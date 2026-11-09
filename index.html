@@ -2,28 +2,30 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Z-DEUTSCH: AUTO — Космический тренажёр немецких слов в стиле ZType (RU / עברית)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Z-DEUTSCH: AUTO — Немецкий тренажёр в стиле ZType (RU / עברית)</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <!-- Основной игровой холст (Корабль, слова, лазеры, взрывы и всплывающие переводы) -->
   <canvas id="gameCanvas" aria-label="Игровое поле космического клавиатурного шутера Z-Deutsch"></canvas>
 
-  <!-- Верхняя панель управления (HUD) -->
+  <!-- Верхняя панель управления (Компактная на телефоне, полная на ПК) -->
   <header class="hud-top">
     <div class="brand-cluster">
-      <div class="brand-logo" title="Немецкий клавиатурный шутер в стиле ZType">
+      <button type="button" class="hud-btn pause-icon-btn" id="btnPause" title="Пауза / Меню уровней (Esc)">
+        ⏸ <span class="hide-mobile">Пауза</span>
+      </button>
+      <div class="brand-logo hide-mobile" title="Немецкий клавиатурный шутер в стиле ZType">
         <span>🚀 Z-DEUTSCH</span>
       </div>
-      <span class="campaign-pill" id="campaignBadge">AUTO</span>
-      <div class="level-indicator">
-        <div class="level-indicator-title" id="hudLevelTitle">Уровень 1: Отпуск и путешествия</div>
+      <div class="level-indicator" id="btnQuickLevels" title="Нажмите, чтобы выбрать уровень">
+        <div class="level-indicator-title" id="hudLevelTitle">Ур. 1: Отпуск</div>
         <div class="level-progress-wrap">
           <div class="level-progress-bar">
             <div class="level-progress-fill" id="hudProgressBar"></div>
           </div>
-          <span id="hudProgressText">0 / 10 слов</span>
+          <span id="hudProgressText">0 / 10</span>
         </div>
       </div>
     </div>
@@ -33,49 +35,46 @@
         <span class="stat-label">Очки</span>
         <span class="stat-value accent-amber" id="hudScore">0</span>
       </div>
-      <div class="stat-item">
+      <div class="stat-item hide-mobile">
         <span class="stat-label">Комбо</span>
         <span class="stat-value accent-emerald" id="hudCombo">x1</span>
       </div>
-      <div class="stat-item">
+      <div class="stat-item hide-mobile">
         <span class="stat-label">Точность</span>
         <span class="stat-value" id="hudAccuracy">100%</span>
       </div>
       <div class="stat-item">
-        <span class="stat-label">Щит корабля</span>
+        <span class="stat-label hide-mobile">Щит</span>
         <span class="stat-value accent-rose" id="hudShields">❤️❤️❤️❤️</span>
       </div>
     </div>
 
     <div class="controls-cluster">
-      <button type="button" class="hud-btn emp-btn" id="btnEmp" title="Взорвать ближайшие слова и показать их перевод (Клавиша Enter)">
-        ⚡ EMP (<span id="empCount">2</span>)
+      <button type="button" class="hud-btn emp-btn" id="btnEmp" title="Взорвать ближайшие слова и показать их перевод (Enter)">
+        ⚡<span class="hide-mobile"> EMP</span> (<span id="empCount">2</span>)
       </button>
-      <button type="button" class="hud-btn active" id="btnLangMode" title="Язык перевода при взрыве слов: Русский / Иврит (עברית) / Оба языка">
-        🌐 Перевод: 🇷🇺 RU
+      <button type="button" class="hud-btn active" id="btnLangMode" title="Язык перевода: Русский / Иврит (עברית) / Оба">
+        🇷🇺 RU
       </button>
       <button type="button" class="hud-btn" id="btnSpeedMode" title="Скорость полёта немецких слов (0.5x / 0.7x / 1.0x / 1.35x)">
-        🐌 Скорость: 0.5x
+        🐌 0.5x
       </button>
-      <button type="button" class="hud-btn" id="btnArticleMode" title="Переключить: печатать только само слово (артикль показан бейджем) или печатать вместе с артиклем der/die/das">
-        🏷️ Артикль: Бейдж
+      <button type="button" class="hud-btn hide-mobile" id="btnArticleMode" title="Печатать только слово или вместе с артиклем">
+        🏷️ Бейдж
       </button>
       <button type="button" class="hud-btn active" id="btnTtsMode" title="Озвучивать немецкое слово при взрыве">
-        🔊 Озвучка DE
+        🔊<span class="hide-mobile"> DE</span>
       </button>
       <button type="button" class="hud-btn" id="btnOpenDict" title="Открыть полный словарь уровня Auto (73 слова)">
-        📚 Словарь (73)
+        📚<span class="hide-mobile"> Словарь</span>
       </button>
-      <button type="button" class="hud-btn" id="btnOpenCustom" title="Добавить свои немецкие слова">
+      <button type="button" class="hud-btn hide-mobile" id="btnOpenCustom" title="Добавить свои немецкие слова">
         ➕ Свои слова
-      </button>
-      <button type="button" class="hud-btn" id="btnPause" title="Пауза (Esc)">
-        ⏸ Пауза
       </button>
     </div>
   </header>
 
-  <!-- Левая панель: Подуровни главного курса AUTO -->
+  <!-- Левая панель (только на широких экранах ПК): Подуровни главного курса AUTO -->
   <aside class="sidebar-left">
     <div class="sidebar-header">
       <span class="sidebar-title">🚗 Уровни «AUTO»</span>
@@ -86,7 +85,7 @@
     </div>
   </aside>
 
-  <!-- Правая панель: Журнал взрывов (Сбитые слова и их перевод) -->
+  <!-- Правая панель (только на широких экранах ПК): Журнал взрывов -->
   <aside class="sidebar-right">
     <div class="sidebar-header">
       <span class="sidebar-title">💥 Взорванные слова</span>
@@ -97,7 +96,7 @@
     <div class="kill-feed scrollable" id="killFeedContainer">
       <div class="kill-feed-empty">
         Сбивайте летящие немецкие слова!<br><br>
-        При взрыве перевод (🇷🇺 / 🇮🇱 עברית) всплывает прямо в космосе и сохраняется здесь для повторения.
+        При взрыве перевод (🇷🇺 / 🇮🇱 עברית) всплывает прямо в космосе и сохраняется здесь.
       </div>
     </div>
     <div class="gender-legend" title="Цветовая подсказка рода существительных">
@@ -108,77 +107,117 @@
     </div>
   </aside>
 
-  <!-- Нижняя панель: Активная цель и быстрые умлауты -->
-  <footer class="hud-bottom">
-    <div class="target-status">
-      <span class="target-label">Прицел:</span>
-      <div class="target-word-preview" id="bottomTargetPreview">Начните печатать любую первую букву...</div>
+  <!-- Встроенная космическая клавиатура в стиле ZType (внизу экрана) -->
+  <section class="ztype-keyboard-dock" id="ztypeKeyboard" aria-label="Экранная клавиатура ZType">
+    <!-- Тонкая неоновая полоса прогресса уровня над клавиатурой (как в ZType) -->
+    <div class="ztype-kbd-topline">
+      <div class="ztype-kbd-topline-fill" id="kbdProgressFill"></div>
     </div>
 
-    <div class="umlaut-helper" title="Можно печатать как немецкие буквы (ä, ö, ü, ß), так и обычные латинские (a, o, u, s) — игра засчитает оба варианта!">
-      <span style="font-size: 0.74rem; color: var(--text-muted);">Умлауты (авто-замена включена):</span>
-      <button type="button" class="umlaut-chip" data-char="ä">ä = <kbd>a</kbd></button>
-      <button type="button" class="umlaut-chip" data-char="ö">ö = <kbd>o</kbd></button>
-      <button type="button" class="umlaut-chip" data-char="ü">ü = <kbd>u</kbd></button>
-      <button type="button" class="umlaut-chip" data-char="ß">ß = <kbd>s</kbd></button>
+    <!-- Компактная строка текущего захваченного слова и перевода -->
+    <div class="ztype-target-strip" id="bottomTargetPreview">
+      Нажимайте буквы, чтобы стрелять по словам...
     </div>
 
-    <div class="hotkeys-hint">
-      <span><kbd>Backspace</kbd> / <kbd>Tab</kbd> Сбросить прицел</span>
-      <span><kbd>Enter</kbd> EMP-взрыв</span>
-    </div>
-  </footer>
+    <!-- Клавиши QWERTY с точками-прицелами '+' как в оригинальном ZType -->
+    <div class="ztype-keys-container">
+      <div class="ztype-key-row">
+        <button type="button" class="zkey" data-key="q">Q</button>
+        <button type="button" class="zkey" data-key="w">W</button>
+        <button type="button" class="zkey" data-key="e">E</button>
+        <button type="button" class="zkey" data-key="r">R</button>
+        <button type="button" class="zkey" data-key="t">T</button>
+        <button type="button" class="zkey" data-key="y">Y</button>
+        <button type="button" class="zkey" data-key="u">U<sub class="uml-sub">ü</sub></button>
+        <button type="button" class="zkey" data-key="i">I</button>
+        <button type="button" class="zkey" data-key="o">O<sub class="uml-sub">ö</sub></button>
+        <button type="button" class="zkey" data-key="p">P</button>
+      </div>
 
-  <!-- Центральный оверлей: Старт уровня / Завершение уровня / Игра окончена -->
+      <div class="ztype-crosshairs-row" aria-hidden="true">
+        <span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span>
+      </div>
+
+      <div class="ztype-key-row row-middle">
+        <button type="button" class="zkey" data-key="a">A<sub class="uml-sub">ä</sub></button>
+        <button type="button" class="zkey" data-key="s">S<sub class="uml-sub">ß</sub></button>
+        <button type="button" class="zkey" data-key="d">D</button>
+        <button type="button" class="zkey" data-key="f">F</button>
+        <button type="button" class="zkey" data-key="g">G</button>
+        <button type="button" class="zkey" data-key="h">H</button>
+        <button type="button" class="zkey" data-key="j">J</button>
+        <button type="button" class="zkey" data-key="k">K</button>
+        <button type="button" class="zkey" data-key="l">L</button>
+      </div>
+
+      <div class="ztype-crosshairs-row" aria-hidden="true">
+        <span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span>
+      </div>
+
+      <div class="ztype-key-row row-bottom">
+        <button type="button" class="zkey zkey-fn" data-action="reset" title="Сбросить прицел (Backspace)">⌫</button>
+        <button type="button" class="zkey" data-key="z">Z</button>
+        <button type="button" class="zkey" data-key="x">X</button>
+        <button type="button" class="zkey" data-key="c">C</button>
+        <button type="button" class="zkey" data-key="v">V</button>
+        <button type="button" class="zkey" data-key="b">B</button>
+        <button type="button" class="zkey" data-key="n">N</button>
+        <button type="button" class="zkey" data-key="m">M</button>
+        <button type="button" class="zkey zkey-emp" data-action="emp" title="EMP-взрыв (Enter)">⚡</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Центральный оверлей: Старт уровня / Выбор уровня / Завершение уровня -->
   <section class="center-overlay" id="centerOverlay">
     <div class="overlay-card scrollable">
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-        <span class="overlay-badge" id="overlayBadge">ГЛАВНЫЙ УРОВЕНЬ: AUTO · ЭТАП 1 ИЗ 6</span>
-        <!-- Быстрый выбор языка перевода и скорости прямо перед стартом -->
-        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-          <button type="button" class="hud-btn lang-quick-btn active" data-lang="ru">🇷🇺 Русский</button>
+      <div class="overlay-top-bar">
+        <span class="overlay-badge" id="overlayBadge">КАМПАНИЯ AUTO · ЭТАП 1 ИЗ 6</span>
+        <!-- Быстрый выбор языка перевода -->
+        <div class="lang-quick-group">
+          <button type="button" class="hud-btn lang-quick-btn active" data-lang="ru">🇷🇺 RU</button>
           <button type="button" class="hud-btn lang-quick-btn" data-lang="he">🇮🇱 עברית</button>
-          <button type="button" class="hud-btn lang-quick-btn" data-lang="both">🇷🇺+🇮🇱 Оба</button>
+          <button type="button" class="hud-btn lang-quick-btn" data-lang="both">🇷🇺+🇮🇱</button>
         </div>
       </div>
 
-      <h1 class="overlay-title" id="overlayTitle">Уровень 1: Отпуск и путешествия (Urlaub & Reise)</h1>
+      <h1 class="overlay-title" id="overlayTitle">Уровень 1: Отпуск и путешествия</h1>
       <p class="overlay-desc" id="overlayDesc">
-        Печатайте немецкие слова, пока они не долетели до вашего корабля! Каждая буква — лазерный выстрел.
-        Когда слово взрывается, на месте взрыва всплывает его <strong>перевод (на русском или иврите)</strong> и звучит немецкое произношение.
+        Сбивайте немецкие слова буква за буквой! При взрыве слова всплывает его перевод и звучит произношение.
       </p>
+
+      <!-- Выбор подуровня прямо в меню (удобно на телефоне!) -->
+      <div class="mobile-level-Chips" id="overlayLevelChips"></div>
+
+      <div class="overlay-actions">
+        <button type="button" class="primary-btn" id="btnStartLevel">🚀 В бой! Начать уровень</button>
+        <button type="button" class="secondary-btn" id="btnNextLevel" style="display: none;">Следующий уровень ➔</button>
+        <button type="button" class="secondary-btn" id="btnPracticeMistakes" style="display: none;">🎯 Сложные слова</button>
+      </div>
 
       <!-- Мини-блиц после прохождения уровня (скрыт перед стартом) -->
       <div class="quiz-box" id="levelQuizBox" style="display: none;">
         <div class="quiz-header">
-          <span>🧠 БЛИЦ-ЗАКРЕПЛЕНИЕ: Выберите правильный перевод сбитого слова!</span>
+          <span>🧠 БЛИЦ: Выберите перевод!</span>
           <span id="quizScoreText">0 / 3</span>
         </div>
         <div class="quiz-question" id="quizQuestionWord">der Kofferraum</div>
         <div class="quiz-options" id="quizOptionsGrid"></div>
       </div>
 
-      <div>
-        <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-cyan); margin-bottom: 8px;" id="overlayWordsHeader">
-          Слова в этом уровне (10):
-        </div>
+      <details class="words-accordion">
+        <summary id="overlayWordsHeader">📋 Посмотреть слова этого уровня (10)</summary>
         <div class="overlay-Words-preview scrollable" id="overlayWordsPreview">
           <!-- Карточки слов уровня -->
         </div>
-      </div>
-
-      <div class="overlay-actions">
-        <button type="button" class="primary-btn" id="btnStartLevel">🚀 В бой! Начать уровень</button>
-        <button type="button" class="secondary-btn" id="btnNextLevel" style="display: none;">Следующий уровень ➔</button>
-        <button type="button" class="secondary-btn" id="btnPracticeMistakes" style="display: none;">🎯 Тренировать сложные слова</button>
-      </div>
+      </details>
     </div>
   </section>
 
   <!-- Модальное окно: Полный словарь всех 73 слов категории AUTO -->
   <dialog class="modern-dialog" id="dictDialog" closedby="any">
     <div class="dialog-header">
-      <h2 class="dialog-title">📚 Словарь курса «AUTO» (Все 73 слова · RU / עברית)</h2>
+      <h2 class="dialog-title">📚 Словарь «AUTO» (73 слова)</h2>
       <button type="button" class="dialog-close" id="btnCloseDict" aria-label="Закрыть">✕</button>
     </div>
     <div class="dialog-body scrollable">
@@ -186,30 +225,29 @@
         type="search"
         class="dict-search-input"
         id="dictSearchInput"
-        placeholder="Поиск по немецкому слову, русскому переводу или на иврите (например: каско, הגה, Lenkrad)..."
+        placeholder="Поиск: немецкий, русский или עברית..."
       />
-      <div id="dictFullList" class="overlay-Words-preview scrollable" style="max-height: 52vh;"></div>
+      <div id="dictFullList" class="overlay-Words-preview scrollable" style="max-height: 58vh;"></div>
     </div>
   </dialog>
 
   <!-- Модальное окно: Добавление своего списка слов -->
   <dialog class="modern-dialog" id="customWordsDialog" closedby="any">
     <div class="dialog-header">
-      <h2 class="dialog-title">➕ Добавить свои немецкие слова в «AUTO»</h2>
+      <h2 class="dialog-title">➕ Добавить свои немецкие слова</h2>
       <button type="button" class="dialog-close" id="btnCloseCustom" aria-label="Закрыть">✕</button>
     </div>
     <div class="dialog-body scrollable">
-      <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5;">
-        Вставьте список слов в формате <code>немецкое слово;перевод RU;перевод HE (по желанию)</code> (каждое с новой строки).
-        Артикли и окончания множественного числа (например, <code>der Motor, -en;двигатель;מנוע</code>) распознаются автоматически!
+      <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.45;">
+        Формат: <code>немецкое слово;перевод RU;перевод HE</code> (каждое с новой строки).
       </p>
       <textarea
         class="custom-words-textarea"
         id="customWordsInput"
-        placeholder="der Autobahnraser, -;лихач на автобане;נהג משתולל בכביש מהיר&#10;die Hupe, -n;клаксон, гудок;צופר&#10;bremsen;тормозить;לבלום"
+        placeholder="der Autobahnraser, -;лихач на автобане;נהג משתולל&#10;die Hupe, -n;клаксон, гудок;צופר"
       ></textarea>
       <div class="overlay-actions">
-        <button type="button" class="primary-btn" id="btnSaveCustomWords">Создать свой уровень и играть 🚀</button>
+        <button type="button" class="primary-btn" id="btnSaveCustomWords">Создать уровень и играть 🚀</button>
       </div>
     </div>
   </dialog>

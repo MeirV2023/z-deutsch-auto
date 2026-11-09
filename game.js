@@ -47,13 +47,12 @@
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
-      // Повышаем тон по мере набора букв в слове, как в аркадах
       const baseFreq = Math.min(920, 420 + pitchIndex * 28);
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(baseFreq, now);
       osc.frequency.exponentialRampToValueAtTime(140, now + 0.075);
 
-      gain.gain.setValueAtTime(0.09, now);
+      gain.gain.setValueAtTime(0.08, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
 
       osc.connect(gain);
@@ -69,14 +68,13 @@
 
       const now = this.ctx.currentTime;
 
-      // Низкочастотный удар взрыва
       const osc = this.ctx.createOscillator();
       const oscGain = this.ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(170, now);
       osc.frequency.exponentialRampToValueAtTime(32, now + 0.36);
 
-      oscGain.gain.setValueAtTime(0.24, now);
+      oscGain.gain.setValueAtTime(0.22, now);
       oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.36);
 
       osc.connect(oscGain);
@@ -84,13 +82,12 @@
       osc.start(now);
       osc.stop(now + 0.37);
 
-      // Аккорд успеха (приятный синтезаторный импульс)
       [523.25, 659.25, 783.99].forEach((freq, idx) => {
         const chime = this.ctx.createOscillator();
         const cGain = this.ctx.createGain();
         chime.type = 'sine';
         chime.frequency.setValueAtTime(freq, now + idx * 0.035);
-        cGain.gain.setValueAtTime(0.06, now + idx * 0.035);
+        cGain.gain.setValueAtTime(0.055, now + idx * 0.035);
         cGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28 + idx * 0.035);
         chime.connect(cGain);
         cGain.connect(this.ctx.destination);
@@ -111,7 +108,7 @@
       osc.frequency.setValueAtTime(135, now);
       osc.frequency.setValueAtTime(98, now + 0.05);
 
-      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.setValueAtTime(0.07, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
 
       osc.connect(gain);
@@ -132,7 +129,7 @@
       osc.frequency.setValueAtTime(110, now);
       osc.frequency.linearRampToValueAtTime(45, now + 0.4);
 
-      gain.gain.setValueAtTime(0.22, now);
+      gain.gain.setValueAtTime(0.2, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
 
       osc.connect(gain);
@@ -154,7 +151,7 @@
         if (deVoice) utter.voice = deVoice;
         window.speechSynthesis.speak(utter);
       } catch (_) {
-        // Игнорируем ошибки TTS в браузерах без голосов
+        // Игнорируем ошибки TTS
       }
     }
   }
@@ -189,19 +186,19 @@
     // Язык перевода: 'ru' (Русский), 'he' (Иврит עברית), 'both' (Оба языка)
     translationLang: 'ru',
     langModes: [
-      { id: 'ru', label: '🌐 Перевод: 🇷🇺 RU' },
-      { id: 'he', label: '🌐 Перевод: 🇮🇱 עברית' },
-      { id: 'both', label: '🌐 Перевод: 🇷🇺+🇮🇱' }
+      { id: 'ru', label: '🇷🇺 RU' },
+      { id: 'he', label: '🇮🇱 עברית' },
+      { id: 'both', label: '🇷🇺+🇮🇱' }
     ],
 
     // Настройки игрока
-    typeWithArticle: false,     // false = печатаем само слово (бейдж рода сверху), true = печатаем с артиклем
-    speedPresetIndex: 0,        // По умолчанию 0.5x по запросу пользователя (доступны 0.5x, 0.7x, 1.0x, 1.35x)
+    typeWithArticle: false,
+    speedPresetIndex: 0, // По умолчанию 0.5x
     speedPresets: [
-      { mult: 0.5, label: '🐌 Скорость: 0.5x' },
-      { mult: 0.7, label: '🐢 Скорость: 0.7x' },
-      { mult: 1.0, label: '🚀 Скорость: 1.0x' },
-      { mult: 1.35, label: '⚡ Скорость: 1.35x' }
+      { mult: 0.5, label: '🐌 0.5x' },
+      { mult: 0.7, label: '🐢 0.7x' },
+      { mult: 1.0, label: '🚀 1.0x' },
+      { mult: 1.35, label: '⚡ 1.35x' }
     ],
 
     // Метрики
@@ -219,8 +216,8 @@
     totalWordsInLevel: 0,
     wordsDestroyedInLevel: 0,
     spawnTimer: 0,
-    mistakeWordsMap: new Map(), // Слова, где игрок ошибался или пропустил
-    killHistory: [],            // История сбитых слов для перерисовки при смене языка
+    mistakeWordsMap: new Map(),
+    killHistory: [],
 
     // Игровые объекты на холсте
     activeWords: [],
@@ -231,7 +228,7 @@
     lasers: [],
     particles: [],
     shockwaves: [],
-    floatingTranslations: [], // Всплывающие переводы на месте взрыва!
+    floatingTranslations: [],
     stars: [],
     layoutWarningTimer: 0,
 
@@ -253,13 +250,9 @@
     const ru = entry.ru || '';
     const he = entry.he || '';
 
-    if (lang === 'he') {
-      return he || ru;
-    }
+    if (lang === 'he') return he || ru;
     if (lang === 'both') {
-      if (ru && he && ru !== he) {
-        return `${ru} · ${he}`;
-      }
+      if (ru && he && ru !== he) return `${ru} · ${he}`;
       return ru || he;
     }
     return ru || he;
@@ -291,9 +284,13 @@
   const btnOpenDict = document.getElementById('btnOpenDict');
   const btnOpenCustom = document.getElementById('btnOpenCustom');
   const btnPause = document.getElementById('btnPause');
+  const btnQuickLevels = document.getElementById('btnQuickLevels');
   const btnClearFeed = document.getElementById('btnClearFeed');
 
+  const ztypeKeyboard = document.getElementById('ztypeKeyboard');
+  const kbdProgressFill = document.getElementById('kbdProgressFill');
   const levelListContainer = document.getElementById('levelListContainer');
+  const overlayLevelChips = document.getElementById('overlayLevelChips');
   const totalWordsCounter = document.getElementById('totalWordsCounter');
   const killFeedContainer = document.getElementById('killFeedContainer');
   const bottomTargetPreview = document.getElementById('bottomTargetPreview');
@@ -323,17 +320,26 @@
   const customWordsInput = document.getElementById('customWordsInput');
   const btnSaveCustomWords = document.getElementById('btnSaveCustomWords');
 
-  // --- Размеры игрового поля с учётом боковых панелей ---
+  // --- Размеры игрового поля с учётом экранной клавиатуры ZType и боковых панелей ---
   function getPlayBounds() {
-    const isWide = window.innerWidth > 860;
-    const leftPad = isWide ? 285 : 24;
-    const rightPad = isWide ? 325 : 24;
+    const isDesktopWide = window.innerWidth > 960;
+    const leftPad = isDesktopWide ? 264 : 8;
+    const rightPad = isDesktopWide ? 294 : 8;
+
+    const kbdRect = ztypeKeyboard ? ztypeKeyboard.getBoundingClientRect() : { height: 185 };
+    const kbdHeight = kbdRect.height || 185;
+
+    const left = leftPad;
+    const right = Math.max(left + 260, canvas.width - rightPad);
+    const top = isDesktopWide ? 64 : 52;
+    const bottom = Math.max(top + 180, canvas.height - kbdHeight);
+
     return {
-      left: leftPad,
-      right: Math.max(leftPad + 300, canvas.width - rightPad),
-      top: 84,
-      bottom: canvas.height - 76,
-      centerX: (leftPad + Math.max(leftPad + 300, canvas.width - rightPad)) / 2
+      left,
+      right,
+      top,
+      bottom,
+      centerX: (left + right) / 2
     };
   }
 
@@ -342,7 +348,7 @@
     canvas.height = window.innerHeight;
     const bounds = getPlayBounds();
     state.ship.x = bounds.centerX;
-    state.ship.y = bounds.bottom - 28;
+    state.ship.y = bounds.bottom - 24;
     initStars();
   }
 
@@ -365,6 +371,17 @@
   // --- Формирование строки для ввода ---
   function getTargetString(wordEntry) {
     return state.typeWithArticle ? wordEntry.withArticle : wordEntry.word;
+  }
+
+  // --- Базовая латинская клавиша для немецкой буквы (для подсветки на клавиатуре) ---
+  function mapGermanCharToBaseKey(ch) {
+    if (!ch) return '';
+    const low = ch.toLowerCase();
+    if (low === 'ä') return 'a';
+    if (low === 'ö') return 'o';
+    if (low === 'ü') return 'u';
+    if (low === 'ß') return 's';
+    return low;
   }
 
   // --- Умное сравнение немецких букв (поддержка ä=a, ö=o, ü=u, ß=s и регистронезависимости) ---
@@ -401,7 +418,6 @@
       btn.classList.toggle('active', btn.dataset.lang === langId);
     });
 
-    // Обновляем все открытые списки слов и журнал взрывов
     const lvl = levels[state.currentLevelIndex];
     if (lvl) {
       renderWordsPreviewList(lvl.words, overlayWordsPreview);
@@ -413,15 +429,18 @@
     updateBottomTargetUI();
   }
 
-  // --- Отрисовка списка уровней слева ---
+  // --- Отрисовка списка уровней (боковая панель ПК + быстрые чипы в меню для телефона) ---
   function renderLevelSidebar() {
     levelListContainer.innerHTML = '';
+    overlayLevelChips.innerHTML = '';
+
     const totalWords = levels
       .filter(l => l.id !== 'level-auto-all')
       .reduce((acc, l) => acc + l.words.length, 0);
     totalWordsCounter.textContent = `${totalWords} слова`;
 
     levels.forEach((lvl, idx) => {
+      // 1. Карточка для левой панели на ПК
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'level-card' +
@@ -444,8 +463,21 @@
       btn.addEventListener('click', () => {
         selectLevel(idx, true);
       });
-
       levelListContainer.appendChild(btn);
+
+      // 2. Компактный чип выбора уровня для мобильного меню
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'level-chip-btn' +
+        (idx === state.currentLevelIndex ? ' active' : '') +
+        (lvl.completed ? ' completed' : '');
+      chip.textContent = lvl.id === 'level-auto-all'
+        ? `🏆 AUTO (${lvl.words.length})`
+        : `Ур.${lvl.number}: ${lvl.name.split(',')[0]}`;
+      chip.addEventListener('click', () => {
+        selectLevel(idx, true);
+      });
+      overlayLevelChips.appendChild(chip);
     });
   }
 
@@ -460,9 +492,12 @@
     state.lasers = [];
 
     const lvl = levels[levelIndex];
-    hudLevelTitle.textContent = `${lvl.id === 'level-auto-all' ? 'Главный уровень AUTO' : 'Уровень ' + lvl.number}: ${lvl.name}`;
+    hudLevelTitle.textContent = lvl.id === 'level-auto-all'
+      ? 'AUTO (Все слова)'
+      : `Ур.${lvl.number}: ${lvl.name}`;
     hudProgressBar.style.width = '0%';
-    hudProgressText.textContent = `0 / ${lvl.words.length} слов`;
+    if (kbdProgressFill) kbdProgressFill.style.width = '0%';
+    hudProgressText.textContent = `0 / ${lvl.words.length}`;
 
     renderLevelSidebar();
     updateBottomTargetUI();
@@ -498,11 +533,11 @@
   function showLevelIntroOverlay(lvl) {
     levelQuizBox.style.display = 'none';
     overlayBadge.textContent = lvl.id === 'level-auto-all'
-      ? '🏆 ГЛАВНЫЙ УРОВЕНЬ КУРСА: AUTO (МАРАФОН)'
+      ? '🏆 ГЛАВНЫЙ УРОВЕНЬ: AUTO (73 СЛОВА)'
       : `КАМПАНИЯ AUTO · УРОВЕНЬ ${lvl.number} ИЗ ${levels.length - 1}`;
     overlayTitle.textContent = `${lvl.name} (${lvl.deName})`;
-    overlayDesc.innerHTML = `${escapeHtml(lvl.description)}<br><small style="color: var(--accent-cyan);">Выберите язык перевода (🇷🇺 Русский / 🇮🇱 עברית) сверху и нажмите на любое слово для прослушивания или жмите «В бой!»</small>`;
-    overlayWordsHeader.textContent = `Слова на этом уровне (${lvl.words.length}):`;
+    overlayDesc.innerHTML = `${escapeHtml(lvl.description)}`;
+    overlayWordsHeader.textContent = `📋 Посмотреть слова этого уровня (${lvl.words.length})`;
 
     renderWordsPreviewList(lvl.words, overlayWordsPreview);
 
@@ -518,6 +553,7 @@
     const lvl = levels[state.currentLevelIndex];
     const pool = customWordPool || lvl.words;
 
+    resizeCanvas();
     state.wordQueue = shuffleArray(pool);
     state.totalWordsInLevel = state.wordQueue.length;
     state.wordsDestroyedInLevel = 0;
@@ -529,7 +565,7 @@
     state.floatingTranslations = [];
     state.shields = state.maxShields;
     state.empCharges = 2;
-    state.spawnTimer = 0.25; // Спавним первое слово почти сразу!
+    state.spawnTimer = 0.25;
     state.running = true;
     state.paused = false;
     state.gameOver = false;
@@ -539,10 +575,19 @@
     updateBottomTargetUI();
     renderLevelSidebar();
 
-    // Снимаем фокус с кнопок, чтобы пробел/Enter не нажимали кнопки повторно
     if (document.activeElement && document.activeElement !== document.body) {
       document.activeElement.blur();
     }
+  }
+
+  // --- Подбор размера шрифта слова, чтобы длинные немецкие слова всегда помещались на экране телефона ---
+  function getWordFontPx(textLength) {
+    const isMobile = canvas.width < 520;
+    if (!isMobile) return 18;
+    if (textLength >= 22) return 12.5;
+    if (textLength >= 17) return 14;
+    if (textLength >= 13) return 15.5;
+    return 17;
   }
 
   // --- Спавн нового слова сверху ---
@@ -553,19 +598,18 @@
     const targetText = getTargetString(entry);
     const bounds = getPlayBounds();
 
-    // Выбираем координату X так, чтобы длинные слова не вылезали за края и не накладывались по высоте
-    ctx.font = '700 20px "JetBrains Mono", Consolas, monospace';
+    const fontPx = getWordFontPx(targetText.length);
+    ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
     const textWidth = ctx.measureText(targetText).width;
-    const halfW = Math.max(70, textWidth / 2 + 26);
+    const halfW = Math.min((bounds.right - bounds.left) / 2 - 6, Math.max(48, textWidth / 2 + 16));
 
     const minX = bounds.left + halfW;
-    const maxX = Math.max(minX + 20, bounds.right - halfW);
+    const maxX = Math.max(minX + 4, bounds.right - halfW);
 
-    // Ищем X с минимальным перекрытием с недавно появившимися словами сверху
     let bestX = minX + Math.random() * (maxX - minX);
     for (let attempt = 0; attempt < 6; attempt++) {
       const candidateX = minX + Math.random() * (maxX - minX);
-      const tooClose = state.activeWords.some(w => w.y < 180 && Math.abs(w.x - candidateX) < 150);
+      const tooClose = state.activeWords.some(w => w.y < bounds.top + 110 && Math.abs(w.x - candidateX) < 110);
       if (!tooClose) {
         bestX = candidateX;
         break;
@@ -574,9 +618,11 @@
 
     const lvl = levels[state.currentLevelIndex];
     const speedPreset = state.speedPresets[state.speedPresetIndex].mult;
-    // Длинные слова (например Kfz-Haftpflichtversicherung) летят чуть медленнее, чтобы их было комфортно напечатать!
     const lengthFactor = Math.max(0.58, Math.min(1.12, 11 / Math.max(6, targetText.length)));
-    const baseSpeedUnscaled = (34 + Math.random() * 10) * (lvl.speedMultiplier || 1) * lengthFactor;
+    // На узких/невысоких экранах телефона масштабируем базовую скорость под высоту поля
+    const playHeight = bounds.bottom - bounds.top;
+    const heightScale = Math.max(0.68, Math.min(1.05, playHeight / 560));
+    const baseSpeedUnscaled = (33 + Math.random() * 9) * (lvl.speedMultiplier || 1) * lengthFactor * heightScale;
 
     state.activeWords.push({
       id: nextEntityId++,
@@ -584,7 +630,7 @@
       text: targetText,
       typedCount: 0,
       x: bestX,
-      y: bounds.top - 18,
+      y: bounds.top - 10,
       vx: 0,
       baseSpeedUnscaled,
       vy: baseSpeedUnscaled * speedPreset,
@@ -592,6 +638,8 @@
       hitFlash: 0,
       spawnTime: performance.now()
     });
+
+    updateKeyboardNextHint();
   }
 
   // --- Выстрел по букве и проверка взрыва всего слова ---
@@ -604,16 +652,14 @@
     state.shotsHit++;
     state.score += 10 * state.combo;
 
-    // Поворачиваем корабль на цель
     const dx = wordObj.x - state.ship.x;
     const dy = wordObj.y - state.ship.y;
     state.ship.targetAngle = Math.atan2(dy, dx);
     state.ship.recoil = 7;
 
-    // Создаём лазерный импульс от носа корабля к слову
     const style = getArticleStyle(wordObj.entry.article);
-    const noseX = state.ship.x + Math.cos(state.ship.targetAngle) * 24;
-    const noseY = state.ship.y + Math.sin(state.ship.targetAngle) * 24;
+    const noseX = state.ship.x + Math.cos(state.ship.targetAngle) * 22;
+    const noseY = state.ship.y + Math.sin(state.ship.targetAngle) * 22;
 
     state.lasers.push({
       x1: noseX,
@@ -624,14 +670,14 @@
       alpha: 1.0
     });
 
-    // Искры попадания по букве
-    spawnParticles(wordObj.x, wordObj.y + 8, style.main, 6, 95);
+    spawnParticles(wordObj.x, wordObj.y + 6, style.main, 6, 90);
     sound.playLaser(wordObj.typedCount);
 
     if (wordObj.typedCount >= wordObj.text.length) {
       explodeWord(wordObj, true);
     } else {
       updateBottomTargetUI();
+      updateKeyboardNextHint();
     }
 
     updateHudStats();
@@ -650,36 +696,33 @@
 
     const style = getArticleStyle(wordObj.entry.article);
 
-    // 1. Взрывная волна и частицы
     state.shockwaves.push({
       x: wordObj.x,
       y: wordObj.y,
       radius: 8,
-      maxRadius: 85,
+      maxRadius: 78,
       color: style.main,
       alpha: 1.0
     });
 
-    spawnParticles(wordObj.x, wordObj.y, style.main, 28, 210);
-    spawnParticles(wordObj.x, wordObj.y, '#fbbf24', 12, 140);
+    spawnParticles(wordObj.x, wordObj.y, style.main, 24, 190);
+    spawnParticles(wordObj.x, wordObj.y, '#fbbf24', 10, 130);
 
-    // 2. ВСПЛЫВАЮЩАЯ ГОЛОГРАММА С ПЕРЕВОДОМ НА МЕСТЕ ВЗРЫВА!
     const bounds = getPlayBounds();
-    const clampedX = Math.max(bounds.left + 150, Math.min(bounds.right - 150, wordObj.x));
-    const clampedY = Math.max(bounds.top + 60, Math.min(bounds.bottom - 90, wordObj.y));
+    const clampedX = Math.max(bounds.left + 80, Math.min(bounds.right - 80, wordObj.x));
+    const clampedY = Math.max(bounds.top + 48, Math.min(bounds.bottom - 55, wordObj.y));
 
     state.floatingTranslations.push({
       x: clampedX,
       y: clampedY,
-      vy: -22, // Плавно всплывает вверх
+      vy: -18,
       entry: wordObj.entry,
       rawDe: wordObj.entry.raw,
       color: style.main,
       life: 0,
-      maxLife: 4.0 // Держится 4 секунды, чтобы игрок спокойно прочитал перевод!
+      maxLife: 4.0
     });
 
-    // 3. Добавляем в правую панель "Взорванные слова"
     state.killHistory.unshift(wordObj.entry);
     if (state.killHistory.length > 40) state.killHistory.pop();
     rerenderKillFeed();
@@ -696,8 +739,8 @@
 
     updateHudStats();
     updateBottomTargetUI();
+    updateKeyboardNextHint();
 
-    // Проверяем, закончился ли уровень
     if (state.wordQueue.length === 0 && state.activeWords.length === 0 && state.shields > 0) {
       setTimeout(() => {
         if (state.running && state.activeWords.length === 0 && state.wordQueue.length === 0) {
@@ -716,7 +759,7 @@
         y,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        size: Math.random() * 3 + 1.5,
+        size: Math.random() * 2.8 + 1.4,
         color,
         alpha: 1.0,
         decay: 0.9 + Math.random() * 0.9
@@ -726,11 +769,12 @@
 
   // --- Отрисовка журнала сбитых слов в правой панели ---
   function rerenderKillFeed() {
+    if (!killFeedContainer) return;
     if (state.killHistory.length === 0) {
       killFeedContainer.innerHTML = `
         <div class="kill-feed-empty">
           Сбивайте летящие немецкие слова!<br><br>
-          При взрыве перевод (🇷🇺 / 🇮🇱 עברית) всплывает прямо в космосе и сохраняется здесь для повторения.
+          При взрыве перевод (🇷🇺 / 🇮🇱 עברית) всплывает прямо в космосе и сохраняется здесь.
         </div>
       `;
       return;
@@ -762,14 +806,34 @@
     });
   }
 
-  // --- Обработка ввода с клавиатуры (Ядро ZType) ---
+  // --- Подсветка следующей нужной клавиши на экранной клавиатуре ZType ---
+  function updateKeyboardNextHint() {
+    document.querySelectorAll('.zkey.next-key-hint').forEach(el => {
+      el.classList.remove('next-key-hint');
+    });
+
+    if (!state.running || state.paused) return;
+
+    const locked = state.activeWords.find(w => w.id === state.lockedWordId);
+    if (locked) {
+      let nextChar = locked.text[locked.typedCount];
+      if (nextChar === '-' || nextChar === ' ') {
+        nextChar = locked.text[locked.typedCount + 1];
+      }
+      const baseKey = mapGermanCharToBaseKey(nextChar);
+      if (baseKey) {
+        const keyBtn = document.querySelector(`.zkey[data-key="${baseKey}"]`);
+        if (keyBtn) keyBtn.classList.add('next-key-hint');
+      }
+    }
+  }
+
+  // --- Обработка ввода с физической клавиатуры ---
   window.addEventListener('keydown', (e) => {
-    // Если открыто модальное окно словаря или добавления слов — не перехватываем ввод
     if ((dictDialog && dictDialog.open) || (customWordsDialog && customWordsDialog.open)) {
       return;
     }
 
-    // Если открыт стартовый/финальный экран — Enter запускает уровень
     if (!centerOverlay.classList.contains('hidden')) {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -786,27 +850,24 @@
 
     if (!state.running || state.paused || state.gameOver) return;
 
-    // Сброс текущего захвата цели (Backspace или Tab)
     if (e.key === 'Backspace' || e.key === 'Tab') {
       e.preventDefault();
       state.lockedWordId = null;
       updateBottomTargetUI();
+      updateKeyboardNextHint();
       return;
     }
 
-    // EMP-волна на Enter
     if (e.key === 'Enter') {
       e.preventDefault();
       triggerEmpWave();
       return;
     }
 
-    // Игнорируем модификаторы
     if (e.ctrlKey || e.altKey || e.metaKey || e.key.length !== 1) return;
 
     const char = e.key;
 
-    // Проверка на случайную русскую или ивритскую раскладку (кириллица / иврит)
     if (/[а-яёА-ЯЁ\u0590-\u05FF]/.test(char)) {
       e.preventDefault();
       state.layoutWarningTimer = 2.6;
@@ -815,21 +876,62 @@
     }
 
     e.preventDefault();
+    flashVirtualKey(mapGermanCharToBaseKey(char));
     processTypedChar(char);
   });
 
+  function flashVirtualKey(baseKey) {
+    if (!baseKey) return;
+    const btn = document.querySelector(`.zkey[data-key="${baseKey}"]`);
+    if (!btn) return;
+    btn.classList.add('pressed');
+    setTimeout(() => btn.classList.remove('pressed'), 110);
+  }
+
+  // --- Обработка нажатий по встроенной экранной клавиатуре ZType ---
+  document.querySelectorAll('.zkey').forEach(btn => {
+    btn.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      sound.init();
+
+      if (!state.running || state.paused || state.gameOver) return;
+
+      btn.classList.add('pressed');
+      setTimeout(() => btn.classList.remove('pressed'), 120);
+
+      if (navigator.vibrate) {
+        try { navigator.vibrate(7); } catch (_) {}
+      }
+
+      const action = btn.dataset.action;
+      if (action === 'reset') {
+        state.lockedWordId = null;
+        updateBottomTargetUI();
+        updateKeyboardNextHint();
+        return;
+      }
+      if (action === 'emp') {
+        triggerEmpWave();
+        return;
+      }
+
+      const ch = btn.dataset.key;
+      if (ch) {
+        processTypedChar(ch);
+      }
+    });
+  });
+
   function processTypedChar(char) {
-    // Если игрок только что ввёл 'a' вместо 'ä' и по привычке допечатал 'e' (ae / oe / ue)
     if (state.lastAbsorbedUmlautE && char.toLowerCase() === 'e') {
       state.lastAbsorbedUmlautE = false;
       const locked = state.activeWords.find(w => w.id === state.lockedWordId);
       if (!locked || (locked.text[locked.typedCount] || '').toLowerCase() !== 'e') {
-        return; // Мягко поглощаем 'e' после замены умлаута
+        return;
       }
     }
     state.lastAbsorbedUmlautE = false;
 
-    // Аналогично для 'ss' при вводе 'ß'
     if (state.lastAbsorbedEszettS && char.toLowerCase() === 's') {
       state.lastAbsorbedEszettS = false;
       const locked = state.activeWords.find(w => w.id === state.lockedWordId);
@@ -841,11 +943,9 @@
 
     let lockedWord = state.activeWords.find(w => w.id === state.lockedWordId);
 
-    // Если цель уже захвачена — проверяем следующую букву захваченного слова
     if (lockedWord) {
       let expectedChar = lockedWord.text[lockedWord.typedCount];
 
-      // Если следующий символ в слове дефис '-' или пробел ' ', а игрок сразу печатает букву после дефиса/пробела
       if ((expectedChar === '-' || expectedChar === ' ') && char !== '-' && char !== ' ') {
         const afterSeparator = lockedWord.text[lockedWord.typedCount + 1];
         if (afterSeparator) {
@@ -866,7 +966,6 @@
         state.lastAbsorbedEszettS = matchRes.eszettSub;
         hitWordLetter(lockedWord);
       } else {
-        // Ошибка ввода
         state.shotsFired++;
         state.combo = 1;
         state.mistakeWordsMap.set(lockedWord.entry.raw, lockedWord.entry);
@@ -876,7 +975,6 @@
       return;
     }
 
-    // Если цель ещё НЕ захвачена — ищем ближайшее к кораблю слово (максимальный Y), начинающееся с этой буквы
     const candidates = state.activeWords.filter(w => {
       const firstChar = w.text[w.typedCount];
       return firstChar && charsMatchGerman(char, firstChar).matched;
@@ -900,7 +998,7 @@
     }
   }
 
-  // --- EMP-Волна (взрывает до 3 ближайших слов и показывает их переводы) ---
+  // --- EMP-Волна ---
   function triggerEmpWave() {
     if (!state.running || state.paused || state.empCharges <= 0 || state.activeWords.length === 0) return;
 
@@ -912,7 +1010,7 @@
       x: state.ship.x,
       y: state.ship.y,
       radius: 15,
-      maxRadius: 520,
+      maxRadius: 480,
       color: '#fbbf24',
       alpha: 1.0
     });
@@ -922,11 +1020,11 @@
     toDestroy.forEach(w => explodeWord(w, true));
   }
 
-  // --- Обновление нижней строки прицела ---
+  // --- Обновление строки прицела над клавиатурой ---
   function updateBottomTargetUI() {
     const locked = state.activeWords.find(w => w.id === state.lockedWordId);
     if (!locked) {
-      bottomTargetPreview.innerHTML = `<span style="color: var(--text-muted); font-weight: 500;">Печатайте первую букву любого слова...</span>`;
+      bottomTargetPreview.innerHTML = `<span style="color: var(--text-muted);">Нажимайте буквы, чтобы стрелять по словам...</span>`;
       return;
     }
 
@@ -936,21 +1034,21 @@
     const dirAttr = isRtlTranslation(locked.entry) ? ' dir="rtl"' : '';
 
     bottomTargetPreview.innerHTML = `
-      <span style="color: var(--text-muted); font-size: 0.78rem;">[${escapeHtml(locked.entry.article)}]</span>
-      <span class="target-word-typed">${escapeHtml(typedPart)}</span><span>${escapeHtml(remainPart)}</span>
-      <span style="color: var(--accent-amber); font-size: 0.8rem; margin-left: 8px;"${dirAttr}>— ${escapeHtml(transText)}</span>
+      <span style="color: var(--accent-cyan);">[${escapeHtml(locked.entry.article)}]</span>
+      <span><span class="target-word-typed">${escapeHtml(typedPart)}</span><strong style="color:#fff;">${escapeHtml(remainPart)}</strong></span>
+      <span style="color: var(--accent-amber);"${dirAttr}>— ${escapeHtml(transText)}</span>
     `;
   }
 
-  // --- Обновление верхнего HUD ---
+  // --- Обновление верхнего HUD и полосы прогресса над клавиатурой ---
   function updateHudStats() {
     hudScore.textContent = state.score.toLocaleString('ru-RU');
-    hudCombo.textContent = `x${state.combo}`;
+    if (hudCombo) hudCombo.textContent = `x${state.combo}`;
 
     const acc = state.shotsFired > 0
       ? Math.round((state.shotsHit / state.shotsFired) * 100)
       : 100;
-    hudAccuracy.textContent = `${acc}%`;
+    if (hudAccuracy) hudAccuracy.textContent = `${acc}%`;
 
     hudShields.textContent = '❤️'.repeat(Math.max(0, state.shields)) +
       '🖤'.repeat(Math.max(0, state.maxShields - state.shields));
@@ -962,29 +1060,30 @@
       ? Math.min(100, Math.round((state.wordsDestroyedInLevel / state.totalWordsInLevel) * 100))
       : 0;
     hudProgressBar.style.width = `${pct}%`;
-    hudProgressText.textContent = `${state.wordsDestroyedInLevel} / ${state.totalWordsInLevel} слов`;
+    if (kbdProgressFill) kbdProgressFill.style.width = `${pct}%`;
+    hudProgressText.textContent = `${state.wordsDestroyedInLevel} / ${state.totalWordsInLevel}`;
   }
 
-  // --- Завершение уровня + Мини-блиц на проверку переводов ---
+  // --- Завершение уровня + Мини-блиц ---
   function completeLevel() {
     state.running = false;
     const lvl = levels[state.currentLevelIndex];
     lvl.completed = true;
     renderLevelSidebar();
 
-    overlayBadge.textContent = `🎉 УРОВЕНЬ ПРОЙДЕН! ТОЧНОСТЬ: ${hudAccuracy.textContent} · МАКС. КОМБО: x${state.maxCombo}`;
+    overlayBadge.textContent = `🎉 УРОВЕНЬ ПРОЙДЕН! МАКС. КОМБО: x${state.maxCombo}`;
     overlayTitle.textContent = `Отличная стрельба! «${lvl.name}» зачищен`;
-    overlayDesc.innerHTML = `Вы успешно сбили все слова уровня. Пройдите быстрый <strong>блиц из 3 вопросов</strong> ниже, чтобы закрепить переводы, или переходите к следующему уровню!`;
+    overlayDesc.innerHTML = `Вы успешно сбили все слова уровня. Пройдите быстрый <strong>блиц из 3 вопросов</strong> или переходите к следующему уровню!`;
 
-    overlayWordsHeader.textContent = `Слова, которые вы только что выучили (${lvl.words.length}):`;
+    overlayWordsHeader.textContent = `📋 Выученные слова (${lvl.words.length})`;
     renderWordsPreviewList(lvl.words, overlayWordsPreview);
 
-    btnStartLevel.textContent = '🔄 Пройти этот уровень ещё раз';
+    btnStartLevel.textContent = '🔄 Ещё раз';
     btnStartLevel.style.display = 'inline-flex';
 
     if (state.currentLevelIndex < levels.length - 1) {
       btnNextLevel.style.display = 'inline-flex';
-      btnNextLevel.textContent = `Следующий уровень (${levels[state.currentLevelIndex + 1].name}) ➔`;
+      btnNextLevel.textContent = `Следующий: Ур.${levels[state.currentLevelIndex + 1].number} ➔`;
     } else {
       btnNextLevel.style.display = 'none';
     }
@@ -995,7 +1094,7 @@
     centerOverlay.classList.remove('hidden');
   }
 
-  // --- Мини-блиц из 3 слов после уровня (с поддержкой иврита и русского) ---
+  // --- Мини-блиц из 3 слов после уровня ---
   function startPostLevelQuiz(levelWords) {
     if (!levelWords || levelWords.length < 4) {
       levelQuizBox.style.display = 'none';
@@ -1017,7 +1116,7 @@
 
       const currentQ = questions[qIndex];
       const correctTrans = getWordTranslation(currentQ);
-      quizScoreText.textContent = `Вопрос ${qIndex + 1} / ${questions.length}`;
+      quizScoreText.textContent = `${qIndex + 1} / ${questions.length}`;
       quizQuestionWord.textContent = currentQ.raw;
       sound.speakGerman(currentQ.withArticle || currentQ.word);
 
@@ -1057,7 +1156,7 @@
           setTimeout(() => {
             qIndex++;
             renderQuestion();
-          }, 950);
+          }, 900);
         });
         quizOptionsGrid.appendChild(btn);
       });
@@ -1066,7 +1165,7 @@
     renderQuestion();
   }
 
-  // --- Поражение (Щит корабля разрушен) ---
+  // --- Поражение ---
   function triggerGameOver() {
     state.running = false;
     state.gameOver = true;
@@ -1074,10 +1173,10 @@
 
     levelQuizBox.style.display = 'none';
     overlayBadge.textContent = '💥 ЩИТ КОРАБЛЯ ПРОБИТ';
-    overlayTitle.textContent = `Корабль повреждён на уровне «${lvl.name}»`;
-    overlayDesc.innerHTML = `Сбито слов: <strong>${state.wordsDestroyedInLevel} из ${state.totalWordsInLevel}</strong>. Попробуйте ещё раз или выберите скорость <code>0.5x</code> в верхней панели!`;
+    overlayTitle.textContent = `Уровень «${lvl.name}» не завершён`;
+    overlayDesc.innerHTML = `Сбито слов: <strong>${state.wordsDestroyedInLevel} из ${state.totalWordsInLevel}</strong>. Попробуйте ещё раз!`;
 
-    overlayWordsHeader.textContent = 'Слова этого уровня для повторения:';
+    overlayWordsHeader.textContent = `📋 Слова этого уровня (${lvl.words.length})`;
     renderWordsPreviewList(lvl.words, overlayWordsPreview);
 
     btnStartLevel.textContent = '🚀 Попробовать снова';
@@ -1089,13 +1188,28 @@
   }
 
   function togglePause() {
-    if (!state.running && !state.paused) return;
-    state.paused = !state.paused;
-    btnPause.textContent = state.paused ? '▶ Продолжить' : '⏸ Пауза';
-    btnPause.classList.toggle('active', state.paused);
+    if (!centerOverlay.classList.contains('hidden')) {
+      if (state.running || state.paused) {
+        state.paused = false;
+        state.running = true;
+        centerOverlay.classList.add('hidden');
+      }
+      return;
+    }
+
+    if (!state.running) return;
+    state.paused = true;
+    const lvl = levels[state.currentLevelIndex];
+    levelQuizBox.style.display = 'none';
+    overlayBadge.textContent = '⏸ ИГРА НА ПАУЗЕ';
+    overlayTitle.textContent = `${lvl.name}`;
+    overlayDesc.innerHTML = `Прогресс: <strong>${state.wordsDestroyedInLevel} / ${state.totalWordsInLevel}</strong> слов. Вы можете продолжить бой или выбрать другой уровень:`;
+    btnStartLevel.textContent = '▶ Продолжить уровень';
+    btnStartLevel.dataset.resumeMode = '1';
+    centerOverlay.classList.remove('hidden');
   }
 
-  // --- Главный игровой цикл (Обновление и рендеринг Canvas) ---
+  // --- Главный игровой цикл ---
   let lastFrameTime = performance.now();
 
   function gameLoop(now) {
@@ -1109,10 +1223,13 @@
   }
 
   function update(dt) {
-    // Звёздное небо движется всегда
+    const bounds = getPlayBounds();
+    state.ship.x = bounds.centerX;
+    state.ship.y = bounds.bottom - 24;
+
     for (const s of state.stars) {
       s.y += s.speed * (state.running && !state.paused ? 1.35 : 0.4) * dt;
-      if (s.y > canvas.height) {
+      if (s.y > bounds.bottom) {
         s.y = 0;
         s.x = Math.random() * canvas.width;
       }
@@ -1122,7 +1239,6 @@
       state.layoutWarningTimer = Math.max(0, state.layoutWarningTimer - dt);
     }
 
-    // Обновляем частицы, волны и всплывающие переводы даже после последнего слова
     for (let i = state.lasers.length - 1; i >= 0; i--) {
       state.lasers[i].alpha -= dt * 7.5;
       if (state.lasers[i].alpha <= 0) state.lasers.splice(i, 1);
@@ -1155,19 +1271,19 @@
       }
     }
 
-    // Плавный поворот корабля
     const angleDiff = state.ship.targetAngle - state.ship.angle;
     state.ship.angle += angleDiff * Math.min(1, dt * 18);
     state.ship.recoil = Math.max(0, state.ship.recoil - dt * 35);
 
     if (!state.running || state.paused) return;
 
-    // Спавн новых слов
     const lvl = levels[state.currentLevelIndex];
     const speedPreset = state.speedPresets[state.speedPresetIndex].mult;
     state.spawnTimer -= dt;
 
-    if (state.spawnTimer <= 0 && state.wordQueue.length > 0 && state.activeWords.length < 7) {
+    const maxActiveOnScreen = canvas.width < 520 ? 5 : 7;
+
+    if (state.spawnTimer <= 0 && state.wordQueue.length > 0 && state.activeWords.length < maxActiveOnScreen) {
       spawnNextWord();
       const baseInterval = (lvl.spawnIntervalMs || 2600) / 1000;
       state.spawnTimer = baseInterval / Math.sqrt(speedPreset);
@@ -1176,16 +1292,13 @@
       state.spawnTimer = 1.8;
     }
 
-    // Движение активных слов к кораблю
     for (let i = state.activeWords.length - 1; i >= 0; i--) {
       const w = state.activeWords[i];
 
-      // Лёгкое смещение по горизонтали к кораблю на нижней трети экрана (как в ZType)
       const dxToShip = state.ship.x - w.x;
-      const pullFactor = w.y > canvas.height * 0.55 ? 0.14 : 0.03;
+      const pullFactor = w.y > bounds.bottom * 0.55 ? 0.12 : 0.03;
       w.x += dxToShip * pullFactor * dt;
 
-      // Отдача назад при попадании лазера
       if (w.recoilY > 0) {
         w.y -= w.recoilY * 9 * dt;
         w.recoilY = Math.max(0, w.recoilY - 28 * dt);
@@ -1197,8 +1310,7 @@
         w.hitFlash = Math.max(0, w.hitFlash - dt * 5);
       }
 
-      // Если слово долетело до корабля!
-      if (w.y >= state.ship.y - 26) {
+      if (w.y >= state.ship.y - 22) {
         state.mistakeWordsMap.set(w.entry.raw, w.entry);
         state.shields--;
         state.combo = 1;
@@ -1219,18 +1331,18 @@
 
     const bounds = getPlayBounds();
 
-    // 1. Тонкая космическая сетка в стиле ZType
+    // 1. Космическая сетка в стиле ZType
     ctx.save();
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)';
+    ctx.strokeStyle = 'rgba(45, 212, 191, 0.05)';
     ctx.lineWidth = 1;
-    const gridSize = 64;
+    const gridSize = canvas.width < 520 ? 44 : 60;
     for (let x = bounds.left; x <= bounds.right; x += gridSize) {
       ctx.beginPath();
       ctx.moveTo(x, 0);
-      ctx.lineTo(x, canvas.height);
+      ctx.lineTo(x, bounds.bottom);
       ctx.stroke();
     }
-    for (let y = 0; y <= canvas.height; y += gridSize) {
+    for (let y = 0; y <= bounds.bottom; y += gridSize) {
       ctx.beginPath();
       ctx.moveTo(bounds.left, y);
       ctx.lineTo(bounds.right, y);
@@ -1240,18 +1352,19 @@
 
     // 2. Звёзды
     for (const s of state.stars) {
+      if (s.y > bounds.bottom) continue;
       ctx.fillStyle = `rgba(203, 213, 225, ${s.alpha})`;
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // 3. Линия лазерного прицела к захваченному слову
+    // 3. Линия прицела
     const lockedWord = state.activeWords.find(w => w.id === state.lockedWordId);
     if (lockedWord && state.running) {
       ctx.save();
-      ctx.setLineDash([6, 6]);
-      ctx.strokeStyle = 'rgba(251, 146, 60, 0.28)';
+      ctx.setLineDash([5, 5]);
+      ctx.strokeStyle = 'rgba(251, 146, 60, 0.3)';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(state.ship.x, state.ship.y);
@@ -1260,14 +1373,14 @@
       ctx.restore();
     }
 
-    // 4. Лазерные лучи выстрелов
+    // 4. Лазеры
     for (const l of state.lasers) {
       ctx.save();
       ctx.strokeStyle = l.color;
       ctx.shadowColor = l.color;
-      ctx.shadowBlur = 14;
+      ctx.shadowBlur = 12;
       ctx.globalAlpha = Math.max(0, l.alpha);
-      ctx.lineWidth = 3.2;
+      ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(l.x1, l.y1);
       ctx.lineTo(l.x2, l.y2);
@@ -1275,64 +1388,52 @@
       ctx.restore();
     }
 
-    // 5. Ударные кольца взрывов
+    // 5. Ударные кольца
     for (const sw of state.shockwaves) {
       ctx.save();
       ctx.strokeStyle = sw.color;
       ctx.globalAlpha = Math.max(0, sw.alpha);
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 2.2;
       ctx.beginPath();
       ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
       ctx.stroke();
       ctx.restore();
     }
 
-    // 6. Частицы взрывов
+    // 6. Частицы
     for (const p of state.particles) {
       ctx.save();
       ctx.fillStyle = p.color;
       ctx.globalAlpha = Math.max(0, p.alpha);
       ctx.shadowColor = p.color;
-      ctx.shadowBlur = 8;
+      ctx.shadowBlur = 7;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
 
-    // 7. Корабль игрока
+    // 7. Корабль игрока прямо над клавиатурой ZType
     drawPlayerShip();
 
-    // 8. Летящие немецкие слова (сначала обычные, поверх них — захваченная цель)
+    // 8. Летящие немецкие слова
     for (const w of state.activeWords) {
       if (w.id !== state.lockedWordId) {
-        drawWordNode(w, false);
+        drawWordNode(w, false, bounds);
       }
     }
     if (lockedWord) {
-      drawWordNode(lockedWord, true);
+      drawWordNode(lockedWord, true, bounds);
     }
 
     // 9. ВСПЛЫВАЮЩИЕ ПЕРЕВОДЫ НА МЕСТЕ ВЗРЫВА!
     for (const ft of state.floatingTranslations) {
-      drawFloatingTranslation(ft);
+      drawFloatingTranslation(ft, bounds);
     }
 
-    // 10. Предупреждение, если нажата русская или ивритская клавиша
+    // 10. Предупреждение раскладки
     if (state.layoutWarningTimer > 0) {
-      drawLayoutWarning();
-    }
-
-    // 11. Индикатор паузы
-    if (state.paused) {
-      ctx.save();
-      ctx.fillStyle = 'rgba(6, 9, 19, 0.55)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.font = '800 28px Inter, sans-serif';
-      ctx.fillStyle = '#38bdf8';
-      ctx.textAlign = 'center';
-      ctx.fillText('⏸ ПАУЗА (Нажмите Esc для продолжения)', bounds.centerX, canvas.height / 2);
-      ctx.restore();
+      drawLayoutWarning(bounds);
     }
   }
 
@@ -1342,132 +1443,126 @@
     ctx.translate(x - Math.cos(angle) * recoil, y - Math.sin(angle) * recoil);
     ctx.rotate(angle + Math.PI / 2);
 
-    // Защитный ореол щита вокруг корабля
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.22)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.arc(0, 2, 28, 0, Math.PI * 2);
-    ctx.stroke();
-
     // Пламя двигателя
-    ctx.fillStyle = 'rgba(251, 146, 60, 0.85)';
+    ctx.fillStyle = 'rgba(45, 212, 191, 0.85)';
     ctx.beginPath();
-    ctx.moveTo(-6, 15);
-    ctx.lineTo(0, 25 + Math.random() * 6);
-    ctx.lineTo(6, 15);
+    ctx.moveTo(-5, 13);
+    ctx.lineTo(0, 21 + Math.random() * 5);
+    ctx.lineTo(5, 13);
     ctx.closePath();
     ctx.fill();
 
-    // Корпус истребителя в стиле ZType
-    ctx.shadowColor = '#38bdf8';
-    ctx.shadowBlur = 14;
+    // Корпус корабля в стиле ZType (бирюзовый неоновый истребитель)
+    ctx.shadowColor = '#2dd4bf';
+    ctx.shadowBlur = 12;
     ctx.fillStyle = '#0f172a';
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 2.2;
+    ctx.strokeStyle = '#2dd4bf';
+    ctx.lineWidth = 2;
 
     ctx.beginPath();
-    ctx.moveTo(0, -22);
-    ctx.lineTo(17, 14);
-    ctx.lineTo(6, 10);
-    ctx.lineTo(0, 15);
-    ctx.lineTo(-6, 10);
-    ctx.lineTo(-17, 14);
+    ctx.moveTo(0, -18);
+    ctx.lineTo(14, 12);
+    ctx.lineTo(5, 8);
+    ctx.lineTo(0, 13);
+    ctx.lineTo(-5, 8);
+    ctx.lineTo(-14, 12);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // Кабина пилота
-    ctx.fillStyle = '#7dd3fc';
+    ctx.fillStyle = '#5eead4';
     ctx.beginPath();
-    ctx.moveTo(0, -10);
-    ctx.lineTo(4.5, 4);
-    ctx.lineTo(-4.5, 4);
+    ctx.moveTo(0, -8);
+    ctx.lineTo(4, 3);
+    ctx.lineTo(-4, 3);
     ctx.closePath();
     ctx.fill();
 
     ctx.restore();
   }
 
-  function drawWordNode(w, isLocked) {
+  function drawWordNode(w, isLocked, bounds) {
     const style = getArticleStyle(w.entry.article);
     const remainText = w.text.slice(w.typedCount);
     const typedText = w.text.slice(0, w.typedCount);
 
-    ctx.save();
-
-    // Вражеский дрон-носитель слова
-    ctx.translate(w.x, w.y);
-    ctx.fillStyle = isLocked ? '#fb923c' : style.main;
-    ctx.shadowColor = isLocked ? '#fb923c' : style.main;
-    ctx.shadowBlur = isLocked ? 14 : 8;
-
-    ctx.beginPath();
-    ctx.arc(0, -18, isLocked ? 6 : 4.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    if (isLocked) {
-      ctx.strokeStyle = 'rgba(251, 146, 60, 0.85)';
-      ctx.lineWidth = 1.6;
-      ctx.beginPath();
-      ctx.arc(0, -18, 11, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    // Измеряем текст слова
-    ctx.font = '700 19px "JetBrains Mono", Consolas, monospace';
+    const fontPx = getWordFontPx(w.text.length);
+    ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
     const typedW = ctx.measureText(typedText).width;
     const remainW = ctx.measureText(remainText).width;
     const totalW = typedW + remainW;
 
-    const padX = 12;
+    const padX = canvas.width < 520 ? 8 : 11;
     const boxW = totalW + padX * 2;
-    const boxH = 31;
-    const boxX = -boxW / 2;
-    const boxY = -10;
+    const boxH = fontPx + 11;
 
-    // Если артикль показан как бейдж — рисуем аккуратный цветной бейдж рода и мн.ч. над словом
+    // Удерживаем плашку слова строго внутри границ экрана
+    const clampedDrawX = Math.max(bounds.left + boxW / 2 + 4, Math.min(bounds.right - boxW / 2 - 4, w.x));
+    w.x = clampedDrawX;
+
+    ctx.save();
+    ctx.translate(clampedDrawX, w.y);
+
+    // Оранжевый/цветной кружок-прицел врага, как в оригинальном ZType
+    ctx.fillStyle = isLocked ? '#fb923c' : style.main;
+    ctx.shadowColor = isLocked ? '#fb923c' : style.main;
+    ctx.shadowBlur = isLocked ? 12 : 6;
+
+    ctx.beginPath();
+    ctx.arc(boxW / 2 + 6, -boxH / 2 + 4, isLocked ? 4.5 : 3.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = isLocked ? 'rgba(251, 146, 60, 0.85)' : style.glow;
+    ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    ctx.arc(boxW / 2 + 6, -boxH / 2 + 4, isLocked ? 9 : 7, 0, Math.PI * 2);
+    ctx.stroke();
+
+    const boxX = -boxW / 2;
+    const boxY = -boxH / 2;
+
+    // Бейдж артикля и мн.ч. сверху
     if (!state.typeWithArticle && w.entry.article) {
       const badgeStr = w.entry.plural
         ? `${w.entry.article} · ${w.entry.plural}`
         : `${w.entry.article}`;
-      ctx.font = '700 11px Inter, sans-serif';
-      const bw = ctx.measureText(badgeStr).width + 12;
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+      ctx.font = '700 10px Inter, sans-serif';
+      const bw = ctx.measureText(badgeStr).width + 10;
+      ctx.fillStyle = 'rgba(10, 15, 28, 0.92)';
       ctx.strokeStyle = style.main;
       ctx.lineWidth = 1;
-      roundRect(ctx, -bw / 2, boxY - 19, bw, 16, 5);
+      roundRect(ctx, -bw / 2, boxY - 15, bw, 14, 4);
       ctx.fill();
       ctx.stroke();
 
       ctx.fillStyle = style.main;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(badgeStr, 0, boxY - 11);
+      ctx.fillText(badgeStr, 0, boxY - 8);
     }
 
-    // Фон плашки самого немецкого слова
+    // Чёрная контрастная плашка под словом (как в ZType)
     ctx.fillStyle = isLocked
-      ? 'rgba(26, 19, 14, 0.94)'
-      : 'rgba(11, 17, 32, 0.88)';
+      ? 'rgba(28, 17, 10, 0.95)'
+      : 'rgba(5, 9, 17, 0.92)';
     ctx.strokeStyle = isLocked
       ? '#fb923c'
-      : (w.hitFlash > 0 ? '#ffffff' : style.main);
-    ctx.lineWidth = isLocked ? 2 : 1.2;
+      : (w.hitFlash > 0 ? '#ffffff' : 'rgba(148, 163, 184, 0.28)');
+    ctx.lineWidth = isLocked ? 1.8 : 1;
 
-    roundRect(ctx, boxX, boxY, boxW, boxH, 8);
+    roundRect(ctx, boxX, boxY, boxW, boxH, 6);
     ctx.fill();
     ctx.stroke();
 
-    // Отрисовка букв: уже простреленные буквы тускнеют и зеленеют, следующая буква ярко светится!
-    ctx.font = '700 19px "JetBrains Mono", Consolas, monospace';
+    // Отрисовка букв
+    ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     const startTextX = -totalW / 2;
-    const textCenterY = boxY + boxH / 2 + 0.5;
 
     if (typedText.length > 0) {
-      ctx.fillStyle = 'rgba(52, 211, 153, 0.42)';
-      ctx.fillText(typedText, startTextX, textCenterY);
+      ctx.fillStyle = 'rgba(52, 211, 153, 0.38)';
+      ctx.fillText(typedText, startTextX, 0.5);
     }
 
     if (remainText.length > 0) {
@@ -1475,50 +1570,63 @@
       const restRemain = remainText.slice(1);
       const firstRemainW = ctx.measureText(firstRemain).width;
 
-      // Первая активная буква для выстрела
-      ctx.fillStyle = isLocked ? '#fb923c' : '#38bdf8';
-      ctx.fillText(firstRemain, startTextX + typedW, textCenterY);
+      ctx.fillStyle = isLocked ? '#fb923c' : '#2dd4bf';
+      ctx.fillText(firstRemain, startTextX + typedW, 0.5);
 
-      // Остальные буквы слова
       ctx.fillStyle = '#f8fafc';
-      ctx.fillText(restRemain, startTextX + typedW + firstRemainW, textCenterY);
+      ctx.fillText(restRemain, startTextX + typedW + firstRemainW, 0.5);
     }
 
     ctx.restore();
   }
 
   // --- Отрисовка голограммы с переводом (RU / עברית) на месте взрыва слова ---
-  function drawFloatingTranslation(ft) {
+  function drawFloatingTranslation(ft, bounds) {
     ctx.save();
 
     let alpha = 1.0;
-    if (ft.life < 0.18) {
-      alpha = ft.life / 0.18;
+    if (ft.life < 0.16) {
+      alpha = ft.life / 0.16;
     } else if (ft.life > ft.maxLife - 0.75) {
       alpha = Math.max(0, (ft.maxLife - ft.life) / 0.75);
     }
 
     ctx.globalAlpha = alpha;
-    ctx.translate(ft.x, ft.y);
 
-    ctx.font = '700 13px "JetBrains Mono", Consolas, monospace';
+    const isMobile = canvas.width < 520;
+    const deFontPx = isMobile ? 11.5 : 13;
+    let ruFontPx = isMobile ? 14.5 : 17;
+
+    ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
     const deW = ctx.measureText(ft.rawDe).width;
 
     const translatedStr = getWordTranslation(ft.entry);
     const transText = `💥 ${translatedStr}`;
-    ctx.font = '800 18px Inter, sans-serif';
-    const transW = ctx.measureText(transText).width;
+    ctx.font = `800 ${ruFontPx}px Inter, sans-serif`;
+    let transW = ctx.measureText(transText).width;
 
-    const cardW = Math.max(deW, transW) + 34;
-    const cardH = 56;
+    const maxAllowedW = (bounds.right - bounds.left) - 16;
+    if (transW + 24 > maxAllowedW && ruFontPx > 11) {
+      ruFontPx = Math.max(11, Math.floor(ruFontPx * (maxAllowedW - 24) / transW));
+      ctx.font = `800 ${ruFontPx}px Inter, sans-serif`;
+      transW = ctx.measureText(transText).width;
+    }
+
+    const cardW = Math.min(maxAllowedW, Math.max(deW, transW) + 26);
+    const cardH = isMobile ? 48 : 54;
+
+    const drawX = Math.max(bounds.left + cardW / 2 + 6, Math.min(bounds.right - cardW / 2 - 6, ft.x));
+    const drawY = Math.max(bounds.top + cardH / 2 + 6, Math.min(bounds.bottom - cardH / 2 - 6, ft.y));
+
+    ctx.translate(drawX, drawY);
 
     ctx.shadowColor = ft.color;
-    ctx.shadowBlur = 18;
-    ctx.fillStyle = 'rgba(10, 16, 31, 0.94)';
+    ctx.shadowBlur = 14;
+    ctx.fillStyle = 'rgba(8, 14, 28, 0.95)';
     ctx.strokeStyle = ft.color;
-    ctx.lineWidth = 1.8;
+    ctx.lineWidth = 1.6;
 
-    roundRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 12);
+    roundRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 10);
     ctx.fill();
     ctx.stroke();
 
@@ -1526,37 +1634,35 @@
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // Немецкая словарная форма сверху (всегда LTR)
     ctx.direction = 'ltr';
-    ctx.font = '700 12.5px "JetBrains Mono", Consolas, monospace';
+    ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
     ctx.fillStyle = ft.color;
-    ctx.fillText(ft.rawDe, 0, -11);
+    ctx.fillText(ft.rawDe, 0, -10);
 
-    // Крупный перевод снизу (RTL для иврита, LTR для русского)
     ctx.direction = isRtlTranslation(ft.entry) ? 'rtl' : 'ltr';
-    ctx.font = '800 17px Inter, sans-serif';
+    ctx.font = `800 ${ruFontPx}px Inter, sans-serif`;
     ctx.fillStyle = '#fbbf24';
-    ctx.fillText(transText, 0, 12);
+    ctx.fillText(transText, 0, 10);
 
     ctx.restore();
   }
 
-  function drawLayoutWarning() {
-    const bounds = getPlayBounds();
+  function drawLayoutWarning(bounds) {
     ctx.save();
-    ctx.translate(bounds.centerX, state.ship.y - 72);
-    ctx.fillStyle = 'rgba(127, 29, 29, 0.92)';
+    const w = Math.min(380, bounds.right - bounds.left - 20);
+    ctx.translate(bounds.centerX, state.ship.y - 60);
+    ctx.fillStyle = 'rgba(127, 29, 29, 0.94)';
     ctx.strokeStyle = '#fb7185';
     ctx.lineWidth = 1.5;
-    roundRect(ctx, -230, -20, 460, 40, 10);
+    roundRect(ctx, -w / 2, -18, w, 36, 9);
     ctx.fill();
     ctx.stroke();
 
-    ctx.font = '700 14px Inter, sans-serif';
+    ctx.font = '700 12.5px Inter, sans-serif';
     ctx.fillStyle = '#fecdd3';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('⚠️ Включена раскладка RU / עברית! Переключите на DE / EN', 0, 0);
+    ctx.fillText('⚠️ Переключите раскладку на DE / EN!', 0, 0);
     ctx.restore();
   }
 
@@ -1586,7 +1692,7 @@
       .replace(/"/g, '&quot;');
   }
 
-  // --- Парсер пользовательских немецких слов (формат "der Motor, -en;двигатель;מנוע") ---
+  // --- Парсер пользовательских немецких слов ---
   function parseGermanEntryLine(line) {
     const trimmed = line.trim();
     if (!trimmed || !trimmed.includes(';')) return null;
@@ -1597,9 +1703,8 @@
     const third = parts[2] || '';
     if (!raw || !second) return null;
 
-    // Если во втором поле иврит, а третьего нет — заполняем и ru, и he
     const hasHebrewInSecond = /[\u0590-\u05FF]/.test(second);
-    const ru = hasHebrewInSecond && !third ? second : second;
+    const ru = second;
     const he = third || (hasHebrewInSecond ? second : second);
 
     const beforeComma = raw.split(',')[0].trim();
@@ -1634,6 +1739,13 @@
   // --- События кнопок интерфейса ---
   btnStartLevel.addEventListener('click', () => {
     sound.init();
+    if (btnStartLevel.dataset.resumeMode === '1' && state.paused) {
+      delete btnStartLevel.dataset.resumeMode;
+      state.paused = false;
+      centerOverlay.classList.add('hidden');
+      return;
+    }
+    delete btnStartLevel.dataset.resumeMode;
     startLevelNow();
   });
 
@@ -1657,7 +1769,6 @@
     btnEmp.blur();
   });
 
-  // Переключение языка перевода в верхней панели (RU -> עברית -> Оба)
   btnLangMode.addEventListener('click', () => {
     const idx = state.langModes.findIndex(m => m.id === state.translationLang);
     const nextMode = state.langModes[(idx + 1) % state.langModes.length];
@@ -1665,7 +1776,6 @@
     btnLangMode.blur();
   });
 
-  // Быстрые кнопки выбора языка на стартовом экране
   document.querySelectorAll('.lang-quick-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       setTranslationLanguage(btn.dataset.lang);
@@ -1673,22 +1783,23 @@
     });
   });
 
-  btnArticleMode.addEventListener('click', () => {
-    state.typeWithArticle = !state.typeWithArticle;
-    btnArticleMode.textContent = state.typeWithArticle
-      ? '🏷️ Артикль: Печатать'
-      : '🏷️ Артикль: Бейдж';
-    btnArticleMode.classList.toggle('active', state.typeWithArticle);
+  if (btnArticleMode) {
+    btnArticleMode.addEventListener('click', () => {
+      state.typeWithArticle = !state.typeWithArticle;
+      btnArticleMode.textContent = state.typeWithArticle
+        ? '🏷️ С артиклем'
+        : '🏷️ Бейдж';
+      btnArticleMode.classList.toggle('active', state.typeWithArticle);
 
-    state.activeWords.forEach(w => {
-      if (w.typedCount === 0) {
-        w.text = getTargetString(w.entry);
-      }
+      state.activeWords.forEach(w => {
+        if (w.typedCount === 0) {
+          w.text = getTargetString(w.entry);
+        }
+      });
+      btnArticleMode.blur();
     });
-    btnArticleMode.blur();
-  });
+  }
 
-  // Переключение скорости (0.5x -> 0.7x -> 1.0x -> 1.35x) с мгновенным пересчётом уже летящих слов
   btnSpeedMode.addEventListener('click', () => {
     state.speedPresetIndex = (state.speedPresetIndex + 1) % state.speedPresets.length;
     const preset = state.speedPresets[state.speedPresetIndex];
@@ -1705,7 +1816,9 @@
   btnTtsMode.addEventListener('click', () => {
     sound.ttsEnabled = !sound.ttsEnabled;
     btnTtsMode.classList.toggle('active', sound.ttsEnabled);
-    btnTtsMode.textContent = sound.ttsEnabled ? '🔊 Озвучка DE' : '🔇 Озвучка DE';
+    btnTtsMode.innerHTML = sound.ttsEnabled
+      ? '🔊<span class="hide-mobile"> DE</span>'
+      : '🔇<span class="hide-mobile"> DE</span>';
     btnTtsMode.blur();
   });
 
@@ -1714,23 +1827,19 @@
     btnPause.blur();
   });
 
-  btnClearFeed.addEventListener('click', () => {
-    state.killHistory = [];
-    rerenderKillFeed();
-  });
-
-  // Кнопки экранного ввода умлаутов внизу
-  document.querySelectorAll('.umlaut-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const ch = chip.dataset.char;
-      if (ch && state.running && !state.paused) {
-        processTypedChar(ch);
-      }
-      chip.blur();
+  if (btnQuickLevels) {
+    btnQuickLevels.addEventListener('click', () => {
+      togglePause();
     });
-  });
+  }
 
-  // Модальное окно полного словаря (73 слова, поиск по DE / RU / HE)
+  if (btnClearFeed) {
+    btnClearFeed.addEventListener('click', () => {
+      state.killHistory = [];
+      rerenderKillFeed();
+    });
+  }
+
   function renderFullDictionary(filterQuery = '') {
     const q = filterQuery.trim().toLowerCase();
     const filtered = allAutoWords.filter(item =>
@@ -1743,27 +1852,36 @@
   }
 
   btnOpenDict.addEventListener('click', () => {
-    if (state.running && !state.paused) togglePause();
+    if (state.running && !state.paused) {
+      state.paused = true;
+    }
     renderFullDictionary(dictSearchInput.value);
     dictDialog.showModal();
   });
 
   btnCloseDict.addEventListener('click', () => {
     dictDialog.close();
+    if (state.running && centerOverlay.classList.contains('hidden')) {
+      state.paused = false;
+    }
   });
 
   dictSearchInput.addEventListener('input', () => {
     renderFullDictionary(dictSearchInput.value);
   });
 
-  // Модальное окно добавления своих слов
-  btnOpenCustom.addEventListener('click', () => {
-    if (state.running && !state.paused) togglePause();
-    customWordsDialog.showModal();
-  });
+  if (btnOpenCustom) {
+    btnOpenCustom.addEventListener('click', () => {
+      if (state.running && !state.paused) state.paused = true;
+      customWordsDialog.showModal();
+    });
+  }
 
   btnCloseCustom.addEventListener('click', () => {
     customWordsDialog.close();
+    if (state.running && centerOverlay.classList.contains('hidden')) {
+      state.paused = false;
+    }
   });
 
   btnSaveCustomWords.addEventListener('click', () => {
@@ -1786,20 +1904,12 @@
       words: parsedWords
     });
 
-    btnOpenDict.textContent = `📚 Словарь (${allAutoWords.length + parsedWords.length})`;
     allAutoWords.push(...parsedWords);
     customWordsDialog.close();
     selectLevel(levels.length - 1, true);
   });
 
-  // Автопауза при сворачивании вкладки браузера (Page Visibility API)
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden' && state.running && !state.paused) {
-      togglePause();
-    }
-  });
-
-  // --- Инициализация при загрузке ---
+  // --- Инициализация ---
   resizeCanvas();
   selectLevel(0, true);
   requestAnimationFrame(gameLoop);
