@@ -18,6 +18,116 @@
     return ARTICLE_COLORS[article] || { main: '#38bdf8', glow: 'rgba(56, 189, 248, 0.4)', label: article || 'DE' };
   }
 
+  // --- Полная локализация интерфейса (RU / עברית) ---
+  const UI_TEXT = {
+    ru: {
+      pause: 'Пауза',
+      score: 'Очки',
+      combo: 'Комбо',
+      accuracy: 'Точность',
+      shield: 'Щит',
+      badgeMode: '🏷️ Бейдж',
+      articleMode: '🏷️ С артиклем',
+      dictBtn: ' Словарь',
+      customBtn: 'Свои слова',
+      sidebarLevels: '🚗 Уровни «AUTO»',
+      wordsCount: (n) => `${n} слова`,
+      wordsShort: (n) => `${n} сл.`,
+      sidebarKills: '💥 Взорванные слова',
+      clearBtn: 'Очистить',
+      killFeedEmpty: 'Сбивайте летящие немецкие слова!<br><br>При взрыве перевод всплывает прямо в космосе и сохраняется здесь.',
+      legendDer: 'der (м.р.)',
+      legendDie: 'die (ж.р.)',
+      legendDas: 'das (ср.р.)',
+      legendVerb: 'Глаг./Пр.',
+      targetIdle: 'Нажимайте буквы, чтобы стрелять по словам...',
+      levelShort: (num, title) => `Ур.${num}: ${title}`,
+      levelBadgeMain: '🏆 ГЛАВНЫЙ AUTO',
+      levelBadgeNum: (num) => `УРОВЕНЬ ${num}`,
+      autoAllShort: 'AUTO (Все слова)',
+      introBadgeMain: '🏆 ГЛАВНЫЙ УРОВЕНЬ: AUTO (73 СЛОВА)',
+      introBadgeStep: (num, total) => `КАМПАНИЯ AUTO · УРОВЕНЬ ${num} ИЗ ${total}`,
+      wordsInLevelHeader: (n) => `📋 Посмотреть слова этого уровня (${n})`,
+      learnedWordsHeader: (n) => `📋 Выученные слова (${n})`,
+      startLevelBtn: '🚀 В бой! Начать уровень',
+      retryBtn: '🔄 Ещё раз',
+      tryAgainBtn: '🚀 Попробовать снова',
+      resumeBtn: '▶ Продолжить уровень',
+      nextLevelBtn: (num) => `Следующий: Ур.${num} ➔`,
+      mistakesBtn: '🎯 Сложные слова',
+      completeBadge: (maxCombo) => `🎉 УРОВЕНЬ ПРОЙДЕН! МАКС. КОМБО: x${maxCombo}`,
+      completeTitle: (name) => `Отличная стрельба! «${name}» зачищен`,
+      completeDesc: 'Вы успешно сбили все слова уровня. Пройдите быстрый <strong>блиц из 3 вопросов</strong> или переходите к следующему уровню!',
+      quizHeader: '🧠 БЛИЦ: Выберите перевод!',
+      quizDoneScore: (c, t) => `${c} / ${t} верно!`,
+      quizDoneTitle: (c, t) => `✨ Блиц завершён! Результат: ${c} из ${t}`,
+      gameOverBadge: '💥 ЩИТ КОРАБЛЯ ПРОБИТ',
+      gameOverTitle: (name) => `Уровень «${name}» не завершён`,
+      gameOverDesc: (done, total) => `Сбито слов: <strong>${done} из ${total}</strong>. Попробуйте ещё раз!`,
+      pauseBadge: '⏸ ИГРА НА ПАУЗЕ',
+      pauseDesc: (done, total) => `Прогресс: <strong>${done} / ${total}</strong> слов. Вы можете продолжить бой или выбрать другой уровень:`,
+      dictTitle: (n) => `📚 Словарь «AUTO» (${n} слова)`,
+      dictSearchPlaceholder: 'Поиск: немецкий, русский или עברית...',
+      customTitle: '➕ Добавить свои немецкие слова',
+      customHint: 'Формат: <code>немецкое слово;перевод RU;перевод HE</code> (каждое с новой строки).',
+      customSaveBtn: 'Создать уровень и играть 🚀',
+      layoutWarning: '⚠️ Переключите раскладку на DE / EN!'
+    },
+    he: {
+      pause: 'הפסקה',
+      score: 'ניקוד',
+      combo: 'רצף',
+      accuracy: 'דיוק',
+      shield: 'מגן',
+      badgeMode: '🏷️ תגית',
+      articleMode: '🏷️ עם תווית',
+      dictBtn: ' מילון',
+      customBtn: 'מילים משלך',
+      sidebarLevels: '🚗 שלבי «AUTO»',
+      wordsCount: (n) => `${n} מילים`,
+      wordsShort: (n) => `${n} מיל׳`,
+      sidebarKills: '💥 מילים שפוצצו',
+      clearBtn: 'נקה',
+      killFeedEmpty: 'פוצצו את המילים בגרמנית!<br><br>בעת הפיצוץ התרגום לעברית יופיע בחלל ויישמר כאן לחזרה.',
+      legendDer: 'der (זכר)',
+      legendDie: 'die (נקבה)',
+      legendDas: 'das (נייטרלי)',
+      legendVerb: 'פועל/אחר',
+      targetIdle: 'הקישו על האותיות כדי לירות במילים...',
+      levelShort: (num, title) => `שלב ${num}: ${title}`,
+      levelBadgeMain: '🏆 שלב AUTO ראשי',
+      levelBadgeNum: (num) => `שלב ${num}`,
+      autoAllShort: 'AUTO (כל המילים)',
+      introBadgeMain: '🏆 השלב הראשי: AUTO (73 מילים)',
+      introBadgeStep: (num, total) => `קמפיין AUTO · שלב ${num} מתוך ${total}`,
+      wordsInLevelHeader: (n) => `📋 הצג את מילות השלב (${n})`,
+      learnedWordsHeader: (n) => `📋 מילים שנלמדו (${n})`,
+      startLevelBtn: '🚀 לקרב! התחל שלב',
+      retryBtn: '🔄 שחק שוב',
+      tryAgainBtn: '🚀 נסה שוב',
+      resumeBtn: '▶ המשך בשלב',
+      nextLevelBtn: (num) => `הבא: שלב ${num} ➔`,
+      mistakesBtn: '🎯 מילים קשות',
+      completeBadge: (maxCombo) => `🎉 השלב הושלם! רצף שיא: x${maxCombo}`,
+      completeTitle: (name) => `ירייה מעולה! השלב «${name}» הושלם`,
+      completeDesc: 'פוצצתם בהצלחה את כל המילים בשלב! ענו על <strong>חידון בזק של 3 שאלות</strong> או עברו לשלב הבא!',
+      quizHeader: '🧠 חידון בזק: בחרו את התרגום הנכון!',
+      quizDoneScore: (c, t) => `${c} / ${t} נכון!`,
+      quizDoneTitle: (c, t) => `✨ החידון הסתיים! תוצאה: ${c} מתוך ${t}`,
+      gameOverBadge: '💥 מגן החללית נפרץ',
+      gameOverTitle: (name) => `השלב «${name}» לא הושלם`,
+      gameOverDesc: (done, total) => `מילים שפוצצו: <strong>${done} מתוך ${total}</strong>. נסו שוב!`,
+      pauseBadge: '⏸ המשחק בהפסקה',
+      pauseDesc: (done, total) => `התקדמות: <strong>${done} / ${total}</strong> מילים. ניתן להמשיך בקרב או לבחור שלב אחר:`,
+      dictTitle: (n) => `📚 מילון «AUTO» (${n} מילים)`,
+      dictSearchPlaceholder: 'חיפוש: גרמנית, עברית או רוסית...',
+      customTitle: '➕ הוספת מילים משלך בגרמנית',
+      customHint: 'פורמט: <code>מילה בגרמנית;תרגום</code> (כל מילה בשורה חדשה).',
+      customSaveBtn: 'צור שלב ושחק 🚀',
+      layoutWarning: '⚠️ החליפו מקלדת ל-DE / EN!'
+    }
+  };
+
   // --- Звуковой движок (Web Audio API синтезатор + Web Speech API немецкая озвучка) ---
   class SoundEngine {
     constructor() {
@@ -150,9 +260,7 @@
         const deVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('de'));
         if (deVoice) utter.voice = deVoice;
         window.speechSynthesis.speak(utter);
-      } catch (_) {
-        // Игнорируем ошибки TTS
-      }
+      } catch (_) {}
     }
   }
 
@@ -168,8 +276,10 @@
       id: 'level-auto-all',
       number: 7,
       name: 'ГЛАВНЫЙ УРОВЕНЬ: AUTO (Все слова)',
+      heName: 'השלב הראשי: AUTO (כל 73 המילים)',
       deName: 'Auto-Marathon (73 Wörter)',
       description: 'Финальный главный уровень AUTO: все 73 слова из всех категорий в динамичном космическом потоке!',
+      heDescription: 'השלב המרכזי של AUTO: כל 73 המילים מכל הקטגוריות בזרימה קוסמית דינמית!',
       speedMultiplier: 1.0,
       spawnIntervalMs: 2550,
       words: allAutoWords
@@ -182,6 +292,8 @@
     running: false,
     paused: false,
     gameOver: false,
+    overlayMode: 'intro', // 'intro' | 'complete' | 'gameover' | 'pause'
+    activeQuiz: null,     // Текущее состояние блиц-теста (чтобы мгновенно переводить варианты на иврит)
 
     // Язык перевода: 'ru' (Русский), 'he' (Иврит עברית), 'both' (Оба языка)
     translationLang: 'ru',
@@ -244,7 +356,25 @@
 
   let nextEntityId = 1;
 
-  // --- Получение перевода слова в зависимости от выбранного языка (RU / HE / Оба) ---
+  // --- Вспомогательные функции локализации ---
+  function isHebrewUI() {
+    return state.translationLang === 'he';
+  }
+
+  function t() {
+    return isHebrewUI() ? UI_TEXT.he : UI_TEXT.ru;
+  }
+
+  function getLevelTitle(lvl) {
+    if (isHebrewUI() && lvl.heName) return lvl.heName;
+    return lvl.name;
+  }
+
+  function getLevelDesc(lvl) {
+    if (isHebrewUI() && lvl.heDescription) return lvl.heDescription;
+    return lvl.description;
+  }
+
   function getWordTranslation(entry, langOverride = null) {
     const lang = langOverride || state.translationLang;
     const ru = entry.ru || '';
@@ -266,6 +396,20 @@
   // --- DOM-элементы ---
   const canvas = document.getElementById('gameCanvas');
   const ctx = canvas.getContext('2d');
+
+  const labelPause = document.getElementById('labelPause');
+  const labelScore = document.getElementById('labelScore');
+  const labelCombo = document.getElementById('labelCombo');
+  const labelAccuracy = document.getElementById('labelAccuracy');
+  const labelShield = document.getElementById('labelShield');
+  const labelDictBtn = document.getElementById('labelDictBtn');
+  const labelCustomBtn = document.getElementById('labelCustomBtn');
+  const sidebarLevelsTitle = document.getElementById('sidebarLevelsTitle');
+  const sidebarKillsTitle = document.getElementById('sidebarKillsTitle');
+  const legendDer = document.getElementById('legendDer');
+  const legendDie = document.getElementById('legendDie');
+  const legendDas = document.getElementById('legendDas');
+  const legendVerb = document.getElementById('legendVerb');
 
   const hudLevelTitle = document.getElementById('hudLevelTitle');
   const hudProgressBar = document.getElementById('hudProgressBar');
@@ -296,6 +440,7 @@
   const bottomTargetPreview = document.getElementById('bottomTargetPreview');
 
   const centerOverlay = document.getElementById('centerOverlay');
+  const overlayCard = document.getElementById('overlayCard');
   const overlayBadge = document.getElementById('overlayBadge');
   const overlayTitle = document.getElementById('overlayTitle');
   const overlayDesc = document.getElementById('overlayDesc');
@@ -306,21 +451,25 @@
   const btnPracticeMistakes = document.getElementById('btnPracticeMistakes');
 
   const levelQuizBox = document.getElementById('levelQuizBox');
+  const quizHeaderTitle = document.getElementById('quizHeaderTitle');
   const quizScoreText = document.getElementById('quizScoreText');
   const quizQuestionWord = document.getElementById('quizQuestionWord');
   const quizOptionsGrid = document.getElementById('quizOptionsGrid');
 
   const dictDialog = document.getElementById('dictDialog');
+  const dictDialogTitle = document.getElementById('dictDialogTitle');
   const btnCloseDict = document.getElementById('btnCloseDict');
   const dictSearchInput = document.getElementById('dictSearchInput');
   const dictFullList = document.getElementById('dictFullList');
 
   const customWordsDialog = document.getElementById('customWordsDialog');
+  const customDialogTitle = document.getElementById('customDialogTitle');
+  const customDialogHint = document.getElementById('customDialogHint');
   const btnCloseCustom = document.getElementById('btnCloseCustom');
   const customWordsInput = document.getElementById('customWordsInput');
   const btnSaveCustomWords = document.getElementById('btnSaveCustomWords');
 
-  // --- Размеры игрового поля с учётом экранной клавиатуры ZType и боковых панелей ---
+  // --- Размеры игрового поля ---
   function getPlayBounds() {
     const isDesktopWide = window.innerWidth > 960;
     const leftPad = isDesktopWide ? 264 : 8;
@@ -368,12 +517,10 @@
 
   window.addEventListener('resize', resizeCanvas);
 
-  // --- Формирование строки для ввода ---
   function getTargetString(wordEntry) {
     return state.typeWithArticle ? wordEntry.withArticle : wordEntry.word;
   }
 
-  // --- Базовая латинская клавиша для немецкой буквы (для подсветки на клавиатуре) ---
   function mapGermanCharToBaseKey(ch) {
     if (!ch) return '';
     const low = ch.toLowerCase();
@@ -384,7 +531,6 @@
     return low;
   }
 
-  // --- Умное сравнение немецких букв (поддержка ä=a, ö=o, ü=u, ß=s и регистронезависимости) ---
   function charsMatchGerman(inputChar, targetChar) {
     const inp = inputChar.toLowerCase();
     const tgt = targetChar.toLowerCase();
@@ -398,7 +544,6 @@
     return { matched: false, umlautSub: false, eszettSub: false };
   }
 
-  // --- Перемешивание массива (Fisher-Yates) ---
   function shuffleArray(arr) {
     const copy = arr.slice();
     for (let i = copy.length - 1; i > 0; i--) {
@@ -408,7 +553,7 @@
     return copy;
   }
 
-  // --- Переключение языка перевода (RU / עברית / Оба) ---
+  // --- Переключение языка перевода и ВСЕГО меню (RU / עברית / Оба) ---
   function setTranslationLanguage(langId) {
     state.translationLang = langId;
     const modeObj = state.langModes.find(m => m.id === langId) || state.langModes[0];
@@ -418,9 +563,11 @@
       btn.classList.toggle('active', btn.dataset.lang === langId);
     });
 
-    const lvl = levels[state.currentLevelIndex];
-    if (lvl) {
-      renderWordsPreviewList(lvl.words, overlayWordsPreview);
+    applyStaticUILocalization();
+    renderLevelSidebar();
+    refreshOverlayContent();
+    if (state.activeQuiz && levelQuizBox.style.display !== 'none') {
+      renderCurrentQuizQuestion(false);
     }
     if (dictDialog && dictDialog.open) {
       renderFullDictionary(dictSearchInput.value);
@@ -429,17 +576,115 @@
     updateBottomTargetUI();
   }
 
-  // --- Отрисовка списка уровней (боковая панель ПК + быстрые чипы в меню для телефона) ---
+  // --- Локализация всех статичных подписей интерфейса ---
+  function applyStaticUILocalization() {
+    const tr = t();
+    const isHe = isHebrewUI();
+
+    if (overlayCard) {
+      overlayCard.dir = isHe ? 'rtl' : 'ltr';
+    }
+    if (labelPause) labelPause.textContent = tr.pause;
+    if (labelScore) labelScore.textContent = tr.score;
+    if (labelCombo) labelCombo.textContent = tr.combo;
+    if (labelAccuracy) labelAccuracy.textContent = tr.accuracy;
+    if (labelShield) labelShield.textContent = tr.shield;
+    if (btnArticleMode) {
+      btnArticleMode.textContent = state.typeWithArticle ? tr.articleMode : tr.badgeMode;
+    }
+    if (labelDictBtn) labelDictBtn.textContent = tr.dictBtn;
+    if (labelCustomBtn) labelCustomBtn.textContent = tr.customBtn;
+    if (sidebarLevelsTitle) sidebarLevelsTitle.textContent = tr.sidebarLevels;
+    if (sidebarKillsTitle) sidebarKillsTitle.textContent = tr.sidebarKills;
+    if (btnClearFeed) btnClearFeed.textContent = tr.clearBtn;
+    if (legendDer) legendDer.textContent = tr.legendDer;
+    if (legendDie) legendDie.textContent = tr.legendDie;
+    if (legendDas) legendDas.textContent = tr.legendDas;
+    if (legendVerb) legendVerb.textContent = tr.legendVerb;
+    if (quizHeaderTitle) quizHeaderTitle.textContent = tr.quizHeader;
+    if (dictDialogTitle) dictDialogTitle.textContent = tr.dictTitle(allAutoWords.length);
+    if (dictSearchInput) dictSearchInput.placeholder = tr.dictSearchPlaceholder;
+    if (customDialogTitle) customDialogTitle.textContent = tr.customTitle;
+    if (customDialogHint) customDialogHint.innerHTML = tr.customHint;
+    if (btnSaveCustomWords) btnSaveCustomWords.textContent = tr.customSaveBtn;
+
+    const lvl = levels[state.currentLevelIndex];
+    if (lvl && hudLevelTitle) {
+      hudLevelTitle.textContent = lvl.id === 'level-auto-all'
+        ? tr.autoAllShort
+        : tr.levelShort(lvl.number, getLevelTitle(lvl));
+    }
+  }
+
+  // --- Перерисовка содержимого центрального меню в соответствии с текущим режимом и языком ---
+  function refreshOverlayContent() {
+    const lvl = levels[state.currentLevelIndex];
+    if (!lvl) return;
+    const tr = t();
+    const title = getLevelTitle(lvl);
+    const desc = getLevelDesc(lvl);
+
+    btnPracticeMistakes.textContent = tr.mistakesBtn;
+    btnPracticeMistakes.style.display = state.mistakeWordsMap.size > 0 ? 'inline-flex' : 'none';
+
+    if (state.overlayMode === 'intro') {
+      overlayBadge.textContent = lvl.id === 'level-auto-all'
+        ? tr.introBadgeMain
+        : tr.introBadgeStep(lvl.number, levels.length - 1);
+      overlayTitle.textContent = `${title} (${lvl.deName})`;
+      overlayDesc.innerHTML = escapeHtml(desc);
+      overlayWordsHeader.textContent = tr.wordsInLevelHeader(lvl.words.length);
+      btnStartLevel.textContent = tr.startLevelBtn;
+      btnStartLevel.style.display = 'inline-flex';
+      btnNextLevel.style.display = 'none';
+    } else if (state.overlayMode === 'complete') {
+      overlayBadge.textContent = tr.completeBadge(state.maxCombo);
+      overlayTitle.textContent = tr.completeTitle(title);
+      overlayDesc.innerHTML = tr.completeDesc;
+      overlayWordsHeader.textContent = tr.learnedWordsHeader(lvl.words.length);
+      btnStartLevel.textContent = tr.retryBtn;
+      btnStartLevel.style.display = 'inline-flex';
+      if (state.currentLevelIndex < levels.length - 1) {
+        btnNextLevel.style.display = 'inline-flex';
+        btnNextLevel.textContent = tr.nextLevelBtn(levels[state.currentLevelIndex + 1].number);
+      } else {
+        btnNextLevel.style.display = 'none';
+      }
+    } else if (state.overlayMode === 'gameover') {
+      overlayBadge.textContent = tr.gameOverBadge;
+      overlayTitle.textContent = tr.gameOverTitle(title);
+      overlayDesc.innerHTML = tr.gameOverDesc(state.wordsDestroyedInLevel, state.totalWordsInLevel);
+      overlayWordsHeader.textContent = tr.wordsInLevelHeader(lvl.words.length);
+      btnStartLevel.textContent = tr.tryAgainBtn;
+      btnStartLevel.style.display = 'inline-flex';
+      btnNextLevel.style.display = 'none';
+    } else if (state.overlayMode === 'pause') {
+      overlayBadge.textContent = tr.pauseBadge;
+      overlayTitle.textContent = title;
+      overlayDesc.innerHTML = tr.pauseDesc(state.wordsDestroyedInLevel, state.totalWordsInLevel);
+      overlayWordsHeader.textContent = tr.wordsInLevelHeader(lvl.words.length);
+      btnStartLevel.textContent = tr.resumeBtn;
+      btnStartLevel.style.display = 'inline-flex';
+      btnNextLevel.style.display = 'none';
+    }
+
+    renderWordsPreviewList(lvl.words, overlayWordsPreview);
+  }
+
+  // --- Отрисовка списка уровней (боковая панель ПК + чипы в меню) ---
   function renderLevelSidebar() {
     levelListContainer.innerHTML = '';
     overlayLevelChips.innerHTML = '';
+    const tr = t();
 
     const totalWords = levels
       .filter(l => l.id !== 'level-auto-all')
       .reduce((acc, l) => acc + l.words.length, 0);
-    totalWordsCounter.textContent = `${totalWords} слова`;
+    totalWordsCounter.textContent = tr.wordsCount(totalWords);
 
     levels.forEach((lvl, idx) => {
+      const localTitle = getLevelTitle(lvl);
+
       // 1. Карточка для левой панели на ПК
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -448,16 +693,16 @@
         (lvl.completed ? ' completed' : '');
 
       const badgeLabel = lvl.id === 'level-auto-all'
-        ? '🏆 ГЛАВНЫЙ AUTO'
-        : `УРОВЕНЬ ${lvl.number}`;
+        ? tr.levelBadgeMain
+        : tr.levelBadgeNum(lvl.number);
 
       btn.innerHTML = `
         <div class="level-card-top">
           <span class="level-badge">${lvl.completed ? '✓ ' : ''}${badgeLabel}</span>
-          <span class="level-word-count">${lvl.words.length} сл.</span>
+          <span class="level-word-count">${tr.wordsShort(lvl.words.length)}</span>
         </div>
-        <div class="level-card-name">${lvl.name}</div>
-        <div class="level-card-sub">${lvl.deName}</div>
+        <div class="level-card-name">${escapeHtml(localTitle)}</div>
+        <div class="level-card-sub" dir="ltr">${escapeHtml(lvl.deName)}</div>
       `;
 
       btn.addEventListener('click', () => {
@@ -465,7 +710,7 @@
       });
       levelListContainer.appendChild(btn);
 
-      // 2. Компактный чип выбора уровня для мобильного меню
+      // 2. Компактный чип выбора уровня для меню
       const chip = document.createElement('button');
       chip.type = 'button';
       chip.className = 'level-chip-btn' +
@@ -473,7 +718,7 @@
         (lvl.completed ? ' completed' : '');
       chip.textContent = lvl.id === 'level-auto-all'
         ? `🏆 AUTO (${lvl.words.length})`
-        : `Ур.${lvl.number}: ${lvl.name.split(',')[0]}`;
+        : tr.levelShort(lvl.number, localTitle.split(',')[0]);
       chip.addEventListener('click', () => {
         selectLevel(idx, true);
       });
@@ -492,9 +737,10 @@
     state.lasers = [];
 
     const lvl = levels[levelIndex];
+    const tr = t();
     hudLevelTitle.textContent = lvl.id === 'level-auto-all'
-      ? 'AUTO (Все слова)'
-      : `Ур.${lvl.number}: ${lvl.name}`;
+      ? tr.autoAllShort
+      : tr.levelShort(lvl.number, getLevelTitle(lvl));
     hudProgressBar.style.width = '0%';
     if (kbdProgressFill) kbdProgressFill.style.width = '0%';
     hudProgressText.textContent = `0 / ${lvl.words.length}`;
@@ -503,7 +749,7 @@
     updateBottomTargetUI();
 
     if (showStartOverlay) {
-      showLevelIntroOverlay(lvl);
+      showLevelIntroOverlay();
     } else {
       startLevelNow();
     }
@@ -516,12 +762,12 @@
       div.className = 'preview-word-item';
       div.dataset.art = item.article || '';
       const transText = getWordTranslation(item);
-      const dirAttr = isRtlTranslation(item) ? ' dir="rtl"' : '';
+      const dirAttr = isRtlTranslation(item) ? ' dir="rtl"' : ' dir="ltr"';
       div.innerHTML = `
-        <span class="preview-word-de">${escapeHtml(item.raw)}</span>
+        <span class="preview-word-de" dir="ltr">${escapeHtml(item.raw)}</span>
         <span class="preview-word-ru"${dirAttr}>${escapeHtml(transText)}</span>
       `;
-      div.title = 'Нажмите, чтобы прослушать немецкое произношение';
+      div.title = '🔊';
       div.style.cursor = 'pointer';
       div.addEventListener('click', () => {
         sound.speakGerman(item.withArticle || item.word);
@@ -530,22 +776,12 @@
     });
   }
 
-  function showLevelIntroOverlay(lvl) {
+  function showLevelIntroOverlay() {
+    state.overlayMode = 'intro';
+    state.activeQuiz = null;
     levelQuizBox.style.display = 'none';
-    overlayBadge.textContent = lvl.id === 'level-auto-all'
-      ? '🏆 ГЛАВНЫЙ УРОВЕНЬ: AUTO (73 СЛОВА)'
-      : `КАМПАНИЯ AUTO · УРОВЕНЬ ${lvl.number} ИЗ ${levels.length - 1}`;
-    overlayTitle.textContent = `${lvl.name} (${lvl.deName})`;
-    overlayDesc.innerHTML = `${escapeHtml(lvl.description)}`;
-    overlayWordsHeader.textContent = `📋 Посмотреть слова этого уровня (${lvl.words.length})`;
-
-    renderWordsPreviewList(lvl.words, overlayWordsPreview);
-
-    btnStartLevel.textContent = '🚀 В бой! Начать уровень';
-    btnStartLevel.style.display = 'inline-flex';
-    btnNextLevel.style.display = 'none';
-    btnPracticeMistakes.style.display = state.mistakeWordsMap.size > 0 ? 'inline-flex' : 'none';
-
+    delete btnStartLevel.dataset.resumeMode;
+    refreshOverlayContent();
     centerOverlay.classList.remove('hidden');
   }
 
@@ -569,6 +805,7 @@
     state.running = true;
     state.paused = false;
     state.gameOver = false;
+    state.activeQuiz = null;
 
     centerOverlay.classList.add('hidden');
     updateHudStats();
@@ -580,7 +817,6 @@
     }
   }
 
-  // --- Подбор размера шрифта слова, чтобы длинные немецкие слова всегда помещались на экране телефона ---
   function getWordFontPx(textLength) {
     const isMobile = canvas.width < 520;
     if (!isMobile) return 18;
@@ -619,7 +855,6 @@
     const lvl = levels[state.currentLevelIndex];
     const speedPreset = state.speedPresets[state.speedPresetIndex].mult;
     const lengthFactor = Math.max(0.58, Math.min(1.12, 11 / Math.max(6, targetText.length)));
-    // На узких/невысоких экранах телефона масштабируем базовую скорость под высоту поля
     const playHeight = bounds.bottom - bounds.top;
     const heightScale = Math.max(0.68, Math.min(1.05, playHeight / 560));
     const baseSpeedUnscaled = (33 + Math.random() * 9) * (lvl.speedMultiplier || 1) * lengthFactor * heightScale;
@@ -642,7 +877,7 @@
     updateKeyboardNextHint();
   }
 
-  // --- Выстрел по букве и проверка взрыва всего слова ---
+  // --- Выстрел по букве ---
   function hitWordLetter(wordObj) {
     wordObj.typedCount++;
     wordObj.recoilY = Math.min(14, wordObj.recoilY + 4.5);
@@ -683,7 +918,7 @@
     updateHudStats();
   }
 
-  // --- ВЗРЫВ СЛОВА + ПОКАЗ ПЕРЕВОДА В КОСМОСЕ И В ЖУРНАЛЕ ---
+  // --- ВЗРЫВ СЛОВА + ПОКАЗ ПЕРЕВОДА ---
   function explodeWord(wordObj, byPlayer = true) {
     const idx = state.activeWords.findIndex(w => w.id === wordObj.id);
     if (idx !== -1) {
@@ -767,15 +1002,12 @@
     }
   }
 
-  // --- Отрисовка журнала сбитых слов в правой панели ---
+  // --- Отрисовка журнала сбитых слов ---
   function rerenderKillFeed() {
     if (!killFeedContainer) return;
     if (state.killHistory.length === 0) {
       killFeedContainer.innerHTML = `
-        <div class="kill-feed-empty">
-          Сбивайте летящие немецкие слова!<br><br>
-          При взрыве перевод (🇷🇺 / 🇮🇱 עברית) всплывает прямо в космосе и сохраняется здесь.
-        </div>
+        <div class="kill-feed-empty">${t().killFeedEmpty}</div>
       `;
       return;
     }
@@ -785,15 +1017,15 @@
       const card = document.createElement('div');
       card.className = 'kill-card';
       card.dataset.art = entry.article || '';
-      card.title = 'Нажмите, чтобы прослушать немецкое произношение';
+      card.title = '🔊';
 
       const transText = getWordTranslation(entry);
-      const dirAttr = isRtlTranslation(entry) ? ' dir="rtl"' : '';
+      const dirAttr = isRtlTranslation(entry) ? ' dir="rtl"' : ' dir="ltr"';
 
       card.innerHTML = `
-        <div class="kill-card-top">
+        <div class="kill-card-top" dir="ltr">
           <span class="kill-de">${escapeHtml(entry.raw)}</span>
-          <button type="button" class="kill-speak-btn" aria-label="Прослушать">🔊</button>
+          <button type="button" class="kill-speak-btn" aria-label="🔊">🔊</button>
         </div>
         <div class="kill-ru"${dirAttr}>${escapeHtml(transText)}</div>
       `;
@@ -806,7 +1038,7 @@
     });
   }
 
-  // --- Подсветка следующей нужной клавиши на экранной клавиатуре ZType ---
+  // --- Подсветка следующей нужной клавиши на экранной клавиатуре ---
   function updateKeyboardNextHint() {
     document.querySelectorAll('.zkey.next-key-hint').forEach(el => {
       el.classList.remove('next-key-hint');
@@ -888,7 +1120,7 @@
     setTimeout(() => btn.classList.remove('pressed'), 110);
   }
 
-  // --- Обработка нажатий по встроенной экранной клавиатуре ZType ---
+  // --- Обработка нажатий по экранной клавиатуре ZType ---
   document.querySelectorAll('.zkey').forEach(btn => {
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
@@ -1024,23 +1256,23 @@
   function updateBottomTargetUI() {
     const locked = state.activeWords.find(w => w.id === state.lockedWordId);
     if (!locked) {
-      bottomTargetPreview.innerHTML = `<span style="color: var(--text-muted);">Нажимайте буквы, чтобы стрелять по словам...</span>`;
+      bottomTargetPreview.innerHTML = `<span style="color: var(--text-muted);">${escapeHtml(t().targetIdle)}</span>`;
       return;
     }
 
     const typedPart = locked.text.slice(0, locked.typedCount);
     const remainPart = locked.text.slice(locked.typedCount);
     const transText = getWordTranslation(locked.entry);
-    const dirAttr = isRtlTranslation(locked.entry) ? ' dir="rtl"' : '';
+    const dirAttr = isRtlTranslation(locked.entry) ? ' dir="rtl"' : ' dir="ltr"';
 
     bottomTargetPreview.innerHTML = `
-      <span style="color: var(--accent-cyan);">[${escapeHtml(locked.entry.article)}]</span>
-      <span><span class="target-word-typed">${escapeHtml(typedPart)}</span><strong style="color:#fff;">${escapeHtml(remainPart)}</strong></span>
+      <span style="color: var(--accent-cyan);" dir="ltr">[${escapeHtml(locked.entry.article)}]</span>
+      <span dir="ltr"><span class="target-word-typed">${escapeHtml(typedPart)}</span><strong style="color:#fff;">${escapeHtml(remainPart)}</strong></span>
       <span style="color: var(--accent-amber);"${dirAttr}>— ${escapeHtml(transText)}</span>
     `;
   }
 
-  // --- Обновление верхнего HUD и полосы прогресса над клавиатурой ---
+  // --- Обновление верхнего HUD ---
   function updateHudStats() {
     hudScore.textContent = state.score.toLocaleString('ru-RU');
     if (hudCombo) hudCombo.textContent = `x${state.combo}`;
@@ -1067,123 +1299,125 @@
   // --- Завершение уровня + Мини-блиц ---
   function completeLevel() {
     state.running = false;
+    state.overlayMode = 'complete';
     const lvl = levels[state.currentLevelIndex];
     lvl.completed = true;
     renderLevelSidebar();
-
-    overlayBadge.textContent = `🎉 УРОВЕНЬ ПРОЙДЕН! МАКС. КОМБО: x${state.maxCombo}`;
-    overlayTitle.textContent = `Отличная стрельба! «${lvl.name}» зачищен`;
-    overlayDesc.innerHTML = `Вы успешно сбили все слова уровня. Пройдите быстрый <strong>блиц из 3 вопросов</strong> или переходите к следующему уровню!`;
-
-    overlayWordsHeader.textContent = `📋 Выученные слова (${lvl.words.length})`;
-    renderWordsPreviewList(lvl.words, overlayWordsPreview);
-
-    btnStartLevel.textContent = '🔄 Ещё раз';
-    btnStartLevel.style.display = 'inline-flex';
-
-    if (state.currentLevelIndex < levels.length - 1) {
-      btnNextLevel.style.display = 'inline-flex';
-      btnNextLevel.textContent = `Следующий: Ур.${levels[state.currentLevelIndex + 1].number} ➔`;
-    } else {
-      btnNextLevel.style.display = 'none';
-    }
-
-    btnPracticeMistakes.style.display = state.mistakeWordsMap.size > 0 ? 'inline-flex' : 'none';
-
+    refreshOverlayContent();
     startPostLevelQuiz(lvl.words);
     centerOverlay.classList.remove('hidden');
   }
 
-  // --- Мини-блиц из 3 слов после уровня ---
+  // --- Мини-блиц из 3 слов после уровня (мгновенно переводится при переключении RU / עברית) ---
   function startPostLevelQuiz(levelWords) {
     if (!levelWords || levelWords.length < 4) {
+      state.activeQuiz = null;
       levelQuizBox.style.display = 'none';
       return;
     }
 
     levelQuizBox.style.display = 'flex';
-    const questions = shuffleArray(levelWords).slice(0, 3);
-    let qIndex = 0;
-    let correctCount = 0;
-
-    function renderQuestion() {
-      if (qIndex >= questions.length) {
-        quizScoreText.textContent = `${correctCount} / ${questions.length} верно!`;
-        quizQuestionWord.textContent = `✨ Блиц завершён! Результат: ${correctCount} из ${questions.length}`;
-        quizOptionsGrid.innerHTML = '';
-        return;
-      }
-
-      const currentQ = questions[qIndex];
-      const correctTrans = getWordTranslation(currentQ);
-      quizScoreText.textContent = `${qIndex + 1} / ${questions.length}`;
-      quizQuestionWord.textContent = currentQ.raw;
-      sound.speakGerman(currentQ.withArticle || currentQ.word);
-
-      const wrongPool = allAutoWords.filter(w => getWordTranslation(w) !== correctTrans);
+    const questions = shuffleArray(levelWords).slice(0, 3).map(currentQ => {
+      const wrongPool = allAutoWords.filter(w => w.raw !== currentQ.raw);
       const wrongChoices = shuffleArray(wrongPool).slice(0, 3);
       const options = shuffleArray([currentQ, ...wrongChoices]);
+      return { currentQ, options };
+    });
 
+    state.activeQuiz = {
+      questions,
+      qIndex: 0,
+      correctCount: 0,
+      answered: false,
+      selectedOptRaw: null
+    };
+
+    renderCurrentQuizQuestion(true);
+  }
+
+  function renderCurrentQuizQuestion(speakNow = false) {
+    const quiz = state.activeQuiz;
+    if (!quiz) return;
+    const tr = t();
+
+    if (quizHeaderTitle) quizHeaderTitle.textContent = tr.quizHeader;
+
+    if (quiz.qIndex >= quiz.questions.length) {
+      quizScoreText.textContent = tr.quizDoneScore(quiz.correctCount, quiz.questions.length);
+      quizQuestionWord.dir = isHebrewUI() ? 'rtl' : 'ltr';
+      quizQuestionWord.textContent = tr.quizDoneTitle(quiz.correctCount, quiz.questions.length);
       quizOptionsGrid.innerHTML = '';
-      options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'quiz-opt-btn';
-        const optText = getWordTranslation(opt);
-        btn.textContent = optText;
-        if (isRtlTranslation(opt)) {
-          btn.dir = 'rtl';
-          btn.style.textAlign = 'right';
-        }
-        btn.addEventListener('click', () => {
-          const allBtns = quizOptionsGrid.querySelectorAll('button');
-          allBtns.forEach(b => (b.disabled = true));
-
-          if (optText === correctTrans) {
-            btn.classList.add('correct');
-            correctCount++;
-            state.score += 150;
-            updateHudStats();
-            sound.playExplosion();
-          } else {
-            btn.classList.add('wrong');
-            allBtns.forEach(b => {
-              if (b.textContent === correctTrans) b.classList.add('correct');
-            });
-            sound.playMiss();
-          }
-
-          setTimeout(() => {
-            qIndex++;
-            renderQuestion();
-          }, 900);
-        });
-        quizOptionsGrid.appendChild(btn);
-      });
+      return;
     }
 
-    renderQuestion();
+    const { currentQ, options } = quiz.questions[quiz.qIndex];
+    quizScoreText.textContent = `${quiz.qIndex + 1} / ${quiz.questions.length}`;
+    quizQuestionWord.dir = 'ltr';
+    quizQuestionWord.textContent = currentQ.raw;
+
+    if (speakNow) {
+      sound.speakGerman(currentQ.withArticle || currentQ.word);
+    }
+
+    quizOptionsGrid.innerHTML = '';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'quiz-opt-btn';
+      const optText = getWordTranslation(opt);
+      btn.textContent = optText;
+      if (isRtlTranslation(opt)) {
+        btn.dir = 'rtl';
+        btn.style.textAlign = 'right';
+      } else {
+        btn.dir = 'ltr';
+        btn.style.textAlign = 'left';
+      }
+
+      if (quiz.answered) {
+        btn.disabled = true;
+        if (opt.raw === currentQ.raw) {
+          btn.classList.add('correct');
+        } else if (opt.raw === quiz.selectedOptRaw) {
+          btn.classList.add('wrong');
+        }
+      }
+
+      btn.addEventListener('click', () => {
+        if (quiz.answered) return;
+        quiz.answered = true;
+        quiz.selectedOptRaw = opt.raw;
+
+        if (opt.raw === currentQ.raw) {
+          quiz.correctCount++;
+          state.score += 150;
+          updateHudStats();
+          sound.playExplosion();
+        } else {
+          sound.playMiss();
+        }
+
+        renderCurrentQuizQuestion(false);
+
+        setTimeout(() => {
+          quiz.qIndex++;
+          quiz.answered = false;
+          quiz.selectedOptRaw = null;
+          renderCurrentQuizQuestion(true);
+        }, 900);
+      });
+      quizOptionsGrid.appendChild(btn);
+    });
   }
 
   // --- Поражение ---
   function triggerGameOver() {
     state.running = false;
     state.gameOver = true;
-    const lvl = levels[state.currentLevelIndex];
-
+    state.overlayMode = 'gameover';
+    state.activeQuiz = null;
     levelQuizBox.style.display = 'none';
-    overlayBadge.textContent = '💥 ЩИТ КОРАБЛЯ ПРОБИТ';
-    overlayTitle.textContent = `Уровень «${lvl.name}» не завершён`;
-    overlayDesc.innerHTML = `Сбито слов: <strong>${state.wordsDestroyedInLevel} из ${state.totalWordsInLevel}</strong>. Попробуйте ещё раз!`;
-
-    overlayWordsHeader.textContent = `📋 Слова этого уровня (${lvl.words.length})`;
-    renderWordsPreviewList(lvl.words, overlayWordsPreview);
-
-    btnStartLevel.textContent = '🚀 Попробовать снова';
-    btnStartLevel.style.display = 'inline-flex';
-    btnNextLevel.style.display = 'none';
-    btnPracticeMistakes.style.display = state.mistakeWordsMap.size > 0 ? 'inline-flex' : 'none';
-
+    refreshOverlayContent();
     centerOverlay.classList.remove('hidden');
   }
 
@@ -1199,13 +1433,11 @@
 
     if (!state.running) return;
     state.paused = true;
-    const lvl = levels[state.currentLevelIndex];
+    state.overlayMode = 'pause';
+    state.activeQuiz = null;
     levelQuizBox.style.display = 'none';
-    overlayBadge.textContent = '⏸ ИГРА НА ПАУЗЕ';
-    overlayTitle.textContent = `${lvl.name}`;
-    overlayDesc.innerHTML = `Прогресс: <strong>${state.wordsDestroyedInLevel} / ${state.totalWordsInLevel}</strong> слов. Вы можете продолжить бой или выбрать другой уровень:`;
-    btnStartLevel.textContent = '▶ Продолжить уровень';
     btnStartLevel.dataset.resumeMode = '1';
+    refreshOverlayContent();
     centerOverlay.classList.remove('hidden');
   }
 
@@ -1331,7 +1563,6 @@
 
     const bounds = getPlayBounds();
 
-    // 1. Космическая сетка в стиле ZType
     ctx.save();
     ctx.strokeStyle = 'rgba(45, 212, 191, 0.05)';
     ctx.lineWidth = 1;
@@ -1350,7 +1581,6 @@
     }
     ctx.restore();
 
-    // 2. Звёзды
     for (const s of state.stars) {
       if (s.y > bounds.bottom) continue;
       ctx.fillStyle = `rgba(203, 213, 225, ${s.alpha})`;
@@ -1359,7 +1589,6 @@
       ctx.fill();
     }
 
-    // 3. Линия прицела
     const lockedWord = state.activeWords.find(w => w.id === state.lockedWordId);
     if (lockedWord && state.running) {
       ctx.save();
@@ -1373,7 +1602,6 @@
       ctx.restore();
     }
 
-    // 4. Лазеры
     for (const l of state.lasers) {
       ctx.save();
       ctx.strokeStyle = l.color;
@@ -1388,7 +1616,6 @@
       ctx.restore();
     }
 
-    // 5. Ударные кольца
     for (const sw of state.shockwaves) {
       ctx.save();
       ctx.strokeStyle = sw.color;
@@ -1400,7 +1627,6 @@
       ctx.restore();
     }
 
-    // 6. Частицы
     for (const p of state.particles) {
       ctx.save();
       ctx.fillStyle = p.color;
@@ -1413,10 +1639,8 @@
       ctx.restore();
     }
 
-    // 7. Корабль игрока прямо над клавиатурой ZType
     drawPlayerShip();
 
-    // 8. Летящие немецкие слова
     for (const w of state.activeWords) {
       if (w.id !== state.lockedWordId) {
         drawWordNode(w, false, bounds);
@@ -1426,12 +1650,10 @@
       drawWordNode(lockedWord, true, bounds);
     }
 
-    // 9. ВСПЛЫВАЮЩИЕ ПЕРЕВОДЫ НА МЕСТЕ ВЗРЫВА!
     for (const ft of state.floatingTranslations) {
       drawFloatingTranslation(ft, bounds);
     }
 
-    // 10. Предупреждение раскладки
     if (state.layoutWarningTimer > 0) {
       drawLayoutWarning(bounds);
     }
@@ -1443,7 +1665,6 @@
     ctx.translate(x - Math.cos(angle) * recoil, y - Math.sin(angle) * recoil);
     ctx.rotate(angle + Math.PI / 2);
 
-    // Пламя двигателя
     ctx.fillStyle = 'rgba(45, 212, 191, 0.85)';
     ctx.beginPath();
     ctx.moveTo(-5, 13);
@@ -1452,7 +1673,6 @@
     ctx.closePath();
     ctx.fill();
 
-    // Корпус корабля в стиле ZType (бирюзовый неоновый истребитель)
     ctx.shadowColor = '#2dd4bf';
     ctx.shadowBlur = 12;
     ctx.fillStyle = '#0f172a';
@@ -1496,14 +1716,12 @@
     const boxW = totalW + padX * 2;
     const boxH = fontPx + 11;
 
-    // Удерживаем плашку слова строго внутри границ экрана
     const clampedDrawX = Math.max(bounds.left + boxW / 2 + 4, Math.min(bounds.right - boxW / 2 - 4, w.x));
     w.x = clampedDrawX;
 
     ctx.save();
     ctx.translate(clampedDrawX, w.y);
 
-    // Оранжевый/цветной кружок-прицел врага, как в оригинальном ZType
     ctx.fillStyle = isLocked ? '#fb923c' : style.main;
     ctx.shadowColor = isLocked ? '#fb923c' : style.main;
     ctx.shadowBlur = isLocked ? 12 : 6;
@@ -1521,7 +1739,6 @@
     const boxX = -boxW / 2;
     const boxY = -boxH / 2;
 
-    // Бейдж артикля и мн.ч. сверху
     if (!state.typeWithArticle && w.entry.article) {
       const badgeStr = w.entry.plural
         ? `${w.entry.article} · ${w.entry.plural}`
@@ -1535,13 +1752,13 @@
       ctx.fill();
       ctx.stroke();
 
+      ctx.direction = 'ltr';
       ctx.fillStyle = style.main;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(badgeStr, 0, boxY - 8);
     }
 
-    // Чёрная контрастная плашка под словом (как в ZType)
     ctx.fillStyle = isLocked
       ? 'rgba(28, 17, 10, 0.95)'
       : 'rgba(5, 9, 17, 0.92)';
@@ -1554,7 +1771,7 @@
     ctx.fill();
     ctx.stroke();
 
-    // Отрисовка букв
+    ctx.direction = 'ltr';
     ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
@@ -1580,7 +1797,6 @@
     ctx.restore();
   }
 
-  // --- Отрисовка голограммы с переводом (RU / עברית) на месте взрыва слова ---
   function drawFloatingTranslation(ft, bounds) {
     ctx.save();
 
@@ -1662,7 +1878,7 @@
     ctx.fillStyle = '#fecdd3';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('⚠️ Переключите раскладку на DE / EN!', 0, 0);
+    ctx.fillText(t().layoutWarning, 0, 0);
     ctx.restore();
   }
 
@@ -1692,7 +1908,6 @@
       .replace(/"/g, '&quot;');
   }
 
-  // --- Парсер пользовательских немецких слов ---
   function parseGermanEntryLine(line) {
     const trimmed = line.trim();
     if (!trimmed || !trimmed.includes(';')) return null;
@@ -1786,9 +2001,8 @@
   if (btnArticleMode) {
     btnArticleMode.addEventListener('click', () => {
       state.typeWithArticle = !state.typeWithArticle;
-      btnArticleMode.textContent = state.typeWithArticle
-        ? '🏷️ С артиклем'
-        : '🏷️ Бейдж';
+      const tr = t();
+      btnArticleMode.textContent = state.typeWithArticle ? tr.articleMode : tr.badgeMode;
       btnArticleMode.classList.toggle('active', state.typeWithArticle);
 
       state.activeWords.forEach(w => {
@@ -1887,18 +2101,17 @@
   btnSaveCustomWords.addEventListener('click', () => {
     const rawLines = customWordsInput.value.split(/\r?\n/);
     const parsedWords = rawLines.map(parseGermanEntryLine).filter(Boolean);
-    if (parsedWords.length === 0) {
-      alert('Введите хотя бы одно слово в формате: немецкое слово;перевод');
-      return;
-    }
+    if (parsedWords.length === 0) return;
 
     const customLevelNum = levels.length + 1;
     levels.push({
       id: `custom-${Date.now()}`,
       number: customLevelNum,
       name: `Свой список #${customLevelNum - 7}`,
+      heName: `רשימה משלי #${customLevelNum - 7}`,
       deName: `Eigene Wörter (${parsedWords.length})`,
       description: 'Пользовательский набор немецких слов для тренировки.',
+      heDescription: 'מאגר מילים מותאם אישית בגרמנית לתרגול.',
       speedMultiplier: 0.95,
       spawnIntervalMs: 2700,
       words: parsedWords
@@ -1911,6 +2124,7 @@
 
   // --- Инициализация ---
   resizeCanvas();
+  applyStaticUILocalization();
   selectLevel(0, true);
   requestAnimationFrame(gameLoop);
 })();

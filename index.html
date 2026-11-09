@@ -14,7 +14,7 @@
   <header class="hud-top">
     <div class="brand-cluster">
       <button type="button" class="hud-btn pause-icon-btn" id="btnPause" title="Пауза / Меню уровней (Esc)">
-        ⏸ <span class="hide-mobile">Пауза</span>
+        ⏸ <span class="hide-mobile" id="labelPause">Пауза</span>
       </button>
       <div class="brand-logo hide-mobile" title="Немецкий клавиатурный шутер в стиле ZType">
         <span>🚀 Z-DEUTSCH</span>
@@ -32,19 +32,19 @@
 
     <div class="stats-cluster">
       <div class="stat-item">
-        <span class="stat-label">Очки</span>
+        <span class="stat-label" id="labelScore">Очки</span>
         <span class="stat-value accent-amber" id="hudScore">0</span>
       </div>
       <div class="stat-item hide-mobile">
-        <span class="stat-label">Комбо</span>
+        <span class="stat-label" id="labelCombo">Комбо</span>
         <span class="stat-value accent-emerald" id="hudCombo">x1</span>
       </div>
       <div class="stat-item hide-mobile">
-        <span class="stat-label">Точность</span>
+        <span class="stat-label" id="labelAccuracy">Точность</span>
         <span class="stat-value" id="hudAccuracy">100%</span>
       </div>
       <div class="stat-item">
-        <span class="stat-label hide-mobile">Щит</span>
+        <span class="stat-label hide-mobile" id="labelShield">Щит</span>
         <span class="stat-value accent-rose" id="hudShields">❤️❤️❤️❤️</span>
       </div>
     </div>
@@ -53,7 +53,7 @@
       <button type="button" class="hud-btn emp-btn" id="btnEmp" title="Взорвать ближайшие слова и показать их перевод (Enter)">
         ⚡<span class="hide-mobile"> EMP</span> (<span id="empCount">2</span>)
       </button>
-      <button type="button" class="hud-btn active" id="btnLangMode" title="Язык перевода: Русский / Иврит (עברית) / Оба">
+      <button type="button" class="hud-btn active" id="btnLangMode" title="Язык перевода и интерфейса: Русский / Иврит (עברית) / Оба">
         🇷🇺 RU
       </button>
       <button type="button" class="hud-btn" id="btnSpeedMode" title="Скорость полёта немецких слов (0.5x / 0.7x / 1.0x / 1.35x)">
@@ -66,10 +66,10 @@
         🔊<span class="hide-mobile"> DE</span>
       </button>
       <button type="button" class="hud-btn" id="btnOpenDict" title="Открыть полный словарь уровня Auto (73 слова)">
-        📚<span class="hide-mobile"> Словарь</span>
+        📚<span class="hide-mobile" id="labelDictBtn"> Словарь</span>
       </button>
       <button type="button" class="hud-btn hide-mobile" id="btnOpenCustom" title="Добавить свои немецкие слова">
-        ➕ Свои слова
+        ➕ <span id="labelCustomBtn">Свои слова</span>
       </button>
     </div>
   </header>
@@ -77,7 +77,7 @@
   <!-- Левая панель (только на широких экранах ПК): Подуровни главного курса AUTO -->
   <aside class="sidebar-left">
     <div class="sidebar-header">
-      <span class="sidebar-title">🚗 Уровни «AUTO»</span>
+      <span class="sidebar-title" id="sidebarLevelsTitle">🚗 Уровни «AUTO»</span>
       <span style="font-size: 0.72rem; color: var(--text-muted);" id="totalWordsCounter">73 слова</span>
     </div>
     <div class="level-list scrollable" id="levelListContainer">
@@ -88,7 +88,7 @@
   <!-- Правая панель (только на широких экранах ПК): Журнал взрывов -->
   <aside class="sidebar-right">
     <div class="sidebar-header">
-      <span class="sidebar-title">💥 Взорванные слова</span>
+      <span class="sidebar-title" id="sidebarKillsTitle">💥 Взорванные слова</span>
       <button type="button" class="hud-btn" id="btnClearFeed" style="padding: 2px 7px; font-size: 0.7rem;" title="Очистить список">
         Очистить
       </button>
@@ -100,10 +100,10 @@
       </div>
     </div>
     <div class="gender-legend" title="Цветовая подсказка рода существительных">
-      <span class="legend-dot legend-der">der (м.р.)</span>
-      <span class="legend-dot legend-die">die (ж.р.)</span>
-      <span class="legend-dot legend-das">das (ср.р.)</span>
-      <span class="legend-dot legend-verb">Глаг./Пр.</span>
+      <span class="legend-dot legend-der" id="legendDer">der (м.р.)</span>
+      <span class="legend-dot legend-die" id="legendDie">die (ж.р.)</span>
+      <span class="legend-dot legend-das" id="legendDas">das (ср.р.)</span>
+      <span class="legend-dot legend-verb" id="legendVerb">Глаг./Пр.</span>
     </div>
   </aside>
 
@@ -170,10 +170,10 @@
 
   <!-- Центральный оверлей: Старт уровня / Выбор уровня / Завершение уровня -->
   <section class="center-overlay" id="centerOverlay">
-    <div class="overlay-card scrollable">
+    <div class="overlay-card scrollable" id="overlayCard">
       <div class="overlay-top-bar">
         <span class="overlay-badge" id="overlayBadge">КАМПАНИЯ AUTO · ЭТАП 1 ИЗ 6</span>
-        <!-- Быстрый выбор языка перевода -->
+        <!-- Быстрый выбор языка перевода и меню -->
         <div class="lang-quick-group">
           <button type="button" class="hud-btn lang-quick-btn active" data-lang="ru">🇷🇺 RU</button>
           <button type="button" class="hud-btn lang-quick-btn" data-lang="he">🇮🇱 עברית</button>
@@ -198,7 +198,7 @@
       <!-- Мини-блиц после прохождения уровня (скрыт перед стартом) -->
       <div class="quiz-box" id="levelQuizBox" style="display: none;">
         <div class="quiz-header">
-          <span>🧠 БЛИЦ: Выберите перевод!</span>
+          <span id="quizHeaderTitle">🧠 БЛИЦ: Выберите перевод!</span>
           <span id="quizScoreText">0 / 3</span>
         </div>
         <div class="quiz-question" id="quizQuestionWord">der Kofferraum</div>
@@ -217,7 +217,7 @@
   <!-- Модальное окно: Полный словарь всех 73 слов категории AUTO -->
   <dialog class="modern-dialog" id="dictDialog" closedby="any">
     <div class="dialog-header">
-      <h2 class="dialog-title">📚 Словарь «AUTO» (73 слова)</h2>
+      <h2 class="dialog-title" id="dictDialogTitle">📚 Словарь «AUTO» (73 слова)</h2>
       <button type="button" class="dialog-close" id="btnCloseDict" aria-label="Закрыть">✕</button>
     </div>
     <div class="dialog-body scrollable">
@@ -234,11 +234,11 @@
   <!-- Модальное окно: Добавление своего списка слов -->
   <dialog class="modern-dialog" id="customWordsDialog" closedby="any">
     <div class="dialog-header">
-      <h2 class="dialog-title">➕ Добавить свои немецкие слова</h2>
+      <h2 class="dialog-title" id="customDialogTitle">➕ Добавить свои немецкие слова</h2>
       <button type="button" class="dialog-close" id="btnCloseCustom" aria-label="Закрыть">✕</button>
     </div>
     <div class="dialog-body scrollable">
-      <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.45;">
+      <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.45;" id="customDialogHint">
         Формат: <code>немецкое слово;перевод RU;перевод HE</code> (каждое с новой строки).
       </p>
       <textarea
