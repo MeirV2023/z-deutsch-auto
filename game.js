@@ -79,6 +79,18 @@
       heName: 'סינת׳ווייב',
       ruDesc: 'Призма-лазер: каждая буква играет мелодичную ноту в стиле Synthwave!',
       heDesc: 'לייזר פריזמה מנגן: כל אות מפיקה צליל סינת׳ווייב מלודי!'
+    },
+    {
+      id: 'gravity',
+      key: '6',
+      icon: '🌀',
+      color: '#2dd4bf',
+      secondaryColor: '#38bdf8',
+      recoilBoost: 2.2,
+      ruName: 'Грави-волна',
+      heName: 'גל כבידה',
+      ruDesc: 'Антигравитация: сразу много слов разлетаются высоко к самому началу экрана!',
+      heDesc: 'אנטי-כבידה: הודף בבת אחת מילים רבות חזרה למעלה לתחילת המסך!'
     }
   ];
 
@@ -107,6 +119,8 @@
       overlayWeaponTitle: '⚔️ Оружие корабля:',
       backToMenuBtn: '🏠 В меню',
       weaponBanner: (icon, name) => `${icon} Оружие: ${name}`,
+      speedBanner: (label) => `Скорость спуска слов: ${label}`,
+      gravitySurgeBanner: '🌀 ГРАВИ-ВОЛНА: СЛОВА ОТБРОШЕНЫ К НАЧАЛУ!',
 
       pause: 'Пауза',
       score: 'Очки',
@@ -191,6 +205,8 @@
       overlayWeaponTitle: '⚔️ נשק החללית:',
       backToMenuBtn: '🏠 מסך ראשי',
       weaponBanner: (icon, name) => `${icon} נשק: ${name}`,
+      speedBanner: (label) => `מהירות ירידת המילים: ${label}`,
+      gravitySurgeBanner: '🌀 גל כבידה: המילים נהדפו לתחילת המסך!',
 
       pause: 'הפסקה',
       score: 'ניקוד',
@@ -542,6 +558,35 @@
           lead.start(now);
           lead.stop(now + 0.185);
         });
+      } else if (weaponId === 'gravity') {
+        // 6. Антигравитационная волна: восходящий саб-импульс + стерео-аккорд подъёма
+        this._playTactileClick(now, dest, 1650, 0.06);
+
+        const lift = this.ctx.createOscillator();
+        const liftGain = this.ctx.createGain();
+        lift.type = 'sine';
+        lift.frequency.setValueAtTime(92, now);
+        lift.frequency.exponentialRampToValueAtTime(285 + letterStep * 0.9, now + 0.14);
+        liftGain.gain.setValueAtTime(0.15, now);
+        liftGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        lift.connect(liftGain);
+        liftGain.connect(dest);
+        lift.start(now);
+        lift.stop(now + 0.155);
+
+        [330 + letterStep, 495 + letterStep].forEach(freq => {
+          const shimmer = this.ctx.createOscillator();
+          const sg = this.ctx.createGain();
+          shimmer.type = 'triangle';
+          shimmer.frequency.setValueAtTime(freq * 0.78, now);
+          shimmer.frequency.exponentialRampToValueAtTime(freq * 1.35, now + 0.13);
+          sg.gain.setValueAtTime(0.045, now);
+          sg.gain.exponentialRampToValueAtTime(0.001, now + 0.135);
+          shimmer.connect(sg);
+          sg.connect(dest);
+          shimmer.start(now);
+          shimmer.stop(now + 0.14);
+        });
       }
 
       // Дополнительный кристальный акцент на последней букве слова
@@ -625,7 +670,53 @@
       if (!this.ctx) return;
       const now = this.ctx.currentTime;
       this._playTactileClick(now, this.masterGain, 2800, 0.07);
-      this.playWeaponShot(weaponId, 3, 2, 0, false);
+      if (weaponId === 'gravity') {
+        this.playGravityWave(1.0);
+      } else {
+        this.playWeaponShot(weaponId, 3, 2, 0, false);
+      }
+    }
+
+    playGravityWave(strength = 1.0) {
+      if (!this.sfxEnabled) return;
+      this.init();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      const dest = this.masterGain;
+      const dur = 0.28 + 0.14 * strength;
+
+      // Мощный восходящий антигравитационный импульс
+      const sub = this.ctx.createOscillator();
+      const sg = this.ctx.createGain();
+      sub.type = 'sine';
+      sub.frequency.setValueAtTime(68, now);
+      sub.frequency.exponentialRampToValueAtTime(420, now + dur);
+      sg.gain.setValueAtTime(0.16 * Math.min(1.1, strength + 0.25), now);
+      sg.gain.exponentialRampToValueAtTime(0.001, now + dur + 0.03);
+      sub.connect(sg);
+      sg.connect(dest);
+      sub.start(now);
+      sub.stop(now + dur + 0.04);
+
+      if (this.noiseBuffer) {
+        const whoosh = this.ctx.createBufferSource();
+        whoosh.buffer = this.noiseBuffer;
+        const bp = this.ctx.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.frequency.setValueAtTime(340, now);
+        bp.frequency.exponentialRampToValueAtTime(2200, now + dur);
+        bp.Q.value = 2.4;
+
+        const wg = this.ctx.createGain();
+        wg.gain.setValueAtTime(0.11, now);
+        wg.gain.exponentialRampToValueAtTime(0.001, now + dur);
+
+        whoosh.connect(bp);
+        bp.connect(wg);
+        wg.connect(dest);
+        whoosh.start(now, Math.random() * 0.4, dur + 0.04);
+      }
     }
 
     playWarpLaunch() {
@@ -1081,12 +1172,24 @@
     weaponBannerText: '',
     weaponBannerTimer: 0,
 
-    // Настройки игрока
+    // Настройки игрока (включая новую сверхмедленную скорость 0.25x!)
     typeWithArticle: Boolean(initialSave.typeWithArticle),
-    speedPresetIndex: typeof initialSave.speedPresetIndex === 'number' ? initialSave.speedPresetIndex : 0,
+    speedPresetIndex: (() => {
+      const presets = [0.25, 0.5, 0.75, 1.0, 1.35];
+      if (typeof initialSave.speedMult === 'number') {
+        const idx = presets.findIndex(m => Math.abs(m - initialSave.speedMult) < 0.03);
+        if (idx !== -1) return idx;
+      }
+      if (typeof initialSave.speedPresetIndex === 'number') {
+        const legacyMap = [1, 2, 3, 4];
+        return legacyMap[initialSave.speedPresetIndex] ?? 1;
+      }
+      return 1; // 0.5x по умолчанию, 0.25x доступна в один цикл кнопки
+    })(),
     speedPresets: [
+      { mult: 0.25, label: '🦥 0.25x' },
       { mult: 0.5, label: '🐌 0.5x' },
-      { mult: 0.7, label: '🐢 0.7x' },
+      { mult: 0.75, label: '🐢 0.75x' },
       { mult: 1.0, label: '🚀 1.0x' },
       { mult: 1.35, label: '⚡ 1.35x' }
     ],
@@ -1127,6 +1230,8 @@
 
     lasers: [],
     missiles: [],
+    repulsorWaves: [],
+    gravityEquipCooldown: 0,
     particles: [],
     shockwaves: [],
     floatingTranslations: [],
@@ -1463,6 +1568,51 @@
     pilotRankText.textContent = tr.rankLine(rankName, state.highScore.toLocaleString('ru-RU'));
   }
 
+  // --- Разлёт сразу множества слов высоко наверх к самому началу экрана (Грави-волна) ---
+  function scatterWordsToTop(wordList, bounds, strength = 1.0, minTopOffset = 34) {
+    // Выпускаем широкую дугообразную антигравитационную волну от корабля вверх
+    state.repulsorWaves.push({
+      x: state.ship.x,
+      y: state.ship.y - 12,
+      radius: 24,
+      maxRadius: Math.max(240, (bounds.bottom - bounds.top) * (0.58 + 0.45 * strength)),
+      alpha: 0.95,
+      color: '#2dd4bf',
+      coreColor: '#e0f2fe',
+      lineWidth: strength >= 0.85 ? 4.5 : 3.0
+    });
+
+    if (!wordList || wordList.length === 0) return;
+
+    const sorted = wordList.slice().sort((a, b) => a.x - b.x);
+    const count = sorted.length;
+    const padX = Math.min(72, Math.max(44, (bounds.right - bounds.left) * 0.1));
+    const spanW = Math.max(100, (bounds.right - bounds.left) - padX * 2);
+    const startX = bounds.left + padX;
+
+    sorted.forEach((w, idx) => {
+      const slotFrac = count === 1 ? 0.5 : idx / (count - 1);
+      const targetX = startX + slotFrac * spanW + (Math.random() - 0.5) * 32;
+      let desiredDx = (targetX - w.x) * (0.5 + 0.5 * strength);
+      if (Math.abs(desiredDx) < 26) {
+        desiredDx = (idx % 2 === 0 ? -1 : 1) * (30 + Math.random() * 28) * strength;
+      }
+      w.pushVx = desiredDx * 3.0;
+
+      const rowOffset = (idx % 3) * 24;
+      const startLineY = bounds.top + minTopOffset + rowOffset + Math.random() * 10;
+      const currentDist = Math.max(42, w.y - startLineY);
+      const liftDist = strength >= 0.85
+        ? currentDist
+        : Math.max(58, currentDist * 0.62);
+
+      w.pushVy = Math.min(w.pushVy || 0, -(liftDist * 2.95 + (w.vy || 16) * 0.8));
+      w.hitFlash = Math.max(w.hitFlash || 0, 0.85);
+
+      spawnParticles(w.x, w.y + 8, '#2dd4bf', strength >= 0.85 ? 6 : 3, 95);
+    });
+  }
+
   // --- Смена и рендер оружия ---
   function equipWeapon(weaponId, withPreviewShot = true) {
     const found = WEAPONS.find(w => w.id === weaponId);
@@ -1478,17 +1628,59 @@
 
       // Показываем баннер на холсте в боевом режиме или делаем живой залп на стартовом экране
       if (state.screenMode === 'play') {
-        state.weaponBannerText = t().weaponBanner(found.icon, getWeaponName(found));
-        state.weaponBannerTimer = 1.6;
+        if (found.id === 'gravity' && state.running && !state.paused && state.gravityEquipCooldown <= 0) {
+          const bounds = getPlayBounds();
+          // Если на поле ещё мало слов, сразу выпускаем до 4 слов из очереди и эффектно разбрасываем их веером к самому началу!
+          const needExtra = Math.min(Math.max(0, 4 - state.activeWords.length), state.wordQueue.length);
+          for (let k = 0; k < needExtra; k++) {
+            spawnNextWord();
+            const spawned = state.activeWords[state.activeWords.length - 1];
+            if (spawned) {
+              spawned.y = bounds.top + Math.min(180, (bounds.bottom - bounds.top) * (0.34 + k * 0.07));
+            }
+          }
+          scatterWordsToTop(state.activeWords, bounds, 1.0, 34);
+          state.spawnTimer = Math.max(state.spawnTimer, 2.8);
+          state.gravityEquipCooldown = 5.0;
+          state.weaponBannerText = t().gravitySurgeBanner;
+          state.weaponBannerTimer = 2.0;
+        } else {
+          state.weaponBannerText = t().weaponBanner(found.icon, getWeaponName(found));
+          state.weaponBannerTimer = 1.6;
+        }
       } else {
         const bounds = getPlayBounds();
-        const targetX = state.demoWords.length > 0
-          ? state.demoWords[0].x
-          : state.ship.x + (Math.random() * 100 - 50);
-        const targetY = state.demoWords.length > 0
-          ? state.demoWords[0].y
-          : Math.max(bounds.top + 28, (bounds.top + state.ship.y) / 2);
-        spawnWeaponVisualEffect(found.id, targetX, targetY, found.color);
+        const corridorH = bounds.bottom - bounds.top;
+        if (found.id === 'gravity' && corridorH >= 120) {
+          // На стартовом экране сразу наполняем космос 5 словами и эффектно разбрасываем их к самому верху окна!
+          while (state.demoWords.length < 5 && allAutoWords.length > 0) {
+            const sample = allAutoWords[Math.floor(Math.random() * allAutoWords.length)];
+            const margin = Math.min(130, canvas.width * 0.2);
+            const rx = margin + Math.random() * Math.max(60, canvas.width - margin * 2);
+            state.demoWords.push({
+              id: nextEntityId++,
+              entry: sample,
+              text: sample.word,
+              typedCount: 0,
+              x: rx,
+              y: bounds.top + corridorH * (0.42 + Math.random() * 0.25),
+              vy: Math.max(9, Math.min(16, corridorH * 0.065)),
+              pushVx: 0,
+              pushVy: 0,
+              recoilY: 0,
+              hitFlash: 0
+            });
+          }
+          scatterWordsToTop(state.demoWords, bounds, 1.0, 26);
+        } else {
+          const targetX = state.demoWords.length > 0
+            ? state.demoWords[0].x
+            : state.ship.x + (Math.random() * 100 - 50);
+          const targetY = state.demoWords.length > 0
+            ? state.demoWords[0].y
+            : Math.max(bounds.top + 28, (bounds.top + state.ship.y) / 2);
+          spawnWeaponVisualEffect(found.id, targetX, targetY, found.color);
+        }
       }
     }
   }
@@ -1687,6 +1879,29 @@
         alpha: 0.85
       });
       spawnParticles(targetX, targetY, noteColor, 8, 115);
+    } else if (weaponId === 'gravity') {
+      // Широкий антигравитационный тракторный луч + импульсное кольцо подъёма
+      state.lasers.push({
+        kind: 'gravity',
+        x1: noseX,
+        y1: noseY,
+        x2: targetX,
+        y2: targetY,
+        color: '#2dd4bf',
+        coreColor: '#ccfbf1',
+        width: 4.6,
+        alpha: 0.95,
+        decay: 6.0
+      });
+      state.shockwaves.push({
+        x: targetX,
+        y: targetY,
+        radius: 5,
+        maxRadius: 34,
+        color: '#2dd4bf',
+        alpha: 0.9
+      });
+      spawnParticles(targetX, targetY, '#5eead4', 9, 130);
     }
   }
 
@@ -1717,6 +1932,7 @@
     state.activeQuiz = null;
     state.lasers = [];
     state.missiles = [];
+    state.repulsorWaves = [];
     state.shockwaves = [];
     state.floatingTranslations = [];
     state.demoWords = [];
@@ -1752,10 +1968,11 @@
       return;
     }
 
-    const spawnY = bounds.top + 22;
+    const spawnY = bounds.top + 24;
+    const maxDemoWords = state.weaponId === 'gravity' ? 4 : 2;
 
     state.demoSpawnTimer -= dt;
-    if (state.demoSpawnTimer <= 0 && state.demoWords.length < 2) {
+    if (state.demoSpawnTimer <= 0 && state.demoWords.length < maxDemoWords) {
       const sample = allAutoWords[Math.floor(Math.random() * allAutoWords.length)];
       if (sample) {
         const margin = Math.min(150, canvas.width * 0.24);
@@ -1768,20 +1985,38 @@
           x: rx,
           y: spawnY,
           vy: Math.max(9, Math.min(16, corridorH * 0.065)),
+          pushVx: 0,
+          pushVy: 0,
           recoilY: 0,
           hitFlash: 0
         });
       }
-      state.demoSpawnTimer = 1.85;
+      state.demoSpawnTimer = state.weaponId === 'gravity' ? 1.15 : 1.85;
     }
 
     for (let i = state.demoWords.length - 1; i >= 0; i--) {
       const dw = state.demoWords[i];
+      if (dw.pushVx) {
+        dw.x += dw.pushVx * dt;
+        dw.pushVx *= Math.exp(-3.0 * dt);
+        if (Math.abs(dw.pushVx) < 1) dw.pushVx = 0;
+      }
+      if (dw.pushVy) {
+        dw.y += dw.pushVy * dt;
+        dw.pushVy *= Math.exp(-2.8 * dt);
+        if (Math.abs(dw.pushVy) < 1) dw.pushVy = 0;
+      }
+
       if (dw.recoilY > 0) {
-        dw.y = Math.max(bounds.top + 18, dw.y - dw.recoilY * 6 * dt);
+        dw.y = Math.max(bounds.top + 22, dw.y - dw.recoilY * 6 * dt);
         dw.recoilY = Math.max(0, dw.recoilY - 24 * dt);
       } else {
         dw.y += dw.vy * dt;
+      }
+
+      if (dw.y < bounds.top + 22) {
+        dw.y = bounds.top + 22;
+        if (dw.pushVy < 0) dw.pushVy = 0;
       }
       if (dw.hitFlash > 0) dw.hitFlash = Math.max(0, dw.hitFlash - dt * 5);
 
@@ -1806,6 +2041,10 @@
         target.recoilY = 2.6;
         const style = getArticleStyle(target.entry.article);
         spawnWeaponVisualEffect(state.weaponId, target.x, target.y, style.main);
+
+        if (state.weaponId === 'gravity' && target.typedCount % 2 === 1) {
+          scatterWordsToTop(state.demoWords, bounds, 0.72, 24);
+        }
 
         if (target.typedCount >= target.text.length) {
           // Красивый беззвучный взрыв слова с показом перевода внутри космического окна
@@ -2230,6 +2469,8 @@
     state.lockedWordId = null;
     state.lasers = [];
     state.missiles = [];
+    state.repulsorWaves = [];
+    state.gravityEquipCooldown = 0;
     state.particles = [];
     state.shockwaves = [];
     state.floatingTranslations = [];
@@ -2240,6 +2481,21 @@
     state.paused = false;
     state.gameOver = false;
     state.activeQuiz = null;
+
+    // Если игрок уже выбрал «Грави-волну» перед стартом — открываем уровень эффектным веерным разлётом сразу 4 слов к началу!
+    if (state.weaponId === 'gravity' && state.wordQueue.length > 0) {
+      const bounds = getPlayBounds();
+      const waveCount = Math.min(4, state.wordQueue.length);
+      for (let k = 0; k < waveCount; k++) {
+        spawnNextWord();
+        const spawned = state.activeWords[state.activeWords.length - 1];
+        if (spawned) {
+          spawned.y = bounds.top + Math.min(170, (bounds.bottom - bounds.top) * (0.34 + k * 0.06));
+        }
+      }
+      scatterWordsToTop(state.activeWords, bounds, 1.0, 34);
+      state.spawnTimer = 3.0;
+    }
 
     centerOverlay.classList.add('hidden');
     updateHudStats();
@@ -2314,8 +2570,10 @@
       text: targetText,
       typedCount: 0,
       x: bestX,
-      y: bounds.top - 10,
+      y: bounds.top + 18,
       vx: 0,
+      pushVx: 0,
+      pushVy: 0,
       baseSpeedUnscaled,
       vy: baseSpeedUnscaled * speedPreset,
       recoilY: 0,
@@ -2347,6 +2605,12 @@
 
     spawnWeaponVisualEffect(weapon.id, wordObj.x, wordObj.y, style.main);
     sound.playWeaponShot(weapon.id, wordObj.typedCount, state.combo, pan, isFinalLetter);
+
+    // При стрельбе из «Грави-волны» каждая буква подбрасывает сразу все слова на экране обратно вверх!
+    if (weapon.id === 'gravity' && !isFinalLetter) {
+      const bounds = getPlayBounds();
+      scatterWordsToTop(state.activeWords, bounds, 0.58, 34);
+    }
 
     if (isFinalLetter) {
       explodeWord(wordObj, true);
@@ -2416,6 +2680,12 @@
       const pan = getHorizontalPan(wordObj.x);
       sound.playExplosion(state.combo, pan);
       ttsManager.speakGerman(wordObj.entry.withArticle || wordObj.entry.word);
+
+      // При взрыве слова из «Грави-волны» все остальные слова мощной волной разлетаются к самому началу!
+      if (weapon.id === 'gravity' && state.activeWords.length > 0) {
+        scatterWordsToTop(state.activeWords, bounds, 1.0, 34);
+        sound.playGravityWave(0.85);
+      }
     }
 
     updateHudStats();
@@ -2516,8 +2786,8 @@
       return;
     }
 
-    // Горячие клавиши 1–5 для мгновенной смены оружия
-    if (!e.ctrlKey && !e.altKey && !e.metaKey && /^[1-5]$/.test(e.key)) {
+    // Горячие клавиши 1–6 для мгновенной смены оружия
+    if (!e.ctrlKey && !e.altKey && !e.metaKey && /^[1-6]$/.test(e.key)) {
       const idx = Number(e.key) - 1;
       if (WEAPONS[idx]) {
         e.preventDefault();
@@ -2989,6 +3259,10 @@
       state.weaponBannerTimer = Math.max(0, state.weaponBannerTimer - dt);
     }
 
+    if (state.gravityEquipCooldown > 0) {
+      state.gravityEquipCooldown = Math.max(0, state.gravityEquipCooldown - dt);
+    }
+
     // Движение туманностей
     for (const neb of state.nebulae) {
       neb.x += neb.vx * dt;
@@ -3071,6 +3345,13 @@
       if (sw.alpha <= 0) state.shockwaves.splice(i, 1);
     }
 
+    for (let i = state.repulsorWaves.length - 1; i >= 0; i--) {
+      const rw = state.repulsorWaves[i];
+      rw.radius += (rw.maxRadius - rw.radius) * 5.4 * dt;
+      rw.alpha -= dt * 1.65;
+      if (rw.alpha <= 0) state.repulsorWaves.splice(i, 1);
+    }
+
     for (let i = state.floatingTranslations.length - 1; i >= 0; i--) {
       const ft = state.floatingTranslations[i];
       ft.life += dt;
@@ -3096,12 +3377,14 @@
     const speedPreset = state.speedPresets[state.speedPresetIndex].mult;
     state.spawnTimer -= dt;
 
-    const maxActiveOnScreen = canvas.width < 520 ? 5 : 7;
+    const maxActiveOnScreen = state.weaponId === 'gravity'
+      ? (canvas.width < 520 ? 6 : 8)
+      : (canvas.width < 520 ? 5 : 7);
 
     if (state.spawnTimer <= 0 && state.wordQueue.length > 0 && state.activeWords.length < maxActiveOnScreen) {
       spawnNextWord();
       const baseInterval = (lvl.spawnIntervalMs || 2600) / 1000;
-      state.spawnTimer = baseInterval / Math.sqrt(speedPreset);
+      state.spawnTimer = baseInterval / Math.pow(speedPreset, 0.72);
     } else if (state.activeWords.length === 0 && state.wordQueue.length > 0) {
       spawnNextWord();
       state.spawnTimer = 1.8;
@@ -3109,6 +3392,33 @@
 
     for (let i = state.activeWords.length - 1; i >= 0; i--) {
       const w = state.activeWords[i];
+
+      if (w.pushVx) {
+        w.x += w.pushVx * dt;
+        w.pushVx *= Math.exp(-3.0 * dt);
+        if (w.x <= bounds.left + 52 || w.x >= bounds.right - 52) {
+          w.pushVx *= -0.35;
+        }
+        if (Math.abs(w.pushVx) < 1) w.pushVx = 0;
+      }
+
+      if (w.pushVy) {
+        w.y += w.pushVy * dt;
+        w.pushVy *= Math.exp(-2.8 * dt);
+        if (w.pushVy < -55 && Math.random() < 0.35) {
+          state.particles.push({
+            x: w.x + (Math.random() * 28 - 14),
+            y: w.y + 12,
+            vx: (Math.random() - 0.5) * 24,
+            vy: 30 + Math.random() * 35,
+            size: Math.random() * 2 + 1.1,
+            color: '#2dd4bf',
+            alpha: 0.78,
+            decay: 2.8
+          });
+        }
+        if (Math.abs(w.pushVy) < 1) w.pushVy = 0;
+      }
 
       const dxToShip = state.ship.x - w.x;
       const pullFactor = w.y > bounds.bottom * 0.55 ? 0.12 : 0.03;
@@ -3119,6 +3429,12 @@
         w.recoilY = Math.max(0, w.recoilY - 28 * dt);
       } else {
         w.y += w.vy * dt;
+      }
+
+      const minStartY = bounds.top + 34;
+      if (w.y < minStartY) {
+        w.y = minStartY;
+        if (w.pushVy < 0) w.pushVy = 0;
       }
 
       if (w.hitFlash > 0) {
@@ -3283,7 +3599,7 @@
       ctx.restore();
     }
 
-    // 7. Ударные волны
+    // 7. Ударные волны + Широкие антигравитационные волны подъёма
     for (const sw of state.shockwaves) {
       ctx.save();
       ctx.strokeStyle = sw.color;
@@ -3291,6 +3607,26 @@
       ctx.lineWidth = 2.2;
       ctx.beginPath();
       ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    for (const rw of state.repulsorWaves) {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, rw.alpha);
+      ctx.strokeStyle = rw.color || '#2dd4bf';
+      ctx.shadowColor = rw.color || '#2dd4bf';
+      ctx.shadowBlur = 18;
+      ctx.lineWidth = rw.lineWidth || 3.5;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.arc(rw.x, rw.y + rw.radius * 0.28, rw.radius, -Math.PI * 0.82, -Math.PI * 0.18);
+      ctx.stroke();
+
+      ctx.strokeStyle = rw.coreColor || '#e0f2fe';
+      ctx.lineWidth = Math.max(1.2, (rw.lineWidth || 3.5) * 0.42);
+      ctx.beginPath();
+      ctx.arc(rw.x, rw.y + rw.radius * 0.28, rw.radius, -Math.PI * 0.79, -Math.PI * 0.21);
       ctx.stroke();
       ctx.restore();
     }
@@ -3427,6 +3763,29 @@
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
+    } else if (weapon.id === 'gravity') {
+      // Футуристичный корабль с дуговым антигравитационным излучателем спереди
+      ctx.beginPath();
+      ctx.moveTo(0, -14);
+      ctx.lineTo(17, 9);
+      ctx.lineTo(8, 12);
+      ctx.lineTo(0, 8);
+      ctx.lineTo(-8, 12);
+      ctx.lineTo(-17, 9);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.strokeStyle = '#5eead4';
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.arc(0, -10, 12, -Math.PI * 0.85, -Math.PI * 0.15);
+      ctx.stroke();
+
+      ctx.fillStyle = '#ccfbf1';
+      ctx.beginPath();
+      ctx.arc(0, -17, 3.4, 0, Math.PI * 2);
+      ctx.fill();
     } else {
       // Классический скоростной перехватчик (Plasma / Synthwave)
       ctx.beginPath();
@@ -3833,8 +4192,11 @@
 
   function cycleSpeedPreset() {
     state.speedPresetIndex = (state.speedPresetIndex + 1) % state.speedPresets.length;
-    saveSettingsPatch({ speedPresetIndex: state.speedPresetIndex });
     const preset = state.speedPresets[state.speedPresetIndex];
+    saveSettingsPatch({
+      speedPresetIndex: state.speedPresetIndex,
+      speedMult: preset.mult
+    });
     if (btnSpeedMode) btnSpeedMode.textContent = preset.label;
     if (btnTitleSpeed) btnTitleSpeed.textContent = preset.label;
 
@@ -3843,6 +4205,11 @@
         w.vy = w.baseSpeedUnscaled * preset.mult;
       }
     });
+
+    if (state.screenMode === 'play') {
+      state.weaponBannerText = t().speedBanner(preset.label);
+      state.weaponBannerTimer = 1.45;
+    }
   }
 
   btnSpeedMode.addEventListener('click', () => {

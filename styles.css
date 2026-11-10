@@ -235,7 +235,7 @@ body.mode-play .arcade-title-screen,
 
 .weapon-selector-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -1533,19 +1533,22 @@ dialog.modern-dialog::backdrop {
   }
 
   .weapon-selector-row {
-    gap: 5px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
   }
 
   .weapon-pill-btn {
-    padding: 7px 4px;
+    flex-direction: row;
+    gap: 5px;
+    padding: 7px 8px;
   }
 
   .weapon-pill-icon {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
   }
 
   .weapon-pill-name {
-    font-size: 0.76rem;
+    font-size: 0.82rem;
   }
 
   .level-chip-btn {
