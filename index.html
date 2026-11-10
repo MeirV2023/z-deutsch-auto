@@ -3,22 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Z-DEUTSCH: AUTO — Немецкий тренажёр в стиле ZType (RU / עברית)</title>
+  <title>Z-DEUTSCH: AUTO — Космический немецкий шутер (Gemini 3.8 TTS · RU / עברית)</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <!-- Основной игровой холст (Корабль, слова, лазеры, взрывы и всплывающие переводы) -->
+<body class="mode-title">
+  <!-- Живой космический холст: туманности, звёзды, автопилот на старте, кораблик, оружие и взрывы -->
   <canvas id="gameCanvas" aria-label="Игровое поле космического клавиатурного шутера Z-Deutsch"></canvas>
 
-  <!-- Верхняя панель управления (Компактная на телефоне, полная на ПК) -->
+  <!-- ========================================================================
+       АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН ПРИ ЗАГРУЗКЕ САЙТА (В ДУХЕ КОСМИЧЕСКОЙ ИГРЫ)
+       ======================================================================== -->
+  <section class="arcade-title-screen" id="arcadeTitleScreen" aria-label="Главный экран игры Z-Deutsch: Auto">
+    <div class="title-top-bar">
+      <div class="pilot-rank-pill" id="pilotRankPill" title="Ваш ранг пилота и лучший счёт">
+        <span class="pilot-rank-icon">🎖️</span>
+        <span id="pilotRankText">КАДЕТ · РЕКОРД: 0</span>
+      </div>
+
+      <div class="lang-quick-group">
+        <button type="button" class="hud-btn lang-quick-btn active" data-lang="ru">🇷🇺 RU</button>
+        <button type="button" class="hud-btn lang-quick-btn" data-lang="he">🇮🇱 עברית</button>
+        <button type="button" class="hud-btn lang-quick-btn" data-lang="both">🇷🇺+🇮🇱</button>
+      </div>
+    </div>
+
+    <div class="title-hero-center">
+      <div class="title-kicker" id="titleKicker">COSMIC VOCABULARY SHOOTER · GEMINI 3.8 AUDIO</div>
+      <h1 class="arcade-logo" aria-label="Z-DEUTSCH AUTO">
+        <span class="arcade-logo-main">Z-DEUTSCH</span>
+        <span class="arcade-logo-sub">AUTO EDITION</span>
+      </h1>
+      <p class="title-tagline" id="titleTagline">
+        Печатайте буквы — сбивайте немецкие слова — запоминайте перевод во вспышках сверхновых!
+      </p>
+    </div>
+
+    <!-- Интерактивный ангар вооружения прямо над кораблём -->
+    <div class="title-bottom-dock">
+      <div class="arsenal-panel">
+        <div class="arsenal-header">
+          <span class="arsenal-label" id="titleArsenalLabel">⚔️ ВООРУЖЕНИЕ КОРАБЛЯ:</span>
+          <span class="arsenal-desc" id="titleWeaponDesc">Двойные плазменные импульсы с комбо-гармоникой</span>
+        </div>
+        <div class="weapon-selector-row" id="titleWeaponRow">
+          <!-- Генерируется из WEAPONS в game.js -->
+        </div>
+      </div>
+
+      <!-- Выбор миссии/уровня перед взлётом -->
+      <div class="title-mission-strip">
+        <div class="mobile-level-Chips" id="titleStageChips">
+          <!-- Генерируется из levels в game.js -->
+        </div>
+      </div>
+
+      <!-- Главная кнопка гиперпрыжка в игру -->
+      <div class="title-launch-wrap">
+        <button type="button" class="arcade-launch-btn" id="btnArcadeLaunch">
+          <span class="launch-glow"></span>
+          <span class="launch-text" id="labelArcadeLaunch">🚀 НАЧАТЬ МИССИЮ</span>
+        </button>
+      </div>
+
+      <!-- Быстрые аркадные настройки (как в ZType: speed, voice, dictionary, custom text) -->
+      <div class="title-utility-links">
+        <button type="button" class="arcade-link-btn" id="btnTitleSpeed">🐌 0.5x</button>
+        <button type="button" class="arcade-link-btn highlight-ai" id="btnTitleVoice">🎙️ Gemini 3.8 TTS</button>
+        <button type="button" class="arcade-link-btn" id="btnTitleDict">📚 <span id="labelTitleDict">Словарь (73)</span></button>
+        <button type="button" class="arcade-link-btn" id="btnTitleCustom">➕ <span id="labelTitleCustom">Свои слова</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       ВЕРХНЯЯ БОЕВАЯ ПАНЕЛЬ HUD (Во время полёта)
+       ======================================================================== -->
   <header class="hud-top">
     <div class="brand-cluster">
-      <button type="button" class="hud-btn pause-icon-btn" id="btnPause" title="Пауза / Меню уровней (Esc)">
+      <button type="button" class="hud-btn pause-icon-btn" id="btnPause" title="Пауза / Меню (Esc)">
         ⏸ <span class="hide-mobile" id="labelPause">Пауза</span>
       </button>
-      <div class="brand-logo hide-mobile" title="Немецкий клавиатурный шутер в стиле ZType">
-        <span>🚀 Z-DEUTSCH</span>
-      </div>
+      <button type="button" class="hud-btn home-icon-btn hide-mobile" id="btnHudHome" title="На главный экран">
+        🏠
+      </button>
       <div class="level-indicator" id="btnQuickLevels" title="Нажмите, чтобы выбрать уровень">
         <div class="level-indicator-title" id="hudLevelTitle">Ур. 1: Отпуск</div>
         <div class="level-progress-wrap">
@@ -50,8 +117,11 @@
     </div>
 
     <div class="controls-cluster">
+      <button type="button" class="hud-btn weapon-hud-btn" id="btnWeaponMode" title="Сменить оружие корабля (клавиши 1–5)">
+        ⚡<span class="hide-mobile" id="hudWeaponLabel"> Плазма</span>
+      </button>
       <button type="button" class="hud-btn emp-btn" id="btnEmp" title="Взорвать ближайшие слова и показать их перевод (Enter)">
-        ⚡<span class="hide-mobile"> EMP</span> (<span id="empCount">2</span>)
+        💥<span class="hide-mobile"> EMP</span> (<span id="empCount">2</span>)
       </button>
       <button type="button" class="hud-btn active" id="btnLangMode" title="Язык перевода и интерфейса: Русский / Иврит (עברית) / Оба">
         🇷🇺 RU
@@ -62,11 +132,11 @@
       <button type="button" class="hud-btn hide-mobile" id="btnArticleMode" title="Печатать только слово или вместе с артиклем">
         🏷️ Бейдж
       </button>
-      <button type="button" class="hud-btn active" id="btnTtsMode" title="Озвучивать немецкое слово при взрыве">
-        🔊<span class="hide-mobile"> DE</span>
+      <button type="button" class="hud-btn ai-voice-btn active" id="btnOpenTtsSettings" title="Настройки озвучки Gemini 3.8 TTS">
+        🎙️<span class="hide-mobile" id="hudTtsBadge"> 3.8 TTS</span>
       </button>
-      <button type="button" class="hud-btn" id="btnOpenDict" title="Открыть полный словарь уровня Auto (73 слова)">
-        📚<span class="hide-mobile" id="labelDictBtn"> Словарь</span>
+      <button type="button" class="hud-btn hide-mobile" id="btnOpenDict" title="Открыть полный словарь уровня Auto (73 слова)">
+        📚<span id="labelDictBtn"> Словарь</span>
       </button>
       <button type="button" class="hud-btn hide-mobile" id="btnOpenCustom" title="Добавить свои немецкие слова">
         ➕ <span id="labelCustomBtn">Свои слова</span>
@@ -74,7 +144,7 @@
     </div>
   </header>
 
-  <!-- Левая панель (только на широких экранах ПК): Подуровни главного курса AUTO -->
+  <!-- Левая панель (ПК): Подуровни главного курса AUTO -->
   <aside class="sidebar-left">
     <div class="sidebar-header">
       <span class="sidebar-title" id="sidebarLevelsTitle">🚗 Уровни «AUTO»</span>
@@ -85,7 +155,7 @@
     </div>
   </aside>
 
-  <!-- Правая панель (только на широких экранах ПК): Журнал взрывов -->
+  <!-- Правая панель (ПК): Журнал взрывов -->
   <aside class="sidebar-right">
     <div class="sidebar-header">
       <span class="sidebar-title" id="sidebarKillsTitle">💥 Взорванные слова</span>
@@ -109,17 +179,14 @@
 
   <!-- Встроенная космическая клавиатура в стиле ZType (внизу экрана) -->
   <section class="ztype-keyboard-dock" id="ztypeKeyboard" aria-label="Экранная клавиатура ZType">
-    <!-- Тонкая неоновая полоса прогресса уровня над клавиатурой (как в ZType) -->
     <div class="ztype-kbd-topline">
       <div class="ztype-kbd-topline-fill" id="kbdProgressFill"></div>
     </div>
 
-    <!-- Компактная строка текущего захваченного слова и перевода -->
     <div class="ztype-target-strip" id="bottomTargetPreview">
       Нажимайте буквы, чтобы стрелять по словам...
     </div>
 
-    <!-- Клавиши QWERTY с точками-прицелами '+' как в оригинальном ZType -->
     <div class="ztype-keys-container">
       <div class="ztype-key-row">
         <button type="button" class="zkey" data-key="q">Q</button>
@@ -168,12 +235,11 @@
     </div>
   </section>
 
-  <!-- Центральный оверлей: Старт уровня / Выбор уровня / Завершение уровня -->
-  <section class="center-overlay" id="centerOverlay">
+  <!-- Центральный оверлей: Пауза / Победа на уровне / Поражение -->
+  <section class="center-overlay hidden" id="centerOverlay">
     <div class="overlay-card scrollable" id="overlayCard">
       <div class="overlay-top-bar">
         <span class="overlay-badge" id="overlayBadge">КАМПАНИЯ AUTO · ЭТАП 1 ИЗ 6</span>
-        <!-- Быстрый выбор языка перевода и меню -->
         <div class="lang-quick-group">
           <button type="button" class="hud-btn lang-quick-btn active" data-lang="ru">🇷🇺 RU</button>
           <button type="button" class="hud-btn lang-quick-btn" data-lang="he">🇮🇱 עברית</button>
@@ -181,21 +247,28 @@
         </div>
       </div>
 
-      <h1 class="overlay-title" id="overlayTitle">Уровень 1: Отпуск и путешествия</h1>
+      <h2 class="overlay-title" id="overlayTitle">Уровень 1: Отпуск и путешествия</h2>
       <p class="overlay-desc" id="overlayDesc">
         Сбивайте немецкие слова буква за буквой! При взрыве слова всплывает его перевод и звучит произношение.
       </p>
 
-      <!-- Выбор подуровня прямо в меню (удобно на телефоне!) -->
+      <!-- Быстрая смена оружия прямо в меню паузы / между уровнями -->
+      <div class="overlay-arsenal-box">
+        <div class="overlay-arsenal-title" id="overlayWeaponTitle">⚔️ Оружие корабля:</div>
+        <div class="weapon-selector-row compact" id="overlayWeaponRow"></div>
+      </div>
+
+      <!-- Выбор подуровня -->
       <div class="mobile-level-Chips" id="overlayLevelChips"></div>
 
       <div class="overlay-actions">
         <button type="button" class="primary-btn" id="btnStartLevel">🚀 В бой! Начать уровень</button>
         <button type="button" class="secondary-btn" id="btnNextLevel" style="display: none;">Следующий уровень ➔</button>
         <button type="button" class="secondary-btn" id="btnPracticeMistakes" style="display: none;">🎯 Сложные слова</button>
+        <button type="button" class="secondary-btn" id="btnBackToTitle">🏠 В меню</button>
       </div>
 
-      <!-- Мини-блиц после прохождения уровня (скрыт перед стартом) -->
+      <!-- Мини-блиц после прохождения уровня -->
       <div class="quiz-box" id="levelQuizBox" style="display: none;">
         <div class="quiz-header">
           <span id="quizHeaderTitle">🧠 БЛИЦ: Выберите перевод!</span>
@@ -207,12 +280,78 @@
 
       <details class="words-accordion">
         <summary id="overlayWordsHeader">📋 Посмотреть слова этого уровня (10)</summary>
-        <div class="overlay-Words-preview scrollable" id="overlayWordsPreview">
-          <!-- Карточки слов уровня -->
-        </div>
+        <div class="overlay-Words-preview scrollable" id="overlayWordsPreview"></div>
       </details>
     </div>
   </section>
+
+  <!-- ========================================================================
+       МОДАЛЬНОЕ ОКНО: СТУДИЯ ОЗВУЧКИ GEMINI 3.8 TTS
+       ======================================================================== -->
+  <dialog class="modern-dialog" id="ttsSettingsDialog" closedby="any">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="ttsDialogTitle">🎙️ Озвучка Gemini 3.8 TTS</h2>
+      <button type="button" class="dialog-close" id="btnCloseTtsDialog" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="dialog-body scrollable" id="ttsDialogBody">
+      <div class="tts-status-banner" id="ttsStatusBanner">
+        ✨ Режим: Gemini 3.8 Flash TTS (авто-кэширование слов)
+      </div>
+
+      <div class="tts-row-between">
+        <span class="tts-field-label" id="ttsEnableLabel">Произношение немецких слов при взрыве:</span>
+        <button type="button" class="hud-btn active" id="btnToggleTtsMaster">🔊 Включено</button>
+      </div>
+
+      <div class="tts-section">
+        <div class="tts-field-label" id="ttsModelLabel">Языковая аудио-модель Gemini 3.8:</div>
+        <div class="tts-model-grid" id="ttsModelGrid">
+          <button type="button" class="tts-option-card active" data-model="gemini-3.8-flash-tts">
+            <span class="tts-opt-title">✨ gemini-3.8-flash-tts</span>
+            <span class="tts-opt-sub" id="ttsModelFlashDesc">Студийное HD качество и живая немецкая интонация</span>
+          </button>
+          <button type="button" class="tts-option-card" data-model="gemini-3.8-flash-lite-tts">
+            <span class="tts-opt-title">⚡ gemini-3.8-flash-lite-tts</span>
+            <span class="tts-opt-sub" id="ttsModelLiteDesc">Сверхбыстрый отклик для скоростной печати</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="tts-section">
+        <div class="tts-field-label" id="ttsVoiceLabel">Студийный голос:</div>
+        <div class="tts-voice-grid" id="ttsVoiceGrid">
+          <!-- Генерируется из GEMINI_VOICES -->
+        </div>
+      </div>
+
+      <div class="tts-test-row">
+        <button type="button" class="primary-btn" id="btnTestGeminiVoice">
+          ▶️ Проверить голос («der Kofferraum»)
+        </button>
+      </div>
+
+      <details class="words-accordion" id="ttsApiKeyAccordion">
+        <summary id="ttsApiKeySummary">🔑 API-ключ Gemini (для Vercel или локального запуска)</summary>
+        <div class="tts-key-box">
+          <p class="tts-key-hint" id="ttsApiKeyHint">
+            На Vercel достаточно добавить переменную окружения <code>GEMINI_API_KEY</code> в настройках проекта — тогда озвучка работает автоматически у всех игроков через серверный кэш <code>/api/tts</code>. Либо вставьте свой ключ ниже (хранится только в вашем браузере):
+          </p>
+          <div class="tts-key-input-row">
+            <input
+              type="password"
+              class="dict-search-input"
+              id="geminiApiKeyInput"
+              placeholder="AIzaSy..."
+              autocomplete="off"
+              dir="ltr"
+            />
+            <button type="button" class="hud-btn active" id="btnSaveApiKey">💾 OK</button>
+            <button type="button" class="hud-btn" id="btnClearApiKey">✕</button>
+          </div>
+        </div>
+      </details>
+    </div>
+  </dialog>
 
   <!-- Модальное окно: Полный словарь всех 73 слов категории AUTO -->
   <dialog class="modern-dialog" id="dictDialog" closedby="any">

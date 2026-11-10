@@ -18,9 +18,96 @@
     return ARTICLE_COLORS[article] || { main: '#38bdf8', glow: 'rgba(56, 189, 248, 0.4)', label: article || 'DE' };
   }
 
+  // --- Арсенал из 5 уникальных видов космического оружия ---
+  const WEAPONS = [
+    {
+      id: 'plasma',
+      key: '1',
+      icon: '⚡',
+      color: '#22d3ee',
+      secondaryColor: '#34d399',
+      recoilBoost: 1.0,
+      ruName: 'Плазма',
+      heName: 'פלזמה',
+      ruDesc: 'Сдвоенные плазменные импульсы с нарастающей комбо-гармоникой',
+      heDesc: 'צמד פולסי פלזמה מהירים עם הרמוניית קומבו מתגברת'
+    },
+    {
+      id: 'railgun',
+      key: '2',
+      icon: '🔴',
+      color: '#fb7185',
+      secondaryColor: '#f43f5e',
+      recoilBoost: 1.75,
+      ruName: 'Рельсотрон',
+      heName: 'תותח מסילה',
+      ruDesc: 'Мощный гиперлуч с басовым ударом, кольцами волны и сильной отдачей',
+      heDesc: 'קרן על-קולית עוצמתית עם הדף חזק וטבעות הדף'
+    },
+    {
+      id: 'tesla',
+      key: '3',
+      icon: '🌩️',
+      color: '#a78bfa',
+      secondaryColor: '#38bdf8',
+      recoilBoost: 1.15,
+      ruName: 'Тесла',
+      heName: 'טסלה',
+      ruDesc: 'Ветвящаяся дуга молнии с электрическим треском и цепными искрами',
+      heDesc: 'קשת ברק מתפצלת עם פריקה חשמלית וניצוצות'
+    },
+    {
+      id: 'missiles',
+      key: '4',
+      icon: '🚀',
+      color: '#fb923c',
+      secondaryColor: '#fbbf24',
+      recoilBoost: 1.35,
+      ruName: 'Ракеты',
+      heName: 'טילים',
+      ruDesc: 'Самонаводящийся рой микро-ракет с дымным шлейфом и микро-взрывом',
+      heDesc: 'נחיל טילי מיקרו מתבייתים עם שובל אש ופיצוץ ממוקד'
+    },
+    {
+      id: 'synth',
+      key: '5',
+      icon: '🎵',
+      color: '#e879f9',
+      secondaryColor: '#22d3ee',
+      recoilBoost: 1.1,
+      ruName: 'Неон-Синт',
+      heName: 'סינת׳ווייב',
+      ruDesc: 'Призма-лазер: каждая буква играет мелодичную ноту в стиле Synthwave!',
+      heDesc: 'לייזר פריזמה מנגן: כל אות מפיקה צליל סינת׳ווייב מלודי!'
+    }
+  ];
+
+  // --- Студийные голоса Gemini 3.8 TTS ---
+  const GEMINI_VOICES = [
+    { id: 'Kore', ruTone: 'Чёткий студийный (Ж)', heTone: 'אולפני וברור (נ)' },
+    { id: 'Puck', ruTone: 'Энергичный и живой (М)', heTone: 'אנרגטי וחי (ג)' },
+    { id: 'Charon', ruTone: 'Глубокий диктор (М)', heTone: 'קריין עמוק (ג)' },
+    { id: 'Aoede', ruTone: 'Мягкий и тёплый (Ж)', heTone: 'רך ונעים (נ)' },
+    { id: 'Fenrir', ruTone: 'Динамичный драйв (М)', heTone: 'דינמי ונמרץ (ג)' },
+    { id: 'Leda', ruTone: 'Чистый и светлый (Ж)', heTone: 'צלול ובהיר (נ)' }
+  ];
+
   // --- Полная локализация интерфейса (RU / עברית) ---
   const UI_TEXT = {
     ru: {
+      titleKicker: 'КОСМИЧЕСКИЙ ТРЕНАЖЁР НЕМЕЦКОГО · GEMINI 3.8 AUDIO',
+      titleTagline: 'Печатайте буквы — сбивайте немецкие слова — запоминайте перевод во вспышках сверхновых!',
+      titleArsenalLabel: '⚔️ ВООРУЖЕНИЕ КОРАБЛЯ:',
+      launchMissionBtn: (lvlNum, name) => `🚀 В БОЙ · УР.${lvlNum}: ${name.toUpperCase()}`,
+      launchAutoBtn: '🚀 В БОЙ · ГЛАВНЫЙ AUTO-МАРАФОН (73)',
+      titleDictLink: (n) => `Словарь (${n})`,
+      titleCustomLink: 'Свои слова',
+      ranks: ['КАДЕТ', 'ПИЛОТ АВТОБАНА', 'ШТУРМАН ГАЛАКТИКИ', 'КОМАНДОР AUTO'],
+      rankLine: (rank, best) => `${rank} · РЕКОРД: ${best}`,
+      overlayWeaponTitle: '⚔️ Оружие корабля:',
+      backToMenuBtn: '🏠 В меню',
+      weaponBanner: (icon, name) => `${icon} ОРУЖИЕ: ${name.toUpperCase()}`,
+
       pause: 'Пауза',
       score: 'Очки',
       combo: 'Комбо',
@@ -65,15 +152,46 @@
       gameOverTitle: (name) => `Уровень «${name}» не завершён`,
       gameOverDesc: (done, total) => `Сбито слов: <strong>${done} из ${total}</strong>. Попробуйте ещё раз!`,
       pauseBadge: '⏸ ИГРА НА ПАУЗЕ',
-      pauseDesc: (done, total) => `Прогресс: <strong>${done} / ${total}</strong> слов. Вы можете продолжить бой или выбрать другой уровень:`,
+      pauseDesc: (done, total) => `Прогресс: <strong>${done} / ${total}</strong> слов. Смените оружие, выберите уровень или продолжайте бой:`,
       dictTitle: (n) => `📚 Словарь «AUTO» (${n} слова)`,
       dictSearchPlaceholder: 'Поиск: немецкий, русский или עברית...',
       customTitle: '➕ Добавить свои немецкие слова',
       customHint: 'Формат: <code>немецкое слово;перевод RU;перевод HE</code> (каждое с новой строки).',
       customSaveBtn: 'Создать уровень и играть 🚀',
-      layoutWarning: '⚠️ Переключите раскладку на DE / EN!'
+      layoutWarning: '⚠️ Переключите раскладку на DE / EN!',
+
+      // Gemini 3.8 TTS диалог
+      ttsDialogTitle: '🎙️ Студия озвучки Gemini 3.8 TTS',
+      ttsEnableLabel: 'Произношение немецких слов при взрыве:',
+      ttsOn: '🔊 Включено',
+      ttsOff: '🔇 Выключено',
+      ttsModelLabel: 'Языковая аудио-модель Gemini 3.8:',
+      ttsModelFlashDesc: 'Максимальное студийное HD качество и живая немецкая дикция',
+      ttsModelLiteDesc: 'Сверхбыстрый отклик для скоростной печати',
+      ttsVoiceLabel: 'Студийный голос:',
+      ttsTestBtn: '▶️ Прослушать голос («der Kofferraum»)',
+      ttsTestingBtn: '⏳ Генерация аудио Gemini 3.8...',
+      ttsApiKeySummary: '🔑 Настройка ключа GEMINI_API_KEY (Vercel / Браузер)',
+      ttsApiKeyHint: 'На Vercel добавьте переменную <code>GEMINI_API_KEY</code> в настройках проекта (Settings → Environment Variables) — и все слова будут озвучиваться через серверный кэш <code>/api/tts</code>. Или вставьте свой ключ ниже (сохраняется только локально в вашем браузере):',
+      ttsStatusReadyServer: (model, voice) => `✨ Активен: ${model} · голос ${voice} (сервер Vercel)`,
+      ttsStatusReadyLocal: (model, voice) => `✨ Активен: ${model} · голос ${voice} (локальный ключ API)`,
+      ttsStatusFallback: '🔊 Сейчас активен встроенный голос браузера. Добавьте GEMINI_API_KEY в Vercel или ниже для студийного голоса Gemini 3.8 TTS!',
+      ttsStatusMuted: '🔇 Озвучка слов выключена'
     },
     he: {
+      titleKicker: 'יורה חלל ללימוד גרמנית · GEMINI 3.8 AUDIO',
+      titleTagline: 'הקלידו אותיות — פוצצו מילים בגרמנית — זכרו את התרגום בפיצוצי סופרנובה!',
+      titleArsenalLabel: '⚔️ חימוש החללית:',
+      launchMissionBtn: (lvlNum, name) => `🚀 לקרב · שלב ${lvlNum}: ${name}`,
+      launchAutoBtn: '🚀 לקרב · מרתון AUTO הראשי (73)',
+      titleDictLink: (n) => `מילון (${n})`,
+      titleCustomLink: 'מילים משלך',
+      ranks: ['צוער חלל', 'טייס אוטובאן', 'נווט גלקטי', 'מפקד AUTO'],
+      rankLine: (rank, best) => `${rank} · שיא: ${best}`,
+      overlayWeaponTitle: '⚔️ נשק החללית:',
+      backToMenuBtn: '🏠 מסך ראשי',
+      weaponBanner: (icon, name) => `${icon} נשק: ${name}`,
+
       pause: 'הפסקה',
       score: 'ניקוד',
       combo: 'רצף',
@@ -118,22 +236,76 @@
       gameOverTitle: (name) => `השלב «${name}» לא הושלם`,
       gameOverDesc: (done, total) => `מילים שפוצצו: <strong>${done} מתוך ${total}</strong>. נסו שוב!`,
       pauseBadge: '⏸ המשחק בהפסקה',
-      pauseDesc: (done, total) => `התקדמות: <strong>${done} / ${total}</strong> מילים. ניתן להמשיך בקרב או לבחור שלב אחר:`,
+      pauseDesc: (done, total) => `התקדמות: <strong>${done} / ${total}</strong> מילים. החליפו נשק, בחרו שלב או המשיכו בקרב:`,
       dictTitle: (n) => `📚 מילון «AUTO» (${n} מילים)`,
       dictSearchPlaceholder: 'חיפוש: גרמנית, עברית או רוסית...',
       customTitle: '➕ הוספת מילים משלך בגרמנית',
       customHint: 'פורמט: <code>מילה בגרמנית;תרגום</code> (כל מילה בשורה חדשה).',
       customSaveBtn: 'צור שלב ושחק 🚀',
-      layoutWarning: '⚠️ החליפו מקלדת ל-DE / EN!'
+      layoutWarning: '⚠️ החליפו מקלדת ל-DE / EN!',
+
+      ttsDialogTitle: '🎙️ אולפן קריינות Gemini 3.8 TTS',
+      ttsEnableLabel: 'הגיית מילים בגרמנית בעת פיצוץ:',
+      ttsOn: '🔊 מופעל',
+      ttsOff: '🔇 מושתק',
+      ttsModelLabel: 'מודל קול Gemini 3.8:',
+      ttsModelFlashDesc: 'איכות אולפן HD מקסימלית והגייה גרמנית טבעית',
+      ttsModelLiteDesc: 'תגובה מהירה במיוחד להקלדה מהירה',
+      ttsVoiceLabel: 'קול אולפן:',
+      ttsTestBtn: '▶️ בדיקת קול («der Kofferraum»)',
+      ttsTestingBtn: '⏳ מפיק אודיו ב-Gemini 3.8...',
+      ttsApiKeySummary: '🔑 הגדרת מפתח GEMINI_API_KEY (ב-Vercel או בדפדפן)',
+      ttsApiKeyHint: 'ב-Vercel מומלץ להוסיף משתנה סביבה <code>GEMINI_API_KEY</code> בהגדרות הפרויקט — או להדביק מפתח אישי למטה (נשמר מקומית בדפדפן בלבד):',
+      ttsStatusReadyServer: (model, voice) => `✨ פעיל: ${model} · קול ${voice} (שרת Vercel)`,
+      ttsStatusReadyLocal: (model, voice) => `✨ פעיל: ${model} · קול ${voice} (מפתח מקומי)`,
+      ttsStatusFallback: '🔊 פעיל קול מובנה של הדפדפן. הוסיפו GEMINI_API_KEY ב-Vercel או למטה להפעלת Gemini 3.8 TTS!',
+      ttsStatusMuted: '🔇 הקראת המילים כבויה'
     }
   };
 
-  // --- Звуковой движок (Web Audio API синтезатор + Web Speech API немецкая озвучка) ---
+  // --- Хранилище прогресса и настроек (localStorage) ---
+  const STORAGE_KEY = 'zdeutsch_save_v2';
+  const KEY_STORAGE_NAME = 'zdeutsch_gemini_api_key';
+
+  function loadSavedSettings() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (_) {
+      return {};
+    }
+  }
+
+  function saveSettingsPatch(patch) {
+    try {
+      const prev = loadSavedSettings();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...prev, ...patch }));
+    } catch (_) {}
+  }
+
+  // ==========================================================================
+  // МНОГОСЛОЙНЫЙ СИНТЕЗАТОР ЗВУКА (SoundEngine 2.0)
+  // ==========================================================================
+  const SYNTH_SCALE_HZ = [
+    293.66, // D4
+    349.23, // F4
+    392.00, // G4
+    440.00, // A4
+    523.25, // C5
+    587.33, // D5
+    698.46, // F5
+    783.99, // G5
+    880.00, // A5
+    1046.50 // C6
+  ];
+
   class SoundEngine {
     constructor() {
       this.ctx = null;
-      this.ttsEnabled = true;
+      this.masterGain = null;
+      this.noiseBuffer = null;
       this.sfxEnabled = true;
+      this.synthNoteCursor = 0;
     }
 
     init() {
@@ -141,69 +313,348 @@
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         if (AudioCtx) {
           this.ctx = new AudioCtx();
+          this.masterGain = this.ctx.createGain();
+          this.masterGain.gain.value = 0.88;
+          this.masterGain.connect(this.ctx.destination);
+          this._buildNoiseBuffer();
         }
       }
       if (this.ctx && this.ctx.state === 'suspended') {
-        this.ctx.resume();
+        this.ctx.resume().catch(() => {});
+      }
+      return this.ctx;
+    }
+
+    _buildNoiseBuffer() {
+      if (!this.ctx) return;
+      const sampleRate = this.ctx.sampleRate;
+      const length = sampleRate * 1.0;
+      const buffer = this.ctx.createBuffer(1, length, sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < length; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      this.noiseBuffer = buffer;
+    }
+
+    _createPanDest(pan = 0) {
+      if (!this.ctx || !this.masterGain) return null;
+      if (typeof this.ctx.createStereoPanner === 'function') {
+        const panner = this.ctx.createStereoPanner();
+        panner.pan.value = Math.max(-0.7, Math.min(0.7, pan));
+        panner.connect(this.masterGain);
+        return panner;
+      }
+      return this.masterGain;
+    }
+
+    // Тактильный механический щелчок клавиши при каждом выстреле
+    _playTactileClick(now, dest, freq = 2100, vol = 0.06) {
+      if (!this.noiseBuffer) return;
+      const src = this.ctx.createBufferSource();
+      src.buffer = this.noiseBuffer;
+
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(freq, now);
+      filter.Q.value = 2.4;
+
+      const g = this.ctx.createGain();
+      g.gain.setValueAtTime(vol, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.016);
+
+      src.connect(filter);
+      filter.connect(g);
+      g.connect(dest);
+      src.start(now, Math.random() * 0.4, 0.02);
+    }
+
+    playWeaponShot(weaponId = 'plasma', pitchIndex = 0, combo = 1, pan = 0, isFinalLetter = false) {
+      if (!this.sfxEnabled) return;
+      this.init();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      const dest = this._createPanDest(pan);
+      if (!dest) return;
+
+      const comboBoost = Math.min(180, (combo - 1) * 18);
+      const letterStep = Math.min(280, pitchIndex * 24);
+
+      if (weaponId === 'plasma') {
+        // 1. Щелчок затвора + двойной расстроенный плазменный импульс + гармонический обертон
+        this._playTactileClick(now, dest, 2400, 0.055);
+
+        const base = 520 + letterStep + comboBoost * 0.5;
+        [-7, 7].forEach(detuneCents => {
+          const osc = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.detune.value = detuneCents;
+          osc.frequency.setValueAtTime(base, now);
+          osc.frequency.exponentialRampToValueAtTime(145, now + 0.095);
+
+          const lp = this.ctx.createBiquadFilter();
+          lp.type = 'lowpass';
+          lp.frequency.setValueAtTime(3400, now);
+          lp.frequency.exponentialRampToValueAtTime(650, now + 0.095);
+
+          g.gain.setValueAtTime(0.068, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.095);
+
+          osc.connect(lp);
+          lp.connect(g);
+          g.connect(dest);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        });
+
+        // Кристальный пинг комбо
+        const ping = this.ctx.createOscillator();
+        const pg = this.ctx.createGain();
+        ping.type = 'sine';
+        ping.frequency.setValueAtTime(880 + letterStep * 1.4, now);
+        pg.gain.setValueAtTime(0.032, now);
+        pg.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+        ping.connect(pg);
+        pg.connect(dest);
+        ping.start(now);
+        ping.stop(now + 0.07);
+      } else if (weaponId === 'railgun') {
+        // 2. Мощный рельсотрон: глубокий саб-бас + металлический звон катушек + импульсный щелчок
+        this._playTactileClick(now, dest, 1750, 0.09);
+
+        const sub = this.ctx.createOscillator();
+        const subGain = this.ctx.createGain();
+        sub.type = 'sine';
+        sub.frequency.setValueAtTime(155, now);
+        sub.frequency.exponentialRampToValueAtTime(36, now + 0.14);
+        subGain.gain.setValueAtTime(0.2, now);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.145);
+        sub.connect(subGain);
+        subGain.connect(dest);
+        sub.start(now);
+        sub.stop(now + 0.15);
+
+        const rail = this.ctx.createOscillator();
+        const railGain = this.ctx.createGain();
+        rail.type = 'triangle';
+        rail.frequency.setValueAtTime(1420 + letterStep, now);
+        rail.frequency.exponentialRampToValueAtTime(390, now + 0.11);
+        railGain.gain.setValueAtTime(0.075, now);
+        railGain.gain.exponentialRampToValueAtTime(0.001, now + 0.115);
+        rail.connect(railGain);
+        railGain.connect(dest);
+        rail.start(now);
+        rail.stop(now + 0.12);
+      } else if (weaponId === 'tesla') {
+        // 3. Тесла-дуга: высоковольтный треск + резонансный свип фильтра
+        if (this.noiseBuffer) {
+          const nz = this.ctx.createBufferSource();
+          nz.buffer = this.noiseBuffer;
+          const bp = this.ctx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.setValueAtTime(3100, now);
+          bp.frequency.exponentialRampToValueAtTime(900, now + 0.09);
+          bp.Q.value = 4.2;
+
+          const ng = this.ctx.createGain();
+          ng.gain.setValueAtTime(0.14, now);
+          ng.gain.exponentialRampToValueAtTime(0.001, now + 0.095);
+
+          nz.connect(bp);
+          bp.connect(ng);
+          ng.connect(dest);
+          nz.start(now, Math.random() * 0.5, 0.1);
+        }
+
+        const zap = this.ctx.createOscillator();
+        const zg = this.ctx.createGain();
+        zap.type = 'sawtooth';
+        zap.frequency.setValueAtTime(1150 + letterStep * 1.2, now);
+        zap.frequency.setValueAtTime(680, now + 0.025);
+        zap.frequency.exponentialRampToValueAtTime(190, now + 0.085);
+        zg.gain.setValueAtTime(0.065, now);
+        zg.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+        zap.connect(zg);
+        zg.connect(dest);
+        zap.start(now);
+        zap.stop(now + 0.095);
+      } else if (weaponId === 'missiles') {
+        // 4. Микро-ракета: пневматический пуск "пшш-вжух" + упругий микро-хлопок детонации
+        this._playTactileClick(now, dest, 1900, 0.05);
+
+        if (this.noiseBuffer) {
+          const whoosh = this.ctx.createBufferSource();
+          whoosh.buffer = this.noiseBuffer;
+          const bp = this.ctx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.setValueAtTime(600, now);
+          bp.frequency.exponentialRampToValueAtTime(2400, now + 0.085);
+          bp.Q.value = 2.8;
+
+          const wg = this.ctx.createGain();
+          wg.gain.setValueAtTime(0.11, now);
+          wg.gain.exponentialRampToValueAtTime(0.001, now + 0.095);
+
+          whoosh.connect(bp);
+          bp.connect(wg);
+          wg.connect(dest);
+          whoosh.start(now, Math.random() * 0.4, 0.1);
+        }
+
+        const popTime = now + 0.065;
+        const pop = this.ctx.createOscillator();
+        const pg = this.ctx.createGain();
+        pop.type = 'triangle';
+        pop.frequency.setValueAtTime(260 + letterStep * 0.7, popTime);
+        pop.frequency.exponentialRampToValueAtTime(62, popTime + 0.075);
+        pg.gain.setValueAtTime(0.12, popTime);
+        pg.gain.exponentialRampToValueAtTime(0.001, popTime + 0.08);
+        pop.connect(pg);
+        pg.connect(dest);
+        pop.start(popTime);
+        pop.stop(popTime + 0.085);
+      } else if (weaponId === 'synth') {
+        // 5. Неоновый Синтвейв: мягкий ASMR-"thock" клавиши + стерео мелодичная нота!
+        this._playTactileClick(now, dest, 1450, 0.055);
+
+        const noteHz = SYNTH_SCALE_HZ[(this.synthNoteCursor++) % SYNTH_SCALE_HZ.length];
+        [-6, 6].forEach(detune => {
+          const lead = this.ctx.createOscillator();
+          const lg = this.ctx.createGain();
+          const filt = this.ctx.createBiquadFilter();
+
+          lead.type = 'sawtooth';
+          lead.frequency.setValueAtTime(noteHz, now);
+          lead.detune.value = detune;
+
+          filt.type = 'lowpass';
+          filt.frequency.setValueAtTime(2600, now);
+          filt.frequency.exponentialRampToValueAtTime(750, now + 0.17);
+
+          lg.gain.setValueAtTime(0.052, now);
+          lg.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+
+          lead.connect(filt);
+          filt.connect(lg);
+          lg.connect(dest);
+          lead.start(now);
+          lead.stop(now + 0.185);
+        });
+      }
+
+      // Дополнительный кристальный акцент на последней букве слова
+      if (isFinalLetter) {
+        const fin = this.ctx.createOscillator();
+        const fg = this.ctx.createGain();
+        fin.type = 'sine';
+        fin.frequency.setValueAtTime(1046.5, now);
+        fin.frequency.exponentialRampToValueAtTime(1567.98, now + 0.09);
+        fg.gain.setValueAtTime(0.06, now);
+        fg.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        fin.connect(fg);
+        fg.connect(dest);
+        fin.start(now);
+        fin.stop(now + 0.105);
       }
     }
 
-    playLaser(pitchIndex = 0) {
+    playExplosion(combo = 1, pan = 0) {
       if (!this.sfxEnabled) return;
       this.init();
       if (!this.ctx) return;
 
       const now = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
+      const dest = this._createPanDest(pan);
+      if (!dest) return;
 
-      const baseFreq = Math.min(920, 420 + pitchIndex * 28);
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(baseFreq, now);
-      osc.frequency.exponentialRampToValueAtTime(140, now + 0.075);
+      // Саб-бас удар взрыва
+      const sub = this.ctx.createOscillator();
+      const subGain = this.ctx.createGain();
+      sub.type = 'triangle';
+      sub.frequency.setValueAtTime(185, now);
+      sub.frequency.exponentialRampToValueAtTime(30, now + 0.38);
+      subGain.gain.setValueAtTime(0.24, now);
+      subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.39);
+      sub.connect(subGain);
+      subGain.connect(dest);
+      sub.start(now);
+      sub.stop(now + 0.4);
 
-      gain.gain.setValueAtTime(0.08, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+      // Тёплый фильтрованный шумовой "бум"
+      if (this.noiseBuffer) {
+        const boom = this.ctx.createBufferSource();
+        boom.buffer = this.noiseBuffer;
+        const lp = this.ctx.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.frequency.setValueAtTime(950, now);
+        lp.frequency.exponentialRampToValueAtTime(140, now + 0.32);
 
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.08);
-    }
+        const bg = this.ctx.createGain();
+        bg.gain.setValueAtTime(0.14, now);
+        bg.gain.exponentialRampToValueAtTime(0.001, now + 0.33);
 
-    playExplosion() {
-      if (!this.sfxEnabled) return;
-      this.init();
-      if (!this.ctx) return;
+        boom.connect(lp);
+        lp.connect(bg);
+        bg.connect(dest);
+        boom.start(now, 0, 0.35);
+      }
 
-      const now = this.ctx.currentTime;
-
-      const osc = this.ctx.createOscillator();
-      const oscGain = this.ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(170, now);
-      osc.frequency.exponentialRampToValueAtTime(32, now + 0.36);
-
-      oscGain.gain.setValueAtTime(0.22, now);
-      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.36);
-
-      osc.connect(oscGain);
-      oscGain.connect(this.ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.37);
-
-      [523.25, 659.25, 783.99].forEach((freq, idx) => {
+      // Победный аккорд (повышается с ростом комбо)
+      const semitoneShift = Math.min(7, Math.floor((combo - 1) / 2));
+      const mult = Math.pow(2, semitoneShift / 12);
+      [523.25 * mult, 659.25 * mult, 783.99 * mult].forEach((freq, idx) => {
         const chime = this.ctx.createOscillator();
         const cGain = this.ctx.createGain();
         chime.type = 'sine';
-        chime.frequency.setValueAtTime(freq, now + idx * 0.035);
-        cGain.gain.setValueAtTime(0.055, now + idx * 0.035);
-        cGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28 + idx * 0.035);
+        const t0 = now + idx * 0.032;
+        chime.frequency.setValueAtTime(freq, t0);
+        cGain.gain.setValueAtTime(0.05, t0);
+        cGain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.28);
         chime.connect(cGain);
-        cGain.connect(this.ctx.destination);
-        chime.start(now + idx * 0.035);
-        chime.stop(now + 0.3 + idx * 0.035);
+        cGain.connect(dest);
+        chime.start(t0);
+        chime.stop(t0 + 0.29);
       });
+    }
+
+    playWeaponEquip(weaponId) {
+      if (!this.sfxEnabled) return;
+      this.init();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      this._playTactileClick(now, this.masterGain, 2800, 0.07);
+      this.playWeaponShot(weaponId, 3, 2, 0, false);
+    }
+
+    playWarpLaunch() {
+      if (!this.sfxEnabled) return;
+      this.init();
+      if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
+      const dest = this.masterGain;
+
+      const sweep = this.ctx.createOscillator();
+      const sg = this.ctx.createGain();
+      sweep.type = 'sawtooth';
+      sweep.frequency.setValueAtTime(95, now);
+      sweep.frequency.exponentialRampToValueAtTime(620, now + 0.42);
+
+      const lp = this.ctx.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.setValueAtTime(400, now);
+      lp.frequency.exponentialRampToValueAtTime(3200, now + 0.42);
+
+      sg.gain.setValueAtTime(0.14, now);
+      sg.gain.exponentialRampToValueAtTime(0.001, now + 0.46);
+
+      sweep.connect(lp);
+      lp.connect(sg);
+      sg.connect(dest);
+      sweep.start(now);
+      sweep.stop(now + 0.48);
     }
 
     playMiss() {
@@ -215,16 +666,16 @@
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'square';
-      osc.frequency.setValueAtTime(135, now);
-      osc.frequency.setValueAtTime(98, now + 0.05);
+      osc.frequency.setValueAtTime(140, now);
+      osc.frequency.setValueAtTime(96, now + 0.045);
 
-      gain.gain.setValueAtTime(0.07, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      gain.gain.setValueAtTime(0.065, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.masterGain);
       osc.start(now);
-      osc.stop(now + 0.13);
+      osc.stop(now + 0.12);
     }
 
     playShieldHit() {
@@ -236,26 +687,336 @@
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(110, now);
-      osc.frequency.linearRampToValueAtTime(45, now + 0.4);
+      osc.frequency.setValueAtTime(125, now);
+      osc.frequency.linearRampToValueAtTime(42, now + 0.4);
 
-      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.setValueAtTime(0.22, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.masterGain);
       osc.start(now);
       osc.stop(now + 0.43);
     }
+  }
 
-    speakGerman(text) {
-      if (!this.ttsEnabled || !('speechSynthesis' in window)) return;
+  const sound = new SoundEngine();
+
+  // ==========================================================================
+  // МЕНЕДЖЕР ВЫСОКОКАЧЕСТВЕННОЙ ОЗВУЧКИ GEMINI 3.8 TTS (С КЭШЕМ И ПРЕДЗАГРУЗКОЙ)
+  // ==========================================================================
+  class GeminiTTSManager {
+    constructor(soundEngine) {
+      this.soundEngine = soundEngine;
+      this.enabled = true;
+      this.model = 'gemini-3.8-flash-tts';
+      this.voice = 'Kore';
+      this.localApiKey = '';
+      this.serverAvailable = null; // null = ещё не проверяли, true = работает, false = нет ключа на сервере
+
+      this.memoryBufferCache = new Map(); // cacheKey -> AudioBuffer
+      this.inflightPromises = new Map();  // cacheKey -> Promise<AudioBuffer|null>
+      this.prefetchQueue = [];
+      this.activePrefetches = 0;
+      this.currentSource = null;
+      this.dbPromise = null;
+
+      this._loadConfig();
+    }
+
+    _loadConfig() {
+      const saved = loadSavedSettings();
+      if (typeof saved.ttsEnabled === 'boolean') this.enabled = saved.ttsEnabled;
+      if (saved.ttsModel === 'gemini-3.8-flash-tts' || saved.ttsModel === 'gemini-3.8-flash-lite-tts') {
+        this.model = saved.ttsModel;
+      }
+      if (saved.ttsVoice && GEMINI_VOICES.some(v => v.id === saved.ttsVoice)) {
+        this.voice = saved.ttsVoice;
+      }
+      try {
+        this.localApiKey = (localStorage.getItem(KEY_STORAGE_NAME) || '').trim();
+      } catch (_) {
+        this.localApiKey = '';
+      }
+    }
+
+    saveConfig() {
+      saveSettingsPatch({
+        ttsEnabled: this.enabled,
+        ttsModel: this.model,
+        ttsVoice: this.voice
+      });
+    }
+
+    setLocalApiKey(keyStr) {
+      this.localApiKey = (keyStr || '').trim();
+      try {
+        if (this.localApiKey) {
+          localStorage.setItem(KEY_STORAGE_NAME, this.localApiKey);
+        } else {
+          localStorage.removeItem(KEY_STORAGE_NAME);
+        }
+      } catch (_) {}
+    }
+
+    canAttemptGemini() {
+      if (this.localApiKey) return true;
+      const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
+      if (isHttp && this.serverAvailable !== false) return true;
+      return false;
+    }
+
+    _cacheKey(text) {
+      return `${this.model}|${this.voice}|${text.trim()}`;
+    }
+
+    _openDb() {
+      if (this.dbPromise) return this.dbPromise;
+      if (!('indexedDB' in window)) return Promise.resolve(null);
+
+      this.dbPromise = new Promise((resolve) => {
+        try {
+          const req = indexedDB.open('zdeutsch_gemini_tts_v1', 1);
+          req.onupgradeneeded = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains('wavs')) {
+              db.createObjectStore('wavs');
+            }
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        } catch (_) {
+          resolve(null);
+        }
+      });
+      return this.dbPromise;
+    }
+
+    async _readFromIdb(key) {
+      const db = await this._openDb();
+      if (!db) return null;
+      return new Promise((resolve) => {
+        try {
+          const tx = db.transaction('wavs', 'readonly');
+          const req = tx.objectStore('wavs').get(key);
+          req.onsuccess = () => resolve(req.result || null);
+          req.onerror = () => resolve(null);
+        } catch (_) {
+          resolve(null);
+        }
+      });
+    }
+
+    async _writeToIdb(key, arrayBuffer) {
+      const db = await this._openDb();
+      if (!db) return;
+      try {
+        const tx = db.transaction('wavs', 'readwrite');
+        tx.objectStore('wavs').put(arrayBuffer, key);
+      } catch (_) {}
+    }
+
+    _extractBase64Audio(data) {
+      if (!data || typeof data !== 'object') return null;
+      if (Array.isArray(data.steps)) {
+        for (let i = data.steps.length - 1; i >= 0; i--) {
+          const step = data.steps[i];
+          if (step && step.type === 'model_output' && Array.isArray(step.content)) {
+            for (let j = step.content.length - 1; j >= 0; j--) {
+              const part = step.content[j];
+              if (part && part.type === 'audio' && part.data) {
+                return part.data;
+              }
+            }
+          }
+        }
+      }
+      if (data.output_audio && data.output_audio.data) return data.output_audio.data;
+      return null;
+    }
+
+    _base64ToArrayBuffer(b64) {
+      const binary = atob(b64);
+      const len = binary.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes.buffer;
+    }
+
+    async _fetchWavArrayBuffer(cleanText) {
+      // Вариант А: Если пользователь указал свой ключ в настройках браузера — прямой запрос к Gemini 3.8 Interactions API
+      if (this.localApiKey) {
+        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+          method: 'POST',
+          headers: {
+            'x-goog-api-key': this.localApiKey,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: this.model,
+            store: false,
+            input: [{
+              type: 'user_input',
+              content: [{
+                type: 'text',
+                text: cleanText,
+                annotations: [{
+                  type: 'speech_metadata',
+                  style: 'clear, natural Standard German pronunciation, crisp diction, warm studio voice'
+                }]
+              }]
+            }],
+            response_format: { type: 'audio' },
+            generation_config: {
+              speech_config: [{ voice: this.voice }]
+            }
+          })
+        });
+
+        if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
+        const json = await res.json();
+        const b64 = this._extractBase64Audio(json);
+        if (!b64) throw new Error('No audio data in Gemini response');
+        return this._base64ToArrayBuffer(b64);
+      }
+
+      // Вариант Б: Серверный прокси /api/tts на Vercel с глобальным CDN-кэшированием
+      const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
+      if (isHttp && this.serverAvailable !== false) {
+        const params = new URLSearchParams({
+          text: cleanText,
+          voice: this.voice,
+          model: this.model
+        });
+        const res = await fetch(`/api/tts?${params.toString()}`, { method: 'GET' });
+        if (res.status === 503 || res.status === 404) {
+          this.serverAvailable = false;
+          onTtsStatusChanged();
+          return null;
+        }
+        if (!res.ok) throw new Error(`Server TTS HTTP ${res.status}`);
+        this.serverAvailable = true;
+        onTtsStatusChanged();
+        return await res.arrayBuffer();
+      }
+
+      return null;
+    }
+
+    async getOrFetchAudioBuffer(text) {
+      const cleanText = String(text || '').trim();
+      if (!cleanText) return null;
+
+      const key = this._cacheKey(cleanText);
+      if (this.memoryBufferCache.has(key)) {
+        return this.memoryBufferCache.get(key);
+      }
+
+      if (this.inflightPromises.has(key)) {
+        return this.inflightPromises.get(key);
+      }
+
+      const promise = (async () => {
+        try {
+          const audioCtx = this.soundEngine.init();
+          if (!audioCtx) return null;
+
+          let wavBytes = await this._readFromIdb(key);
+          if (!wavBytes) {
+            if (!this.canAttemptGemini()) return null;
+            wavBytes = await this._fetchWavArrayBuffer(cleanText);
+            if (!wavBytes) return null;
+            this._writeToIdb(key, wavBytes.slice(0));
+          }
+
+          const decoded = await audioCtx.decodeAudioData(wavBytes.slice(0));
+          this.memoryBufferCache.set(key, decoded);
+          return decoded;
+        } catch (_) {
+          return null;
+        } finally {
+          this.inflightPromises.delete(key);
+        }
+      })();
+
+      this.inflightPromises.set(key, promise);
+      return promise;
+    }
+
+    // Фоновая предзагрузка слов, летящих на экране (чтобы в момент взрыва озвучка звучала без задержки!)
+    prefetch(text) {
+      if (!this.enabled || !this.canAttemptGemini()) return;
+      const cleanText = String(text || '').trim();
+      if (!cleanText) return;
+      const key = this._cacheKey(cleanText);
+      if (this.memoryBufferCache.has(key) || this.inflightPromises.has(key)) return;
+      if (this.prefetchQueue.includes(cleanText)) return;
+
+      this.prefetchQueue.push(cleanText);
+      this._drainPrefetchQueue();
+    }
+
+    _drainPrefetchQueue() {
+      while (this.activePrefetches < 2 && this.prefetchQueue.length > 0) {
+        const nextText = this.prefetchQueue.shift();
+        this.activePrefetches++;
+        this.getOrFetchAudioBuffer(nextText).finally(() => {
+          this.activePrefetches--;
+          this._drainPrefetchQueue();
+        });
+      }
+    }
+
+    async speakGerman(text, forceSpeak = false) {
+      if (!this.enabled && !forceSpeak) return false;
+      const cleanText = String(text || '').trim();
+      if (!cleanText) return false;
+
+      if (this.canAttemptGemini()) {
+        const buffer = await this.getOrFetchAudioBuffer(cleanText);
+        if (buffer) {
+          this._playDecodedBuffer(buffer);
+          return true;
+        }
+      }
+
+      // Плавный резервный фолбэк на системный немецкий голос, если ключ ещё не задан
+      this._speakBrowserFallback(cleanText);
+      return false;
+    }
+
+    _playDecodedBuffer(audioBuffer) {
+      const audioCtx = this.soundEngine.init();
+      if (!audioCtx) return;
+
+      if (this.currentSource) {
+        try { this.currentSource.stop(); } catch (_) {}
+        this.currentSource = null;
+      }
+      if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch (_) {}
+      }
+
+      const src = audioCtx.createBufferSource();
+      src.buffer = audioBuffer;
+      const gain = audioCtx.createGain();
+      gain.gain.value = 1.05;
+      src.connect(gain);
+      gain.connect(audioCtx.destination);
+      src.start(0);
+      this.currentSource = src;
+    }
+
+    _speakBrowserFallback(text) {
+      if (!('speechSynthesis' in window)) return;
       try {
         window.speechSynthesis.cancel();
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = 'de-DE';
         utter.rate = 0.96;
-        utter.volume = 0.9;
+        utter.volume = 0.95;
         const voices = window.speechSynthesis.getVoices();
         const deVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('de'));
         if (deVoice) utter.voice = deVoice;
@@ -264,7 +1025,7 @@
     }
   }
 
-  const sound = new SoundEngine();
+  const ttsManager = new GeminiTTSManager(sound);
 
   // --- Подготовка уровней: 6 тематических подуровней + 7-й Главный уровень "AUTO (Все 73 слова)" ---
   const baseLevels = window.AUTO_CAMPAIGN.levels.slice();
@@ -286,26 +1047,43 @@
     }
   ];
 
+  // Восстановление пройденных уровней из сохранения
+  const initialSave = loadSavedSettings();
+  if (Array.isArray(initialSave.completedLevelIds)) {
+    levels.forEach(lvl => {
+      if (initialSave.completedLevelIds.includes(lvl.id)) {
+        lvl.completed = true;
+      }
+    });
+  }
+
   // --- Состояние игры ---
   const state = {
+    screenMode: 'title', // 'title' (аркадный стартовый экран) | 'play' (боевой режим)
     currentLevelIndex: 0,
     running: false,
     paused: false,
     gameOver: false,
-    overlayMode: 'intro', // 'intro' | 'complete' | 'gameover' | 'pause'
-    activeQuiz: null,     // Текущее состояние блиц-теста (чтобы мгновенно переводить варианты на иврит)
+    overlayMode: 'pause', // 'intro' | 'complete' | 'gameover' | 'pause'
+    activeQuiz: null,
 
     // Язык перевода: 'ru' (Русский), 'he' (Иврит עברית), 'both' (Оба языка)
-    translationLang: 'ru',
+    translationLang: initialSave.translationLang || 'ru',
     langModes: [
       { id: 'ru', label: '🇷🇺 RU' },
       { id: 'he', label: '🇮🇱 עברית' },
       { id: 'both', label: '🇷🇺+🇮🇱' }
     ],
 
+    // Выбранное оружие
+    weaponId: WEAPONS.some(w => w.id === initialSave.weaponId) ? initialSave.weaponId : 'plasma',
+    missileAlternateSide: 1,
+    weaponBannerText: '',
+    weaponBannerTimer: 0,
+
     // Настройки игрока
-    typeWithArticle: false,
-    speedPresetIndex: 0, // По умолчанию 0.5x
+    typeWithArticle: Boolean(initialSave.typeWithArticle),
+    speedPresetIndex: typeof initialSave.speedPresetIndex === 'number' ? initialSave.speedPresetIndex : 0,
     speedPresets: [
       { mult: 0.5, label: '🐌 0.5x' },
       { mult: 0.7, label: '🐢 0.7x' },
@@ -313,8 +1091,9 @@
       { mult: 1.35, label: '⚡ 1.35x' }
     ],
 
-    // Метрики
+    // Метрики и рекорды
     score: 0,
+    highScore: Number(initialSave.highScore) || 0,
     combo: 1,
     maxCombo: 1,
     shotsFired: 0,
@@ -322,6 +1101,15 @@
     shields: 4,
     maxShields: 4,
     empCharges: 2,
+
+    // Эффект гиперпрыжка при старте с титульного экрана
+    warpTimer: 0,
+
+    // Автопилот-демо для живого титульного экрана
+    demoWords: [],
+    demoSpawnTimer: 0.4,
+    demoFireTimer: 0.25,
+    demoTargetId: null,
 
     // Очередь слов текущего уровня
     wordQueue: [],
@@ -338,16 +1126,19 @@
     lastAbsorbedEszettS: false,
 
     lasers: [],
+    missiles: [],
     particles: [],
     shockwaves: [],
     floatingTranslations: [],
     stars: [],
+    nebulae: [],
     layoutWarningTimer: 0,
 
     // Корабль игрока
     ship: {
       x: 0,
       y: 0,
+      targetY: 0,
       angle: -Math.PI / 2,
       targetAngle: -Math.PI / 2,
       recoil: 0
@@ -356,13 +1147,24 @@
 
   let nextEntityId = 1;
 
-  // --- Вспомогательные функции локализации ---
+  function getCurrentWeapon() {
+    return WEAPONS.find(w => w.id === state.weaponId) || WEAPONS[0];
+  }
+
   function isHebrewUI() {
     return state.translationLang === 'he';
   }
 
   function t() {
     return isHebrewUI() ? UI_TEXT.he : UI_TEXT.ru;
+  }
+
+  function getWeaponName(w) {
+    return isHebrewUI() ? w.heName : w.ruName;
+  }
+
+  function getWeaponDesc(w) {
+    return isHebrewUI() ? w.heDesc : w.ruDesc;
   }
 
   function getLevelTitle(lvl) {
@@ -397,6 +1199,25 @@
   const canvas = document.getElementById('gameCanvas');
   const ctx = canvas.getContext('2d');
 
+  // Титульный аркадный экран
+  const arcadeTitleScreen = document.getElementById('arcadeTitleScreen');
+  const pilotRankText = document.getElementById('pilotRankText');
+  const titleKicker = document.getElementById('titleKicker');
+  const titleTagline = document.getElementById('titleTagline');
+  const titleArsenalLabel = document.getElementById('titleArsenalLabel');
+  const titleWeaponDesc = document.getElementById('titleWeaponDesc');
+  const titleWeaponRow = document.getElementById('titleWeaponRow');
+  const titleStageChips = document.getElementById('titleStageChips');
+  const btnArcadeLaunch = document.getElementById('btnArcadeLaunch');
+  const labelArcadeLaunch = document.getElementById('labelArcadeLaunch');
+  const btnTitleSpeed = document.getElementById('btnTitleSpeed');
+  const btnTitleVoice = document.getElementById('btnTitleVoice');
+  const btnTitleDict = document.getElementById('btnTitleDict');
+  const labelTitleDict = document.getElementById('labelTitleDict');
+  const btnTitleCustom = document.getElementById('btnTitleCustom');
+  const labelTitleCustom = document.getElementById('labelTitleCustom');
+
+  // Боевой HUD
   const labelPause = document.getElementById('labelPause');
   const labelScore = document.getElementById('labelScore');
   const labelCombo = document.getElementById('labelCombo');
@@ -420,14 +1241,18 @@
   const hudShields = document.getElementById('hudShields');
   const empCountEl = document.getElementById('empCount');
 
+  const btnWeaponMode = document.getElementById('btnWeaponMode');
+  const hudWeaponLabel = document.getElementById('hudWeaponLabel');
   const btnEmp = document.getElementById('btnEmp');
   const btnLangMode = document.getElementById('btnLangMode');
   const btnArticleMode = document.getElementById('btnArticleMode');
   const btnSpeedMode = document.getElementById('btnSpeedMode');
-  const btnTtsMode = document.getElementById('btnTtsMode');
+  const btnOpenTtsSettings = document.getElementById('btnOpenTtsSettings');
+  const hudTtsBadge = document.getElementById('hudTtsBadge');
   const btnOpenDict = document.getElementById('btnOpenDict');
   const btnOpenCustom = document.getElementById('btnOpenCustom');
   const btnPause = document.getElementById('btnPause');
+  const btnHudHome = document.getElementById('btnHudHome');
   const btnQuickLevels = document.getElementById('btnQuickLevels');
   const btnClearFeed = document.getElementById('btnClearFeed');
 
@@ -444,17 +1269,41 @@
   const overlayBadge = document.getElementById('overlayBadge');
   const overlayTitle = document.getElementById('overlayTitle');
   const overlayDesc = document.getElementById('overlayDesc');
+  const overlayWeaponTitle = document.getElementById('overlayWeaponTitle');
+  const overlayWeaponRow = document.getElementById('overlayWeaponRow');
   const overlayWordsHeader = document.getElementById('overlayWordsHeader');
   const overlayWordsPreview = document.getElementById('overlayWordsPreview');
   const btnStartLevel = document.getElementById('btnStartLevel');
   const btnNextLevel = document.getElementById('btnNextLevel');
   const btnPracticeMistakes = document.getElementById('btnPracticeMistakes');
+  const btnBackToTitle = document.getElementById('btnBackToTitle');
 
   const levelQuizBox = document.getElementById('levelQuizBox');
   const quizHeaderTitle = document.getElementById('quizHeaderTitle');
   const quizScoreText = document.getElementById('quizScoreText');
   const quizQuestionWord = document.getElementById('quizQuestionWord');
   const quizOptionsGrid = document.getElementById('quizOptionsGrid');
+
+  // Диалог Gemini 3.8 TTS
+  const ttsSettingsDialog = document.getElementById('ttsSettingsDialog');
+  const ttsDialogBody = document.getElementById('ttsDialogBody');
+  const ttsDialogTitle = document.getElementById('ttsDialogTitle');
+  const btnCloseTtsDialog = document.getElementById('btnCloseTtsDialog');
+  const ttsStatusBanner = document.getElementById('ttsStatusBanner');
+  const ttsEnableLabel = document.getElementById('ttsEnableLabel');
+  const btnToggleTtsMaster = document.getElementById('btnToggleTtsMaster');
+  const ttsModelLabel = document.getElementById('ttsModelLabel');
+  const ttsModelGrid = document.getElementById('ttsModelGrid');
+  const ttsModelFlashDesc = document.getElementById('ttsModelFlashDesc');
+  const ttsModelLiteDesc = document.getElementById('ttsModelLiteDesc');
+  const ttsVoiceLabel = document.getElementById('ttsVoiceLabel');
+  const ttsVoiceGrid = document.getElementById('ttsVoiceGrid');
+  const btnTestGeminiVoice = document.getElementById('btnTestGeminiVoice');
+  const ttsApiKeySummary = document.getElementById('ttsApiKeySummary');
+  const ttsApiKeyHint = document.getElementById('ttsApiKeyHint');
+  const geminiApiKeyInput = document.getElementById('geminiApiKeyInput');
+  const btnSaveApiKey = document.getElementById('btnSaveApiKey');
+  const btnClearApiKey = document.getElementById('btnClearApiKey');
 
   const dictDialog = document.getElementById('dictDialog');
   const dictDialogTitle = document.getElementById('dictDialogTitle');
@@ -471,6 +1320,16 @@
 
   // --- Размеры игрового поля ---
   function getPlayBounds() {
+    if (state.screenMode === 'title') {
+      return {
+        left: 16,
+        right: Math.max(280, canvas.width - 16),
+        top: 68,
+        bottom: Math.max(240, canvas.height * 0.56),
+        centerX: canvas.width / 2
+      };
+    }
+
     const isDesktopWide = window.innerWidth > 960;
     const leftPad = isDesktopWide ? 264 : 8;
     const rightPad = isDesktopWide ? 294 : 8;
@@ -497,22 +1356,43 @@
     canvas.height = window.innerHeight;
     const bounds = getPlayBounds();
     state.ship.x = bounds.centerX;
-    state.ship.y = bounds.bottom - 24;
+    state.ship.targetY = state.screenMode === 'title'
+      ? Math.min(canvas.height * 0.49, canvas.height - 290)
+      : bounds.bottom - 24;
+    if (!state.ship.y) state.ship.y = state.ship.targetY;
     initStars();
+    initNebulae();
   }
 
   function initStars() {
-    const count = Math.floor((canvas.width * canvas.height) / 11000);
+    const count = Math.floor((canvas.width * canvas.height) / 9500);
     state.stars = [];
     for (let i = 0; i < count; i++) {
       state.stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 1.8 + 0.4,
-        speed: Math.random() * 18 + 6,
-        alpha: Math.random() * 0.65 + 0.2
+        size: Math.random() * 1.9 + 0.4,
+        speed: Math.random() * 24 + 7,
+        alpha: Math.random() * 0.7 + 0.2,
+        twinklePhase: Math.random() * Math.PI * 2
       });
     }
+  }
+
+  function initNebulae() {
+    const palette = [
+      'rgba(34, 211, 238, 0.08)',
+      'rgba(139, 92, 246, 0.085)',
+      'rgba(16, 185, 129, 0.07)'
+    ];
+    state.nebulae = palette.map((color, idx) => ({
+      x: canvas.width * (0.22 + idx * 0.28),
+      y: canvas.height * (0.28 + (idx % 2) * 0.22),
+      radius: Math.max(canvas.width, canvas.height) * (0.28 + idx * 0.05),
+      vx: (idx % 2 === 0 ? 1 : -1) * (4 + idx * 1.5),
+      vy: (idx === 1 ? -1 : 1) * 2.5,
+      color
+    }));
   }
 
   window.addEventListener('resize', resizeCanvas);
@@ -553,19 +1433,407 @@
     return copy;
   }
 
+  function getHorizontalPan(x) {
+    const bounds = getPlayBounds();
+    const halfSpan = Math.max(120, (bounds.right - bounds.left) / 2);
+    return Math.max(-0.65, Math.min(0.65, (x - bounds.centerX) / halfSpan));
+  }
+
+  // --- Ранг пилота и рекорд на титульном экране ---
+  function updatePilotRankUI() {
+    if (!pilotRankText) return;
+    const completedCount = levels.filter(l => l.completed).length;
+    const tr = t();
+    let rankIdx = 0;
+    if (completedCount >= 6 || state.highScore >= 18000) rankIdx = 3;
+    else if (completedCount >= 3 || state.highScore >= 7500) rankIdx = 2;
+    else if (completedCount >= 1 || state.highScore >= 2000) rankIdx = 1;
+
+    const rankName = tr.ranks[rankIdx] || tr.ranks[0];
+    pilotRankText.textContent = tr.rankLine(rankName, state.highScore.toLocaleString('ru-RU'));
+  }
+
+  // --- Смена и рендер оружия ---
+  function equipWeapon(weaponId, withPreviewShot = true) {
+    const found = WEAPONS.find(w => w.id === weaponId);
+    if (!found) return;
+    state.weaponId = found.id;
+    saveSettingsPatch({ weaponId: found.id });
+
+    renderWeaponSelectors();
+    updateHudWeaponBtn();
+
+    if (withPreviewShot) {
+      sound.playWeaponEquip(found.id);
+
+      // Показываем баннер на холсте в боевом режиме или делаем живой залп на стартовом экране
+      if (state.screenMode === 'play') {
+        state.weaponBannerText = t().weaponBanner(found.icon, getWeaponName(found));
+        state.weaponBannerTimer = 1.6;
+      } else {
+        const targetX = state.demoWords.length > 0
+          ? state.demoWords[0].x
+          : state.ship.x + (Math.random() * 120 - 60);
+        const targetY = state.demoWords.length > 0
+          ? state.demoWords[0].y
+          : Math.max(90, state.ship.y - 150);
+        spawnWeaponVisualEffect(found.id, targetX, targetY, found.color);
+      }
+    }
+  }
+
+  function updateHudWeaponBtn() {
+    const w = getCurrentWeapon();
+    if (btnWeaponMode) {
+      btnWeaponMode.style.borderColor = w.color;
+      btnWeaponMode.innerHTML = `${w.icon}<span class="hide-mobile" id="hudWeaponLabel"> ${escapeHtml(getWeaponName(w))}</span>`;
+    }
+    if (titleWeaponDesc) {
+      titleWeaponDesc.textContent = getWeaponDesc(w);
+    }
+  }
+
+  function renderWeaponSelectors() {
+    const current = getCurrentWeapon();
+    [titleWeaponRow, overlayWeaponRow].forEach(container => {
+      if (!container) return;
+      container.innerHTML = '';
+      WEAPONS.forEach(w => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'weapon-pill-btn' + (w.id === current.id ? ' active' : '');
+        btn.style.setProperty('--w-color', w.color);
+        btn.title = `${getWeaponName(w)} — ${getWeaponDesc(w)}`;
+        btn.innerHTML = `
+          <span class="weapon-pill-key">${w.key}</span>
+          <span class="weapon-pill-icon">${w.icon}</span>
+          <span class="weapon-pill-name">${escapeHtml(getWeaponName(w))}</span>
+        `;
+        btn.addEventListener('click', () => {
+          equipWeapon(w.id, true);
+          btn.blur();
+        });
+        container.appendChild(btn);
+      });
+    });
+  }
+
+  // --- Визуальные эффекты выстрелов каждого вида оружия ---
+  function buildLightningPoints(x1, y1, x2, y2, segments = 8, jitter = 15) {
+    const pts = [{ x: x1, y: y1 }];
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const len = Math.hypot(dx, dy) || 1;
+    const nx = -dy / len;
+    const ny = dx / len;
+
+    for (let i = 1; i < segments; i++) {
+      const frac = i / segments;
+      const offset = (Math.random() * 2 - 1) * jitter * Math.sin(frac * Math.PI);
+      pts.push({
+        x: x1 + dx * frac + nx * offset,
+        y: y1 + dy * frac + ny * offset
+      });
+    }
+    pts.push({ x: x2, y: y2 });
+    return pts;
+  }
+
+  function spawnWeaponVisualEffect(weaponId, targetX, targetY, articleColor) {
+    const dx = targetX - state.ship.x;
+    const dy = targetY - state.ship.y;
+    const angle = Math.atan2(dy, dx);
+    state.ship.targetAngle = angle;
+
+    const w = WEAPONS.find(item => item.id === weaponId) || WEAPONS[0];
+    state.ship.recoil = 6.5 * w.recoilBoost;
+
+    const noseX = state.ship.x + Math.cos(angle) * 20;
+    const noseY = state.ship.y + Math.sin(angle) * 20;
+    const perpX = -Math.sin(angle);
+    const perpY = Math.cos(angle);
+
+    if (weaponId === 'plasma') {
+      // Двойные параллельные плазменные разряды с крыльев
+      [-7, 7].forEach(offset => {
+        state.lasers.push({
+          kind: 'plasma',
+          x1: noseX + perpX * offset,
+          y1: noseY + perpY * offset,
+          x2: targetX + perpX * (offset * 0.45),
+          y2: targetY + perpY * (offset * 0.45),
+          color: w.color,
+          coreColor: '#ecfeff',
+          width: 2.8,
+          alpha: 1.0,
+          decay: 8.0
+        });
+      });
+      spawnParticles(targetX, targetY + 4, w.color, 7, 105);
+    } else if (weaponId === 'railgun') {
+      // Мощный пробивной рельсовый гиперлуч + звуковые кольца вдоль траектории
+      state.lasers.push({
+        kind: 'railgun',
+        x1: noseX,
+        y1: noseY,
+        x2: targetX,
+        y2: targetY,
+        color: w.color,
+        coreColor: '#ffffff',
+        width: 5.5,
+        alpha: 1.0,
+        decay: 5.2
+      });
+      [0.35, 0.7, 1.0].forEach(frac => {
+        state.shockwaves.push({
+          x: noseX + (targetX - noseX) * frac,
+          y: noseY + (targetY - noseY) * frac,
+          radius: 3,
+          maxRadius: frac === 1.0 ? 28 : 16,
+          color: w.color,
+          alpha: 0.9
+        });
+      });
+      spawnParticles(targetX, targetY, '#fda4af', 10, 145);
+    } else if (weaponId === 'tesla') {
+      // Ветвящаяся электрическая молния
+      const mainBolt = buildLightningPoints(noseX, noseY, targetX, targetY, 9, 18);
+      const midPoint = mainBolt[Math.floor(mainBolt.length / 2)];
+      const branchBolt = buildLightningPoints(
+        midPoint.x,
+        midPoint.y,
+        midPoint.x + (Math.random() * 56 - 28),
+        midPoint.y - (20 + Math.random() * 30),
+        4,
+        9
+      );
+      state.lasers.push({
+        kind: 'tesla',
+        points: mainBolt,
+        branch: branchBolt,
+        color: w.color,
+        coreColor: '#e0f2fe',
+        width: 2.6,
+        alpha: 1.0,
+        decay: 6.8
+      });
+      spawnParticles(targetX, targetY, '#c4b5fd', 8, 120);
+    } else if (weaponId === 'missiles') {
+      // Изогнутая самонаводящаяся микро-ракета + тонкий луч целеуказателя
+      state.missileAlternateSide *= -1;
+      const curveSign = state.missileAlternateSide;
+      const dist = Math.hypot(dx, dy);
+      const ctrlX = (noseX + targetX) / 2 + perpX * curveSign * Math.min(95, dist * 0.32);
+      const ctrlY = (noseY + targetY) / 2 + perpY * curveSign * 24;
+
+      state.lasers.push({
+        kind: 'designator',
+        x1: noseX,
+        y1: noseY,
+        x2: targetX,
+        y2: targetY,
+        color: 'rgba(251, 146, 60, 0.45)',
+        width: 1.2,
+        alpha: 0.75,
+        decay: 9.0
+      });
+
+      state.missiles.push({
+        x0: noseX + perpX * curveSign * 9,
+        y0: noseY + perpY * curveSign * 9,
+        cx: ctrlX,
+        cy: ctrlY,
+        x2: targetX,
+        y2: targetY,
+        x: noseX,
+        y: noseY,
+        progress: 0,
+        speed: 7.4,
+        color: w.color
+      });
+    } else if (weaponId === 'synth') {
+      // Хроматический неоновый луч Synthwave + музыкальная пульсирующая волна
+      const hueColors = ['#e879f9', '#22d3ee', '#fbbf24', '#34d399'];
+      const noteColor = hueColors[sound.synthNoteCursor % hueColors.length];
+      state.lasers.push({
+        kind: 'synth',
+        x1: noseX,
+        y1: noseY,
+        x2: targetX,
+        y2: targetY,
+        color: noteColor,
+        secondaryColor: articleColor || '#22d3ee',
+        coreColor: '#ffffff',
+        width: 3.8,
+        alpha: 1.0,
+        decay: 6.2
+      });
+      state.shockwaves.push({
+        x: targetX,
+        y: targetY,
+        radius: 4,
+        maxRadius: 24,
+        color: noteColor,
+        alpha: 0.85
+      });
+      spawnParticles(targetX, targetY, noteColor, 8, 115);
+    }
+  }
+
+  // --- Переключение между Аркадным Титульным Экраном и Игрой ---
+  function launchFromTitleScreen() {
+    sound.init();
+    sound.playWarpLaunch();
+
+    state.screenMode = 'play';
+    state.warpTimer = 0.65;
+    state.demoWords = [];
+    state.demoTargetId = null;
+
+    document.body.classList.remove('mode-title');
+    document.body.classList.add('mode-play');
+
+    startLevelNow();
+  }
+
+  function returnToTitleScreen() {
+    state.running = false;
+    state.paused = false;
+    state.gameOver = false;
+    state.activeWords = [];
+    state.lockedWordId = null;
+    state.activeQuiz = null;
+    state.screenMode = 'title';
+    state.warpTimer = 0.35;
+
+    centerOverlay.classList.add('hidden');
+    document.body.classList.remove('mode-play');
+    document.body.classList.add('mode-title');
+
+    resizeCanvas();
+    updatePilotRankUI();
+    renderLevelSidebar();
+    applyStaticUILocalization();
+  }
+
+  // --- Живой Автопилот на Аркадном Титульном Экране ---
+  function updateTitleDemo(dt) {
+    const topZoneMin = Math.max(95, canvas.height * 0.19);
+    const topZoneMax = Math.max(topZoneMin + 55, canvas.height * 0.37);
+
+    // Плавное покачивание корабля в открытом космосе между логотипом и ангаром оружия
+    const hoverY = Math.min(canvas.height * 0.48, canvas.height - 285);
+    state.ship.targetY = Math.max(topZoneMax + 46, hoverY);
+    state.ship.x = canvas.width / 2 + Math.sin(performance.now() * 0.0011) * 26;
+
+    state.demoSpawnTimer -= dt;
+    if (state.demoSpawnTimer <= 0 && state.demoWords.length < 3) {
+      const sample = allAutoWords[Math.floor(Math.random() * allAutoWords.length)];
+      if (sample) {
+        const margin = Math.min(160, canvas.width * 0.25);
+        const rx = margin + Math.random() * Math.max(60, canvas.width - margin * 2);
+        state.demoWords.push({
+          id: nextEntityId++,
+          entry: sample,
+          text: sample.word,
+          typedCount: 0,
+          x: rx,
+          y: topZoneMin - 12,
+          vy: 12 + Math.random() * 6,
+          recoilY: 0,
+          hitFlash: 0
+        });
+      }
+      state.demoSpawnTimer = 1.65;
+    }
+
+    for (let i = state.demoWords.length - 1; i >= 0; i--) {
+      const dw = state.demoWords[i];
+      if (dw.recoilY > 0) {
+        dw.y -= dw.recoilY * 6 * dt;
+        dw.recoilY = Math.max(0, dw.recoilY - 24 * dt);
+      } else {
+        dw.y += dw.vy * dt;
+      }
+      if (dw.hitFlash > 0) dw.hitFlash = Math.max(0, dw.hitFlash - dt * 5);
+
+      if (dw.y > state.ship.y - 36) {
+        state.demoWords.splice(i, 1);
+        if (state.demoTargetId === dw.id) state.demoTargetId = null;
+      }
+    }
+
+    // Автоприцеливание и красивая демонстрационная стрельба выбранным оружием
+    state.demoFireTimer -= dt;
+    if (state.demoFireTimer <= 0 && state.demoWords.length > 0) {
+      let target = state.demoWords.find(w => w.id === state.demoTargetId);
+      if (!target) {
+        target = state.demoWords[0];
+        state.demoTargetId = target.id;
+      }
+
+      if (target && target.y > topZoneMin + 4) {
+        target.typedCount++;
+        target.hitFlash = 1.0;
+        target.recoilY = 3.2;
+        const style = getArticleStyle(target.entry.article);
+        spawnWeaponVisualEffect(state.weaponId, target.x, target.y, style.main);
+
+        if (target.typedCount >= target.text.length) {
+          // Красивый беззвучный взрыв слова с показом перевода в космосе
+          const idx = state.demoWords.findIndex(w => w.id === target.id);
+          if (idx !== -1) state.demoWords.splice(idx, 1);
+          state.demoTargetId = null;
+
+          state.shockwaves.push({
+            x: target.x,
+            y: target.y,
+            radius: 6,
+            maxRadius: 56,
+            color: style.main,
+            alpha: 0.9
+          });
+          spawnParticles(target.x, target.y, style.main, 16, 140);
+          state.floatingTranslations.push({
+            x: target.x,
+            y: target.y,
+            vy: -14,
+            entry: target.entry,
+            rawDe: target.entry.raw,
+            color: style.main,
+            life: 0,
+            maxLife: 2.8
+          });
+          state.demoFireTimer = 0.55;
+        } else {
+          state.demoFireTimer = 0.14;
+        }
+      } else {
+        state.demoFireTimer = 0.2;
+      }
+    }
+  }
+
   // --- Переключение языка перевода и ВСЕГО меню (RU / עברית / Оба) ---
   function setTranslationLanguage(langId) {
     state.translationLang = langId;
+    saveSettingsPatch({ translationLang: langId });
+
     const modeObj = state.langModes.find(m => m.id === langId) || state.langModes[0];
-    btnLangMode.textContent = modeObj.label;
+    if (btnLangMode) btnLangMode.textContent = modeObj.label;
 
     document.querySelectorAll('.lang-quick-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === langId);
     });
 
     applyStaticUILocalization();
+    renderWeaponSelectors();
+    updateHudWeaponBtn();
     renderLevelSidebar();
     refreshOverlayContent();
+    renderTtsSettingsUI();
+    updatePilotRankUI();
+
     if (state.activeQuiz && levelQuizBox.style.display !== 'none') {
       renderCurrentQuizQuestion(false);
     }
@@ -581,9 +1849,25 @@
     const tr = t();
     const isHe = isHebrewUI();
 
-    if (overlayCard) {
-      overlayCard.dir = isHe ? 'rtl' : 'ltr';
+    if (arcadeTitleScreen) arcadeTitleScreen.dir = isHe ? 'rtl' : 'ltr';
+    if (overlayCard) overlayCard.dir = isHe ? 'rtl' : 'ltr';
+    if (ttsDialogBody) ttsDialogBody.dir = isHe ? 'rtl' : 'ltr';
+
+    if (titleKicker) titleKicker.textContent = tr.titleKicker;
+    if (titleTagline) titleTagline.textContent = tr.titleTagline;
+    if (titleArsenalLabel) titleArsenalLabel.textContent = tr.titleArsenalLabel;
+    if (labelTitleDict) labelTitleDict.textContent = tr.titleDictLink(allAutoWords.length);
+    if (labelTitleCustom) labelTitleCustom.textContent = tr.titleCustomLink;
+    if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.overlayWeaponTitle;
+    if (btnBackToTitle) btnBackToTitle.textContent = tr.backToMenuBtn;
+
+    const lvl = levels[state.currentLevelIndex];
+    if (lvl && labelArcadeLaunch) {
+      labelArcadeLaunch.textContent = lvl.id === 'level-auto-all'
+        ? tr.launchAutoBtn
+        : tr.launchMissionBtn(lvl.number, getLevelTitle(lvl).split(',')[0]);
     }
+
     if (labelPause) labelPause.textContent = tr.pause;
     if (labelScore) labelScore.textContent = tr.score;
     if (labelCombo) labelCombo.textContent = tr.combo;
@@ -591,6 +1875,7 @@
     if (labelShield) labelShield.textContent = tr.shield;
     if (btnArticleMode) {
       btnArticleMode.textContent = state.typeWithArticle ? tr.articleMode : tr.badgeMode;
+      btnArticleMode.classList.toggle('active', state.typeWithArticle);
     }
     if (labelDictBtn) labelDictBtn.textContent = tr.dictBtn;
     if (labelCustomBtn) labelCustomBtn.textContent = tr.customBtn;
@@ -608,15 +1893,98 @@
     if (customDialogHint) customDialogHint.innerHTML = tr.customHint;
     if (btnSaveCustomWords) btnSaveCustomWords.textContent = tr.customSaveBtn;
 
-    const lvl = levels[state.currentLevelIndex];
+    const preset = state.speedPresets[state.speedPresetIndex] || state.speedPresets[0];
+    if (btnSpeedMode) btnSpeedMode.textContent = preset.label;
+    if (btnTitleSpeed) btnTitleSpeed.textContent = preset.label;
+
     if (lvl && hudLevelTitle) {
       hudLevelTitle.textContent = lvl.id === 'level-auto-all'
         ? tr.autoAllShort
         : tr.levelShort(lvl.number, getLevelTitle(lvl));
     }
+
+    onTtsStatusChanged();
   }
 
-  // --- Перерисовка содержимого центрального меню в соответствии с текущим режимом и языком ---
+  // --- Окно настроек Gemini 3.8 TTS ---
+  function onTtsStatusChanged() {
+    const tr = t();
+    if (btnOpenTtsSettings) {
+      btnOpenTtsSettings.classList.toggle('active', ttsManager.enabled);
+      const shortBadge = !ttsManager.enabled
+        ? ' OFF'
+        : (ttsManager.localApiKey || ttsManager.serverAvailable === true ? ' 3.8 TTS' : ' TTS');
+      btnOpenTtsSettings.innerHTML = `${ttsManager.enabled ? '🎙️' : '🔇'}<span class="hide-mobile" id="hudTtsBadge">${shortBadge}</span>`;
+    }
+
+    if (!ttsStatusBanner) return;
+
+    if (!ttsManager.enabled) {
+      ttsStatusBanner.textContent = tr.ttsStatusMuted;
+      ttsStatusBanner.classList.add('fallback');
+    } else if (ttsManager.localApiKey) {
+      ttsStatusBanner.textContent = tr.ttsStatusReadyLocal(ttsManager.model, ttsManager.voice);
+      ttsStatusBanner.classList.remove('fallback');
+    } else if (ttsManager.serverAvailable === false || (location.protocol !== 'http:' && location.protocol !== 'https:')) {
+      ttsStatusBanner.textContent = tr.ttsStatusFallback;
+      ttsStatusBanner.classList.add('fallback');
+    } else {
+      ttsStatusBanner.textContent = tr.ttsStatusReadyServer(ttsManager.model, ttsManager.voice);
+      ttsStatusBanner.classList.remove('fallback');
+    }
+  }
+
+  function renderTtsSettingsUI() {
+    if (!ttsSettingsDialog) return;
+    const tr = t();
+
+    if (ttsDialogTitle) ttsDialogTitle.textContent = tr.ttsDialogTitle;
+    if (ttsEnableLabel) ttsEnableLabel.textContent = tr.ttsEnableLabel;
+    if (btnToggleTtsMaster) {
+      btnToggleTtsMaster.textContent = ttsManager.enabled ? tr.ttsOn : tr.ttsOff;
+      btnToggleTtsMaster.classList.toggle('active', ttsManager.enabled);
+    }
+    if (ttsModelLabel) ttsModelLabel.textContent = tr.ttsModelLabel;
+    if (ttsModelFlashDesc) ttsModelFlashDesc.textContent = tr.ttsModelFlashDesc;
+    if (ttsModelLiteDesc) ttsModelLiteDesc.textContent = tr.ttsModelLiteDesc;
+    if (ttsVoiceLabel) ttsVoiceLabel.textContent = tr.ttsVoiceLabel;
+    if (btnTestGeminiVoice) btnTestGeminiVoice.textContent = tr.ttsTestBtn;
+    if (ttsApiKeySummary) ttsApiKeySummary.textContent = tr.ttsApiKeySummary;
+    if (ttsApiKeyHint) ttsApiKeyHint.innerHTML = tr.ttsApiKeyHint;
+    if (geminiApiKeyInput && document.activeElement !== geminiApiKeyInput) {
+      geminiApiKeyInput.value = ttsManager.localApiKey;
+    }
+
+    if (ttsModelGrid) {
+      ttsModelGrid.querySelectorAll('.tts-option-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.model === ttsManager.model);
+      });
+    }
+
+    if (ttsVoiceGrid) {
+      ttsVoiceGrid.innerHTML = '';
+      GEMINI_VOICES.forEach(v => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'tts-voice-btn' + (v.id === ttsManager.voice ? ' active' : '');
+        btn.innerHTML = `
+          <span class="tts-voice-name">🎙️ ${escapeHtml(v.id)}</span>
+          <span class="tts-voice-tone">${escapeHtml(isHebrewUI() ? v.heTone : v.ruTone)}</span>
+        `;
+        btn.addEventListener('click', () => {
+          ttsManager.voice = v.id;
+          ttsManager.saveConfig();
+          renderTtsSettingsUI();
+          onTtsStatusChanged();
+        });
+        ttsVoiceGrid.appendChild(btn);
+      });
+    }
+
+    onTtsStatusChanged();
+  }
+
+  // --- Перерисовка содержимого центрального меню ---
   function refreshOverlayContent() {
     const lvl = levels[state.currentLevelIndex];
     if (!lvl) return;
@@ -671,62 +2039,86 @@
     renderWordsPreviewList(lvl.words, overlayWordsPreview);
   }
 
-  // --- Отрисовка списка уровней (боковая панель ПК + чипы в меню) ---
+  // --- Отрисовка списка уровней (боковая панель ПК + чипы в меню + чипы на титульном экране) ---
   function renderLevelSidebar() {
-    levelListContainer.innerHTML = '';
-    overlayLevelChips.innerHTML = '';
+    if (levelListContainer) levelListContainer.innerHTML = '';
+    if (overlayLevelChips) overlayLevelChips.innerHTML = '';
+    if (titleStageChips) titleStageChips.innerHTML = '';
     const tr = t();
 
     const totalWords = levels
       .filter(l => l.id !== 'level-auto-all')
       .reduce((acc, l) => acc + l.words.length, 0);
-    totalWordsCounter.textContent = tr.wordsCount(totalWords);
+    if (totalWordsCounter) totalWordsCounter.textContent = tr.wordsCount(totalWords);
 
     levels.forEach((lvl, idx) => {
       const localTitle = getLevelTitle(lvl);
 
       // 1. Карточка для левой панели на ПК
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'level-card' +
-        (idx === state.currentLevelIndex ? ' active' : '') +
-        (lvl.completed ? ' completed' : '');
+      if (levelListContainer) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'level-card' +
+          (idx === state.currentLevelIndex ? ' active' : '') +
+          (lvl.completed ? ' completed' : '');
 
-      const badgeLabel = lvl.id === 'level-auto-all'
-        ? tr.levelBadgeMain
-        : tr.levelBadgeNum(lvl.number);
+        const badgeLabel = lvl.id === 'level-auto-all'
+          ? tr.levelBadgeMain
+          : tr.levelBadgeNum(lvl.number);
 
-      btn.innerHTML = `
-        <div class="level-card-top">
-          <span class="level-badge">${lvl.completed ? '✓ ' : ''}${badgeLabel}</span>
-          <span class="level-word-count">${tr.wordsShort(lvl.words.length)}</span>
-        </div>
-        <div class="level-card-name">${escapeHtml(localTitle)}</div>
-        <div class="level-card-sub" dir="ltr">${escapeHtml(lvl.deName)}</div>
-      `;
+        btn.innerHTML = `
+          <div class="level-card-top">
+            <span class="level-badge">${lvl.completed ? '✓ ' : ''}${badgeLabel}</span>
+            <span class="level-word-count">${tr.wordsShort(lvl.words.length)}</span>
+          </div>
+          <div class="level-card-name">${escapeHtml(localTitle)}</div>
+          <div class="level-card-sub" dir="ltr">${escapeHtml(lvl.deName)}</div>
+        `;
 
-      btn.addEventListener('click', () => {
-        selectLevel(idx, true);
-      });
-      levelListContainer.appendChild(btn);
+        btn.addEventListener('click', () => {
+          selectLevel(idx, true);
+        });
+        levelListContainer.appendChild(btn);
+      }
 
-      // 2. Компактный чип выбора уровня для меню
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'level-chip-btn' +
-        (idx === state.currentLevelIndex ? ' active' : '') +
-        (lvl.completed ? ' completed' : '');
-      chip.textContent = lvl.id === 'level-auto-all'
+      const shortChipLabel = lvl.id === 'level-auto-all'
         ? `🏆 AUTO (${lvl.words.length})`
-        : tr.levelShort(lvl.number, localTitle.split(',')[0]);
-      chip.addEventListener('click', () => {
-        selectLevel(idx, true);
-      });
-      overlayLevelChips.appendChild(chip);
+        : `${lvl.completed ? '✓ ' : ''}${tr.levelShort(lvl.number, localTitle.split(',')[0])}`;
+
+      // 2. Чип для центрального оверлея
+      if (overlayLevelChips) {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'level-chip-btn' +
+          (idx === state.currentLevelIndex ? ' active' : '') +
+          (lvl.completed ? ' completed' : '');
+        chip.textContent = shortChipLabel;
+        chip.addEventListener('click', () => {
+          selectLevel(idx, true);
+        });
+        overlayLevelChips.appendChild(chip);
+      }
+
+      // 3. Чип выбора миссии на аркадном титульном экране
+      if (titleStageChips) {
+        const tChip = document.createElement('button');
+        tChip.type = 'button';
+        tChip.className = 'level-chip-btn' +
+          (idx === state.currentLevelIndex ? ' active' : '') +
+          (lvl.completed ? ' completed' : '');
+        tChip.textContent = shortChipLabel;
+        tChip.addEventListener('click', () => {
+          state.currentLevelIndex = idx;
+          sound.init();
+          sound._playTactileClick(sound.ctx ? sound.ctx.currentTime : 0, sound.masterGain, 2200, 0.05);
+          renderLevelSidebar();
+          applyStaticUILocalization();
+        });
+        titleStageChips.appendChild(tChip);
+      }
     });
   }
 
-  // --- Выбор и показ превью уровня ---
   function selectLevel(levelIndex, showStartOverlay = true) {
     state.currentLevelIndex = levelIndex;
     state.running = false;
@@ -735,6 +2127,7 @@
     state.activeWords = [];
     state.lockedWordId = null;
     state.lasers = [];
+    state.missiles = [];
 
     const lvl = levels[levelIndex];
     const tr = t();
@@ -746,7 +2139,12 @@
     hudProgressText.textContent = `0 / ${lvl.words.length}`;
 
     renderLevelSidebar();
+    applyStaticUILocalization();
     updateBottomTargetUI();
+
+    if (state.screenMode === 'title') {
+      return;
+    }
 
     if (showStartOverlay) {
       showLevelIntroOverlay();
@@ -756,6 +2154,7 @@
   }
 
   function renderWordsPreviewList(wordsArray, container) {
+    if (!container) return;
     container.innerHTML = '';
     wordsArray.forEach(item => {
       const div = document.createElement('div');
@@ -767,10 +2166,10 @@
         <span class="preview-word-de" dir="ltr">${escapeHtml(item.raw)}</span>
         <span class="preview-word-ru"${dirAttr}>${escapeHtml(transText)}</span>
       `;
-      div.title = '🔊';
+      div.title = '🔊 Прослушать произношение (Gemini 3.8 TTS)';
       div.style.cursor = 'pointer';
       div.addEventListener('click', () => {
-        sound.speakGerman(item.withArticle || item.word);
+        ttsManager.speakGerman(item.withArticle || item.word, true);
       });
       container.appendChild(div);
     });
@@ -789,6 +2188,10 @@
     const lvl = levels[state.currentLevelIndex];
     const pool = customWordPool || lvl.words;
 
+    state.screenMode = 'play';
+    document.body.classList.remove('mode-title');
+    document.body.classList.add('mode-play');
+
     resizeCanvas();
     state.wordQueue = shuffleArray(pool);
     state.totalWordsInLevel = state.wordQueue.length;
@@ -796,6 +2199,7 @@
     state.activeWords = [];
     state.lockedWordId = null;
     state.lasers = [];
+    state.missiles = [];
     state.particles = [];
     state.shockwaves = [];
     state.floatingTranslations = [];
@@ -811,6 +2215,12 @@
     updateHudStats();
     updateBottomTargetUI();
     renderLevelSidebar();
+
+    // Предзагружаем первые 3 слова уровня в кэш Gemini 3.8 TTS заранее!
+    const previewSlice = state.wordQueue.slice(-3);
+    previewSlice.forEach(entry => {
+      ttsManager.prefetch(entry.withArticle || entry.word);
+    });
 
     if (document.activeElement && document.activeElement !== document.body) {
       document.activeElement.blur();
@@ -833,6 +2243,13 @@
     const entry = state.wordQueue.pop();
     const targetText = getTargetString(entry);
     const bounds = getPlayBounds();
+
+    // Заранее запрашиваем аудио Gemini 3.8 TTS, пока слово только летит сверху!
+    ttsManager.prefetch(entry.withArticle || entry.word);
+    if (state.wordQueue.length > 0) {
+      const nextUp = state.wordQueue[state.wordQueue.length - 1];
+      ttsManager.prefetch(nextUp.withArticle || nextUp.word);
+    }
 
     const fontPx = getWordFontPx(targetText.length);
     ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
@@ -877,38 +2294,29 @@
     updateKeyboardNextHint();
   }
 
-  // --- Выстрел по букве ---
+  // --- Выстрел по букве выбранным оружием ---
   function hitWordLetter(wordObj) {
+    const weapon = getCurrentWeapon();
     wordObj.typedCount++;
-    wordObj.recoilY = Math.min(14, wordObj.recoilY + 4.5);
+    wordObj.recoilY = Math.min(18, wordObj.recoilY + 4.2 * weapon.recoilBoost);
     wordObj.hitFlash = 1.0;
 
     state.shotsFired++;
     state.shotsHit++;
     state.score += 10 * state.combo;
-
-    const dx = wordObj.x - state.ship.x;
-    const dy = wordObj.y - state.ship.y;
-    state.ship.targetAngle = Math.atan2(dy, dx);
-    state.ship.recoil = 7;
+    if (state.score > state.highScore) {
+      state.highScore = state.score;
+      saveSettingsPatch({ highScore: state.highScore });
+    }
 
     const style = getArticleStyle(wordObj.entry.article);
-    const noseX = state.ship.x + Math.cos(state.ship.targetAngle) * 22;
-    const noseY = state.ship.y + Math.sin(state.ship.targetAngle) * 22;
+    const isFinalLetter = wordObj.typedCount >= wordObj.text.length;
+    const pan = getHorizontalPan(wordObj.x);
 
-    state.lasers.push({
-      x1: noseX,
-      y1: noseY,
-      x2: wordObj.x,
-      y2: wordObj.y,
-      color: style.main,
-      alpha: 1.0
-    });
+    spawnWeaponVisualEffect(weapon.id, wordObj.x, wordObj.y, style.main);
+    sound.playWeaponShot(weapon.id, wordObj.typedCount, state.combo, pan, isFinalLetter);
 
-    spawnParticles(wordObj.x, wordObj.y + 6, style.main, 6, 90);
-    sound.playLaser(wordObj.typedCount);
-
-    if (wordObj.typedCount >= wordObj.text.length) {
+    if (isFinalLetter) {
       explodeWord(wordObj, true);
     } else {
       updateBottomTargetUI();
@@ -918,7 +2326,7 @@
     updateHudStats();
   }
 
-  // --- ВЗРЫВ СЛОВА + ПОКАЗ ПЕРЕВОДА ---
+  // --- ВЗРЫВ СЛОВА + ПЕРЕВОД + ОЗВУЧКА GEMINI 3.8 TTS ---
   function explodeWord(wordObj, byPlayer = true) {
     const idx = state.activeWords.findIndex(w => w.id === wordObj.id);
     if (idx !== -1) {
@@ -930,18 +2338,19 @@
     }
 
     const style = getArticleStyle(wordObj.entry.article);
+    const weapon = getCurrentWeapon();
 
     state.shockwaves.push({
       x: wordObj.x,
       y: wordObj.y,
       radius: 8,
-      maxRadius: 78,
+      maxRadius: 82,
       color: style.main,
       alpha: 1.0
     });
 
-    spawnParticles(wordObj.x, wordObj.y, style.main, 24, 190);
-    spawnParticles(wordObj.x, wordObj.y, '#fbbf24', 10, 130);
+    spawnParticles(wordObj.x, wordObj.y, style.main, 24, 195);
+    spawnParticles(wordObj.x, wordObj.y, weapon.color, 12, 155);
 
     const bounds = getPlayBounds();
     const clampedX = Math.max(bounds.left + 80, Math.min(bounds.right - 80, wordObj.x));
@@ -967,9 +2376,14 @@
       state.combo = Math.min(12, state.combo + 1);
       state.maxCombo = Math.max(state.maxCombo, state.combo);
       state.score += wordObj.text.length * 25 * state.combo;
+      if (state.score > state.highScore) {
+        state.highScore = state.score;
+        saveSettingsPatch({ highScore: state.highScore });
+      }
 
-      sound.playExplosion();
-      sound.speakGerman(wordObj.entry.withArticle || wordObj.entry.word);
+      const pan = getHorizontalPan(wordObj.x);
+      sound.playExplosion(state.combo, pan);
+      ttsManager.speakGerman(wordObj.entry.withArticle || wordObj.entry.word);
     }
 
     updateHudStats();
@@ -1017,7 +2431,7 @@
       const card = document.createElement('div');
       card.className = 'kill-card';
       card.dataset.art = entry.article || '';
-      card.title = '🔊';
+      card.title = '🔊 Gemini 3.8 TTS';
 
       const transText = getWordTranslation(entry);
       const dirAttr = isRtlTranslation(entry) ? ' dir="rtl"' : ' dir="ltr"';
@@ -1031,7 +2445,7 @@
       `;
 
       card.addEventListener('click', () => {
-        sound.speakGerman(entry.withArticle || entry.word);
+        ttsManager.speakGerman(entry.withArticle || entry.word, true);
       });
 
       killFeedContainer.appendChild(card);
@@ -1062,7 +2476,30 @@
 
   // --- Обработка ввода с физической клавиатуры ---
   window.addEventListener('keydown', (e) => {
-    if ((dictDialog && dictDialog.open) || (customWordsDialog && customWordsDialog.open)) {
+    if (
+      (dictDialog && dictDialog.open) ||
+      (customWordsDialog && customWordsDialog.open) ||
+      (ttsSettingsDialog && ttsSettingsDialog.open)
+    ) {
+      return;
+    }
+
+    // Горячие клавиши 1–5 для мгновенной смены оружия
+    if (!e.ctrlKey && !e.altKey && !e.metaKey && /^[1-5]$/.test(e.key)) {
+      const idx = Number(e.key) - 1;
+      if (WEAPONS[idx]) {
+        e.preventDefault();
+        equipWeapon(WEAPONS[idx].id, true);
+        return;
+      }
+    }
+
+    // Запуск с титульного экрана по Enter / Space
+    if (state.screenMode === 'title') {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        launchFromTitleScreen();
+      }
       return;
     }
 
@@ -1217,6 +2654,9 @@
       const chosen = candidates[0];
       state.lockedWordId = chosen.id;
 
+      // Моментально повышаем приоритет предзагрузки озвучки захваченного слова
+      ttsManager.prefetch(chosen.entry.withArticle || chosen.entry.word);
+
       const matchRes = charsMatchGerman(char, chosen.text[chosen.typedCount]);
       state.lastAbsorbedUmlautE = matchRes.umlautSub;
       state.lastAbsorbedEszettS = matchRes.eszettSub;
@@ -1302,13 +2742,21 @@
     state.overlayMode = 'complete';
     const lvl = levels[state.currentLevelIndex];
     lvl.completed = true;
+
+    const completedIds = levels.filter(l => l.completed).map(l => l.id);
+    saveSettingsPatch({
+      completedLevelIds: completedIds,
+      highScore: Math.max(state.highScore, state.score)
+    });
+
+    updatePilotRankUI();
     renderLevelSidebar();
     refreshOverlayContent();
     startPostLevelQuiz(lvl.words);
     centerOverlay.classList.remove('hidden');
   }
 
-  // --- Мини-блиц из 3 слов после уровня (мгновенно переводится при переключении RU / עברית) ---
+  // --- Мини-блиц из 3 слов после уровня ---
   function startPostLevelQuiz(levelWords) {
     if (!levelWords || levelWords.length < 4) {
       state.activeQuiz = null;
@@ -1356,7 +2804,7 @@
     quizQuestionWord.textContent = currentQ.raw;
 
     if (speakNow) {
-      sound.speakGerman(currentQ.withArticle || currentQ.word);
+      ttsManager.speakGerman(currentQ.withArticle || currentQ.word);
     }
 
     quizOptionsGrid.innerHTML = '';
@@ -1391,8 +2839,12 @@
         if (opt.raw === currentQ.raw) {
           quiz.correctCount++;
           state.score += 150;
+          if (state.score > state.highScore) {
+            state.highScore = state.score;
+            saveSettingsPatch({ highScore: state.highScore });
+          }
           updateHudStats();
-          sound.playExplosion();
+          sound.playExplosion(3, 0);
         } else {
           sound.playMiss();
         }
@@ -1422,6 +2874,8 @@
   }
 
   function togglePause() {
+    if (state.screenMode === 'title') return;
+
     if (!centerOverlay.classList.contains('hidden')) {
       if (state.running || state.paused) {
         state.paused = false;
@@ -1448,20 +2902,45 @@
     const dt = Math.min(0.05, (now - lastFrameTime) / 1000);
     lastFrameTime = now;
 
-    update(dt);
-    render();
+    update(dt, now);
+    render(now);
 
     requestAnimationFrame(gameLoop);
   }
 
-  function update(dt) {
+  function update(dt, now) {
     const bounds = getPlayBounds();
-    state.ship.x = bounds.centerX;
-    state.ship.y = bounds.bottom - 24;
 
+    if (state.screenMode === 'play') {
+      state.ship.x = bounds.centerX;
+      state.ship.targetY = bounds.bottom - 24;
+    }
+
+    // Плавный перелёт корабля по вертикали (при старте с титульного экрана в бой)
+    state.ship.y += (state.ship.targetY - state.ship.y) * Math.min(1, dt * 8.5);
+
+    if (state.warpTimer > 0) {
+      state.warpTimer = Math.max(0, state.warpTimer - dt);
+    }
+
+    if (state.weaponBannerTimer > 0) {
+      state.weaponBannerTimer = Math.max(0, state.weaponBannerTimer - dt);
+    }
+
+    // Движение туманностей
+    for (const neb of state.nebulae) {
+      neb.x += neb.vx * dt;
+      neb.y += neb.vy * dt;
+      if (neb.x < -neb.radius * 0.4 || neb.x > canvas.width + neb.radius * 0.4) neb.vx *= -1;
+      if (neb.y < -neb.radius * 0.4 || neb.y > canvas.height + neb.radius * 0.4) neb.vy *= -1;
+    }
+
+    // Звёздное поле + ускорение во время гиперпрыжка
+    const warpMult = state.warpTimer > 0 ? 14.0 : (state.running && !state.paused ? 1.45 : 0.75);
+    const starMaxY = state.screenMode === 'title' ? canvas.height : bounds.bottom;
     for (const s of state.stars) {
-      s.y += s.speed * (state.running && !state.paused ? 1.35 : 0.4) * dt;
-      if (s.y > bounds.bottom) {
+      s.y += s.speed * warpMult * dt;
+      if (s.y > starMaxY) {
         s.y = 0;
         s.x = Math.random() * canvas.width;
       }
@@ -1471,9 +2950,46 @@
       state.layoutWarningTimer = Math.max(0, state.layoutWarningTimer - dt);
     }
 
+    // Обновление лучей и молний
     for (let i = state.lasers.length - 1; i >= 0; i--) {
-      state.lasers[i].alpha -= dt * 7.5;
-      if (state.lasers[i].alpha <= 0) state.lasers.splice(i, 1);
+      const l = state.lasers[i];
+      l.alpha -= dt * (l.decay || 7.5);
+      if (l.alpha <= 0) state.lasers.splice(i, 1);
+    }
+
+    // Обновление самонаводящихся микро-ракет
+    for (let i = state.missiles.length - 1; i >= 0; i--) {
+      const m = state.missiles[i];
+      m.progress += m.speed * dt;
+      const tProg = Math.min(1, m.progress);
+      const inv = 1 - tProg;
+      m.x = inv * inv * m.x0 + 2 * inv * tProg * m.cx + tProg * tProg * m.x2;
+      m.y = inv * inv * m.y0 + 2 * inv * tProg * m.cy + tProg * tProg * m.y2;
+
+      // Дымный огненный шлейф ракеты
+      state.particles.push({
+        x: m.x + (Math.random() * 4 - 2),
+        y: m.y + (Math.random() * 4 - 2),
+        vx: (Math.random() - 0.5) * 20,
+        vy: 15 + Math.random() * 20,
+        size: Math.random() * 2.1 + 1.1,
+        color: Math.random() > 0.4 ? '#fb923c' : '#fde047',
+        alpha: 0.85,
+        decay: 3.4
+      });
+
+      if (m.progress >= 1) {
+        spawnParticles(m.x2, m.y2, '#fb923c', 9, 125);
+        state.shockwaves.push({
+          x: m.x2,
+          y: m.y2,
+          radius: 3,
+          maxRadius: 22,
+          color: '#fbbf24',
+          alpha: 0.9
+        });
+        state.missiles.splice(i, 1);
+      }
     }
 
     for (let i = state.particles.length - 1; i >= 0; i--) {
@@ -1506,6 +3022,11 @@
     const angleDiff = state.ship.targetAngle - state.ship.angle;
     state.ship.angle += angleDiff * Math.min(1, dt * 18);
     state.ship.recoil = Math.max(0, state.ship.recoil - dt * 35);
+
+    if (state.screenMode === 'title') {
+      updateTitleDemo(dt, now);
+      return;
+    }
 
     if (!state.running || state.paused) return;
 
@@ -1558,42 +3079,73 @@
   }
 
   // --- Отрисовка игрового мира на Canvas ---
-  function render() {
+  function render(now = 0) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const bounds = getPlayBounds();
+    const starClipBottom = state.screenMode === 'title' ? canvas.height : bounds.bottom;
 
-    ctx.save();
-    ctx.strokeStyle = 'rgba(45, 212, 191, 0.05)';
-    ctx.lineWidth = 1;
-    const gridSize = canvas.width < 520 ? 44 : 60;
-    for (let x = bounds.left; x <= bounds.right; x += gridSize) {
+    // 1. Глубокие живые космические туманности
+    for (const neb of state.nebulae) {
+      const grad = ctx.createRadialGradient(neb.x, neb.y, 10, neb.x, neb.y, neb.radius);
+      grad.addColorStop(0, neb.color);
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, bounds.bottom);
-      ctx.stroke();
-    }
-    for (let y = 0; y <= bounds.bottom; y += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(bounds.left, y);
-      ctx.lineTo(bounds.right, y);
-      ctx.stroke();
-    }
-    ctx.restore();
-
-    for (const s of state.stars) {
-      if (s.y > bounds.bottom) continue;
-      ctx.fillStyle = `rgba(203, 213, 225, ${s.alpha})`;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.arc(neb.x, neb.y, neb.radius, 0, Math.PI * 2);
       ctx.fill();
     }
 
+    // 2. Тактическая сетка ZType в боевом режиме
+    if (state.screenMode === 'play') {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(45, 212, 191, 0.045)';
+      ctx.lineWidth = 1;
+      const gridSize = canvas.width < 520 ? 44 : 60;
+      for (let x = bounds.left; x <= bounds.right; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, bounds.bottom);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= bounds.bottom; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(bounds.left, y);
+        ctx.lineTo(bounds.right, y);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // 3. Звёзды (или гиперпространственные росчерки при варп-прыжке!)
+    for (const s of state.stars) {
+      if (s.y > starClipBottom) continue;
+      const twinkle = 0.78 + 0.22 * Math.sin(now * 0.003 + s.twinklePhase);
+      const a = s.alpha * twinkle;
+
+      if (state.warpTimer > 0) {
+        ctx.strokeStyle = `rgba(165, 243, 252, ${Math.min(1, a + 0.25)})`;
+        ctx.lineWidth = s.size;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y - s.speed * 1.15);
+        ctx.lineTo(s.x, s.y);
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = `rgba(226, 232, 240, ${a})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // 4. Линия захвата цели
     const lockedWord = state.activeWords.find(w => w.id === state.lockedWordId);
     if (lockedWord && state.running) {
+      const w = getCurrentWeapon();
       ctx.save();
       ctx.setLineDash([5, 5]);
-      ctx.strokeStyle = 'rgba(251, 146, 60, 0.3)';
+      ctx.strokeStyle = w.color;
+      ctx.globalAlpha = 0.34;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(state.ship.x, state.ship.y);
@@ -1602,20 +3154,74 @@
       ctx.restore();
     }
 
+    // 5. Отрисовка всех видов оружейных залпов (Плазма, Рельсотрон, Молния Тесла, Синтвейв)
     for (const l of state.lasers) {
       ctx.save();
-      ctx.strokeStyle = l.color;
-      ctx.shadowColor = l.color;
-      ctx.shadowBlur = 12;
       ctx.globalAlpha = Math.max(0, l.alpha);
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(l.x1, l.y1);
-      ctx.lineTo(l.x2, l.y2);
-      ctx.stroke();
+
+      if (l.kind === 'tesla' && Array.isArray(l.points)) {
+        ctx.strokeStyle = l.color;
+        ctx.shadowColor = l.color;
+        ctx.shadowBlur = 16;
+        ctx.lineWidth = l.width || 2.6;
+        ctx.beginPath();
+        l.points.forEach((pt, idx) => {
+          if (idx === 0) ctx.moveTo(pt.x, pt.y);
+          else ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.stroke();
+
+        // Яркое белое ядро молнии
+        ctx.strokeStyle = l.coreColor || '#ffffff';
+        ctx.lineWidth = 1.1;
+        ctx.stroke();
+
+        if (Array.isArray(l.branch)) {
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          l.branch.forEach((pt, idx) => {
+            if (idx === 0) ctx.moveTo(pt.x, pt.y);
+            else ctx.lineTo(pt.x, pt.y);
+          });
+          ctx.stroke();
+        }
+      } else {
+        ctx.strokeStyle = l.color;
+        ctx.shadowColor = l.color;
+        ctx.shadowBlur = l.kind === 'railgun' ? 20 : 13;
+        ctx.lineWidth = l.width || 3;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(l.x1, l.y1);
+        ctx.lineTo(l.x2, l.y2);
+        ctx.stroke();
+
+        if (l.coreColor) {
+          ctx.strokeStyle = l.coreColor;
+          ctx.lineWidth = Math.max(1, (l.width || 3) * 0.38);
+          ctx.beginPath();
+          ctx.moveTo(l.x1, l.y1);
+          ctx.lineTo(l.x2, l.y2);
+          ctx.stroke();
+        }
+      }
       ctx.restore();
     }
 
+    // 6. Отрисовка летящих микро-ракет
+    for (const m of state.missiles) {
+      ctx.save();
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = m.color;
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, 3.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // 7. Ударные волны
     for (const sw of state.shockwaves) {
       ctx.save();
       ctx.strokeStyle = sw.color;
@@ -1627,6 +3233,7 @@
       ctx.restore();
     }
 
+    // 8. Частицы
     for (const p of state.particles) {
       ctx.save();
       ctx.fillStyle = p.color;
@@ -1639,60 +3246,152 @@
       ctx.restore();
     }
 
-    drawPlayerShip();
+    // 9. Корабль игрока (меняет обшивку и пушки в зависимости от выбранного оружия!)
+    drawPlayerShip(now);
 
-    for (const w of state.activeWords) {
-      if (w.id !== state.lockedWordId) {
-        drawWordNode(w, false, bounds);
+    // 10. Слова (в режиме титульного экрана — демо-слова автопилота; в бою — боевые слова)
+    if (state.screenMode === 'title') {
+      const demoTarget = state.demoWords.find(w => w.id === state.demoTargetId);
+      for (const dw of state.demoWords) {
+        if (!demoTarget || dw.id !== demoTarget.id) {
+          drawWordNode(dw, false, bounds);
+        }
+      }
+      if (demoTarget) {
+        drawWordNode(demoTarget, true, bounds);
+      }
+    } else {
+      for (const w of state.activeWords) {
+        if (w.id !== state.lockedWordId) {
+          drawWordNode(w, false, bounds);
+        }
+      }
+      if (lockedWord) {
+        drawWordNode(lockedWord, true, bounds);
       }
     }
-    if (lockedWord) {
-      drawWordNode(lockedWord, true, bounds);
-    }
 
+    // 11. Всплывающие карточки переводов
     for (const ft of state.floatingTranslations) {
       drawFloatingTranslation(ft, bounds);
     }
 
+    // 12. Уведомления над кораблём (смена оружия / раскладка)
+    if (state.weaponBannerTimer > 0 && state.weaponBannerText) {
+      drawWeaponBanner(bounds);
+    }
     if (state.layoutWarningTimer > 0) {
       drawLayoutWarning(bounds);
     }
   }
 
-  function drawPlayerShip() {
+  function drawPlayerShip(now = 0) {
     const { x, y, angle, recoil } = state.ship;
+    const weapon = getCurrentWeapon();
+    const primary = weapon.color;
+    const secondary = weapon.secondaryColor;
+
     ctx.save();
     ctx.translate(x - Math.cos(angle) * recoil, y - Math.sin(angle) * recoil);
     ctx.rotate(angle + Math.PI / 2);
 
-    ctx.fillStyle = 'rgba(45, 212, 191, 0.85)';
+    // Длинный реактивный шлейф двигателя (особенно эффектный на титульном экране в стиле ZType!)
+    const isTitle = state.screenMode === 'title';
+    const flameLen = (isTitle ? 48 : 23) + Math.sin(now * 0.03) * 4 + Math.random() * 4;
+    const grad = ctx.createLinearGradient(0, 11, 0, 11 + flameLen);
+    grad.addColorStop(0, primary);
+    grad.addColorStop(0.45, secondary);
+    grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+    ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.moveTo(-5, 13);
-    ctx.lineTo(0, 21 + Math.random() * 5);
-    ctx.lineTo(5, 13);
+    ctx.moveTo(-5.5, 12);
+    ctx.lineTo(0, 12 + flameLen);
+    ctx.lineTo(5.5, 12);
     ctx.closePath();
     ctx.fill();
 
-    ctx.shadowColor = '#2dd4bf';
-    ctx.shadowBlur = 12;
-    ctx.fillStyle = '#0f172a';
-    ctx.strokeStyle = '#2dd4bf';
+    ctx.shadowColor = primary;
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = '#0b1324';
+    ctx.strokeStyle = primary;
     ctx.lineWidth = 2;
 
-    ctx.beginPath();
-    ctx.moveTo(0, -18);
-    ctx.lineTo(14, 12);
-    ctx.lineTo(5, 8);
-    ctx.lineTo(0, 13);
-    ctx.lineTo(-5, 8);
-    ctx.lineTo(-14, 12);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
+    if (weapon.id === 'railgun') {
+      // Двойной магнитный рельсовый ствол
+      ctx.beginPath();
+      ctx.moveTo(-4, -23);
+      ctx.lineTo(-4, -6);
+      ctx.moveTo(4, -23);
+      ctx.lineTo(4, -6);
+      ctx.stroke();
 
-    ctx.fillStyle = '#5eead4';
+      ctx.beginPath();
+      ctx.moveTo(0, -14);
+      ctx.lineTo(15, 12);
+      ctx.lineTo(5, 9);
+      ctx.lineTo(0, 14);
+      ctx.lineTo(-5, 9);
+      ctx.lineTo(-15, 12);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    } else if (weapon.id === 'tesla') {
+      // Корпус с энергетической сферой Теслы на носу
+      ctx.beginPath();
+      ctx.moveTo(0, -17);
+      ctx.lineTo(14, 12);
+      ctx.lineTo(0, 8);
+      ctx.lineTo(-14, 12);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#e0f2fe';
+      ctx.beginPath();
+      ctx.arc(0, -19, 3.8, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (weapon.id === 'missiles') {
+      // Ударный перехватчик с боковыми ракетными пилонами
+      ctx.beginPath();
+      ctx.moveTo(0, -17);
+      ctx.lineTo(17, 10);
+      ctx.lineTo(11, 13);
+      ctx.lineTo(5, 9);
+      ctx.lineTo(0, 13);
+      ctx.lineTo(-5, 9);
+      ctx.lineTo(-11, 13);
+      ctx.lineTo(-17, 10);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    } else {
+      // Классический скоростной перехватчик (Plasma / Synthwave)
+      ctx.beginPath();
+      ctx.moveTo(0, -19);
+      ctx.lineTo(15, 12);
+      ctx.lineTo(5, 8);
+      ctx.lineTo(0, 13);
+      ctx.lineTo(-5, 8);
+      ctx.lineTo(-15, 12);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      if (weapon.id === 'plasma') {
+        ctx.fillStyle = secondary;
+        ctx.beginPath();
+        ctx.arc(-11, 5, 2.2, 0, Math.PI * 2);
+        ctx.arc(11, 5, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Светящаяся кабина пилота
+    ctx.fillStyle = '#ffffff';
+    ctx.globalAlpha = 0.9;
     ctx.beginPath();
-    ctx.moveTo(0, -8);
+    ctx.moveTo(0, -9);
     ctx.lineTo(4, 3);
     ctx.lineTo(-4, 3);
     ctx.closePath();
@@ -1863,6 +3562,27 @@
     ctx.restore();
   }
 
+  function drawWeaponBanner(bounds) {
+    const w = getCurrentWeapon();
+    ctx.save();
+    ctx.globalAlpha = Math.min(1, state.weaponBannerTimer * 1.4);
+    ctx.font = '800 12px "JetBrains Mono", Consolas, monospace';
+    const textW = ctx.measureText(state.weaponBannerText).width + 26;
+    ctx.translate(bounds.centerX, state.ship.y - 54);
+    ctx.fillStyle = 'rgba(8, 15, 30, 0.92)';
+    ctx.strokeStyle = w.color;
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, -textW / 2, -14, textW, 28, 999);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(state.weaponBannerText, 0, 0);
+    ctx.restore();
+  }
+
   function drawLayoutWarning(bounds) {
     ctx.save();
     const w = Math.min(380, bounds.right - bounds.left - 20);
@@ -1951,7 +3671,34 @@
     };
   }
 
-  // --- События кнопок интерфейса ---
+  // --- События кнопок Титульного Экрана и Боевого Интерфейса ---
+  if (btnArcadeLaunch) {
+    btnArcadeLaunch.addEventListener('click', () => {
+      launchFromTitleScreen();
+    });
+  }
+
+  if (btnBackToTitle) {
+    btnBackToTitle.addEventListener('click', () => {
+      returnToTitleScreen();
+    });
+  }
+
+  if (btnHudHome) {
+    btnHudHome.addEventListener('click', () => {
+      returnToTitleScreen();
+    });
+  }
+
+  if (btnWeaponMode) {
+    btnWeaponMode.addEventListener('click', () => {
+      const idx = WEAPONS.findIndex(w => w.id === state.weaponId);
+      const nextW = WEAPONS[(idx + 1) % WEAPONS.length];
+      equipWeapon(nextW.id, true);
+      btnWeaponMode.blur();
+    });
+  }
+
   btnStartLevel.addEventListener('click', () => {
     sound.init();
     if (btnStartLevel.dataset.resumeMode === '1' && state.paused) {
@@ -2001,6 +3748,7 @@
   if (btnArticleMode) {
     btnArticleMode.addEventListener('click', () => {
       state.typeWithArticle = !state.typeWithArticle;
+      saveSettingsPatch({ typeWithArticle: state.typeWithArticle });
       const tr = t();
       btnArticleMode.textContent = state.typeWithArticle ? tr.articleMode : tr.badgeMode;
       btnArticleMode.classList.toggle('active', state.typeWithArticle);
@@ -2014,27 +3762,113 @@
     });
   }
 
-  btnSpeedMode.addEventListener('click', () => {
+  function cycleSpeedPreset() {
     state.speedPresetIndex = (state.speedPresetIndex + 1) % state.speedPresets.length;
+    saveSettingsPatch({ speedPresetIndex: state.speedPresetIndex });
     const preset = state.speedPresets[state.speedPresetIndex];
-    btnSpeedMode.textContent = preset.label;
+    if (btnSpeedMode) btnSpeedMode.textContent = preset.label;
+    if (btnTitleSpeed) btnTitleSpeed.textContent = preset.label;
 
     state.activeWords.forEach(w => {
       if (w.baseSpeedUnscaled) {
         w.vy = w.baseSpeedUnscaled * preset.mult;
       }
     });
+  }
+
+  btnSpeedMode.addEventListener('click', () => {
+    cycleSpeedPreset();
     btnSpeedMode.blur();
   });
 
-  btnTtsMode.addEventListener('click', () => {
-    sound.ttsEnabled = !sound.ttsEnabled;
-    btnTtsMode.classList.toggle('active', sound.ttsEnabled);
-    btnTtsMode.innerHTML = sound.ttsEnabled
-      ? '🔊<span class="hide-mobile"> DE</span>'
-      : '🔇<span class="hide-mobile"> DE</span>';
-    btnTtsMode.blur();
-  });
+  if (btnTitleSpeed) {
+    btnTitleSpeed.addEventListener('click', () => {
+      cycleSpeedPreset();
+      btnTitleSpeed.blur();
+    });
+  }
+
+  // --- Открытие и управление студией Gemini 3.8 TTS ---
+  function openTtsStudioDialog() {
+    if (state.running && !state.paused) state.paused = true;
+    renderTtsSettingsUI();
+    ttsSettingsDialog.showModal();
+  }
+
+  if (btnOpenTtsSettings) {
+    btnOpenTtsSettings.addEventListener('click', () => {
+      openTtsStudioDialog();
+      btnOpenTtsSettings.blur();
+    });
+  }
+
+  if (btnTitleVoice) {
+    btnTitleVoice.addEventListener('click', () => {
+      openTtsStudioDialog();
+      btnTitleVoice.blur();
+    });
+  }
+
+  if (btnCloseTtsDialog) {
+    btnCloseTtsDialog.addEventListener('click', () => {
+      ttsSettingsDialog.close();
+      if (state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
+        state.paused = false;
+      }
+    });
+  }
+
+  if (btnToggleTtsMaster) {
+    btnToggleTtsMaster.addEventListener('click', () => {
+      ttsManager.enabled = !ttsManager.enabled;
+      ttsManager.saveConfig();
+      renderTtsSettingsUI();
+    });
+  }
+
+  if (ttsModelGrid) {
+    ttsModelGrid.querySelectorAll('.tts-option-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const model = card.dataset.model;
+        if (model === 'gemini-3.8-flash-tts' || model === 'gemini-3.8-flash-lite-tts') {
+          ttsManager.model = model;
+          ttsManager.saveConfig();
+          renderTtsSettingsUI();
+        }
+      });
+    });
+  }
+
+  if (btnTestGeminiVoice) {
+    btnTestGeminiVoice.addEventListener('click', async () => {
+      sound.init();
+      const tr = t();
+      btnTestGeminiVoice.disabled = true;
+      btnTestGeminiVoice.textContent = tr.ttsTestingBtn;
+      try {
+        await ttsManager.speakGerman('der Kofferraum', true);
+      } finally {
+        btnTestGeminiVoice.disabled = false;
+        btnTestGeminiVoice.textContent = tr.ttsTestBtn;
+        onTtsStatusChanged();
+      }
+    });
+  }
+
+  if (btnSaveApiKey) {
+    btnSaveApiKey.addEventListener('click', () => {
+      ttsManager.setLocalApiKey(geminiApiKeyInput.value);
+      renderTtsSettingsUI();
+    });
+  }
+
+  if (btnClearApiKey) {
+    btnClearApiKey.addEventListener('click', () => {
+      geminiApiKeyInput.value = '';
+      ttsManager.setLocalApiKey('');
+      renderTtsSettingsUI();
+    });
+  }
 
   btnPause.addEventListener('click', () => {
     togglePause();
@@ -2065,17 +3899,20 @@
     renderWordsPreviewList(filtered, dictFullList);
   }
 
-  btnOpenDict.addEventListener('click', () => {
+  function openDictionaryModal() {
     if (state.running && !state.paused) {
       state.paused = true;
     }
     renderFullDictionary(dictSearchInput.value);
     dictDialog.showModal();
-  });
+  }
+
+  btnOpenDict.addEventListener('click', openDictionaryModal);
+  if (btnTitleDict) btnTitleDict.addEventListener('click', openDictionaryModal);
 
   btnCloseDict.addEventListener('click', () => {
     dictDialog.close();
-    if (state.running && centerOverlay.classList.contains('hidden')) {
+    if (state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
       state.paused = false;
     }
   });
@@ -2084,16 +3921,17 @@
     renderFullDictionary(dictSearchInput.value);
   });
 
-  if (btnOpenCustom) {
-    btnOpenCustom.addEventListener('click', () => {
-      if (state.running && !state.paused) state.paused = true;
-      customWordsDialog.showModal();
-    });
+  function openCustomWordsModal() {
+    if (state.running && !state.paused) state.paused = true;
+    customWordsDialog.showModal();
   }
+
+  if (btnOpenCustom) btnOpenCustom.addEventListener('click', openCustomWordsModal);
+  if (btnTitleCustom) btnTitleCustom.addEventListener('click', openCustomWordsModal);
 
   btnCloseCustom.addEventListener('click', () => {
     customWordsDialog.close();
-    if (state.running && centerOverlay.classList.contains('hidden')) {
+    if (state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
       state.paused = false;
     }
   });
@@ -2119,12 +3957,13 @@
 
     allAutoWords.push(...parsedWords);
     customWordsDialog.close();
-    selectLevel(levels.length - 1, true);
+    state.currentLevelIndex = levels.length - 1;
+    launchFromTitleScreen();
   });
 
-  // --- Инициализация ---
+  // --- Инициализация на живом аркадном титульном экране ---
   resizeCanvas();
-  applyStaticUILocalization();
-  selectLevel(0, true);
+  setTranslationLanguage(state.translationLang);
+  updatePilotRankUI();
   requestAnimationFrame(gameLoop);
 })();

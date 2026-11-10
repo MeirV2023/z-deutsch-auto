@@ -1,9 +1,9 @@
 :root {
   color-scheme: dark;
-  --bg-deep: #050811;
+  --bg-deep: #040711;
   --bg-panel: rgba(10, 16, 30, 0.84);
-  --bg-panel-strong: rgba(12, 19, 36, 0.96);
-  --border-subtle: rgba(45, 212, 191, 0.2);
+  --bg-panel-strong: rgba(11, 18, 35, 0.96);
+  --border-subtle: rgba(45, 212, 191, 0.22);
   --border-bright: rgba(56, 189, 248, 0.55);
   --text-main: #f1f5f9;
   --text-muted: #94a3b8;
@@ -40,7 +40,7 @@ html, body {
   overflow: hidden;
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at 50% 65%, #0b1629 0%, #050811 72%, #020408 100%);
+  background: radial-gradient(circle at 50% 58%, #0c1830 0%, #050914 68%, #020409 100%);
   color: var(--text-main);
   font-family: var(--font-ui);
   user-select: none;
@@ -49,7 +49,6 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Тонкие современные скроллбары */
 .scrollable {
   scrollbar-width: thin;
   scrollbar-color: rgba(56, 189, 248, 0.35) rgba(15, 23, 42, 0.4);
@@ -65,7 +64,374 @@ html, body {
   z-index: 1;
 }
 
-/* Верхняя панель HUD */
+/* ==========================================================================
+   ПЕРЕХОДЫ МЕЖДУ РЕЖИМОМ "АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН" И "БОЕВОЙ ПОЛЁТ"
+   ========================================================================== */
+body.mode-title .hud-top {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-28px);
+}
+
+body.mode-title .sidebar-left {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-32px);
+}
+
+body.mode-title .sidebar-right {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(32px);
+}
+
+body.mode-title .ztype-keyboard-dock {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(40px);
+}
+
+body.mode-play .arcade-title-screen {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.06);
+}
+
+/* ==========================================================================
+   АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН (КОСМИЧЕСКОЕ ИНТРО И АНГАР ОРУЖИЯ)
+   ========================================================================== */
+.arcade-title-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: max(12px, env(safe-area-inset-top)) 16px max(14px, env(safe-area-inset-bottom));
+  background: radial-gradient(circle at 50% 48%, rgba(5, 10, 22, 0.08) 0%, rgba(3, 6, 15, 0.56) 100%);
+  transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none; /* Позволяет видеть космос; интерактивные блоки имеют pointer-events: auto */
+}
+
+.title-top-bar,
+.title-bottom-dock {
+  pointer-events: auto;
+}
+
+.title-top-bar {
+  width: min(1040px, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pilot-rank-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: rgba(10, 18, 36, 0.78);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(251, 191, 36, 0.38);
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.14);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent-amber);
+}
+
+.title-hero-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 2vh;
+  margin-bottom: auto;
+  padding: 0 8px;
+}
+
+.title-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(103, 232, 249, 0.88);
+  text-shadow: 0 0 14px rgba(34, 211, 238, 0.55);
+  margin-bottom: 6px;
+}
+
+.arcade-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  line-height: 0.96;
+}
+
+.arcade-logo-main {
+  font-family: var(--font-mono);
+  font-size: clamp(2.65rem, 7.6vw, 5.1rem);
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  background: linear-gradient(180deg, #ffffff 0%, #bae6fd 46%, #22d3ee 78%, #10b981 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 26px rgba(34, 211, 238, 0.42)) drop-shadow(0 8px 20px rgba(0, 0, 0, 0.85));
+  animation: logoFloat 4.2s ease-in-out infinite;
+}
+
+.arcade-logo-sub {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 4px 16px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: clamp(0.72rem, 1.8vw, 0.92rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: #fbbf24;
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.08), rgba(251, 146, 60, 0.24), rgba(251, 191, 36, 0.08));
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  box-shadow: 0 0 20px rgba(251, 146, 60, 0.25);
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+.title-tagline {
+  margin-top: 10px;
+  max-width: 560px;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  line-height: 1.42;
+  color: rgba(226, 232, 240, 0.88);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+/* Нижний интерактивный док на титульном экране (Под кораблём автопилота) */
+.title-bottom-dock {
+  width: min(700px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  background: linear-gradient(180deg, rgba(8, 15, 30, 0.72) 0%, rgba(5, 10, 22, 0.9) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 20px;
+  padding: 13px 15px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.72), 0 0 32px rgba(34, 211, 238, 0.12);
+}
+
+.arsenal-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.arsenal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.arsenal-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+}
+
+.arsenal-desc {
+  font-size: 0.76rem;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.weapon-selector-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.weapon-selector-row.compact {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.weapon-pill-btn {
+  --w-color: #22d3ee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 7px 6px;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.75);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.16s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.weapon-selector-row.compact .weapon-pill-btn {
+  flex: 1 0 auto;
+  flex-direction: row;
+  gap: 5px;
+  padding: 6px 10px;
+}
+
+.weapon-pill-btn:hover {
+  border-color: var(--w-color);
+  color: #ffffff;
+  background: rgba(30, 41, 59, 0.9);
+  transform: translateY(-1px);
+}
+
+.weapon-pill-btn.active {
+  border-color: var(--w-color);
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.14), rgba(15, 23, 42, 0.92));
+  box-shadow: 0 0 16px color-mix(in srgb, var(--w-color) 42%, transparent), inset 0 0 10px color-mix(in srgb, var(--w-color) 24%, transparent);
+  color: #ffffff;
+}
+
+.weapon-pill-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.weapon-pill-name {
+  font-size: 0.71rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.weapon-pill-key {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: rgba(148, 163, 184, 0.55);
+}
+
+.title-mission-strip {
+  width: 100%;
+}
+
+.title-launch-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.arcade-launch-btn {
+  position: relative;
+  width: 100%;
+  padding: 13px 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(110, 231, 183, 0.7);
+  background: linear-gradient(135deg, #0ea5e9 0%, #10b981 52%, #059669 100%);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(16, 185, 129, 0.42), 0 0 22px rgba(14, 165, 233, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.arcade-launch-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 12px 34px rgba(16, 185, 129, 0.58), 0 0 30px rgba(34, 211, 238, 0.5);
+}
+
+.arcade-launch-btn:active {
+  transform: scale(0.98);
+}
+
+.launch-glow {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 75%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+  transform: skewX(-24deg);
+  animation: launchSweep 3.2s infinite;
+  pointer-events: none;
+}
+
+@keyframes launchSweep {
+  0% { left: -120%; }
+  45%, 100% { left: 160%; }
+}
+
+.launch-text {
+  position: relative;
+  z-index: 1;
+}
+
+.title-utility-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.arcade-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(15, 23, 42, 0.72);
+  color: #cbd5e1;
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.arcade-link-btn:hover {
+  border-color: var(--accent-cyan);
+  color: #ffffff;
+  background: rgba(34, 211, 238, 0.16);
+}
+
+.arcade-link-btn.highlight-ai {
+  border-color: rgba(167, 139, 250, 0.55);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(34, 211, 238, 0.16));
+  color: #e9d5ff;
+}
+
+/* ==========================================================================
+   ВЕРХНЯЯ БОЕВАЯ ПАНЕЛЬ HUD
+   ========================================================================== */
 .hud-top {
   position: fixed;
   top: 8px;
@@ -82,26 +448,14 @@ html, body {
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .brand-cluster {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
-}
-
-.brand-logo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-weight: 800;
-  font-size: 0.98rem;
-  letter-spacing: 0.05em;
-  color: var(--accent-cyan);
-  text-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
-  white-space: nowrap;
 }
 
 .level-indicator {
@@ -119,7 +473,7 @@ html, body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 220px;
+  max-width: 210px;
 }
 
 .level-progress-wrap {
@@ -147,7 +501,6 @@ html, body {
   transition: width 0.25s ease;
 }
 
-/* Статистика по центру HUD */
 .stats-cluster {
   display: flex;
   align-items: center;
@@ -180,11 +533,10 @@ html, body {
 .stat-value.accent-emerald { color: var(--accent-emerald); }
 .stat-value.accent-rose { color: var(--accent-rose); font-size: 0.8rem; }
 
-/* Кнопки управления сверху */
 .controls-cluster {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   flex-shrink: 0;
 }
 
@@ -199,7 +551,7 @@ html, body {
   background: rgba(30, 41, 59, 0.7);
   color: var(--text-main);
   font-family: var(--font-ui);
-  font-size: 0.76rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -217,6 +569,18 @@ html, body {
   color: #a7f3d0;
 }
 
+.hud-btn.weapon-hud-btn {
+  border-color: rgba(56, 189, 248, 0.55);
+  background: rgba(14, 165, 233, 0.18);
+  color: #e0f2fe;
+}
+
+.hud-btn.ai-voice-btn.active {
+  border-color: rgba(167, 139, 250, 0.6);
+  background: rgba(139, 92, 246, 0.22);
+  color: #ddd6fe;
+}
+
 .hud-btn.emp-btn {
   border-color: rgba(251, 191, 36, 0.5);
   background: rgba(251, 191, 36, 0.15);
@@ -228,7 +592,9 @@ html, body {
   cursor: not-allowed;
 }
 
-/* Левая боковая панель (ПК): Уровни кампании "Auto" */
+/* ==========================================================================
+   БОКОВЫЕ ПАНЕЛИ НА ПК
+   ========================================================================== */
 .sidebar-left {
   position: fixed;
   top: 66px;
@@ -243,6 +609,7 @@ html, body {
   border: 1px solid var(--border-subtle);
   border-radius: 14px;
   padding: 12px;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .sidebar-header {
@@ -336,7 +703,6 @@ html, body {
   color: var(--text-muted);
 }
 
-/* Правая боковая панель (ПК): Журнал взрывов */
 .sidebar-right {
   position: fixed;
   top: 66px;
@@ -351,6 +717,7 @@ html, body {
   border: 1px solid var(--border-subtle);
   border-radius: 14px;
   padding: 12px;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .kill-feed {
@@ -456,7 +823,7 @@ html, body {
 .legend-verb::before { background: var(--art-verb); }
 
 /* ==========================================================================
-   ВСТРОЕННАЯ КОСМИЧЕСКАЯ КЛАВИАТУРА ZTYPE (Точь-в-точь как в мобильном ZType)
+   ВСТРОЕННАЯ КОСМИЧЕСКАЯ КЛАВИАТУРА ZTYPE
    ========================================================================== */
 .ztype-keyboard-dock {
   position: fixed;
@@ -470,9 +837,9 @@ html, body {
   display: flex;
   flex-direction: column;
   user-select: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-/* Тонкая бирюзовая линия над клавиатурой (как в оригинальном ZType!) */
 .ztype-kbd-topline {
   width: 100%;
   height: 2px;
@@ -489,7 +856,6 @@ html, body {
   transition: width 0.22s ease;
 }
 
-/* Компактная строка прицела прямо над буквами клавиатуры */
 .ztype-target-strip {
   height: 24px;
   display: flex;
@@ -534,7 +900,6 @@ html, body {
   padding: 0 1%;
 }
 
-/* Крестики '+' между рядами клавиш, как на скриншоте zty.pe */
 .ztype-crosshairs-row {
   display: flex;
   align-items: center;
@@ -585,7 +950,6 @@ html, body {
   text-shadow: 0 0 16px #fb923c;
 }
 
-/* Мягкая подсветка следующей нужной буквы на клавиатуре */
 .zkey.next-key-hint {
   color: #fbbf24;
   text-shadow: 0 0 14px rgba(251, 191, 36, 0.85);
@@ -603,7 +967,7 @@ html, body {
 }
 
 /* ==========================================================================
-   ЦЕНТРАЛЬНЫЙ ОВЕРЛЕЙ (Меню / Старт уровня / Победа)
+   ЦЕНТРАЛЬНЫЙ ОВЕРЛЕЙ (Пауза / Победа / Поражение)
    ========================================================================== */
 .center-overlay {
   position: fixed;
@@ -612,7 +976,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(3, 6, 14, 0.82);
+  background: rgba(3, 6, 14, 0.8);
   backdrop-filter: blur(8px);
   padding: 14px;
 }
@@ -622,17 +986,17 @@ html, body {
 }
 
 .overlay-card {
-  width: min(620px, 96vw);
+  width: min(640px, 96vw);
   max-height: 90dvh;
   overflow-y: auto;
   background: var(--bg-panel-strong);
   border: 1px solid var(--border-bright);
   border-radius: 18px;
-  padding: 20px 22px;
+  padding: 18px 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 36px rgba(34, 211, 238, 0.15);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .overlay-top-bar {
@@ -663,7 +1027,7 @@ html, body {
 }
 
 .overlay-title {
-  font-size: 1.38rem;
+  font-size: 1.32rem;
   font-weight: 800;
   line-height: 1.22;
   background: linear-gradient(90deg, #ffffff, #67e8f9, #34d399);
@@ -673,12 +1037,27 @@ html, body {
 }
 
 .overlay-desc {
-  font-size: 0.86rem;
-  line-height: 1.48;
+  font-size: 0.85rem;
+  line-height: 1.45;
   color: #cbd5e1;
 }
 
-/* Быстрые кнопки выбора подуровня внутри меню (для телефона и ПК) */
+.overlay-arsenal-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: rgba(8, 13, 26, 0.68);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+}
+
+.overlay-arsenal-title {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
 .mobile-level-Chips {
   display: flex;
   gap: 6px;
@@ -692,26 +1071,31 @@ html, body {
   padding: 6px 11px;
   border-radius: 9px;
   border: 1px solid rgba(148, 163, 184, 0.25);
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(15, 23, 42, 0.82);
   color: var(--text-muted);
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.14s ease;
 }
 
+.level-chip-btn:hover {
+  border-color: rgba(34, 211, 238, 0.5);
+  color: #e2e8f0;
+}
+
 .level-chip-btn.active {
   border-color: var(--accent-cyan);
-  background: rgba(34, 211, 238, 0.2);
+  background: rgba(34, 211, 238, 0.22);
   color: #fff;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.22);
 }
 
 .level-chip-btn.completed {
-  border-color: rgba(52, 211, 153, 0.45);
+  border-color: rgba(52, 211, 153, 0.48);
   color: var(--accent-emerald);
 }
 
-/* Сворачиваемый список слов в меню, чтобы не перегружать экран телефона */
 .words-accordion {
   border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: 12px;
@@ -729,9 +1113,9 @@ html, body {
 
 .overlay-Words-preview {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
   gap: 7px;
-  max-height: 190px;
+  max-height: 180px;
   overflow-y: auto;
   margin-top: 8px;
   padding-right: 4px;
@@ -769,34 +1153,44 @@ html, body {
 .overlay-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .primary-btn {
   flex: 1 1 auto;
-  padding: 12px 20px;
+  padding: 11px 18px;
   border-radius: 12px;
   border: none;
   background: linear-gradient(135deg, #0284c7, #10b981);
   color: #ffffff;
   font-family: var(--font-ui);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
   text-align: center;
   cursor: pointer;
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+  transition: filter 0.14s ease, transform 0.12s ease;
+}
+
+.primary-btn:hover {
+  filter: brightness(1.08);
 }
 
 .secondary-btn {
-  padding: 11px 16px;
+  padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid rgba(148, 163, 184, 0.35);
   background: rgba(30, 41, 59, 0.75);
   color: var(--text-main);
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
+}
+
+.secondary-btn:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(34, 211, 238, 0.14);
 }
 
 /* Мини-блиц после уровня */
@@ -856,11 +1250,13 @@ html, body {
   color: #fecdd3;
 }
 
-/* Модальные окна <dialog> */
+/* ==========================================================================
+   МОДАЛЬНЫЕ ОКНА (<dialog>) И СТУДИЯ GEMINI 3.8 TTS
+   ========================================================================== */
 dialog.modern-dialog {
   margin: auto;
-  width: min(720px, 95vw);
-  max-height: 86dvh;
+  width: min(680px, 95vw);
+  max-height: 88dvh;
   background: var(--bg-panel-strong);
   color: var(--text-main);
   border: 1px solid var(--border-bright);
@@ -903,7 +1299,7 @@ dialog.modern-dialog::backdrop {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 70dvh;
+  max-height: 74dvh;
   overflow-y: auto;
 }
 
@@ -924,8 +1320,147 @@ dialog.modern-dialog::backdrop {
   resize: vertical;
 }
 
+/* Стили окна Gemini 3.8 TTS */
+.tts-status-banner {
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(16, 185, 129, 0.16));
+  border: 1px solid rgba(167, 139, 250, 0.45);
+  color: #e9d5ff;
+}
+
+.tts-status-banner.fallback {
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: #fde68a;
+}
+
+.tts-row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.tts-field-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.tts-model-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.tts-option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.78);
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.tts-option-card.active {
+  border-color: var(--accent-violet);
+  background: rgba(139, 92, 246, 0.22);
+  box-shadow: 0 0 14px rgba(167, 139, 250, 0.22);
+}
+
+.tts-opt-title {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.tts-opt-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.tts-voice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.tts-voice-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.75);
+  color: var(--text-main);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.14s ease;
+}
+
+.tts-voice-btn.active {
+  border-color: var(--accent-cyan);
+  background: rgba(34, 211, 238, 0.18);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
+}
+
+.tts-voice-name {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.tts-voice-tone {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.tts-test-row {
+  display: flex;
+}
+
+.tts-key-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tts-key-hint {
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.tts-key-input-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
 /* ==========================================================================
-   МОБИЛЬНАЯ АДАПТАЦИЯ (КАК В ОРИГИНАЛЬНОМ ZTYPE НА ТЕЛЕФОНЕ)
+   МОБИЛЬНАЯ АДАПТАЦИЯ (ТЕЛЕФОНЫ И КОМПАКТНЫЕ ЭКРАНЫ)
    ========================================================================== */
 @media (max-width: 960px) {
   .sidebar-left,
@@ -938,35 +1473,34 @@ dialog.modern-dialog::backdrop {
     top: 4px;
     left: 6px;
     right: 6px;
-    padding: 5px 8px;
+    padding: 5px 7px;
     border-radius: 10px;
     gap: 4px;
   }
 
   .level-indicator-title {
-    font-size: 0.74rem;
-    max-width: 115px;
+    font-size: 0.72rem;
+    max-width: 96px;
   }
 
   .level-progress-bar {
-    width: 48px;
+    width: 42px;
   }
 
   .stats-cluster {
-    gap: 8px;
+    gap: 6px;
   }
 
   .stat-value {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
   }
 
   .hud-btn {
-    padding: 4px 7px;
-    font-size: 0.72rem;
+    padding: 4px 6px;
+    font-size: 0.7rem;
     border-radius: 7px;
   }
 
-  /* Клавиатура на всю ширину внизу экрана телефона */
   .ztype-keyboard-dock {
     left: 0;
     right: 0;
@@ -978,8 +1512,69 @@ dialog.modern-dialog::backdrop {
     font-size: 1.35rem;
   }
 
-  .quiz-options {
+  .quiz-options,
+  .tts-model-grid {
     grid-template-columns: 1fr;
+  }
+
+  .tts-voice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Адаптация аркадного титульного экрана под смартфон */
+  .arcade-title-screen {
+    padding: max(8px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+  }
+
+  .pilot-rank-pill {
+    font-size: 0.66rem;
+    padding: 5px 10px;
+  }
+
+  .title-hero-center {
+    margin-top: 1vh;
+  }
+
+  .title-kicker {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+  }
+
+  .title-tagline {
+    font-size: 0.76rem;
+    margin-top: 6px;
+  }
+
+  .title-bottom-dock {
+    padding: 10px 11px;
+    gap: 8px;
+    border-radius: 16px;
+  }
+
+  .arsenal-desc {
+    display: none;
+  }
+
+  .weapon-pill-btn {
+    padding: 6px 3px;
+  }
+
+  .weapon-pill-key {
+    display: none;
+  }
+
+  .weapon-pill-name {
+    font-size: 0.63rem;
+  }
+
+  .arcade-launch-btn {
+    padding: 11px 16px;
+    font-size: 0.94rem;
+  }
+
+  .arcade-link-btn {
+    padding: 5px 9px;
+    font-size: 0.71rem;
   }
 }
 
@@ -990,5 +1585,11 @@ dialog.modern-dialog::backdrop {
   }
   .ztype-crosshairs-row {
     height: 6px;
+  }
+  .arcade-logo-main {
+    font-size: 2.2rem;
+  }
+  .title-tagline {
+    display: none;
   }
 }
