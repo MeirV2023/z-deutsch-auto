@@ -95,18 +95,18 @@
   // --- Полная локализация интерфейса (RU / עברית) ---
   const UI_TEXT = {
     ru: {
-      titleKicker: 'КОСМИЧЕСКИЙ ТРЕНАЖЁР НЕМЕЦКОГО · GEMINI 3.8 AUDIO',
-      titleTagline: 'Печатайте буквы — сбивайте немецкие слова — запоминайте перевод во вспышках сверхновых!',
-      titleArsenalLabel: '⚔️ ВООРУЖЕНИЕ КОРАБЛЯ:',
-      launchMissionBtn: (lvlNum, name) => `🚀 В БОЙ · УР.${lvlNum}: ${name.toUpperCase()}`,
-      launchAutoBtn: '🚀 В БОЙ · ГЛАВНЫЙ AUTO-МАРАФОН (73)',
+      titleTagline: 'Сбивайте немецкие слова по буквам и запоминайте перевод при взрыве!',
+      titleArsenalLabel: '⚔️ Выберите оружие:',
+      launchMissionBtn: (lvlNum, name) => `🚀 Начать игру · Уровень ${lvlNum}: ${name}`,
+      launchAutoBtn: '🚀 Начать игру · Главный AUTO-марафон (73)',
+      titleVoiceLink: '🎙️ Озвучка AI',
       titleDictLink: (n) => `Словарь (${n})`,
       titleCustomLink: 'Свои слова',
       ranks: ['КАДЕТ', 'ПИЛОТ АВТОБАНА', 'ШТУРМАН ГАЛАКТИКИ', 'КОМАНДОР AUTO'],
       rankLine: (rank, best) => `${rank} · РЕКОРД: ${best}`,
       overlayWeaponTitle: '⚔️ Оружие корабля:',
       backToMenuBtn: '🏠 В меню',
-      weaponBanner: (icon, name) => `${icon} ОРУЖИЕ: ${name.toUpperCase()}`,
+      weaponBanner: (icon, name) => `${icon} Оружие: ${name}`,
 
       pause: 'Пауза',
       score: 'Очки',
@@ -179,11 +179,11 @@
       ttsStatusMuted: '🔇 Озвучка слов выключена'
     },
     he: {
-      titleKicker: 'יורה חלל ללימוד גרמנית · GEMINI 3.8 AUDIO',
-      titleTagline: 'הקלידו אותיות — פוצצו מילים בגרמנית — זכרו את התרגום בפיצוצי סופרנובה!',
-      titleArsenalLabel: '⚔️ חימוש החללית:',
-      launchMissionBtn: (lvlNum, name) => `🚀 לקרב · שלב ${lvlNum}: ${name}`,
-      launchAutoBtn: '🚀 לקרב · מרתון AUTO הראשי (73)',
+      titleTagline: 'פוצצו מילים בגרמנית אות אחר אות וזכרו את התרגום בפיצוץ!',
+      titleArsenalLabel: '⚔️ בחרו נשק לחללית:',
+      launchMissionBtn: (lvlNum, name) => `🚀 התחל משחק · שלב ${lvlNum}: ${name}`,
+      launchAutoBtn: '🚀 התחל משחק · מרתון AUTO הראשי (73)',
+      titleVoiceLink: '🎙️ קריינות AI',
       titleDictLink: (n) => `מילון (${n})`,
       titleCustomLink: 'מילים משלך',
       ranks: ['צוער חלל', 'טייס אוטובאן', 'נווט גלקטי', 'מפקד AUTO'],
@@ -1201,8 +1201,10 @@
 
   // Титульный аркадный экран
   const arcadeTitleScreen = document.getElementById('arcadeTitleScreen');
+  const titleHeaderCard = document.getElementById('titleHeaderCard');
+  const titleSpaceWindow = document.getElementById('titleSpaceWindow');
+  const titleBottomDock = document.getElementById('titleBottomDock');
   const pilotRankText = document.getElementById('pilotRankText');
-  const titleKicker = document.getElementById('titleKicker');
   const titleTagline = document.getElementById('titleTagline');
   const titleArsenalLabel = document.getElementById('titleArsenalLabel');
   const titleWeaponDesc = document.getElementById('titleWeaponDesc');
@@ -1258,6 +1260,8 @@
 
   const ztypeKeyboard = document.getElementById('ztypeKeyboard');
   const kbdProgressFill = document.getElementById('kbdProgressFill');
+  const btnKbdEmp = document.getElementById('btnKbdEmp');
+  const kbdEmpCount = document.getElementById('kbdEmpCount');
   const levelListContainer = document.getElementById('levelListContainer');
   const overlayLevelChips = document.getElementById('overlayLevelChips');
   const totalWordsCounter = document.getElementById('totalWordsCounter');
@@ -1321,11 +1325,17 @@
   // --- Размеры игрового поля ---
   function getPlayBounds() {
     if (state.screenMode === 'title') {
+      const headerRect = titleHeaderCard ? titleHeaderCard.getBoundingClientRect() : null;
+      const dockRect = titleBottomDock ? titleBottomDock.getBoundingClientRect() : null;
+      const headerBottom = headerRect && headerRect.height > 0 ? headerRect.bottom : 140;
+      const dockTop = dockRect && dockRect.height > 0 ? dockRect.top : (canvas.height - 260);
+      const safeTop = Math.max(16, headerBottom + 10);
+      const safeBottom = Math.max(safeTop + 70, dockTop - 10);
       return {
         left: 16,
         right: Math.max(280, canvas.width - 16),
-        top: 68,
-        bottom: Math.max(240, canvas.height * 0.56),
+        top: safeTop,
+        bottom: safeBottom,
         centerX: canvas.width / 2
       };
     }
@@ -1335,7 +1345,7 @@
     const rightPad = isDesktopWide ? 294 : 8;
 
     const kbdRect = ztypeKeyboard ? ztypeKeyboard.getBoundingClientRect() : { height: 185 };
-    const kbdHeight = kbdRect.height || 185;
+    const kbdHeight = kbdRect.height > 20 ? kbdRect.height : 185;
 
     const left = leftPad;
     const right = Math.max(left + 260, canvas.width - rightPad);
@@ -1357,7 +1367,7 @@
     const bounds = getPlayBounds();
     state.ship.x = bounds.centerX;
     state.ship.targetY = state.screenMode === 'title'
-      ? Math.min(canvas.height * 0.49, canvas.height - 290)
+      ? Math.max(bounds.top + 48, bounds.bottom - 26)
       : bounds.bottom - 24;
     if (!state.ship.y) state.ship.y = state.ship.targetY;
     initStars();
@@ -1471,12 +1481,13 @@
         state.weaponBannerText = t().weaponBanner(found.icon, getWeaponName(found));
         state.weaponBannerTimer = 1.6;
       } else {
+        const bounds = getPlayBounds();
         const targetX = state.demoWords.length > 0
           ? state.demoWords[0].x
-          : state.ship.x + (Math.random() * 120 - 60);
+          : state.ship.x + (Math.random() * 100 - 50);
         const targetY = state.demoWords.length > 0
           ? state.demoWords[0].y
-          : Math.max(90, state.ship.y - 150);
+          : Math.max(bounds.top + 28, (bounds.top + state.ship.y) / 2);
         spawnWeaponVisualEffect(found.id, targetX, targetY, found.color);
       }
     }
@@ -1505,7 +1516,6 @@
         btn.style.setProperty('--w-color', w.color);
         btn.title = `${getWeaponName(w)} — ${getWeaponDesc(w)}`;
         btn.innerHTML = `
-          <span class="weapon-pill-key">${w.key}</span>
           <span class="weapon-pill-icon">${w.icon}</span>
           <span class="weapon-pill-name">${escapeHtml(getWeaponName(w))}</span>
         `;
@@ -1682,6 +1692,7 @@
 
   // --- Переключение между Аркадным Титульным Экраном и Игрой ---
   function launchFromTitleScreen() {
+    if (state.screenMode !== 'title') return;
     sound.init();
     sound.playWarpLaunch();
 
@@ -1690,6 +1701,7 @@
     state.demoWords = [];
     state.demoTargetId = null;
 
+    if (arcadeTitleScreen) arcadeTitleScreen.hidden = true;
     document.body.classList.remove('mode-title');
     document.body.classList.add('mode-play');
 
@@ -1703,34 +1715,50 @@
     state.activeWords = [];
     state.lockedWordId = null;
     state.activeQuiz = null;
+    state.lasers = [];
+    state.missiles = [];
+    state.shockwaves = [];
+    state.floatingTranslations = [];
+    state.demoWords = [];
+    state.demoTargetId = null;
     state.screenMode = 'title';
     state.warpTimer = 0.35;
 
     centerOverlay.classList.add('hidden');
+    if (arcadeTitleScreen) arcadeTitleScreen.hidden = false;
     document.body.classList.remove('mode-play');
     document.body.classList.add('mode-title');
 
     resizeCanvas();
+    requestAnimationFrame(() => resizeCanvas());
     updatePilotRankUI();
     renderLevelSidebar();
     applyStaticUILocalization();
   }
 
-  // --- Живой Автопилот на Аркадном Титульном Экране ---
+  // --- Живой Автопилот на Аркадном Титульном Экране (строго в центральном окне космоса) ---
   function updateTitleDemo(dt) {
-    const topZoneMin = Math.max(95, canvas.height * 0.19);
-    const topZoneMax = Math.max(topZoneMin + 55, canvas.height * 0.37);
+    const bounds = getPlayBounds();
+    const corridorH = bounds.bottom - bounds.top;
 
-    // Плавное покачивание корабля в открытом космосе между логотипом и ангаром оружия
-    const hoverY = Math.min(canvas.height * 0.48, canvas.height - 285);
-    state.ship.targetY = Math.max(topZoneMax + 46, hoverY);
-    state.ship.x = canvas.width / 2 + Math.sin(performance.now() * 0.0011) * 26;
+    // Плавное покачивание корабля в нижней части открытого космического окна
+    state.ship.targetY = Math.max(bounds.top + 44, bounds.bottom - 26);
+    state.ship.x = canvas.width / 2 + Math.sin(performance.now() * 0.0011) * 24;
+
+    // На очень узких по высоте экранах (альбомная ориентация телефона) не спавним демо-слова, чтобы не теснить карточки
+    if (corridorH < 120) {
+      state.demoWords = [];
+      state.demoTargetId = null;
+      return;
+    }
+
+    const spawnY = bounds.top + 22;
 
     state.demoSpawnTimer -= dt;
-    if (state.demoSpawnTimer <= 0 && state.demoWords.length < 3) {
+    if (state.demoSpawnTimer <= 0 && state.demoWords.length < 2) {
       const sample = allAutoWords[Math.floor(Math.random() * allAutoWords.length)];
       if (sample) {
-        const margin = Math.min(160, canvas.width * 0.25);
+        const margin = Math.min(150, canvas.width * 0.24);
         const rx = margin + Math.random() * Math.max(60, canvas.width - margin * 2);
         state.demoWords.push({
           id: nextEntityId++,
@@ -1738,26 +1766,26 @@
           text: sample.word,
           typedCount: 0,
           x: rx,
-          y: topZoneMin - 12,
-          vy: 12 + Math.random() * 6,
+          y: spawnY,
+          vy: Math.max(9, Math.min(16, corridorH * 0.065)),
           recoilY: 0,
           hitFlash: 0
         });
       }
-      state.demoSpawnTimer = 1.65;
+      state.demoSpawnTimer = 1.85;
     }
 
     for (let i = state.demoWords.length - 1; i >= 0; i--) {
       const dw = state.demoWords[i];
       if (dw.recoilY > 0) {
-        dw.y -= dw.recoilY * 6 * dt;
+        dw.y = Math.max(bounds.top + 18, dw.y - dw.recoilY * 6 * dt);
         dw.recoilY = Math.max(0, dw.recoilY - 24 * dt);
       } else {
         dw.y += dw.vy * dt;
       }
       if (dw.hitFlash > 0) dw.hitFlash = Math.max(0, dw.hitFlash - dt * 5);
 
-      if (dw.y > state.ship.y - 36) {
+      if (dw.y > state.ship.y - 38) {
         state.demoWords.splice(i, 1);
         if (state.demoTargetId === dw.id) state.demoTargetId = null;
       }
@@ -1772,15 +1800,15 @@
         state.demoTargetId = target.id;
       }
 
-      if (target && target.y > topZoneMin + 4) {
+      if (target && target.y >= spawnY + 4) {
         target.typedCount++;
         target.hitFlash = 1.0;
-        target.recoilY = 3.2;
+        target.recoilY = 2.6;
         const style = getArticleStyle(target.entry.article);
         spawnWeaponVisualEffect(state.weaponId, target.x, target.y, style.main);
 
         if (target.typedCount >= target.text.length) {
-          // Красивый беззвучный взрыв слова с показом перевода в космосе
+          // Красивый беззвучный взрыв слова с показом перевода внутри космического окна
           const idx = state.demoWords.findIndex(w => w.id === target.id);
           if (idx !== -1) state.demoWords.splice(idx, 1);
           state.demoTargetId = null;
@@ -1789,27 +1817,27 @@
             x: target.x,
             y: target.y,
             radius: 6,
-            maxRadius: 56,
+            maxRadius: 52,
             color: style.main,
             alpha: 0.9
           });
           spawnParticles(target.x, target.y, style.main, 16, 140);
           state.floatingTranslations.push({
             x: target.x,
-            y: target.y,
-            vy: -14,
+            y: Math.min(bounds.bottom - 36, Math.max(bounds.top + 36, target.y)),
+            vy: -10,
             entry: target.entry,
             rawDe: target.entry.raw,
             color: style.main,
             life: 0,
-            maxLife: 2.8
+            maxLife: 2.5
           });
-          state.demoFireTimer = 0.55;
+          state.demoFireTimer = 0.65;
         } else {
           state.demoFireTimer = 0.14;
         }
       } else {
-        state.demoFireTimer = 0.2;
+        state.demoFireTimer = 0.18;
       }
     }
   }
@@ -1853,9 +1881,9 @@
     if (overlayCard) overlayCard.dir = isHe ? 'rtl' : 'ltr';
     if (ttsDialogBody) ttsDialogBody.dir = isHe ? 'rtl' : 'ltr';
 
-    if (titleKicker) titleKicker.textContent = tr.titleKicker;
     if (titleTagline) titleTagline.textContent = tr.titleTagline;
     if (titleArsenalLabel) titleArsenalLabel.textContent = tr.titleArsenalLabel;
+    if (btnTitleVoice) btnTitleVoice.textContent = tr.titleVoiceLink;
     if (labelTitleDict) labelTitleDict.textContent = tr.titleDictLink(allAutoWords.length);
     if (labelTitleCustom) labelTitleCustom.textContent = tr.titleCustomLink;
     if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.overlayWeaponTitle;
@@ -2189,10 +2217,12 @@
     const pool = customWordPool || lvl.words;
 
     state.screenMode = 'play';
+    if (arcadeTitleScreen) arcadeTitleScreen.hidden = true;
     document.body.classList.remove('mode-title');
     document.body.classList.add('mode-play');
 
     resizeCanvas();
+    requestAnimationFrame(() => resizeCanvas());
     state.wordQueue = shuffleArray(pool);
     state.totalWordsInLevel = state.wordQueue.length;
     state.wordsDestroyedInLevel = 0;
@@ -2229,11 +2259,13 @@
 
   function getWordFontPx(textLength) {
     const isMobile = canvas.width < 520;
-    if (!isMobile) return 18;
-    if (textLength >= 22) return 12.5;
-    if (textLength >= 17) return 14;
-    if (textLength >= 13) return 15.5;
-    return 17;
+    if (!isMobile) {
+      return textLength >= 20 ? 17.5 : 20;
+    }
+    if (textLength >= 22) return 14;
+    if (textLength >= 17) return 15.5;
+    if (textLength >= 13) return 17;
+    return 18.5;
   }
 
   // --- Спавн нового слова сверху ---
@@ -2557,37 +2589,63 @@
     setTimeout(() => btn.classList.remove('pressed'), 110);
   }
 
-  // --- Обработка нажатий по экранной клавиатуре ZType ---
+  // --- Обработка нажатий по экранной клавиатуре ZType (мгновенный тач без пробивания подложек) ---
+  function handleVirtualKeyPress(btn, e) {
+    if (e) {
+      if (e.cancelable) e.preventDefault();
+      e.stopPropagation();
+    }
+    sound.init();
+
+    if (state.screenMode !== 'play' || !state.running || state.paused || state.gameOver) return;
+
+    btn.classList.add('pressed');
+    setTimeout(() => btn.classList.remove('pressed'), 120);
+
+    if (navigator.vibrate) {
+      try { navigator.vibrate(7); } catch (_) {}
+    }
+
+    const action = btn.dataset.action;
+    if (action === 'reset') {
+      state.lockedWordId = null;
+      updateBottomTargetUI();
+      updateKeyboardNextHint();
+      return;
+    }
+    if (action === 'emp') {
+      triggerEmpWave();
+      return;
+    }
+
+    const ch = btn.dataset.key;
+    if (ch) {
+      processTypedChar(ch);
+    }
+  }
+
   document.querySelectorAll('.zkey').forEach(btn => {
-    btn.addEventListener('pointerdown', (e) => {
+    let lastTriggerTs = 0;
+    const triggerOnce = (e) => {
+      const now = performance.now();
+      if (now - lastTriggerTs < 35) {
+        if (e && e.cancelable) e.preventDefault();
+        return;
+      }
+      lastTriggerTs = now;
+      handleVirtualKeyPress(btn, e);
+    };
+
+    if (window.PointerEvent) {
+      btn.addEventListener('pointerdown', triggerOnce);
+    } else {
+      btn.addEventListener('touchstart', triggerOnce, { passive: false });
+      btn.addEventListener('mousedown', triggerOnce);
+    }
+
+    btn.addEventListener('click', (e) => {
       e.preventDefault();
-      sound.init();
-
-      if (!state.running || state.paused || state.gameOver) return;
-
-      btn.classList.add('pressed');
-      setTimeout(() => btn.classList.remove('pressed'), 120);
-
-      if (navigator.vibrate) {
-        try { navigator.vibrate(7); } catch (_) {}
-      }
-
-      const action = btn.dataset.action;
-      if (action === 'reset') {
-        state.lockedWordId = null;
-        updateBottomTargetUI();
-        updateKeyboardNextHint();
-        return;
-      }
-      if (action === 'emp') {
-        triggerEmpWave();
-        return;
-      }
-
-      const ch = btn.dataset.key;
-      if (ch) {
-        processTypedChar(ch);
-      }
+      e.stopPropagation();
     });
   });
 
@@ -2676,7 +2734,9 @@
 
     state.empCharges--;
     empCountEl.textContent = String(state.empCharges);
+    if (kbdEmpCount) kbdEmpCount.textContent = String(state.empCharges);
     btnEmp.disabled = state.empCharges <= 0;
+    if (btnKbdEmp) btnKbdEmp.style.opacity = state.empCharges <= 0 ? '0.42' : '1';
 
     state.shockwaves.push({
       x: state.ship.x,
@@ -2726,7 +2786,9 @@
       '🖤'.repeat(Math.max(0, state.maxShields - state.shields));
 
     empCountEl.textContent = String(state.empCharges);
+    if (kbdEmpCount) kbdEmpCount.textContent = String(state.empCharges);
     btnEmp.disabled = state.empCharges <= 0;
+    if (btnKbdEmp) btnKbdEmp.style.opacity = state.empCharges <= 0 ? '0.42' : '1';
 
     const pct = state.totalWordsInLevel > 0
       ? Math.min(100, Math.round((state.wordsDestroyedInLevel / state.totalWordsInLevel) * 100))
@@ -3411,9 +3473,9 @@
     const remainW = ctx.measureText(remainText).width;
     const totalW = typedW + remainW;
 
-    const padX = canvas.width < 520 ? 8 : 11;
+    const padX = canvas.width < 520 ? 10 : 13;
     const boxW = totalW + padX * 2;
-    const boxH = fontPx + 11;
+    const boxH = fontPx + 14;
 
     const clampedDrawX = Math.max(bounds.left + boxW / 2 + 4, Math.min(bounds.right - boxW / 2 - 4, w.x));
     w.x = clampedDrawX;
@@ -3426,28 +3488,27 @@
     ctx.shadowBlur = isLocked ? 12 : 6;
 
     ctx.beginPath();
-    ctx.arc(boxW / 2 + 6, -boxH / 2 + 4, isLocked ? 4.5 : 3.5, 0, Math.PI * 2);
+    ctx.arc(boxW / 2 + 7, -boxH / 2 + 5, isLocked ? 4.5 : 3.5, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.strokeStyle = isLocked ? 'rgba(251, 146, 60, 0.85)' : style.glow;
-    ctx.lineWidth = 1.3;
+    ctx.strokeStyle = isLocked ? 'rgba(251, 146, 60, 0.9)' : style.glow;
+    ctx.lineWidth = 1.4;
     ctx.beginPath();
-    ctx.arc(boxW / 2 + 6, -boxH / 2 + 4, isLocked ? 9 : 7, 0, Math.PI * 2);
+    ctx.arc(boxW / 2 + 7, -boxH / 2 + 5, isLocked ? 9.5 : 7, 0, Math.PI * 2);
     ctx.stroke();
 
     const boxX = -boxW / 2;
     const boxY = -boxH / 2;
 
     if (!state.typeWithArticle && w.entry.article) {
-      const badgeStr = w.entry.plural
-        ? `${w.entry.article} · ${w.entry.plural}`
-        : `${w.entry.article}`;
-      ctx.font = '700 10px Inter, sans-serif';
-      const bw = ctx.measureText(badgeStr).width + 10;
-      ctx.fillStyle = 'rgba(10, 15, 28, 0.92)';
+      const badgeStr = w.entry.article;
+      ctx.shadowBlur = 0;
+      ctx.font = '800 12.5px Inter, sans-serif';
+      const bw = ctx.measureText(badgeStr).width + 14;
+      ctx.fillStyle = 'rgba(7, 13, 26, 0.96)';
       ctx.strokeStyle = style.main;
-      ctx.lineWidth = 1;
-      roundRect(ctx, -bw / 2, boxY - 15, bw, 14, 4);
+      ctx.lineWidth = 1.3;
+      roundRect(ctx, -bw / 2, boxY - 19, bw, 18, 6);
       ctx.fill();
       ctx.stroke();
 
@@ -3455,21 +3516,23 @@
       ctx.fillStyle = style.main;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(badgeStr, 0, boxY - 8);
+      ctx.fillText(badgeStr, 0, boxY - 10);
     }
 
+    ctx.shadowBlur = isLocked ? 12 : 0;
     ctx.fillStyle = isLocked
-      ? 'rgba(28, 17, 10, 0.95)'
-      : 'rgba(5, 9, 17, 0.92)';
+      ? 'rgba(30, 16, 8, 0.97)'
+      : 'rgba(6, 11, 23, 0.96)';
     ctx.strokeStyle = isLocked
       ? '#fb923c'
-      : (w.hitFlash > 0 ? '#ffffff' : 'rgba(148, 163, 184, 0.28)');
-    ctx.lineWidth = isLocked ? 1.8 : 1;
+      : (w.hitFlash > 0 ? '#ffffff' : style.main);
+    ctx.lineWidth = isLocked ? 2.2 : 1.5;
 
-    roundRect(ctx, boxX, boxY, boxW, boxH, 6);
+    roundRect(ctx, boxX, boxY, boxW, boxH, 8);
     ctx.fill();
     ctx.stroke();
 
+    ctx.shadowBlur = 0;
     ctx.direction = 'ltr';
     ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
     ctx.textAlign = 'left';
@@ -3477,7 +3540,7 @@
     const startTextX = -totalW / 2;
 
     if (typedText.length > 0) {
-      ctx.fillStyle = 'rgba(52, 211, 153, 0.38)';
+      ctx.fillStyle = '#34d399';
       ctx.fillText(typedText, startTextX, 0.5);
     }
 
@@ -3486,10 +3549,10 @@
       const restRemain = remainText.slice(1);
       const firstRemainW = ctx.measureText(firstRemain).width;
 
-      ctx.fillStyle = isLocked ? '#fb923c' : '#2dd4bf';
+      ctx.fillStyle = isLocked ? '#fde047' : '#38bdf8';
       ctx.fillText(firstRemain, startTextX + typedW, 0.5);
 
-      ctx.fillStyle = '#f8fafc';
+      ctx.fillStyle = '#ffffff';
       ctx.fillText(restRemain, startTextX + typedW + firstRemainW, 0.5);
     }
 
@@ -3509,11 +3572,12 @@
     ctx.globalAlpha = alpha;
 
     const isMobile = canvas.width < 520;
-    const deFontPx = isMobile ? 11.5 : 13;
-    let ruFontPx = isMobile ? 14.5 : 17;
+    const cleanDe = (ft.entry && (ft.entry.withArticle || ft.entry.word)) || ft.rawDe;
+    let deFontPx = isMobile ? 14.5 : 16.5;
+    let ruFontPx = isMobile ? 16.5 : 19;
 
     ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
-    const deW = ctx.measureText(ft.rawDe).width;
+    let deW = ctx.measureText(cleanDe).width;
 
     const translatedStr = getWordTranslation(ft.entry);
     const transText = `💥 ${translatedStr}`;
@@ -3521,14 +3585,19 @@
     let transW = ctx.measureText(transText).width;
 
     const maxAllowedW = (bounds.right - bounds.left) - 16;
-    if (transW + 24 > maxAllowedW && ruFontPx > 11) {
-      ruFontPx = Math.max(11, Math.floor(ruFontPx * (maxAllowedW - 24) / transW));
+    if (deW + 28 > maxAllowedW && deFontPx > 12) {
+      deFontPx = Math.max(12, Math.floor(deFontPx * (maxAllowedW - 28) / deW));
+      ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
+      deW = ctx.measureText(cleanDe).width;
+    }
+    if (transW + 28 > maxAllowedW && ruFontPx > 12.5) {
+      ruFontPx = Math.max(12.5, Math.floor(ruFontPx * (maxAllowedW - 28) / transW));
       ctx.font = `800 ${ruFontPx}px Inter, sans-serif`;
       transW = ctx.measureText(transText).width;
     }
 
-    const cardW = Math.min(maxAllowedW, Math.max(deW, transW) + 26);
-    const cardH = isMobile ? 48 : 54;
+    const cardW = Math.min(maxAllowedW, Math.max(deW, transW) + 30);
+    const cardH = isMobile ? 56 : 64;
 
     const drawX = Math.max(bounds.left + cardW / 2 + 6, Math.min(bounds.right - cardW / 2 - 6, ft.x));
     const drawY = Math.max(bounds.top + cardH / 2 + 6, Math.min(bounds.bottom - cardH / 2 - 6, ft.y));
@@ -3536,12 +3605,12 @@
     ctx.translate(drawX, drawY);
 
     ctx.shadowColor = ft.color;
-    ctx.shadowBlur = 14;
-    ctx.fillStyle = 'rgba(8, 14, 28, 0.95)';
+    ctx.shadowBlur = 16;
+    ctx.fillStyle = 'rgba(6, 12, 24, 0.97)';
     ctx.strokeStyle = ft.color;
-    ctx.lineWidth = 1.6;
+    ctx.lineWidth = 2;
 
-    roundRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 10);
+    roundRect(ctx, -cardW / 2, -cardH / 2, cardW, cardH, 11);
     ctx.fill();
     ctx.stroke();
 
@@ -3551,13 +3620,13 @@
 
     ctx.direction = 'ltr';
     ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
-    ctx.fillStyle = ft.color;
-    ctx.fillText(ft.rawDe, 0, -10);
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillText(cleanDe, 0, -11.5);
 
     ctx.direction = isRtlTranslation(ft.entry) ? 'rtl' : 'ltr';
     ctx.font = `800 ${ruFontPx}px Inter, sans-serif`;
-    ctx.fillStyle = '#fbbf24';
-    ctx.fillText(transText, 0, 10);
+    ctx.fillStyle = '#fde047';
+    ctx.fillText(transText, 0, 12.5);
 
     ctx.restore();
   }
@@ -3566,13 +3635,13 @@
     const w = getCurrentWeapon();
     ctx.save();
     ctx.globalAlpha = Math.min(1, state.weaponBannerTimer * 1.4);
-    ctx.font = '800 12px "JetBrains Mono", Consolas, monospace';
-    const textW = ctx.measureText(state.weaponBannerText).width + 26;
-    ctx.translate(bounds.centerX, state.ship.y - 54);
-    ctx.fillStyle = 'rgba(8, 15, 30, 0.92)';
+    ctx.font = '800 14px Inter, sans-serif';
+    const textW = ctx.measureText(state.weaponBannerText).width + 30;
+    ctx.translate(bounds.centerX, state.ship.y - 56);
+    ctx.fillStyle = 'rgba(7, 13, 26, 0.96)';
     ctx.strokeStyle = w.color;
-    ctx.lineWidth = 1.5;
-    roundRect(ctx, -textW / 2, -14, textW, 28, 999);
+    ctx.lineWidth = 1.8;
+    roundRect(ctx, -textW / 2, -16, textW, 32, 999);
     ctx.fill();
     ctx.stroke();
 
@@ -3585,17 +3654,17 @@
 
   function drawLayoutWarning(bounds) {
     ctx.save();
-    const w = Math.min(380, bounds.right - bounds.left - 20);
+    const w = Math.min(390, bounds.right - bounds.left - 20);
     ctx.translate(bounds.centerX, state.ship.y - 60);
-    ctx.fillStyle = 'rgba(127, 29, 29, 0.94)';
+    ctx.fillStyle = 'rgba(127, 29, 29, 0.96)';
     ctx.strokeStyle = '#fb7185';
-    ctx.lineWidth = 1.5;
-    roundRect(ctx, -w / 2, -18, w, 36, 9);
+    ctx.lineWidth = 1.8;
+    roundRect(ctx, -w / 2, -19, w, 38, 10);
     ctx.fill();
     ctx.stroke();
 
-    ctx.font = '700 12.5px Inter, sans-serif';
-    ctx.fillStyle = '#fecdd3';
+    ctx.font = '700 14px Inter, sans-serif';
+    ctx.fillStyle = '#ffe4e6';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(t().layoutWarning, 0, 0);
@@ -3958,12 +4027,17 @@
     allAutoWords.push(...parsedWords);
     customWordsDialog.close();
     state.currentLevelIndex = levels.length - 1;
-    launchFromTitleScreen();
+    if (state.screenMode === 'title') {
+      launchFromTitleScreen();
+    } else {
+      startLevelNow();
+    }
   });
 
   // --- Инициализация на живом аркадном титульном экране ---
-  resizeCanvas();
   setTranslationLanguage(state.translationLang);
   updatePilotRankUI();
+  resizeCanvas();
+  requestAnimationFrame(() => resizeCanvas());
   requestAnimationFrame(gameLoop);
 })();

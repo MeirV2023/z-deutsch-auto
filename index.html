@@ -7,42 +7,47 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="mode-title">
-  <!-- Живой космический холст: туманности, звёзды, автопилот на старте, кораблик, оружие и взрывы -->
+  <!-- Живой космический холст -->
   <canvas id="gameCanvas" aria-label="Игровое поле космического клавиатурного шутера Z-Deutsch"></canvas>
 
   <!-- ========================================================================
-       АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН ПРИ ЗАГРУЗКЕ САЙТА (В ДУХЕ КОСМИЧЕСКОЙ ИГРЫ)
+       АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН (Чёткие карточки сверху и снизу + арена боя по центру)
        ======================================================================== -->
   <section class="arcade-title-screen" id="arcadeTitleScreen" aria-label="Главный экран игры Z-Deutsch: Auto">
-    <div class="title-top-bar">
-      <div class="pilot-rank-pill" id="pilotRankPill" title="Ваш ранг пилота и лучший счёт">
-        <span class="pilot-rank-icon">🎖️</span>
-        <span id="pilotRankText">КАДЕТ · РЕКОРД: 0</span>
+    <!-- Верхняя шапка титульного экрана с плотной подложкой (слова за ней не мешают чтению) -->
+    <div class="title-header-card" id="titleHeaderCard">
+      <div class="title-top-bar">
+        <div class="pilot-rank-pill" id="pilotRankPill" title="Ваш ранг пилота и лучший счёт">
+          <span class="pilot-rank-icon">🎖️</span>
+          <span id="pilotRankText">КАДЕТ · РЕКОРД: 0</span>
+        </div>
+
+        <div class="lang-quick-group">
+          <button type="button" class="hud-btn lang-quick-btn active" data-lang="ru">🇷🇺 RU</button>
+          <button type="button" class="hud-btn lang-quick-btn" data-lang="he">🇮🇱 עברית</button>
+          <button type="button" class="hud-btn lang-quick-btn" data-lang="both">🇷🇺+🇮🇱</button>
+        </div>
       </div>
 
-      <div class="lang-quick-group">
-        <button type="button" class="hud-btn lang-quick-btn active" data-lang="ru">🇷🇺 RU</button>
-        <button type="button" class="hud-btn lang-quick-btn" data-lang="he">🇮🇱 עברית</button>
-        <button type="button" class="hud-btn lang-quick-btn" data-lang="both">🇷🇺+🇮🇱</button>
+      <div class="title-hero-center">
+        <div class="arcade-logo-row">
+          <h1 class="arcade-logo-main">🚀 Z-DEUTSCH</h1>
+          <span class="arcade-logo-sub">AUTO</span>
+        </div>
+        <p class="title-tagline" id="titleTagline">
+          Сбивайте немецкие слова по буквам и запоминайте перевод при взрыве!
+        </p>
       </div>
     </div>
 
-    <div class="title-hero-center">
-      <div class="title-kicker" id="titleKicker">COSMIC VOCABULARY SHOOTER · GEMINI 3.8 AUDIO</div>
-      <h1 class="arcade-logo" aria-label="Z-DEUTSCH AUTO">
-        <span class="arcade-logo-main">Z-DEUTSCH</span>
-        <span class="arcade-logo-sub">AUTO EDITION</span>
-      </h1>
-      <p class="title-tagline" id="titleTagline">
-        Печатайте буквы — сбивайте немецкие слова — запоминайте перевод во вспышках сверхновых!
-      </p>
-    </div>
+    <!-- Открытое окно космоса посередине: здесь летает корабль и стреляет выбранным оружием -->
+    <div class="title-space-window" id="titleSpaceWindow" aria-hidden="true"></div>
 
-    <!-- Интерактивный ангар вооружения прямо над кораблём -->
-    <div class="title-bottom-dock">
+    <!-- Нижняя панель управления и выбора оружия -->
+    <div class="title-bottom-dock" id="titleBottomDock">
       <div class="arsenal-panel">
         <div class="arsenal-header">
-          <span class="arsenal-label" id="titleArsenalLabel">⚔️ ВООРУЖЕНИЕ КОРАБЛЯ:</span>
+          <span class="arsenal-label" id="titleArsenalLabel">⚔️ Выберите оружие:</span>
           <span class="arsenal-desc" id="titleWeaponDesc">Двойные плазменные импульсы с комбо-гармоникой</span>
         </div>
         <div class="weapon-selector-row" id="titleWeaponRow">
@@ -50,25 +55,25 @@
         </div>
       </div>
 
-      <!-- Выбор миссии/уровня перед взлётом -->
+      <!-- Выбор уровня перед стартом -->
       <div class="title-mission-strip">
         <div class="mobile-level-Chips" id="titleStageChips">
           <!-- Генерируется из levels в game.js -->
         </div>
       </div>
 
-      <!-- Главная кнопка гиперпрыжка в игру -->
+      <!-- Главная кнопка запуска -->
       <div class="title-launch-wrap">
         <button type="button" class="arcade-launch-btn" id="btnArcadeLaunch">
           <span class="launch-glow"></span>
-          <span class="launch-text" id="labelArcadeLaunch">🚀 НАЧАТЬ МИССИЮ</span>
+          <span class="launch-text" id="labelArcadeLaunch">🚀 Начать игру · Уровень 1</span>
         </button>
       </div>
 
-      <!-- Быстрые аркадные настройки (как в ZType: speed, voice, dictionary, custom text) -->
+      <!-- Нижние кнопки настроек (единый читабельный размер) -->
       <div class="title-utility-links">
         <button type="button" class="arcade-link-btn" id="btnTitleSpeed">🐌 0.5x</button>
-        <button type="button" class="arcade-link-btn highlight-ai" id="btnTitleVoice">🎙️ Gemini 3.8 TTS</button>
+        <button type="button" class="arcade-link-btn highlight-ai" id="btnTitleVoice">🎙️ Озвучка AI</button>
         <button type="button" class="arcade-link-btn" id="btnTitleDict">📚 <span id="labelTitleDict">Словарь (73)</span></button>
         <button type="button" class="arcade-link-btn" id="btnTitleCustom">➕ <span id="labelTitleCustom">Свои слова</span></button>
       </div>
@@ -99,7 +104,7 @@
 
     <div class="stats-cluster">
       <div class="stat-item">
-        <span class="stat-label" id="labelScore">Очки</span>
+        <span class="stat-label hide-mobile" id="labelScore">Очки</span>
         <span class="stat-value accent-amber" id="hudScore">0</span>
       </div>
       <div class="stat-item hide-mobile">
@@ -120,8 +125,8 @@
       <button type="button" class="hud-btn weapon-hud-btn" id="btnWeaponMode" title="Сменить оружие корабля (клавиши 1–5)">
         ⚡<span class="hide-mobile" id="hudWeaponLabel"> Плазма</span>
       </button>
-      <button type="button" class="hud-btn emp-btn" id="btnEmp" title="Взорвать ближайшие слова и показать их перевод (Enter)">
-        💥<span class="hide-mobile"> EMP</span> (<span id="empCount">2</span>)
+      <button type="button" class="hud-btn emp-btn hide-mobile" id="btnEmp" title="Взорвать ближайшие слова и показать их перевод (Enter)">
+        💥 EMP (<span id="empCount">2</span>)
       </button>
       <button type="button" class="hud-btn active" id="btnLangMode" title="Язык перевода и интерфейса: Русский / Иврит (עברית) / Оба">
         🇷🇺 RU
@@ -148,7 +153,7 @@
   <aside class="sidebar-left">
     <div class="sidebar-header">
       <span class="sidebar-title" id="sidebarLevelsTitle">🚗 Уровни «AUTO»</span>
-      <span style="font-size: 0.72rem; color: var(--text-muted);" id="totalWordsCounter">73 слова</span>
+      <span class="sidebar-count" id="totalWordsCounter">73 слова</span>
     </div>
     <div class="level-list scrollable" id="levelListContainer">
       <!-- Генерируется из words.js -->
@@ -159,7 +164,7 @@
   <aside class="sidebar-right">
     <div class="sidebar-header">
       <span class="sidebar-title" id="sidebarKillsTitle">💥 Взорванные слова</span>
-      <button type="button" class="hud-btn" id="btnClearFeed" style="padding: 2px 7px; font-size: 0.7rem;" title="Очистить список">
+      <button type="button" class="hud-btn" id="btnClearFeed" title="Очистить список">
         Очистить
       </button>
     </div>
@@ -195,19 +200,15 @@
         <button type="button" class="zkey" data-key="r">R</button>
         <button type="button" class="zkey" data-key="t">T</button>
         <button type="button" class="zkey" data-key="y">Y</button>
-        <button type="button" class="zkey" data-key="u">U<sub class="uml-sub">ü</sub></button>
+        <button type="button" class="zkey" data-key="u">U<span class="uml-sub">ü</span></button>
         <button type="button" class="zkey" data-key="i">I</button>
-        <button type="button" class="zkey" data-key="o">O<sub class="uml-sub">ö</sub></button>
+        <button type="button" class="zkey" data-key="o">O<span class="uml-sub">ö</span></button>
         <button type="button" class="zkey" data-key="p">P</button>
       </div>
 
-      <div class="ztype-crosshairs-row" aria-hidden="true">
-        <span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span>
-      </div>
-
       <div class="ztype-key-row row-middle">
-        <button type="button" class="zkey" data-key="a">A<sub class="uml-sub">ä</sub></button>
-        <button type="button" class="zkey" data-key="s">S<sub class="uml-sub">ß</sub></button>
+        <button type="button" class="zkey" data-key="a">A<span class="uml-sub">ä</span></button>
+        <button type="button" class="zkey" data-key="s">S<span class="uml-sub">ß</span></button>
         <button type="button" class="zkey" data-key="d">D</button>
         <button type="button" class="zkey" data-key="f">F</button>
         <button type="button" class="zkey" data-key="g">G</button>
@@ -215,10 +216,6 @@
         <button type="button" class="zkey" data-key="j">J</button>
         <button type="button" class="zkey" data-key="k">K</button>
         <button type="button" class="zkey" data-key="l">L</button>
-      </div>
-
-      <div class="ztype-crosshairs-row" aria-hidden="true">
-        <span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span><span>+</span>
       </div>
 
       <div class="ztype-key-row row-bottom">
@@ -230,7 +227,7 @@
         <button type="button" class="zkey" data-key="b">B</button>
         <button type="button" class="zkey" data-key="n">N</button>
         <button type="button" class="zkey" data-key="m">M</button>
-        <button type="button" class="zkey zkey-emp" data-action="emp" title="EMP-взрыв (Enter)">⚡</button>
+        <button type="button" class="zkey zkey-emp" data-action="emp" id="btnKbdEmp" title="EMP-взрыв (Enter)">⚡<span class="emp-mini-badge" id="kbdEmpCount">2</span></button>
       </div>
     </div>
   </section>
@@ -377,7 +374,7 @@
       <button type="button" class="dialog-close" id="btnCloseCustom" aria-label="Закрыть">✕</button>
     </div>
     <div class="dialog-body scrollable">
-      <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.45;" id="customDialogHint">
+      <p class="dialog-hint-text" id="customDialogHint">
         Формат: <code>немецкое слово;перевод RU;перевод HE</code> (каждое с новой строки).
       </p>
       <textarea
