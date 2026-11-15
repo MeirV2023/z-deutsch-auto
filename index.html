@@ -7,222 +7,553 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="mode-title">
-  <!-- Живой космический холст -->
+  <!-- Живой космический холст (отрисовка звёзд, корабля, выстрелов и слов) -->
   <canvas id="gameCanvas" aria-label="Игровое поле космического клавиатурного шутера Z-Lingo"></canvas>
 
   <!-- ========================================================================
-       АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН (Компактные карточки сверху и снизу + большая промо-арена боя по центру)
+       ЭКРАН 1: ГЛАВНАЯ ПАНЕЛЬ Z-LINGO (Дашборд + Живое промо-окно боя справа в Hero)
        ======================================================================== -->
-  <section class="arcade-title-screen" id="arcadeTitleScreen" aria-label="Главный экран игры Z-Lingo">
-    <!-- Верхняя шапка титульного экрана -->
-    <div class="title-header-card" id="titleHeaderCard">
-      <div class="title-top-bar">
-        <div class="pilot-rank-pill" id="pilotRankPill" title="Ваш ранг пилота, выученные слова и рекорд">
-          <span class="pilot-rank-icon">🎖️</span>
-          <span id="pilotRankText">КАДЕТ · 📖 0 СЛ. · РЕКОРД: 0</span>
+  <section class="arcade-title-screen" id="arcadeTitleScreen" aria-label="Главная страница Z-Lingo">
+    <div class="home-shell">
+      <!-- 1. Верхняя навигационная панель -->
+      <nav class="home-navbar" id="titleHeaderCard" aria-label="Основная навигация">
+        <div class="home-brand" id="homeBrandLogo">
+          <span class="home-brand-rocket">🚀</span>
+          <div class="home-brand-text">
+            <span class="home-brand-title" id="arcadeLogoMain">Z-LINGO</span>
+            <span class="home-brand-sub" id="homeBrandSub">Играй · Учись · Запоминай</span>
+          </div>
         </div>
 
-        <!-- Фильтр 2: Перевод / Интерфейс (авто-определяется через navigator.language при первом входе) -->
-        <div class="lang-filter-inline" title="Язык интерфейса и перевода при взрыве">
-          <span class="lang-filter-caption hide-mobile" id="labelNativeFilter">Перевод:</span>
-          <div class="lang-quick-group">
+        <div class="home-nav-links">
+          <button type="button" class="home-nav-pill active" id="btnNavHome">
+            🏠 <span id="labelNavHome">Главная</span>
+          </button>
+          <button type="button" class="home-nav-pill" id="btnNavPlay">
+            🎮 <span id="labelNavPlay">Играть</span>
+          </button>
+          <button type="button" class="home-nav-pill" id="btnNavCourses">
+            📖 <span id="labelNavCourses">Курсы</span>
+          </button>
+          <button type="button" class="home-nav-pill" id="btnNavDecks">
+            🗂️ <span id="labelNavDecks">Мои колоды</span>
+          </button>
+          <button type="button" class="home-nav-pill" id="btnNavStats">
+            📊 <span id="labelNavStats">Статистика</span>
+          </button>
+          <button type="button" class="home-nav-pill" id="btnNavLeaderboard">
+            🏆 <span id="labelNavLeaderboard">Рейтинг</span>
+          </button>
+        </div>
+
+        <div class="home-nav-right">
+          <button type="button" class="home-stat-chip streak" id="btnHomeStreakChip" title="Ударная серия дней подряд">
+            🔥 <span id="homeStreakBadge">1 дн.</span>
+          </button>
+          <button type="button" class="home-stat-chip trophy" id="pilotRankPill" title="Ваш рекорд очков и звание">
+            🏆 <span id="homeScoreBadge">0</span>
+            <span class="sr-only" id="pilotRankText">КАДЕТ</span>
+          </button>
+          <div class="lang-quick-group compact-nav-langs" title="Язык интерфейса и перевода">
             <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
             <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
             <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
           </div>
-        </div>
-      </div>
-
-      <div class="title-hero-center">
-        <div class="arcade-logo-row">
-          <h1 class="arcade-logo-main" id="arcadeLogoMain">🚀 Z-DEUTSCH</h1>
-          <button type="button" class="arcade-logo-sub" id="arcadeLogoSub" title="Нажмите, чтобы выбрать курс или колоду Anki">🚗 AUTO ▾</button>
-        </div>
-        <p class="title-tagline" id="titleTagline">
-          Сбивайте немецкие слова по буквам и запоминайте перевод при взрыве!
-        </p>
-      </div>
-    </div>
-
-    <!-- Большое открытое окно космоса посередине: промо-бой корабля, сбивающего слова по буквам! -->
-    <div class="title-space-window" id="titleSpaceWindow" aria-hidden="true"></div>
-
-    <!-- Компактный нижний док (сохраняет большой промо-космос посередине!) -->
-    <div class="title-bottom-dock" id="titleBottomDock">
-      <!-- 1. Арсенал корабля -->
-      <div class="arsenal-panel">
-        <div class="arsenal-header">
-          <div class="arsenal-header-left">
-            <span class="arsenal-label" id="titleArsenalLabel">⚔️ Выберите оружие:</span>
-            <span class="learned-progress-pill" id="learnedProgressPill">📖 Выучено: 0 сл.</span>
-          </div>
-          <span class="arsenal-desc" id="titleWeaponDesc">Двойные плазменные импульсы с комбо-гармоникой</span>
-        </div>
-        <div class="weapon-selector-row" id="titleWeaponRow">
-          <!-- Генерируется из WEAPONS в game.js -->
-        </div>
-      </div>
-
-      <!-- 2. Единая компактная лента курса и коротких уроков модуля (1 строка, как в классическом меню) -->
-      <div class="title-mission-strip" id="titleCourseStrip">
-        <button type="button" class="course-strip-pill" id="btnOpenCatalogTitle" title="Открыть каталог всех курсов и модулей">
-          <span class="origin-badge official" id="titleCourseOriginBadge">🏛️</span>
-          <span class="course-strip-title" id="titleCourseName">🚗 Авто · М1</span>
-          <span class="course-strip-caret">▾</span>
-        </button>
-        <div class="mobile-level-Chips" id="titleStageChips">
-          <!-- Короткие уроки текущего модуля (Ур. 1, Ур. 2, Ур. 3, 👹 Босс) -->
-        </div>
-      </div>
-
-      <!-- 3. Переключатель изучаемого языка в 1 клик + Главная кнопка запуска в одну компактную линию -->
-      <div class="title-launch-row">
-        <div class="target-lang-bar compact-inline" id="titleTargetLangBar" title="Фильтр 1: Какой язык учим">
-          <span class="target-lang-label sr-only" id="labelTargetFilter">🎯 Я учу:</span>
-          <div class="target-lang-pills">
-            <button type="button" class="target-lang-pill active" data-target-lang="de" title="Немецкий / German">🇩🇪 <span>DE</span><span class="sr-only" data-tlang-name="de">Немецкий</span></button>
-            <button type="button" class="target-lang-pill" data-target-lang="en" title="Английский / English">🇬🇧 <span>EN</span><span class="sr-only" data-tlang-name="en">Английский</span></button>
-            <button type="button" class="target-lang-pill" data-target-lang="es" title="Испанский / Español">🇪🇸 <span>ES</span><span class="sr-only" data-tlang-name="es">Испанский</span></button>
-          </div>
-        </div>
-
-        <div class="title-launch-wrap">
-          <button type="button" class="arcade-launch-btn" id="btnArcadeLaunch">
-            <span class="launch-glow"></span>
-            <span class="launch-text" id="labelArcadeLaunch">🚀 Начать игру · Урок 1</span>
+          <button type="button" class="home-avatar-btn" id="btnHomeSettings" title="Настройки игры и озвучки AI">
+            ⚙️
           </button>
         </div>
+      </nav>
+
+      <!-- 2. Hero-секция: призыв к игре слева + ЖИВОЕ ПРОМО-ОКНО КОРАБЛЯ справа -->
+      <div class="home-hero-grid">
+        <div class="home-hero-copy">
+          <h1 class="home-hero-heading">
+            <span class="hero-line-white" id="homeHeroTitleTop">Изучай иностранные языки</span>
+            <span class="hero-line-gold" id="homeHeroTitleAccent">в формате игры!</span>
+          </h1>
+          <p class="home-hero-subtitle" id="titleTagline">
+            Стреляй по словам, запоминай перевод при взрыве и расширяй словарный запас.
+          </p>
+
+          <div class="home-hero-perks">
+            <div class="hero-perk-item">
+              <span class="hero-perk-icon">🎮</span>
+              <span id="labelPerkPlay">Игра и практика</span>
+            </div>
+            <div class="hero-perk-item">
+              <span class="hero-perk-icon">🧠</span>
+              <span id="labelPerkMemory">Эффективное запоминание</span>
+            </div>
+            <div class="hero-perk-item">
+              <span class="hero-perk-icon">🗂️</span>
+              <span id="labelPerkAnki">Свои колоды (Anki)</span>
+            </div>
+          </div>
+
+          <div class="home-hero-cta-row">
+            <button type="button" class="hero-green-cta" id="btnArcadeLaunch">
+              <span class="launch-glow"></span>
+              <span class="hero-cta-play-icon">▶</span>
+              <span class="launch-text" id="labelArcadeLaunch">Начать игру бесплатно</span>
+              <span class="hero-cta-arrow">›</span>
+            </button>
+            <button type="button" class="arcade-logo-sub" id="arcadeLogoSub" title="Выбрать курс или урок">
+              🚗 AUTO ▾
+            </button>
+          </div>
+        </div>
+
+        <!-- Правая рамка-монитор: здесь прямо на живом холсте #gameCanvas идёт промо-бой корабля! -->
+        <div class="home-promo-monitor" id="titleSpaceWindow">
+          <div class="promo-monitor-topbar">
+            <span class="promo-hearts" aria-hidden="true">❤️❤️❤️</span>
+            <span class="promo-stage-pill" id="promoMonitorBadge">УРОК 1 · АВТО И ДОРОГА</span>
+            <button type="button" class="promo-weapon-cycle" id="btnPromoWeaponCycle" title="Нажмите, чтобы испытать другое оружие в промо-бою!">
+              ⚡
+            </button>
+          </div>
+          <div class="promo-horizon-glow" aria-hidden="true"></div>
+        </div>
       </div>
 
-      <!-- 4. Нижние кнопки быстрых настроек, всех курсов и Anki .apkg -->
-      <div class="title-utility-links">
-        <button type="button" class="arcade-link-btn" id="btnTitleSpeed">🐌 0.5x</button>
-        <button type="button" class="arcade-link-btn highlight-ai" id="btnTitleVoice">🎙️ Озвучка AI</button>
-        <button type="button" class="arcade-link-btn" id="btnTitleDict">📚 <span id="labelTitleDict">Словарь</span></button>
-        <button type="button" class="arcade-link-btn" id="btnTitleAllCourses">🗂️ <span id="labelOpenCatalogTitle">Все курсы</span></button>
-        <button type="button" class="arcade-link-btn anki-accent-btn" id="btnTitleCustom">📦 <span id="labelTitleCustom">Anki / Свои слова</span> <span class="sr-only" id="labelOpenAnkiTitle">Anki .apkg</span></button>
+      <!-- 3. Полоса из 3 шагов -->
+      <div class="home-steps-strip">
+        <div class="home-step-item">
+          <span class="step-num step-1">1</span>
+          <span class="step-icon">🌐</span>
+          <span class="step-text" id="labelStep1">Выбери язык и уровень</span>
+        </div>
+        <span class="step-chevron" aria-hidden="true">›</span>
+        <div class="home-step-item">
+          <span class="step-num step-2">2</span>
+          <span class="step-icon">🗂️</span>
+          <span class="step-text" id="labelStep2">Играй с готовыми колодами или загрузи Anki</span>
+        </div>
+        <span class="step-chevron" aria-hidden="true">›</span>
+        <div class="home-step-item">
+          <span class="step-num step-3">3</span>
+          <span class="step-icon">🚀</span>
+          <span class="step-text" id="labelStep3">Стреляй по словам, учись и прокачивай арсенал!</span>
+        </div>
       </div>
+
+      <!-- 4. Основная 3-колоночная сетка блоков (Выбор языка | Быстрый старт | Прогресс и Топ) -->
+      <div class="home-bento-grid" id="titleBottomDock">
+        <!-- Левая карточка: Выбери язык -->
+        <div class="bento-card home-lang-card" id="titleTargetLangBar">
+          <div class="bento-card-header">
+            <span class="bento-card-title">🌐 <span id="labelTargetFilter">Выбери язык</span></span>
+          </div>
+
+          <div class="home-lang-list">
+            <button type="button" class="home-lang-row target-lang-pill active" data-target-lang="de">
+              <span class="home-lang-left">
+                <span class="home-lang-flag">🇩🇪</span>
+                <span class="home-lang-name" data-tlang-name="de">Немецкий</span>
+              </span>
+              <span class="home-lang-check">✓</span>
+            </button>
+
+            <button type="button" class="home-lang-row target-lang-pill" data-target-lang="en">
+              <span class="home-lang-left">
+                <span class="home-lang-flag">🇬🇧</span>
+                <span class="home-lang-name" data-tlang-name="en">Английский</span>
+              </span>
+              <span class="home-lang-check">✓</span>
+            </button>
+
+            <button type="button" class="home-lang-row target-lang-pill" data-target-lang="es">
+              <span class="home-lang-left">
+                <span class="home-lang-flag">🇪🇸</span>
+                <span class="home-lang-name" data-tlang-name="es">Испанский</span>
+              </span>
+              <span class="home-lang-check">✓</span>
+            </button>
+          </div>
+
+          <div class="home-native-subbox">
+            <span class="home-native-caption" id="labelNativeFilter">Перевод слов:</span>
+            <div class="home-native-pills">
+              <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
+              <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
+              <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
+            </div>
+          </div>
+
+          <button type="button" class="home-more-langs-btn" id="btnTitleCustom">
+            ＋ <span id="labelTitleCustom">Своя колода / язык (Anki)</span>
+          </button>
+        </div>
+
+        <!-- Центральная широкая карточка: Быстрый старт (4 иллюстрированные карточки курсов + уроки + пушки) -->
+        <div class="bento-card home-quickstart-card" id="titleCourseStrip">
+          <div class="bento-card-header">
+            <div class="quickstart-title-wrap">
+              <span class="bento-card-title">🎯 <span id="labelQuickStartTitle">Быстрый старт</span></span>
+              <span class="origin-badge official" id="titleCourseOriginBadge">🏛️</span>
+              <span class="quickstart-active-sub" id="titleCourseName">🚗 Авто · М1</span>
+            </div>
+            <div class="quickstart-header-actions">
+              <button type="button" class="anki-import-cta-btn" id="btnQuickStartAnki">
+                📥 <span id="labelQuickAnkiBtn">Импорт Anki</span> <span class="apkg-tag">.apkg</span>
+              </button>
+              <button type="button" class="hud-btn" id="btnOpenCatalogTitle" title="Все курсы и модули">
+                🗂️ <span id="labelOpenCatalogTitle">Все курсы</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 визуальные карточки курсов (генерируются динамически под выбранный язык) -->
+          <div class="quickstart-cards-grid" id="homeQuickStartGrid"></div>
+
+          <!-- Компактная полоска уроков активного модуля + выбор оружия -->
+          <div class="quickstart-subbar">
+            <div class="mobile-level-Chips" id="titleStageChips"></div>
+          </div>
+
+          <div class="quickstart-arsenal-strip">
+            <div class="arsenal-mini-meta">
+              <span class="arsenal-label" id="titleArsenalLabel">🚀 Оружие:</span>
+              <span class="learned-progress-pill" id="learnedProgressPill">📖 0 сл.</span>
+              <span class="arsenal-desc" id="titleWeaponDesc">Плазма</span>
+            </div>
+            <div class="weapon-selector-row home-compact-weapons" id="titleWeaponRow"></div>
+          </div>
+        </div>
+
+        <!-- Правая колонка: 2 карточки друг над другом (Твой прогресс + Топ игроков) -->
+        <div class="home-right-stack">
+          <!-- Карточка 3А: Твой прогресс с круговой диаграммой -->
+          <div class="bento-card home-progress-card">
+            <div class="bento-card-header">
+              <span class="bento-card-title">📊 <span id="labelHomeProgressTitle">Твой прогресс</span></span>
+              <button type="button" class="card-link-btn" id="btnOpenStatsCard">→</button>
+            </div>
+            <div class="progress-ring-layout">
+              <div class="donut-ring-wrap">
+                <svg class="donut-svg" viewBox="0 0 88 88" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="zlingoRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#38bdf8" />
+                      <stop offset="100%" stop-color="#34d399" />
+                    </linearGradient>
+                  </defs>
+                  <circle class="donut-bg" cx="44" cy="44" r="35" />
+                  <circle class="donut-fg" id="homeProgressRingCircle" cx="44" cy="44" r="35" stroke-dasharray="219.9" stroke-dashoffset="219.9" />
+                </svg>
+                <span class="donut-percent-text" id="homeProgressPercent">0%</span>
+              </div>
+
+              <div class="progress-metrics-list">
+                <div class="prog-metric-row">
+                  <span class="prog-metric-label">📖 <span id="labelMetricLearned">Выучено слов</span></span>
+                  <strong class="prog-metric-val" id="homeStatLearned">0</strong>
+                </div>
+                <div class="prog-metric-row">
+                  <span class="prog-metric-label">🗂️ <span id="labelMetricDecks">Колоды</span></span>
+                  <strong class="prog-metric-val" id="homeStatDecks">9</strong>
+                </div>
+                <div class="prog-metric-row">
+                  <span class="prog-metric-label">🏆 <span id="labelMetricStreak">Рекорд серии</span></span>
+                  <strong class="prog-metric-val accent-amber" id="homeStatStreak">1 дн.</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Карточка 3Б: Топ игроков (неделя) -->
+          <div class="bento-card home-leaderboard-card">
+            <div class="bento-card-header">
+              <span class="bento-card-title">🏆 <span id="labelHomeTopTitle">Топ игроков (неделя)</span></span>
+              <button type="button" class="card-link-btn" id="btnOpenLeaderboardCard">
+                <span id="labelSeeAllTop">Все</span> →
+              </button>
+            </div>
+            <div class="mini-leaderboard-list" id="homeLeaderboardMiniList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Нижняя полоса возможностей (все элементы кликабельны!) -->
+      <footer class="home-bottom-features">
+        <button type="button" class="bottom-feat-btn" id="btnTitleAllCourses">
+          <span class="feat-icon amber">⚡</span>
+          <span id="labelFeatCourses">Готовые курсы по темам</span>
+        </button>
+        <button type="button" class="bottom-feat-btn" id="btnFooterAnki">
+          <span class="feat-icon cyan">☁️</span>
+          <span id="labelFeatAnki">Импорт колод Anki (.apkg)</span>
+        </button>
+        <button type="button" class="bottom-feat-btn" id="btnTitleSpeed" title="Нажмите для переключения скорости падения слов">
+          <span class="feat-icon teal">🎚️</span>
+          <span id="labelFeatSettings">Скорость: 0.5x</span>
+        </button>
+        <button type="button" class="bottom-feat-btn" id="btnTitleVoice">
+          <span class="feat-icon purple">🎙️</span>
+          <span id="labelFeatVoice">Озвучка Gemini 3.8 AI</span>
+        </button>
+        <button type="button" class="bottom-feat-btn" id="btnTitleDict">
+          <span class="feat-icon gold">📚</span>
+          <span id="labelTitleDict">Словарь курса</span>
+        </button>
+      </footer>
     </div>
   </section>
 
   <!-- ========================================================================
-       ВЕРХНЯЯ БОЕВАЯ ПАНЕЛЬ HUD (Во время полёта)
+       ЭКРАН 2: БОЕВОЙ ИНТЕРФЕЙС Z-LINGO SPACE LANGUAGE ACADEMY (Во время полёта)
        ======================================================================== -->
+  <!-- Верхняя панель Академии -->
   <header class="hud-top">
-    <div class="brand-cluster">
-      <button type="button" class="hud-btn pause-icon-btn" id="btnPause" title="Пауза / Меню (Esc)">
-        ⏸ <span class="hide-mobile" id="labelPause">Пауза</span>
+    <div class="hud-left-academy">
+      <button type="button" class="hud-academy-brand" id="btnHudHome" title="Вернуться на главную панель Z-Lingo">
+        <span class="hud-brand-icon">🚀</span>
+        <span class="hud-brand-word">Z-LINGO</span>
+        <span class="hud-brand-divider hide-mobile"></span>
+        <span class="hud-brand-tag hide-mobile" id="labelAcademySub">SPACE LANGUAGE ACADEMY</span>
       </button>
-      <button type="button" class="hud-btn home-icon-btn hide-mobile" id="btnHudHome" title="На главный экран">
-        🏠
-      </button>
-      <div class="level-indicator" id="btnQuickLevels" title="Нажмите, чтобы выбрать курс, модуль или урок">
-        <div class="level-indicator-title" id="hudLevelTitle">Ур. 1: Кузов и свет</div>
-        <div class="level-progress-wrap">
-          <div class="level-progress-bar">
-            <div class="level-progress-fill" id="hudProgressBar"></div>
-          </div>
-          <span id="hudProgressText">0 / 12</span>
-        </div>
-      </div>
     </div>
 
-    <div class="stats-cluster">
-      <div class="stat-item">
-        <span class="stat-label hide-mobile" id="labelScore">Очки</span>
-        <span class="stat-value accent-amber" id="hudScore">0</span>
-      </div>
-      <div class="stat-item hide-mobile">
-        <span class="stat-label" id="labelCombo">Комбо</span>
-        <span class="stat-value accent-emerald" id="hudCombo">x1</span>
-      </div>
-      <div class="stat-item hide-mobile">
-        <span class="stat-label" id="labelLearnedHud">Выучено</span>
-        <span class="stat-value" id="hudLearnedCount">0</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label hide-mobile" id="labelShield">Щит</span>
-        <span class="stat-value accent-rose" id="hudShields">❤️❤️❤️❤️</span>
-      </div>
+    <!-- Центральные пилюли выбора языковой пары и активной колоды -->
+    <div class="hud-center-selectors">
+      <button type="button" class="hud-pill-selector" id="btnHudLangPair" title="Переключить языковую пару или открыть настройки">
+        <span id="hudLangPairText">🇩🇪 Немецкий → Русский</span>
+        <span class="pill-caret">▾</span>
+      </button>
+
+      <button type="button" class="hud-pill-selector" id="btnQuickLevels" title="Выбрать курс, модуль или урок">
+        <span id="hudLevelTitle">🚗 Авто и дорога</span>
+        <span class="pill-caret">▾</span>
+      </button>
+
+      <!-- Скрытые совместимые кнопки для быстрых хоткеев / мобильного режима -->
+      <button type="button" class="hud-btn show-mobile-only" id="btnLangMode" title="Язык перевода">🇷🇺 RU</button>
+      <button type="button" class="hud-btn show-mobile-only" id="btnSpeedMode" title="Скорость слов">🐌 0.5x</button>
+      <button type="button" class="sr-only" id="btnTargetLangHud" tabindex="-1">🇩🇪 DE</button>
+      <button type="button" class="sr-only" id="btnWeaponMode" tabindex="-1"><span id="hudWeaponLabel">Плазма</span></button>
+      <button type="button" class="sr-only" id="btnArticleMode" tabindex="-1">Бейдж</button>
+      <button type="button" class="sr-only" id="btnOpenCatalogHud" tabindex="-1"><span id="labelCatalogHud">Курсы</span></button>
+      <button type="button" class="sr-only" id="btnOpenCustom" tabindex="-1"><span id="labelCustomBtn">Anki</span></button>
     </div>
 
-    <div class="controls-cluster">
-      <button type="button" class="hud-btn weapon-hud-btn" id="btnWeaponMode" title="Сменить открытое оружие корабля (клавиши 1–6)">
-        ⚡<span class="hide-mobile" id="hudWeaponLabel"> Плазма</span>
+    <!-- Правый блок: Очки, Комбо, Кольцо прогресса урока и Настройки -->
+    <div class="hud-right-metrics">
+      <div class="hud-metric-pill trophy" title="Очки">
+        <span class="sr-only" id="labelScore">Очки</span>
+        🏆 <span id="hudScore">0</span>
+      </div>
+
+      <div class="hud-metric-pill combo hide-mobile" title="Текущее комбо">
+        <span class="sr-only" id="labelCombo">Комбо</span>
+        🔥 <span id="hudCombo">x1</span>
+      </div>
+
+      <div class="hud-ring-pill" title="Прогресс текущего урока">
+        <svg class="hud-mini-ring" viewBox="0 0 28 28" aria-hidden="true">
+          <circle class="hud-ring-bg" cx="14" cy="14" r="10.5" />
+          <circle class="hud-ring-fg" id="hudRingCircle" cx="14" cy="14" r="10.5" stroke-dasharray="65.97" stroke-dashoffset="65.97" />
+        </svg>
+        <span id="hudProgressText">0 / 12</span>
+        <div class="sr-only"><div id="hudProgressBar"></div><span id="labelLearnedHud">Выучено</span><span id="hudLearnedCount">0</span></div>
+      </div>
+
+      <button type="button" class="hud-gear-btn ai-voice-btn" id="btnOpenTtsSettings" title="Настройки озвучки Gemini 3.8 TTS">
+        🎙️<span class="sr-only" id="hudTtsBadge">3.8 TTS</span>
       </button>
-      <button type="button" class="hud-btn emp-btn hide-mobile" id="btnEmp" title="Взорвать ближайшие слова и показать их перевод (Enter)">
-        💥 EMP (<span id="empCount">2</span>)
-      </button>
-      <button type="button" class="hud-btn hide-mobile" id="btnTargetLangHud" title="Изучаемый язык (Я учу)">
-        🇩🇪 DE
-      </button>
-      <button type="button" class="hud-btn active" id="btnLangMode" title="Язык перевода и интерфейса (RU / EN / עברית)">
-        🇷🇺 RU
-      </button>
-      <button type="button" class="hud-btn" id="btnSpeedMode" title="Скорость полёта слов (0.25x / 0.5x / 0.75x / 1.0x / 1.35x)">
-        🐌 0.5x
-      </button>
-      <button type="button" class="hud-btn hide-mobile" id="btnArticleMode" title="Печатать только слово или вместе с артиклем">
-        🏷️ Бейдж
-      </button>
-      <button type="button" class="hud-btn ai-voice-btn active" id="btnOpenTtsSettings" title="Настройки озвучки Gemini 3.8 TTS">
-        🎙️<span class="hide-mobile" id="hudTtsBadge"> 3.8 TTS</span>
-      </button>
-      <button type="button" class="hud-btn hide-mobile" id="btnOpenCatalogHud" title="Открыть каталог всех курсов и модулей">
-        🗂️ <span id="labelCatalogHud">Курсы</span>
-      </button>
-      <button type="button" class="hud-btn hide-mobile" id="btnOpenCustom" title="Импорт колоды Anki (.apkg) или своих слов">
-        📦 <span id="labelCustomBtn">Anki</span>
+
+      <button type="button" class="hud-gear-btn" id="btnHudGameSettings" title="Настройки игры (Скорость, Режим, Звук)">
+        ⚙️
       </button>
     </div>
   </header>
 
-  <!-- Левая панель (ПК): Трёхступенчатая навигация по активному курсу -->
+  <!-- Центральная рамка боевой арены поверх холста (Щиты, Волна/Урок, Пауза и нижняя плашка печати на ПК) -->
+  <div class="battle-arena-frame" id="battleArenaFrame">
+    <div class="arena-top-hud">
+      <div class="arena-shields-pill" title="Щиты корабля">
+        <span class="sr-only" id="labelShield">Щит</span>
+        <span id="hudShields">❤️❤️❤️❤️</span>
+      </div>
+
+      <div class="arena-wave-pill" id="arenaWavePill">
+        УРОК 1 · ВОЛНА 01
+      </div>
+
+      <div class="arena-actions-right">
+        <button type="button" class="arena-hud-btn emp" id="btnEmp" title="Импульс EMP — взорвать ближайшие слова (Enter)">
+          💥 EMP (<span id="empCount">2</span>)
+        </button>
+        <button type="button" class="arena-hud-btn pause" id="btnPause" title="Пауза / Меню (Esc)">
+          ⏸ <span id="labelPause">Пауза</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Нижняя полупрозрачная плашка подсказки ввода на ПК (как в макете 2) -->
+    <div class="arena-bottom-prompt hide-mobile" id="desktopTypingPromptBar">
+      <div class="arena-prompt-inner" id="desktopTypingPreview">
+        ⌨️ Печатайте слово, чтобы стрелять
+      </div>
+      <button type="button" class="arena-kbd-toggle-btn" id="btnToggleDesktopKbd" title="Показать или скрыть экранную клавиатуру">
+        ⌨️
+      </button>
+    </div>
+  </div>
+
+  <!-- Левая боевая панель (ПК): МОИ КОЛОДЫ + Импорт Anki + РЕЖИМ ОБУЧЕНИЯ + ОРУЖИЕ + Настройки -->
   <aside class="sidebar-left">
-    <div class="sidebar-course-box">
-      <div class="sidebar-course-top">
-        <span class="origin-badge official" id="sidebarOriginBadge">🏛️ ОТ СОЗДАТЕЛЯ</span>
-        <span class="sidebar-count" id="totalWordsCounter">73 сл.</span>
+    <!-- Блок 1: Мои колоды -->
+    <div class="sleft-section">
+      <div class="sleft-section-header">
+        <span class="sleft-section-title">🗂️ <span id="labelSidebarDecksHeader">МОИ КОЛОДЫ</span></span>
+        <button type="button" class="sleft-mini-link" id="btnSidebarCatalog">Все ▾</button>
       </div>
-      <div class="sidebar-course-title" id="sidebarLevelsTitle">🚗 Авто и дорога</div>
-      <div class="sidebar-course-btns">
-        <button type="button" class="hud-btn full-w-btn" id="btnSidebarCatalog">🗂️ Все курсы</button>
-        <button type="button" class="hud-btn anki-btn" id="btnSidebarAnki" title="Загрузить файл Anki .apkg">📦 .apkg</button>
+
+      <div class="active-deck-card" id="sidebarActiveDeckCard" role="button" tabindex="0" title="Нажмите, чтобы сменить курс или модуль">
+        <div class="active-deck-thumb" id="sidebarDeckThumb">🚗</div>
+        <div class="active-deck-meta">
+          <div class="active-deck-title-row">
+            <span class="active-deck-title" id="sidebarLevelsTitle">🚗 Авто и дорога</span>
+            <span class="origin-badge official" id="sidebarOriginBadge">🏛️</span>
+          </div>
+          <div class="active-deck-sub" id="sidebarActiveLessonSub">Урок 1 · Кузов и свет</div>
+          <div class="active-deck-prog-row">
+            <div class="active-deck-prog-track">
+              <div class="active-deck-prog-fill" id="sidebarDeckProgFill"></div>
+            </div>
+            <span class="active-deck-prog-num" id="sidebarDeckProgNum">0 / 12</span>
+            <span class="sr-only" id="totalWordsCounter">73 сл.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Раскрывающийся список всех уроков курса (для быстрого прыжка на любой урок или Босс!) -->
+      <details class="sidebar-lessons-drawer" id="sidebarLessonsDrawer">
+        <summary id="labelLessonsDrawerSummary">📋 Выбрать урок курса ▾</summary>
+        <div class="level-list scrollable" id="levelListContainer"></div>
+      </details>
+
+      <button type="button" class="sidebar-anki-import-btn" id="btnSidebarAnki">
+        <span>📥 <span id="labelSidebarAnkiBtn">Импорт Anki</span></span>
+        <span class="apkg-tag">.apkg</span>
+      </button>
+    </div>
+
+    <!-- Блок 2: Режим обучения -->
+    <div class="sleft-section">
+      <div class="sleft-section-header">
+        <span class="sleft-section-title">🎯 <span id="labelStudyModeHeader">РЕЖИМ ОБУЧЕНИЯ</span></span>
+      </div>
+      <div class="study-mode-list" id="studyModeGroup">
+        <button type="button" class="study-mode-btn active" data-study-mode="type">
+          <span class="study-mode-left">⌨️ <span id="labelModeType">Печатать</span></span>
+          <span class="study-mode-check">✓</span>
+        </button>
+        <button type="button" class="study-mode-btn" data-study-mode="listen">
+          <span class="study-mode-left">🎧 <span id="labelModeListen">Слушать</span></span>
+          <span class="study-mode-check">✓</span>
+        </button>
+        <button type="button" class="study-mode-btn" data-study-mode="translate">
+          <span class="study-mode-left">⇄ <span id="labelModeTranslate">Переводить</span></span>
+          <span class="study-mode-check">✓</span>
+        </button>
       </div>
     </div>
-    <div class="level-list scrollable" id="levelListContainer">
-      <!-- Модули -> Короткие уроки + Босс-уроки -->
+
+    <!-- Блок 3: Оружие корабля -->
+    <div class="sleft-section sleft-weapons-grow">
+      <div class="sleft-section-header">
+        <span class="sleft-section-title">🚀 <span id="labelSidebarWeaponsHeader">ОРУЖИЕ</span></span>
+        <span class="sleft-weapon-hint" id="sidebarWeaponUnlockHint">1–6</span>
+      </div>
+      <div class="sidebar-weapon-grid" id="sidebarWeaponRow">
+        <!-- Генерируется из WEAPONS -->
+      </div>
     </div>
+
+    <!-- Блок 4: Настройки игры -->
+    <button type="button" class="sidebar-bottom-settings-btn" id="btnSidebarGameSettings">
+      <span>⚙️ <span id="labelSidebarGameSettings">Настройки игры</span></span>
+      <span class="chevron-right">›</span>
+    </button>
   </aside>
 
-  <!-- Правая панель (ПК): Журнал взрывов + кнопка «Повторить ещё раз» (⭐) -->
+  <!-- Правая боевая панель (ПК): Карточка «🎯 ПОПАДАНИЕ!» + «📊 СЕГОДНЯ ВЫУЧЕНО» -->
   <aside class="sidebar-right">
-    <div class="sidebar-header">
-      <span class="sidebar-title" id="sidebarKillsTitle">💥 Взорванные слова</span>
-      <div class="sidebar-right-actions">
-        <button type="button" class="hud-btn pin-drill-btn" id="btnDrillPinned" title="Запустить тренировку отмеченных звёздочкой слов">
-          ⭐ <span id="pinnedCountBadge">0</span>
-        </button>
-        <button type="button" class="hud-btn" id="btnClearFeed" title="Очистить список">
-          ✕
-        </button>
+    <!-- Верхняя фокус-карточка последнего сбитого слова -->
+    <div class="sright-hit-panel" id="hitSpotlightPanel">
+      <div class="hit-panel-header">
+        <span class="hit-crosshair-icon">🎯</span>
+        <span class="hit-header-text" id="labelHitBanner">ПОПАДАНИЕ!</span>
+      </div>
+
+      <div class="hit-spotlight-card" id="hitSpotlightCard">
+        <div class="hit-word-top" dir="ltr">
+          <div class="hit-word-text-wrap">
+            <span class="hit-word-article" id="hitWordArticle">das</span>
+            <span class="hit-word-main" id="hitWordMain">Auto</span>
+          </div>
+          <button type="button" class="hit-audio-btn" id="btnHitSpeak" title="Прослушать произношение (Gemini 3.8 TTS)">
+            🔊
+          </button>
+        </div>
+
+        <div class="hit-visual-banner theme-auto" id="hitVisualBanner">
+          <span class="hit-visual-emoji" id="hitVisualEmoji">🚘</span>
+          <span class="hit-visual-tag" id="hitVisualTag">AUTO · Z-LINGO</span>
+        </div>
+
+        <div class="hit-translation-text" id="hitWordTranslation">
+          автомобиль
+        </div>
+
+        <div class="hit-action-row">
+          <button type="button" class="hit-know-btn" id="btnHitKnow">
+            ✓ <span id="labelHitKnow">Знаю</span>
+          </button>
+          <button type="button" class="hit-repeat-btn" id="btnHitRepeat">
+            ↻ <span id="labelHitRepeat">Повторить</span>
+          </button>
+        </div>
       </div>
     </div>
-    <div class="kill-feed scrollable" id="killFeedContainer">
-      <div class="kill-feed-empty">
-        Сбивайте летящие слова!<br><br>
-        Нажмите <strong>☆</strong> рядом с незнакомым словом, чтобы игра чаще подкидывала его в следующих раундах.
+
+    <!-- Нижняя карточка: Сегодня выучено + Последние слова -->
+    <div class="sright-today-panel">
+      <div class="today-summary-header">
+        <div class="today-summary-left">
+          <span class="today-bars-icon">📊</span>
+          <div>
+            <div class="today-caption" id="labelTodayCaption">СЕГОДНЯ ВЫУЧЕНО</div>
+            <div class="today-big-count" id="todayLearnedCount">0 слов</div>
+          </div>
+        </div>
+        <div class="sidebar-right-actions">
+          <button type="button" class="hud-btn pin-drill-btn" id="btnDrillPinned" title="Тренировать слова из списка «Повторить»">
+            ⭐ <span id="pinnedCountBadge">0</span>
+          </button>
+          <span class="today-check-circle" aria-hidden="true">✓</span>
+        </div>
       </div>
-    </div>
-    <div class="gender-legend" id="genderLegendBar" title="Цветовая подсказка категорий слов">
-      <span class="legend-dot legend-der" id="legendDer">der (м.р.)</span>
-      <span class="legend-dot legend-die" id="legendDie">die (ж.р.)</span>
-      <span class="legend-dot legend-das" id="legendDas">das (ср.р.)</span>
-      <span class="legend-dot legend-verb" id="legendVerb">Глаг./Пр.</span>
+
+      <div class="recent-words-subheader">
+        <span id="sidebarKillsTitle">Последние слова:</span>
+        <button type="button" class="recent-clear-btn" id="btnClearFeed" title="Очистить историю">✕</button>
+      </div>
+
+      <div class="kill-feed scrollable" id="killFeedContainer"></div>
+
+      <div class="gender-legend" id="genderLegendBar" title="Цветовая подсказка артиклей">
+        <span class="legend-dot legend-der" id="legendDer">der</span>
+        <span class="legend-dot legend-die" id="legendDie">die</span>
+        <span class="legend-dot legend-das" id="legendDas">das</span>
+        <span class="legend-dot legend-verb" id="legendVerb">Verb</span>
+      </div>
     </div>
   </aside>
 
-  <!-- Встроенная космическая клавиатура в стиле ZType (адаптируется под DE / EN / ES) -->
+  <!-- Встроенная космическая клавиатура ZType (на мобильных всегда активна; на ПК открывается по кнопке ⌨️) -->
   <section class="ztype-keyboard-dock" id="ztypeKeyboard" aria-label="Экранная клавиатура ZType">
     <div class="ztype-kbd-topline">
       <div class="ztype-kbd-topline-fill" id="kbdProgressFill"></div>
@@ -232,9 +563,7 @@
       Нажимайте буквы, чтобы стрелять по словам...
     </div>
 
-    <div class="ztype-keys-container" id="ztypeKeysContainer">
-      <!-- Генерируется под выбранный изучаемый язык (DE с ä/ö/ü/ß, EN чистая QWERTY, ES с клавишей Ñ и ударениями) -->
-    </div>
+    <div class="ztype-keys-container" id="ztypeKeysContainer"></div>
   </section>
 
   <!-- Центральный оверлей: Пауза / Победа на уроке / Поражение -->
@@ -257,7 +586,6 @@
         Сбивайте слова буква за буквой! При взрыве всплывает перевод и звучит произношение.
       </p>
 
-      <!-- Прокачка и смена оружия в меню паузы / между уроками -->
       <div class="overlay-arsenal-box">
         <div class="arsenal-header-left">
           <span class="overlay-arsenal-title" id="overlayWeaponTitle">⚔️ Оружие корабля:</span>
@@ -266,7 +594,6 @@
         <div class="weapon-selector-row compact" id="overlayWeaponRow"></div>
       </div>
 
-      <!-- Выбор урока текущего модуля + кнопка смены курса -->
       <div class="overlay-course-row">
         <div class="mobile-level-Chips" id="overlayLevelChips"></div>
       </div>
@@ -277,7 +604,7 @@
         <button type="button" class="secondary-btn" id="btnPracticePinned" style="display: none;">⭐ Повторить отмеченные</button>
         <button type="button" class="secondary-btn" id="btnPracticeMistakes" style="display: none;">🎯 Ошибки</button>
         <button type="button" class="secondary-btn" id="btnOverlayCatalog">🗂️ Все курсы</button>
-        <button type="button" class="secondary-btn" id="btnBackToTitle">🏠 В меню</button>
+        <button type="button" class="secondary-btn" id="btnBackToTitle">🏠 На главную</button>
       </div>
 
       <!-- Мини-блиц после прохождения урока -->
@@ -306,7 +633,6 @@
       <button type="button" class="dialog-close" id="btnCloseCatalog" aria-label="Закрыть">✕</button>
     </div>
     <div class="dialog-body scrollable" id="catalogDialogBody">
-      <!-- Верхняя панель фильтров: Изучаемый язык + Источник курса (Все / От создателя / Личные) -->
       <div class="catalog-toolbar">
         <div class="target-lang-pills compact">
           <button type="button" class="target-lang-pill active" data-target-lang="de">🇩🇪 <span data-tlang-name="de">Немецкий</span></button>
@@ -317,7 +643,7 @@
         <div class="source-filter-tabs" id="catalogSourceTabs">
           <button type="button" class="hud-btn source-tab-btn active" data-source-filter="all" id="tabSourceAll">Все</button>
           <button type="button" class="hud-btn source-tab-btn" data-source-filter="official" id="tabSourceOfficial">🏛️ От создателя</button>
-          <button type="button" class="hud-btn source-tab-btn" data-source-filter="user" id="tabSourceUser">👤 Мои / Anki</button>
+          <button type="button" class="hud-btn source-tab-btn" data-source-filter="user" id="tabSourceUser">👤 Мои колоды / Anki</button>
         </div>
 
         <button type="button" class="hud-btn anki-btn" id="btnOpenAnkiFromCatalog">
@@ -325,9 +651,7 @@
         </button>
       </div>
 
-      <div class="catalog-courses-grid" id="catalogCoursesContainer">
-        <!-- Карточки курсов (Уровень 1) -> Модули (Уровень 2) -> Короткие уроки и Босс-уроки (Уровень 3) -->
-      </div>
+      <div class="catalog-courses-grid" id="catalogCoursesContainer"></div>
     </div>
   </dialog>
 
@@ -340,7 +664,6 @@
       <button type="button" class="dialog-close" id="btnCloseCustom" aria-label="Закрыть">✕</button>
     </div>
     <div class="dialog-body scrollable" id="customDialogBody">
-      <!-- Переключатель вкладок: Файл Anki .apkg | Ручной список -->
       <div class="import-mode-tabs">
         <button type="button" class="hud-btn import-tab-btn active" data-import-tab="anki" id="tabImportAnki">
           📦 Файл Anki (.apkg / .tsv)
@@ -350,7 +673,6 @@
         </button>
       </div>
 
-      <!-- Общий выбор языка изучаемых слов для личного курса -->
       <div class="import-lang-row">
         <span class="tts-field-label" id="importTargetLangLabel">Язык изучаемых слов в колоде:</span>
         <div class="target-lang-pills compact" id="importTargetLangGroup">
@@ -376,7 +698,6 @@
           <span class="anki-status-text" id="ankiParseStatus"></span>
         </div>
 
-        <!-- Блок предпросмотра и выбора колонок (появляется после чтения файла) -->
         <div class="anki-preview-box hidden" id="ankiPreviewBox">
           <div class="anki-field-selectors">
             <div class="anki-field-col">
@@ -431,6 +752,78 @@
   </dialog>
 
   <!-- ========================================================================
+       МОДАЛЬНОЕ ОКНО: ГИБКИЕ НАСТРОЙКИ ИГРЫ
+       ======================================================================== -->
+  <dialog class="modern-dialog" id="gameSettingsDialog" closedby="any">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="gameSettingsDialogTitle">⚙️ Настройки игры</h2>
+      <button type="button" class="dialog-close" id="btnCloseGameSettings" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="dialog-body scrollable" id="gameSettingsDialogBody">
+      <div class="settings-group-card">
+        <div class="tts-field-label" id="labelSettingSpeed">Скорость падения слов:</div>
+        <div class="settings-pills-row" id="settingsSpeedGroup"></div>
+      </div>
+
+      <div class="settings-group-card">
+        <div class="tts-row-between">
+          <span class="tts-field-label" id="labelSettingArticle">Ввод артикля вместе со словом (der/die/das):</span>
+          <button type="button" class="hud-btn" id="btnSettingsToggleArticle">🏷️ Только бейдж</button>
+        </div>
+      </div>
+
+      <div class="settings-group-card">
+        <div class="tts-row-between">
+          <span class="tts-field-label" id="labelSettingDesktopKbd">Экранная клавиатура ZType на ПК:</span>
+          <button type="button" class="hud-btn" id="btnSettingsToggleKbd">⌨️ Скрыта</button>
+        </div>
+      </div>
+
+      <div class="settings-group-card">
+        <div class="tts-row-between">
+          <span class="tts-field-label" id="labelSettingVoiceStudio">Студия озвучки Gemini 3.8 TTS:</span>
+          <button type="button" class="hud-btn ai-voice-btn active" id="btnOpenVoiceFromSettings">🎙️ Настроить голос</button>
+        </div>
+      </div>
+
+      <div class="settings-group-card">
+        <div class="tts-row-between">
+          <span class="tts-field-label" id="labelSettingDictBtn">Полный словарь текущего курса:</span>
+          <button type="button" class="hud-btn" id="btnOpenDictFromSettings">📚 Открыть словарь</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ========================================================================
+       МОДАЛЬНОЕ ОКНО: ПОДРОБНАЯ СТАТИСТИКА ПИЛОТА
+       ======================================================================== -->
+  <dialog class="modern-dialog" id="statsDialog" closedby="any">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="statsDialogTitle">📊 Подробная статистика</h2>
+      <button type="button" class="dialog-close" id="btnCloseStatsDialog" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="dialog-body scrollable" id="statsDialogBody">
+      <div class="stats-modal-grid" id="statsModalGrid"></div>
+    </div>
+  </dialog>
+
+  <!-- ========================================================================
+       МОДАЛЬНОЕ ОКНО: РЕЙТИНГ ИГРОКОВ И ДОСТИЖЕНИЯ
+       ======================================================================== -->
+  <dialog class="modern-dialog" id="leaderboardDialog" closedby="any">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="leaderboardDialogTitle">🏆 Рейтинг недели и достижения</h2>
+      <button type="button" class="dialog-close" id="btnCloseLeaderboardDialog" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="dialog-body scrollable" id="leaderboardDialogBody">
+      <div class="leaderboard-full-list" id="leaderboardFullList"></div>
+      <h3 class="achievements-heading" id="labelAchievementsHeading">🎖️ Достижения пилота</h3>
+      <div class="achievements-grid" id="achievementsGrid"></div>
+    </div>
+  </dialog>
+
+  <!-- ========================================================================
        МОДАЛЬНОЕ ОКНО: СТУДИЯ ОЗВУЧКИ GEMINI 3.8 TTS
        ======================================================================== -->
   <dialog class="modern-dialog" id="ttsSettingsDialog" closedby="any">
@@ -464,9 +857,7 @@
 
       <div class="tts-section">
         <div class="tts-field-label" id="ttsVoiceLabel">Студийный голос:</div>
-        <div class="tts-voice-grid" id="ttsVoiceGrid">
-          <!-- Генерируется из GEMINI_VOICES -->
-        </div>
+        <div class="tts-voice-grid" id="ttsVoiceGrid"></div>
       </div>
 
       <div class="tts-test-row">

@@ -207,13 +207,96 @@
       customBtn: 'Anki',
       wordsCount: (n) => `${n} сл.`,
       wordsShort: (n) => `${n} сл.`,
-      sidebarKills: '💥 Взорванные слова',
+      sidebarKills: 'Последние слова:',
       killFeedEmpty: 'Сбивайте летящие слова!<br><br>Нажмите <strong>☆</strong> («Повторить ещё раз») рядом со словом — игра сохранит его и будет чаще подкидывать в следующих раундах!',
       pinTooltip: 'Повторить ещё раз (чаще подкидывать в следующих раундах)',
       pinAddedBanner: (w) => `⭐ «${w}» добавлено в повтор!`,
       pinRemovedBanner: (w) => `☆ «${w}» убрано из повтора`,
       drillPinnedBtn: (n) => `⭐ Повторить отмеченные (${n})`,
       pinnedRoundTitle: '⭐ Тренировка отмеченных слов',
+
+      // Z-LINGO 2.0: Главная панель и Космическая Академия
+      homeBrandSub: 'Играй · Учись · Запоминай',
+      navHome: 'Главная',
+      navPlay: 'Играть',
+      navCourses: 'Курсы',
+      navDecks: 'Мои колоды',
+      navStats: 'Статистика',
+      navLeaderboard: 'Рейтинг',
+      streakDays: (n) => `${n} дн.`,
+      heroTitleTop: 'Изучай иностранные языки',
+      heroTitleAccent: 'в формате игры!',
+      launchFreeBtn: 'Начать игру бесплатно',
+      perkPlay: 'Игра и практика',
+      perkMemory: 'Эффективное запоминание',
+      perkAnki: 'Свои колоды (Anki)',
+      step1: 'Выбери язык и уровень',
+      step2: 'Играй с готовыми колодами или загрузи Anki',
+      step3: 'Стреляй по словам, учись и прокачивай арсенал!',
+      chooseLangTitle: 'Выбери язык',
+      quickStartTitle: 'Быстрый старт',
+      quickAnkiBtn: 'Импорт Anki',
+      quickAnkiCardTitle: 'Загрузить свою колоду Anki (.apkg)',
+      homeProgressTitle: 'Твой прогресс',
+      metricLearned: 'Выучено слов',
+      metricDecks: 'Колоды',
+      metricStreak: 'Рекорд серии',
+      homeTopTitle: 'Топ игроков (неделя)',
+      seeAllTop: 'Все',
+      youPilotLabel: 'Вы (Пилот)',
+      featCourses: 'Готовые курсы по темам',
+      featAnki: 'Импорт колод Anki (.apkg)',
+      featSpeed: (lbl) => `Скорость: ${lbl}`,
+      featVoice: 'Озвучка Gemini 3.8 AI',
+      promoMonitorBadge: (num, title) => `УРОК ${num} · ${title}`,
+      academySub: 'SPACE LANGUAGE ACADEMY',
+      nativeLangNames: { ru: 'Русский', en: 'Английский', he: 'Иврит' },
+      arenaWaveLabel: (lessonNum, waveNum) => `УРОК ${lessonNum} · ВОЛНА ${String(waveNum).padStart(2, '0')}`,
+      desktopPromptIdle: '⌨️ Печатайте слово, чтобы стрелять',
+      sidebarDecksHeader: 'МОИ КОЛОДЫ',
+      lessonsDrawerSummary: '📋 Выбрать урок курса ▾',
+      studyModeHeader: 'РЕЖИМ ОБУЧЕНИЯ',
+      modeType: 'Печатать',
+      modeListen: 'Слушать',
+      modeTranslate: 'Переводить',
+      studyModeBanner: (name) => `🎯 Режим обучения: ${name}`,
+      sidebarWeaponsHeader: 'ОРУЖИЕ',
+      sidebarGameSettings: 'Настройки игры',
+      hitBanner: 'ПОПАДАНИЕ!',
+      hitReadyBanner: 'ЦЕЛЬ В ПРИЦЕЛЕ',
+      hitKnowBtn: 'Знаю',
+      hitKnownToast: (w) => `✓ «${w}» отмечено как изученное!`,
+      hitRepeatBtn: 'Повторить',
+      hitPinnedBtn: 'В повторе ⭐',
+      todayCaption: 'СЕГОДНЯ ВЫУЧЕНО',
+      todayWordsVal: (n) => `${n} сл.`,
+      gameSettingsTitle: '⚙️ Гибкие настройки игры',
+      settingSpeed: 'Скорость падения слов:',
+      settingArticle: 'Ввод артикля вместе со словом:',
+      settingDesktopKbd: 'Экранная клавиатура ZType на ПК:',
+      kbdShown: '⌨️ Показана',
+      kbdHidden: '⌨️ Скрыта',
+      settingVoiceStudio: 'Студия озвучки Gemini 3.8 TTS:',
+      openVoiceBtn: '🎙️ Настроить голос',
+      settingDictLabel: 'Полный словарь текущего курса:',
+      openDictBtn: '📚 Открыть словарь',
+      statsDialogTitle: '📊 Подробная статистика пилота',
+      statTotalLearned: 'Всего выучено слов',
+      statTodayLearned: 'Выучено сегодня',
+      statBestScore: 'Рекорд очков',
+      statBestStreak: 'Рекорд серии',
+      statLessonsDone: 'Пройдено уроков',
+      statAccuracy: 'Точность стрельбы',
+      statUnlockedWeapons: 'Открыто пушек',
+      statPinnedCount: 'Слов в повторе (⭐)',
+      leaderboardDialogTitle: '🏆 Рейтинг недели и достижения',
+      achievementsHeading: '🎖️ Достижения пилота',
+      achFirstTen: { title: 'Первая десятка', desc: 'Выучить 10 иностранных слов' },
+      achArsenalHalf: { title: 'Оружейник', desc: 'Выучить 35 слов и открыть Ракеты' },
+      achTeslaMaster: { title: 'Повелитель молний', desc: 'Выучить 50 слов и открыть Теслу' },
+      achCombo8: { title: 'Снайпер x8', desc: 'Набрать комбо x8 без единого промаха' },
+      achLesson3: { title: 'Покоритель курса', desc: 'Пройти 3 урока до конца' },
+      achAnkiDeck: { title: 'Своя колода', desc: 'Импортировать личный курс Anki' },
 
       legends: {
         de: ['der (м.р.)', 'die (ж.р.)', 'das (ср.р.)', 'Глаг./Пр.'],
@@ -333,13 +416,96 @@
       customBtn: 'Anki',
       wordsCount: (n) => `${n} words`,
       wordsShort: (n) => `${n} w.`,
-      sidebarKills: '💥 Exploded Words',
+      sidebarKills: 'Recent words:',
       killFeedEmpty: 'Shoot falling words!<br><br>Click <strong>☆</strong> ("Repeat again") next to unfamiliar words so the game mixes them into upcoming rounds more often.',
       pinTooltip: 'Repeat again (boost frequency in upcoming rounds)',
       pinAddedBanner: (w) => `⭐ "${w}" pinned for extra review!`,
       pinRemovedBanner: (w) => `☆ "${w}" unpinned`,
       drillPinnedBtn: (n) => `⭐ Practice Pinned (${n})`,
       pinnedRoundTitle: '⭐ Pinned Words Drill',
+
+      // Z-LINGO 2.0: Home Dashboard & Space Language Academy
+      homeBrandSub: 'Play · Learn · Remember',
+      navHome: 'Home',
+      navPlay: 'Play',
+      navCourses: 'Courses',
+      navDecks: 'My Decks',
+      navStats: 'Stats',
+      navLeaderboard: 'Leaderboard',
+      streakDays: (n) => `${n}d`,
+      heroTitleTop: 'Learn Foreign Languages',
+      heroTitleAccent: 'Through Space Action!',
+      launchFreeBtn: 'Start Playing Free',
+      perkPlay: 'Game & Practice',
+      perkMemory: 'Active Recall',
+      perkAnki: 'Your Anki Decks',
+      step1: 'Choose language & level',
+      step2: 'Play built-in courses or upload Anki',
+      step3: 'Shoot words, learn & upgrade your arsenal!',
+      chooseLangTitle: 'Choose Language',
+      quickStartTitle: 'Quick Start',
+      quickAnkiBtn: 'Import Anki',
+      quickAnkiCardTitle: 'Import Your Anki Deck (.apkg)',
+      homeProgressTitle: 'Your Progress',
+      metricLearned: 'Words Learned',
+      metricDecks: 'Decks',
+      metricStreak: 'Best Streak',
+      homeTopTitle: 'Top Pilots (Week)',
+      seeAllTop: 'All',
+      youPilotLabel: 'You (Pilot)',
+      featCourses: 'Thematic Built-in Courses',
+      featAnki: 'Anki Deck Import (.apkg)',
+      featSpeed: (lbl) => `Speed: ${lbl}`,
+      featVoice: 'Gemini 3.8 AI Voice',
+      promoMonitorBadge: (num, title) => `LESSON ${num} · ${title}`,
+      academySub: 'SPACE LANGUAGE ACADEMY',
+      nativeLangNames: { ru: 'Russian', en: 'English', he: 'Hebrew' },
+      arenaWaveLabel: (lessonNum, waveNum) => `LESSON ${lessonNum} · WAVE ${String(waveNum).padStart(2, '0')}`,
+      desktopPromptIdle: '⌨️ Type any word to fire lasers',
+      sidebarDecksHeader: 'MY DECKS',
+      lessonsDrawerSummary: '📋 Choose Course Lesson ▾',
+      studyModeHeader: 'STUDY MODE',
+      modeType: 'Type',
+      modeListen: 'Listen',
+      modeTranslate: 'Translate',
+      studyModeBanner: (name) => `🎯 Study Mode: ${name}`,
+      sidebarWeaponsHeader: 'ARSENAL',
+      sidebarGameSettings: 'Game Settings',
+      hitBanner: 'DIRECT HIT!',
+      hitReadyBanner: 'TARGET LOCKED',
+      hitKnowBtn: 'I Know',
+      hitKnownToast: (w) => `✓ "${w}" marked as mastered!`,
+      hitRepeatBtn: 'Repeat',
+      hitPinnedBtn: 'Pinned ⭐',
+      todayCaption: 'LEARNED TODAY',
+      todayWordsVal: (n) => `${n} words`,
+      gameSettingsTitle: '⚙️ Game Settings',
+      settingSpeed: 'Word Descent Speed:',
+      settingArticle: 'Type article with word (der/die/el):',
+      settingDesktopKbd: 'On-Screen ZType Keyboard on Desktop:',
+      kbdShown: '⌨️ Visible',
+      kbdHidden: '⌨️ Hidden',
+      settingVoiceStudio: 'Gemini 3.8 TTS Voice Studio:',
+      openVoiceBtn: '🎙️ Voice Studio',
+      settingDictLabel: 'Current Course Dictionary:',
+      openDictBtn: '📚 Open Dictionary',
+      statsDialogTitle: '📊 Pilot Statistics',
+      statTotalLearned: 'Total Words Learned',
+      statTodayLearned: 'Learned Today',
+      statBestScore: 'High Score',
+      statBestStreak: 'Best Daily Streak',
+      statLessonsDone: 'Lessons Cleared',
+      statAccuracy: 'Typing Accuracy',
+      statUnlockedWeapons: 'Weapons Unlocked',
+      statPinnedCount: 'Pinned Review Words (⭐)',
+      leaderboardDialogTitle: '🏆 Weekly Leaderboard & Achievements',
+      achievementsHeading: '🎖️ Pilot Achievements',
+      achFirstTen: { title: 'First Ten', desc: 'Learn 10 foreign words' },
+      achArsenalHalf: { title: 'Weaponsmith', desc: 'Learn 35 words & unlock Missiles' },
+      achTeslaMaster: { title: 'Lightning Lord', desc: 'Learn 50 words & unlock Tesla Coil' },
+      achCombo8: { title: 'Sniper x8', desc: 'Reach an x8 combo without missing' },
+      achLesson3: { title: 'Course Explorer', desc: 'Complete 3 lessons' },
+      achAnkiDeck: { title: 'Custom Commander', desc: 'Import a personal Anki deck' },
 
       legends: {
         de: ['der (masc.)', 'die (fem.)', 'das (neut.)', 'Verb/Other'],
@@ -457,13 +623,96 @@
       customBtn: 'Anki',
       wordsCount: (n) => `${n} מילים`,
       wordsShort: (n) => `${n} מיל׳`,
-      sidebarKills: '💥 מילים שפוצצו',
+      sidebarKills: 'מילים אחרונות:',
       killFeedEmpty: 'פוצצו את המילים המעופפות!<br><br>לחצו על <strong>☆</strong> ליד מילה קשה כדי לשמור אותה ולתרגל אותה בתדירות גבוהה יותר בסיבובים הבאים.',
       pinTooltip: 'חזור שוב (יופיע יותר בסיבובים הבאים)',
       pinAddedBanner: (w) => `⭐ «${w}» נשמר לחזרה!`,
       pinRemovedBanner: (w) => `☆ «${w}» הוסר מרשימת החזרה`,
       drillPinnedBtn: (n) => `⭐ תרגול מסומנות (${n})`,
       pinnedRoundTitle: '⭐ תרגול מילים מסומנות בכוכב',
+
+      // Z-LINGO 2.0: מסך ראשי והאקדמיה החללית
+      homeBrandSub: 'שחק · למד · זכור',
+      navHome: 'ראשי',
+      navPlay: 'שחק',
+      navCourses: 'קורסים',
+      navDecks: 'החפיסות שלי',
+      navStats: 'סטטיסטיקה',
+      navLeaderboard: 'דירוג',
+      streakDays: (n) => `${n} ימים`,
+      heroTitleTop: 'למדו שפות זרות',
+      heroTitleAccent: 'בפורמט של משחק חלל!',
+      launchFreeBtn: 'התחל משחק בחינם',
+      perkPlay: 'משחק ותרגול',
+      perkMemory: 'שינון יעיל ומהיר',
+      perkAnki: 'חפיסות משלך (Anki)',
+      step1: 'בחרו שפה ורמה',
+      step2: 'שחקו בקורסים מוכנים או העלו Anki',
+      step3: 'ירו במילים, למדו ושדרגו את הנשקייה!',
+      chooseLangTitle: 'בחרו שפה',
+      quickStartTitle: 'התחלה מהירה',
+      quickAnkiBtn: 'ייבוא Anki',
+      quickAnkiCardTitle: 'ייבוא חפיסת Anki משלך (.apkg)',
+      homeProgressTitle: 'ההתקדמות שלך',
+      metricLearned: 'מילים שנלמדו',
+      metricDecks: 'חפיסות',
+      metricStreak: 'שיא רצף',
+      homeTopTitle: 'טייסים מובילים (השבוע)',
+      seeAllTop: 'הכל',
+      youPilotLabel: 'את/ה (טייס)',
+      featCourses: 'קורסים מובנים לפי נושא',
+      featAnki: 'ייבוא חפיסות Anki (.apkg)',
+      featSpeed: (lbl) => `מהירות: ${lbl}`,
+      featVoice: 'קריינות Gemini 3.8 AI',
+      promoMonitorBadge: (num, title) => `שלב ${num} · ${title}`,
+      academySub: 'האקדמיה החללית לשפות',
+      nativeLangNames: { ru: 'רוסית', en: 'אנגלית', he: 'עברית' },
+      arenaWaveLabel: (lessonNum, waveNum) => `שלב ${lessonNum} · גל ${String(waveNum).padStart(2, '0')}`,
+      desktopPromptIdle: '⌨️ הקלידו מילה באותיות לטיניות כדי לירות',
+      sidebarDecksHeader: 'החפיסות שלי',
+      lessonsDrawerSummary: '📋 בחר שלב בקורס ▾',
+      studyModeHeader: 'מצב למידה',
+      modeType: 'הקלדה',
+      modeListen: 'שמיעה',
+      modeTranslate: 'תרגום',
+      studyModeBanner: (name) => `🎯 מצב למידה: ${name}`,
+      sidebarWeaponsHeader: 'נשקייה',
+      sidebarGameSettings: 'הגדרות משחק',
+      hitBanner: 'פגיעה מדויקת!',
+      hitReadyBanner: 'מטרה נעולה',
+      hitKnowBtn: 'יודע/ת',
+      hitKnownToast: (w) => `✓ «${w}» סומן כידוע!`,
+      hitRepeatBtn: 'לחזור שוב',
+      hitPinnedBtn: 'בחזרה ⭐',
+      todayCaption: 'נלמדו היום',
+      todayWordsVal: (n) => `${n} מילים`,
+      gameSettingsTitle: '⚙️ הגדרות משחק',
+      settingSpeed: 'מהירות ירידת המילים:',
+      settingArticle: 'הקלדת תווית/יידוע עם המילה:',
+      settingDesktopKbd: 'מקלדת מסך ZType במחשב:',
+      kbdShown: '⌨️ מוצגת',
+      kbdHidden: '⌨️ מוסתרת',
+      settingVoiceStudio: 'אולפן קריינות Gemini 3.8 TTS:',
+      openVoiceBtn: '🎙️ הגדרת קול',
+      settingDictLabel: 'מילון מלא של הקורס:',
+      openDictBtn: '📚 פתח מילון',
+      statsDialogTitle: '📊 סטטיסטיקה מפורטת',
+      statTotalLearned: 'סה״כ מילים שנלמדו',
+      statTodayLearned: 'נלמדו היום',
+      statBestScore: 'שיא ניקוד',
+      statBestStreak: 'שיא רצף ימים',
+      statLessonsDone: 'שלבים שהושלמו',
+      statAccuracy: 'דיוק הקלדה',
+      statUnlockedWeapons: 'נשקים שנפתחו',
+      statPinnedCount: 'מילים לחזרה (⭐)',
+      leaderboardDialogTitle: '🏆 דירוג שבועי והישגים',
+      achievementsHeading: '🎖️ הישגי הטייס',
+      achFirstTen: { title: 'עשירייה ראשונה', desc: 'לימוד 10 מילים זרות' },
+      achArsenalHalf: { title: 'מומחה נשק', desc: 'לימוד 35 מילים ופתיחת טילים' },
+      achTeslaMaster: { title: 'אדון הברקים', desc: 'לימוד 50 מילים ופתיחת טסלה' },
+      achCombo8: { title: 'צלף x8', desc: 'הגעה לרצף x8 ללא החטאה' },
+      achLesson3: { title: 'כובש קורסים', desc: 'השלמת 3 שלבים במלואם' },
+      achAnkiDeck: { title: 'מפקד אישי', desc: 'ייבוא חפיסת Anki משלך' },
 
       legends: {
         de: ['der (זכר)', 'die (נקבה)', 'das (נייטרלי)', 'פועל/אחר'],
@@ -546,7 +795,15 @@
   const STORAGE_KEY = 'zdeutsch_save_v2';
   const PINNED_STORAGE_KEY = 'zlingo_pinned_words_v1';
   const LEARNED_STORAGE_KEY = 'zlingo_learned_words_v1';
+  const DAILY_PROGRESS_KEY = 'zlingo_daily_progress_v1';
   const KEY_STORAGE_NAME = 'zdeutsch_gemini_api_key';
+
+  function getLocalIsoDateString(dateObj = new Date()) {
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const d = String(dateObj.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
 
   function loadJsonStorage(key, fallback) {
     try {
@@ -1458,6 +1715,64 @@
   const savedPinnedObj = loadJsonStorage(PINNED_STORAGE_KEY, {});
   const pinnedWordsMap = new Map(Object.entries(savedPinnedObj || {}));
 
+  // Ударная серия дней подряд (🔥 Streak) и счётчик выученных за сегодня слов
+  const dailyProgress = (() => {
+    const today = getLocalIsoDateString();
+    const saved = loadJsonStorage(DAILY_PROGRESS_KEY, {
+      lastActiveDate: '',
+      streakDays: 1,
+      bestStreakDays: 1,
+      todayDate: today,
+      todayWords: []
+    });
+    let streak = Math.max(1, Number(saved.streakDays) || 1);
+    let bestStreak = Math.max(streak, Number(saved.bestStreakDays) || 1);
+    const lastDate = String(saved.lastActiveDate || '');
+
+    if (!lastDate) {
+      streak = 1;
+    } else if (lastDate !== today) {
+      const dPrev = new Date(`${lastDate}T00:00:00`);
+      const dNow = new Date(`${today}T00:00:00`);
+      const diffDays = Math.round((dNow - dPrev) / 86400000);
+      if (diffDays === 1) {
+        streak += 1;
+      } else if (diffDays > 1) {
+        streak = 1;
+      }
+    }
+    bestStreak = Math.max(bestStreak, streak);
+    const todayWords = saved.todayDate === today && Array.isArray(saved.todayWords)
+      ? saved.todayWords
+      : [];
+
+    const normalized = {
+      lastActiveDate: today,
+      streakDays: streak,
+      bestStreakDays: bestStreak,
+      todayDate: today,
+      todayWords
+    };
+    saveJsonStorage(DAILY_PROGRESS_KEY, normalized);
+    return normalized;
+  })();
+
+  const todayLearnedSet = new Set(dailyProgress.todayWords || []);
+
+  function recordTodayWord(wordKey) {
+    const today = getLocalIsoDateString();
+    if (dailyProgress.todayDate !== today) {
+      dailyProgress.todayDate = today;
+      dailyProgress.lastActiveDate = today;
+      todayLearnedSet.clear();
+    }
+    if (!todayLearnedSet.has(wordKey)) {
+      todayLearnedSet.add(wordKey);
+      dailyProgress.todayWords = Array.from(todayLearnedSet);
+      saveJsonStorage(DAILY_PROGRESS_KEY, dailyProgress);
+    }
+  }
+
   function determineInitialNativeLang() {
     if (initialSave.nativeLang && UI_TEXT[initialSave.nativeLang]) {
       return initialSave.nativeLang;
@@ -1488,6 +1803,15 @@
       { id: 'en', short: '🇬🇧 EN' },
       { id: 'he', short: '🇮🇱 עברית' }
     ],
+
+    // Режим обучения в Академии ('type' | 'listen' | 'translate') и клавиатура ПК
+    studyMode: (initialSave.studyMode === 'listen' || initialSave.studyMode === 'translate')
+      ? initialSave.studyMode
+      : 'type',
+    desktopKbdOpen: Boolean(initialSave.desktopKbdOpen),
+    lastSpotlightEntry: null,
+    lastSpotlightIsHit: false,
+    lastPromoRect: null,
 
     // Трёхступенчатый выбор курса -> модуля -> урока + пользовательские курсы Anki
     userCourses: [],
@@ -1638,6 +1962,7 @@
 
     updatePinnedCountUI();
     rerenderKillFeed();
+    refreshHitSpotlightPinState();
     if (!centerOverlay.classList.contains('hidden')) {
       refreshOverlayContent();
     }
@@ -1651,7 +1976,13 @@
     if (!entry) return;
     const prevCount = learnedWordsSet.size;
     const key = makeWordKey(targetLang, entry);
-    if (learnedWordsSet.has(key)) return;
+    recordTodayWord(key);
+
+    if (learnedWordsSet.has(key)) {
+      updateTodayLearnedUI();
+      renderHomeDashboardWidgets();
+      return;
+    }
 
     learnedWordsSet.add(key);
     saveJsonStorage(LEARNED_STORAGE_KEY, Array.from(learnedWordsSet));
@@ -1668,7 +1999,9 @@
 
     renderWeaponSelectors();
     updateLearnedProgressUI();
+    updateTodayLearnedUI();
     updatePilotRankUI();
+    renderHomeDashboardWidgets();
   }
 
   // --- Хелперы локализации и каталога курсов ---
@@ -2038,9 +2371,179 @@
   const labelDictPinnedFilter = document.getElementById('labelDictPinnedFilter');
   const dictFullList = document.getElementById('dictFullList');
 
-  // --- Геометрия игрового поля ---
+  // --- Z-LINGO 2.0: DOM-элементы Главной панели и Космической Академии ---
+  const homeBrandLogo = document.getElementById('homeBrandLogo');
+  const homeBrandSub = document.getElementById('homeBrandSub');
+  const btnNavHome = document.getElementById('btnNavHome');
+  const btnNavPlay = document.getElementById('btnNavPlay');
+  const btnNavCourses = document.getElementById('btnNavCourses');
+  const btnNavDecks = document.getElementById('btnNavDecks');
+  const btnNavStats = document.getElementById('btnNavStats');
+  const btnNavLeaderboard = document.getElementById('btnNavLeaderboard');
+  const labelNavHome = document.getElementById('labelNavHome');
+  const labelNavPlay = document.getElementById('labelNavPlay');
+  const labelNavCourses = document.getElementById('labelNavCourses');
+  const labelNavDecks = document.getElementById('labelNavDecks');
+  const labelNavStats = document.getElementById('labelNavStats');
+  const labelNavLeaderboard = document.getElementById('labelNavLeaderboard');
+  const btnHomeStreakChip = document.getElementById('btnHomeStreakChip');
+  const homeStreakBadge = document.getElementById('homeStreakBadge');
+  const pilotRankPill = document.getElementById('pilotRankPill');
+  const homeScoreBadge = document.getElementById('homeScoreBadge');
+  const btnHomeSettings = document.getElementById('btnHomeSettings');
+
+  const homeHeroTitleTop = document.getElementById('homeHeroTitleTop');
+  const homeHeroTitleAccent = document.getElementById('homeHeroTitleAccent');
+  const labelPerkPlay = document.getElementById('labelPerkPlay');
+  const labelPerkMemory = document.getElementById('labelPerkMemory');
+  const labelPerkAnki = document.getElementById('labelPerkAnki');
+  const titleSpaceWindow = document.getElementById('titleSpaceWindow');
+  const promoMonitorBadge = document.getElementById('promoMonitorBadge');
+  const btnPromoWeaponCycle = document.getElementById('btnPromoWeaponCycle');
+
+  const labelStep1 = document.getElementById('labelStep1');
+  const labelStep2 = document.getElementById('labelStep2');
+  const labelStep3 = document.getElementById('labelStep3');
+
+  const labelQuickStartTitle = document.getElementById('labelQuickStartTitle');
+  const btnQuickStartAnki = document.getElementById('btnQuickStartAnki');
+  const labelQuickAnkiBtn = document.getElementById('labelQuickAnkiBtn');
+  const homeQuickStartGrid = document.getElementById('homeQuickStartGrid');
+
+  const labelHomeProgressTitle = document.getElementById('labelHomeProgressTitle');
+  const btnOpenStatsCard = document.getElementById('btnOpenStatsCard');
+  const homeProgressRingCircle = document.getElementById('homeProgressRingCircle');
+  const homeProgressPercent = document.getElementById('homeProgressPercent');
+  const labelMetricLearned = document.getElementById('labelMetricLearned');
+  const labelMetricDecks = document.getElementById('labelMetricDecks');
+  const labelMetricStreak = document.getElementById('labelMetricStreak');
+  const homeStatLearned = document.getElementById('homeStatLearned');
+  const homeStatDecks = document.getElementById('homeStatDecks');
+  const homeStatStreak = document.getElementById('homeStatStreak');
+
+  const labelHomeTopTitle = document.getElementById('labelHomeTopTitle');
+  const btnOpenLeaderboardCard = document.getElementById('btnOpenLeaderboardCard');
+  const labelSeeAllTop = document.getElementById('labelSeeAllTop');
+  const homeLeaderboardMiniList = document.getElementById('homeLeaderboardMiniList');
+
+  const labelFeatCourses = document.getElementById('labelFeatCourses');
+  const btnFooterAnki = document.getElementById('btnFooterAnki');
+  const labelFeatAnki = document.getElementById('labelFeatAnki');
+  const labelFeatSettings = document.getElementById('labelFeatSettings');
+  const labelFeatVoice = document.getElementById('labelFeatVoice');
+
+  // Боевой экран Академии
+  const labelAcademySub = document.getElementById('labelAcademySub');
+  const btnHudLangPair = document.getElementById('btnHudLangPair');
+  const hudLangPairText = document.getElementById('hudLangPairText');
+  const hudRingCircle = document.getElementById('hudRingCircle');
+  const btnHudGameSettings = document.getElementById('btnHudGameSettings');
+
+  const battleArenaFrame = document.getElementById('battleArenaFrame');
+  const arenaWavePill = document.getElementById('arenaWavePill');
+  const desktopTypingPromptBar = document.getElementById('desktopTypingPromptBar');
+  const desktopTypingPreview = document.getElementById('desktopTypingPreview');
+  const btnToggleDesktopKbd = document.getElementById('btnToggleDesktopKbd');
+
+  const labelSidebarDecksHeader = document.getElementById('labelSidebarDecksHeader');
+  const sidebarActiveDeckCard = document.getElementById('sidebarActiveDeckCard');
+  const sidebarDeckThumb = document.getElementById('sidebarDeckThumb');
+  const sidebarActiveLessonSub = document.getElementById('sidebarActiveLessonSub');
+  const sidebarDeckProgFill = document.getElementById('sidebarDeckProgFill');
+  const sidebarDeckProgNum = document.getElementById('sidebarDeckProgNum');
+  const sidebarLessonsDrawer = document.getElementById('sidebarLessonsDrawer');
+  const labelLessonsDrawerSummary = document.getElementById('labelLessonsDrawerSummary');
+  const labelSidebarAnkiBtn = document.getElementById('labelSidebarAnkiBtn');
+
+  const labelStudyModeHeader = document.getElementById('labelStudyModeHeader');
+  const studyModeGroup = document.getElementById('studyModeGroup');
+  const labelModeType = document.getElementById('labelModeType');
+  const labelModeListen = document.getElementById('labelModeListen');
+  const labelModeTranslate = document.getElementById('labelModeTranslate');
+
+  const labelSidebarWeaponsHeader = document.getElementById('labelSidebarWeaponsHeader');
+  const sidebarWeaponRow = document.getElementById('sidebarWeaponRow');
+  const btnSidebarGameSettings = document.getElementById('btnSidebarGameSettings');
+  const labelSidebarGameSettings = document.getElementById('labelSidebarGameSettings');
+
+  const labelHitBanner = document.getElementById('labelHitBanner');
+  const hitSpotlightCard = document.getElementById('hitSpotlightCard');
+  const hitWordArticle = document.getElementById('hitWordArticle');
+  const hitWordMain = document.getElementById('hitWordMain');
+  const btnHitSpeak = document.getElementById('btnHitSpeak');
+  const hitVisualBanner = document.getElementById('hitVisualBanner');
+  const hitVisualEmoji = document.getElementById('hitVisualEmoji');
+  const hitVisualTag = document.getElementById('hitVisualTag');
+  const hitWordTranslation = document.getElementById('hitWordTranslation');
+  const btnHitKnow = document.getElementById('btnHitKnow');
+  const labelHitKnow = document.getElementById('labelHitKnow');
+  const btnHitRepeat = document.getElementById('btnHitRepeat');
+  const labelHitRepeat = document.getElementById('labelHitRepeat');
+
+  const labelTodayCaption = document.getElementById('labelTodayCaption');
+  const todayLearnedCount = document.getElementById('todayLearnedCount');
+
+  // Новые диалоги: Настройки игры, Статистика и Рейтинг
+  const gameSettingsDialog = document.getElementById('gameSettingsDialog');
+  const gameSettingsDialogTitle = document.getElementById('gameSettingsDialogTitle');
+  const gameSettingsDialogBody = document.getElementById('gameSettingsDialogBody');
+  const btnCloseGameSettings = document.getElementById('btnCloseGameSettings');
+  const labelSettingSpeed = document.getElementById('labelSettingSpeed');
+  const settingsSpeedGroup = document.getElementById('settingsSpeedGroup');
+  const labelSettingArticle = document.getElementById('labelSettingArticle');
+  const btnSettingsToggleArticle = document.getElementById('btnSettingsToggleArticle');
+  const labelSettingDesktopKbd = document.getElementById('labelSettingDesktopKbd');
+  const btnSettingsToggleKbd = document.getElementById('btnSettingsToggleKbd');
+  const labelSettingVoiceStudio = document.getElementById('labelSettingVoiceStudio');
+  const btnOpenVoiceFromSettings = document.getElementById('btnOpenVoiceFromSettings');
+  const labelSettingDictBtn = document.getElementById('labelSettingDictBtn');
+  const btnOpenDictFromSettings = document.getElementById('btnOpenDictFromSettings');
+
+  const statsDialog = document.getElementById('statsDialog');
+  const statsDialogTitle = document.getElementById('statsDialogTitle');
+  const statsDialogBody = document.getElementById('statsDialogBody');
+  const btnCloseStatsDialog = document.getElementById('btnCloseStatsDialog');
+  const statsModalGrid = document.getElementById('statsModalGrid');
+
+  const leaderboardDialog = document.getElementById('leaderboardDialog');
+  const leaderboardDialogTitle = document.getElementById('leaderboardDialogTitle');
+  const leaderboardDialogBody = document.getElementById('leaderboardDialogBody');
+  const btnCloseLeaderboardDialog = document.getElementById('btnCloseLeaderboardDialog');
+  const leaderboardFullList = document.getElementById('leaderboardFullList');
+  const labelAchievementsHeading = document.getElementById('labelAchievementsHeading');
+  const achievementsGrid = document.getElementById('achievementsGrid');
+
+  // Применяем сохранённое состояние экранной клавиатуры на ПК
+  if (state.desktopKbdOpen) {
+    document.body.classList.add('desktop-kbd-open');
+  }
+
+  // --- Геометрия игрового поля (рамка промо-монитора на Главной + рамка боевой арены в игре) ---
   function getPlayBounds() {
     if (state.screenMode === 'title') {
+      if (titleSpaceWindow) {
+        const rect = titleSpaceWindow.getBoundingClientRect();
+        if (rect.width > 80 && rect.height > 70) {
+          const left = rect.left + 10;
+          const right = Math.max(left + 120, rect.right - 10);
+          const top = rect.top + 42;
+          const bottom = Math.max(top + 66, rect.bottom - 12);
+          return {
+            left,
+            right,
+            top,
+            bottom,
+            centerX: (left + right) / 2,
+            clipRect: {
+              x: rect.left + 2,
+              y: rect.top + 2,
+              w: Math.max(40, rect.width - 4),
+              h: Math.max(40, rect.height - 4)
+            }
+          };
+        }
+      }
+
       const headerRect = titleHeaderCard ? titleHeaderCard.getBoundingClientRect() : null;
       const dockRect = titleBottomDock ? titleBottomDock.getBoundingClientRect() : null;
       const headerBottom = headerRect && headerRect.height > 0 ? headerRect.bottom : 140;
@@ -2052,28 +2555,55 @@
         right: Math.max(280, canvas.width - 16),
         top: safeTop,
         bottom: safeBottom,
-        centerX: canvas.width / 2
+        centerX: canvas.width / 2,
+        clipRect: null
       };
     }
 
+    const kbdRect = ztypeKeyboard ? ztypeKeyboard.getBoundingClientRect() : { height: 0, top: canvas.height };
+    const kbdVisible = kbdRect.height > 20;
+
+    if (battleArenaFrame) {
+      const aRect = battleArenaFrame.getBoundingClientRect();
+      if (aRect.width > 120 && aRect.height > 120) {
+        const left = aRect.left + 12;
+        const right = Math.max(left + 180, aRect.right - 12);
+        const top = aRect.top + 46;
+        const rawBottom = kbdVisible
+          ? Math.min(aRect.bottom - 10, kbdRect.top - 8)
+          : (aRect.bottom - 54);
+        const bottom = Math.max(top + 120, rawBottom);
+        return {
+          left,
+          right,
+          top,
+          bottom,
+          centerX: (left + right) / 2,
+          clipRect: {
+            x: aRect.left + 2,
+            y: aRect.top + 2,
+            w: Math.max(60, aRect.width - 4),
+            h: Math.max(60, aRect.height - 4)
+          }
+        };
+      }
+    }
+
     const isDesktopWide = window.innerWidth > 960;
-    const leftPad = isDesktopWide ? 272 : 8;
-    const rightPad = isDesktopWide ? 296 : 8;
-
-    const kbdRect = ztypeKeyboard ? ztypeKeyboard.getBoundingClientRect() : { height: 185 };
-    const kbdHeight = kbdRect.height > 20 ? kbdRect.height : 185;
-
+    const leftPad = isDesktopWide ? 280 : 8;
+    const rightPad = isDesktopWide ? 308 : 8;
     const left = leftPad;
-    const right = Math.max(left + 260, canvas.width - rightPad);
-    const top = isDesktopWide ? 64 : 52;
-    const bottom = Math.max(top + 180, canvas.height - kbdHeight);
+    const right = Math.max(left + 220, canvas.width - rightPad);
+    const top = isDesktopWide ? 96 : 64;
+    const bottom = Math.max(top + 160, kbdVisible ? kbdRect.top - 8 : canvas.height - 64);
 
     return {
       left,
       right,
       top,
       bottom,
-      centerX: (left + right) / 2
+      centerX: (left + right) / 2,
+      clipRect: null
     };
   }
 
@@ -2335,15 +2865,33 @@
     return 18.5;
   }
 
+  function getTopBadgeTextForWord(entry) {
+    if (!entry) return '';
+    const showArt = !state.typeWithArticle && Boolean(entry.article);
+    const showTransHint = state.screenMode === 'play' && state.studyMode === 'translate';
+    if (!showArt && !showTransHint) return '';
+    if (showTransHint) {
+      let shortTr = getWordTranslation(entry) || '';
+      if (shortTr.length > 22) shortTr = shortTr.slice(0, 21) + '…';
+      return showArt ? `${entry.article} · ${shortTr}` : shortTr;
+    }
+    return entry.article || '';
+  }
+
   function measureWordCapsule(text, entry) {
     const fontPx = getWordFontPx(text.length);
     ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
     const textW = ctx.measureText(text).width;
     const padX = canvas.width < 520 ? 10 : 13;
     const starExtra = entry && isEntryPinned(entry) ? 16 : 0;
-    const boxW = textW + padX * 2 + starExtra + 16; // +16 под правый индикатор цели
-    const hasTopBadge = !state.typeWithArticle && Boolean(entry && entry.article);
-    const boxH = fontPx + 14 + (hasTopBadge ? 20 : 0);
+    let boxW = textW + padX * 2 + starExtra + 16; // +16 под правый индикатор цели
+    const badgeStr = getTopBadgeTextForWord(entry);
+    if (badgeStr) {
+      ctx.font = '800 12px Inter, sans-serif';
+      const badgeW = ctx.measureText(badgeStr).width + 20;
+      boxW = Math.max(boxW, badgeW);
+    }
+    const boxH = fontPx + 14 + (badgeStr ? 20 : 0);
     return { boxW, boxH, fontPx };
   }
 
@@ -2488,18 +3036,267 @@
     }
   }
 
-  // --- Ранг пилота, прогресс выученных слов и счётчик ⭐ ---
+  // --- Ранг пилота, прогресс выученных слов, серия дней и виджеты Главной панели ---
   function updatePilotRankUI() {
-    if (!pilotRankText) return;
     const learnedCount = learnedWordsSet.size;
     const tr = t();
     let rankIdx = 0;
-    if (learnedCount >= 70 || state.highScore >= 22000) rankIdx = 3;
-    else if (learnedCount >= 35 || state.highScore >= 9000) rankIdx = 2;
-    else if (learnedCount >= 10 || state.highScore >= 2500) rankIdx = 1;
+    const bestPts = Math.max(state.highScore, state.score);
+    if (learnedCount >= 70 || bestPts >= 22000) rankIdx = 3;
+    else if (learnedCount >= 35 || bestPts >= 9000) rankIdx = 2;
+    else if (learnedCount >= 10 || bestPts >= 2500) rankIdx = 1;
 
     const rankName = tr.ranks[rankIdx] || tr.ranks[0];
-    pilotRankText.textContent = tr.rankLine(rankName, learnedCount, state.highScore.toLocaleString());
+    if (pilotRankText) {
+      pilotRankText.textContent = tr.rankLine(rankName, learnedCount, bestPts.toLocaleString());
+    }
+    if (pilotRankPill) {
+      pilotRankPill.title = tr.rankLine(rankName, learnedCount, bestPts.toLocaleString());
+    }
+    if (homeScoreBadge) {
+      homeScoreBadge.textContent = bestPts.toLocaleString();
+    }
+    if (homeStreakBadge) {
+      homeStreakBadge.textContent = tr.streakDays(dailyProgress.streakDays || 1);
+    }
+  }
+
+  function updateTodayLearnedUI() {
+    const tr = t();
+    if (todayLearnedCount) {
+      todayLearnedCount.textContent = tr.todayWordsVal(todayLearnedSet.size);
+    }
+  }
+
+  function getCourseVisualTheme(course) {
+    if (!course) return { cls: 'art-auto', emoji: '🚀', tag: 'Z-LINGO' };
+    if (course.source === 'user') {
+      return {
+        cls: 'art-anki',
+        emoji: course.originType === 'anki' ? '🗂️' : '✨',
+        tag: course.originType === 'anki' ? 'ANKI' : 'MY DECK'
+      };
+    }
+    const cid = String(course.id || '').toLowerCase();
+    if (cid.includes('auto')) return { cls: 'art-auto', emoji: '🚘', tag: 'AUTO' };
+    if (cid.includes('it')) return { cls: 'art-it', emoji: '💻', tag: 'IT & AI' };
+    return { cls: 'art-base', emoji: '🌍', tag: course.levelTag || 'A1–B2' };
+  }
+
+  function countLearnedWordsInCourse(course) {
+    if (!course) return { learned: 0, total: 0 };
+    const words = getAllWordsInCourse(course);
+    let learned = 0;
+    const cLang = course.targetLang || state.targetLang;
+    for (const w of words) {
+      if (learnedWordsSet.has(makeWordKey(cLang, w))) {
+        learned++;
+      }
+    }
+    return { learned, total: words.length };
+  }
+
+  function renderHomeQuickStartGrid() {
+    if (!homeQuickStartGrid) return;
+    const tr = t();
+    const courses = getCoursesForTargetLang(state.targetLang);
+    homeQuickStartGrid.innerHTML = '';
+
+    const displayCourses = courses.slice(0, 4);
+    displayCourses.forEach(course => {
+      const theme = getCourseVisualTheme(course);
+      const { learned, total } = countLearnedWordsInCourse(course);
+      const pct = total > 0 ? Math.min(100, Math.round((learned / total) * 100)) : 0;
+      const isActive = course.id === state.activeCourseId;
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'qs-course-card' + (isActive ? ' active' : '');
+      btn.innerHTML = `
+        <div class="qs-card-art ${theme.cls}">
+          <span class="qs-art-badge">${escapeHtml(theme.tag)}</span>
+          <span class="qs-art-emoji">${escapeHtml(course.icon || theme.emoji)}</span>
+          <span class="qs-art-play" data-launch-now="1" title="▶">▶</span>
+        </div>
+        <div class="qs-card-body">
+          <div class="qs-card-title">${escapeHtml(getLocalizedField(course, 'titles'))}</div>
+          <div class="qs-card-prog-row">
+            <div class="qs-prog-bar">
+              <div class="qs-prog-fill" style="width:${pct}%;"></div>
+            </div>
+            <span class="qs-prog-text">${learned} / ${total}</span>
+          </div>
+        </div>
+      `;
+
+      btn.addEventListener('click', (e) => {
+        const clickedPlayIcon = e.target && e.target.closest && e.target.closest('[data-launch-now="1"]');
+        if (clickedPlayIcon || course.id === state.activeCourseId) {
+          if (course.id !== state.activeCourseId) {
+            selectCourseLesson(course.id, 0, 0, false);
+          }
+          launchFromTitleScreen();
+        } else {
+          selectCourseLesson(course.id, 0, 0, false);
+        }
+      });
+
+      homeQuickStartGrid.appendChild(btn);
+    });
+
+    if (displayCourses.length < 4) {
+      const ankiCard = document.createElement('button');
+      ankiCard.type = 'button';
+      ankiCard.className = 'qs-course-card';
+      ankiCard.innerHTML = `
+        <div class="qs-card-art art-anki">
+          <span class="qs-art-badge">+ .APKG</span>
+          <span class="qs-art-emoji">📥</span>
+          <span class="qs-art-play">＋</span>
+        </div>
+        <div class="qs-card-body">
+          <div class="qs-card-title">${escapeHtml(tr.quickAnkiCardTitle)}</div>
+          <div class="qs-card-prog-row">
+            <div class="qs-prog-bar">
+              <div class="qs-prog-fill" style="width:0%;"></div>
+            </div>
+            <span class="qs-prog-text">Anki</span>
+          </div>
+        </div>
+      `;
+      ankiCard.addEventListener('click', () => openCustomWordsModal('anki'));
+      homeQuickStartGrid.appendChild(ankiCard);
+    }
+  }
+
+  function getMergedLeaderboardEntries() {
+    const tr = t();
+    const myBest = Math.max(state.highScore, state.score);
+    const baseRivals = [
+      { name: 'LeoBerlin', score: 26540, avatar: '🧑‍🚀', isYou: false },
+      { name: 'AnnaAT', score: 24980, avatar: '👩‍🚀', isYou: false },
+      { name: 'VictorVienna', score: 23410, avatar: '🚀', isYou: false },
+      { name: 'MayaTLV', score: 15800, avatar: '⚡', isYou: false },
+      { name: 'CarlosMadrid', score: 9450, avatar: '🌟', isYou: false }
+    ];
+    const youEntry = {
+      name: tr.youPilotLabel,
+      score: myBest,
+      avatar: '🏆',
+      isYou: true
+    };
+    const all = [...baseRivals, youEntry].sort((a, b) => b.score - a.score);
+    return all.map((item, idx) => ({ ...item, rank: idx + 1 }));
+  }
+
+  function renderHomeDashboardWidgets() {
+    const tr = t();
+    renderHomeQuickStartGrid();
+
+    // Круговая диаграмма «Твой прогресс»
+    const langWords = getAllWordsInTargetLang(state.targetLang);
+    let learnedInLang = 0;
+    for (const w of langWords) {
+      if (learnedWordsSet.has(makeWordKey(state.targetLang, w))) {
+        learnedInLang++;
+      }
+    }
+    const pct = langWords.length > 0
+      ? Math.min(100, Math.round((learnedInLang / langWords.length) * 100))
+      : 0;
+
+    if (homeProgressPercent) homeProgressPercent.textContent = `${pct}%`;
+    if (homeProgressRingCircle) {
+      const circ = 219.9;
+      homeProgressRingCircle.style.strokeDashoffset = (circ * (1 - pct / 100)).toFixed(1);
+    }
+    if (homeStatLearned) homeStatLearned.textContent = learnedWordsSet.size.toLocaleString();
+    if (homeStatDecks) {
+      const officialCount = ['de', 'en', 'es'].reduce((acc, lg) => {
+        const list = (window.GAME_CATALOG && window.GAME_CATALOG.courses && window.GAME_CATALOG.courses[lg]) || [];
+        return acc + list.length;
+      }, 0);
+      homeStatDecks.textContent = String(officialCount + state.userCourses.length);
+    }
+    if (homeStatStreak) {
+      homeStatStreak.textContent = tr.streakDays(dailyProgress.bestStreakDays || 1);
+    }
+
+    // Мини-список Топ-3 недели на Главной
+    if (homeLeaderboardMiniList) {
+      const ranked = getMergedLeaderboardEntries();
+      const topSlice = ranked.slice(0, 3);
+      if (!topSlice.some(x => x.isYou)) {
+        const youRow = ranked.find(x => x.isYou);
+        if (youRow) topSlice[2] = youRow;
+      }
+      homeLeaderboardMiniList.innerHTML = '';
+      topSlice.forEach(row => {
+        const rankCls = row.rank === 1 ? 'r1' : (row.rank === 2 ? 'r2' : (row.rank === 3 ? 'r3' : ''));
+        const div = document.createElement('div');
+        div.className = 'mini-leader-row' + (row.isYou ? ' is-you' : '');
+        div.innerHTML = `
+          <span class="mini-leader-left">
+            <span class="leader-rank-badge ${rankCls}">${row.rank}</span>
+            <span class="leader-name">${escapeHtml(row.avatar)} ${escapeHtml(row.name)}</span>
+          </span>
+          <span class="leader-score">${row.score.toLocaleString()}</span>
+        `;
+        homeLeaderboardMiniList.appendChild(div);
+      });
+    }
+  }
+
+  function refreshHitSpotlightPinState() {
+    if (!btnHitRepeat || !labelHitRepeat) return;
+    const tr = t();
+    const entry = state.lastSpotlightEntry;
+    const pinned = entry ? isEntryPinned(entry, state.targetLang) : false;
+    btnHitRepeat.classList.toggle('pinned', pinned);
+    labelHitRepeat.textContent = pinned ? tr.hitPinnedBtn : tr.hitRepeatBtn;
+  }
+
+  function updateHitSpotlightCard(entry, isHitFlash = true) {
+    if (!entry || !hitSpotlightCard) return;
+    state.lastSpotlightEntry = entry;
+    state.lastSpotlightIsHit = isHitFlash;
+
+    const tr = t();
+    const style = getArticleStyle(entry.article, state.targetLang);
+    const { course } = getActiveSelection();
+    const theme = getCourseVisualTheme(course);
+
+    if (labelHitBanner) {
+      labelHitBanner.textContent = isHitFlash ? tr.hitBanner : tr.hitReadyBanner;
+    }
+    if (hitWordArticle) {
+      hitWordArticle.textContent = entry.article || '';
+      hitWordArticle.style.color = style.main;
+      hitWordArticle.style.display = entry.article ? 'inline' : 'none';
+    }
+    if (hitWordMain) {
+      hitWordMain.textContent = entry.word || entry.raw || '';
+    }
+    if (hitVisualEmoji) {
+      hitVisualEmoji.textContent = (course && course.icon) || theme.emoji;
+    }
+    if (hitVisualTag) {
+      hitVisualTag.textContent = `${theme.tag} · ${state.targetLang.toUpperCase()}`;
+    }
+    if (hitWordTranslation) {
+      hitWordTranslation.textContent = getWordTranslation(entry);
+      hitWordTranslation.dir = isRtlTranslation(entry) ? 'rtl' : 'ltr';
+    }
+    refreshHitSpotlightPinState();
+
+    if (isHitFlash) {
+      hitSpotlightCard.classList.remove('flash-hit');
+      void hitSpotlightCard.offsetWidth;
+      hitSpotlightCard.classList.add('flash-hit');
+      setTimeout(() => {
+        if (hitSpotlightCard) hitSpotlightCard.classList.remove('flash-hit');
+      }, 260);
+    }
   }
 
   function updateLearnedProgressUI() {
@@ -2513,6 +3310,7 @@
     if (learnedProgressPill) learnedProgressPill.textContent = text;
     if (overlayLearnedPill) overlayLearnedPill.textContent = text;
     if (hudLearnedCount) hudLearnedCount.textContent = String(learnedCount);
+    updateTodayLearnedUI();
   }
 
   function updatePinnedCountUI() {
@@ -2673,6 +3471,11 @@
       btnWeaponMode.style.borderColor = w.color;
       btnWeaponMode.innerHTML = `${w.icon}<span class="hide-mobile" id="hudWeaponLabel"> ${escapeHtml(getWeaponName(w))}</span>`;
     }
+    if (btnPromoWeaponCycle) {
+      btnPromoWeaponCycle.textContent = w.icon;
+      btnPromoWeaponCycle.style.borderColor = w.color;
+      btnPromoWeaponCycle.title = `${getWeaponName(w)} — ${getWeaponDesc(w)}`;
+    }
     if (titleWeaponDesc) {
       titleWeaponDesc.textContent = getWeaponDesc(w);
     }
@@ -2681,7 +3484,7 @@
   function renderWeaponSelectors() {
     const current = getCurrentWeapon();
     const tr = t();
-    [titleWeaponRow, overlayWeaponRow].forEach(container => {
+    [titleWeaponRow, overlayWeaponRow, sidebarWeaponRow].forEach(container => {
       if (!container) return;
       container.innerHTML = '';
       WEAPONS.forEach(w => {
@@ -3001,9 +3804,12 @@
       });
     }
 
+    state.lastPromoRect = { left: bounds.left, top: bounds.top };
+
     if (state.demoWords.length > 0) {
       const firstTarget = state.demoWords[Math.min(1, state.demoWords.length - 1)];
       state.demoTargetId = firstTarget.id;
+      state.ship.x = bounds.centerX;
       state.ship.y = Math.max(bounds.top + 42, bounds.bottom - 22);
       state.ship.targetY = state.ship.y;
       const aimAngle = Math.atan2(firstTarget.y - state.ship.y, firstTarget.x - state.ship.x);
@@ -3018,8 +3824,31 @@
     const bounds = getPlayBounds();
     const corridorH = bounds.bottom - bounds.top;
 
+    // Если пользователь прокрутил дашборд на мобильном — плавно смещаем демо-сцену вместе с окном монитора!
+    if (state.lastPromoRect) {
+      const dx = bounds.left - state.lastPromoRect.left;
+      const dy = bounds.top - state.lastPromoRect.top;
+      if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+        state.ship.x += dx;
+        state.ship.y += dy;
+        state.ship.targetY += dy;
+        for (const dw of state.demoWords) { dw.x += dx; dw.y += dy; }
+        for (const ft of state.floatingTranslations) { ft.x += dx; ft.y += dy; }
+        for (const sw of state.shockwaves) { sw.x += dx; sw.y += dy; }
+        for (const rw of state.repulsorWaves) { rw.x += dx; rw.y += dy; }
+        for (const p of state.particles) { p.x += dx; p.y += dy; }
+        for (const l of state.lasers) {
+          if (Array.isArray(l.points)) l.points.forEach(pt => { pt.x += dx; pt.y += dy; });
+          if (Array.isArray(l.branch)) l.branch.forEach(pt => { pt.x += dx; pt.y += dy; });
+          if (typeof l.x1 === 'number') { l.x1 += dx; l.x2 += dx; l.y1 += dy; l.y2 += dy; }
+        }
+      }
+    }
+    state.lastPromoRect = { left: bounds.left, top: bounds.top };
+
+    const swayAmp = Math.min(22, Math.max(8, (bounds.right - bounds.left) * 0.08));
     state.ship.targetY = Math.max(bounds.top + 40, bounds.bottom - 22);
-    state.ship.x = canvas.width / 2 + Math.sin(performance.now() * 0.0011) * 26;
+    state.ship.x = bounds.centerX + Math.sin(performance.now() * 0.0011) * swayAmp;
 
     if (corridorH < 64) {
       state.demoWords = [];
@@ -3163,6 +3992,13 @@
   // ==========================================================================
   // 5) ПЕРЕКЛЮЧЕНИЕ ФИЛЬТРА 1 («Я учу») И ФИЛЬТРА 2 («Перевод / Интерфейс»)
   // ==========================================================================
+  function updateStudyModeButtonsUI() {
+    if (!studyModeGroup) return;
+    studyModeGroup.querySelectorAll('.study-mode-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.studyMode === state.studyMode);
+    });
+  }
+
   function setNativeLanguage(langId) {
     if (!UI_TEXT[langId]) return;
     state.nativeLang = langId;
@@ -3186,8 +4022,20 @@
     updateLearnedProgressUI();
     updatePinnedCountUI();
 
+    if (state.lastSpotlightEntry) {
+      updateHitSpotlightCard(state.lastSpotlightEntry, false);
+    }
     if (courseBrowserDialog && courseBrowserDialog.open) {
       renderCourseBrowserModal();
+    }
+    if (gameSettingsDialog && gameSettingsDialog.open) {
+      renderGameSettingsModal();
+    }
+    if (statsDialog && statsDialog.open) {
+      renderStatsModal();
+    }
+    if (leaderboardDialog && leaderboardDialog.open) {
+      renderLeaderboardModal();
     }
     if (state.activeQuiz && levelQuizBox.style.display !== 'none') {
       renderCurrentQuizQuestion(false);
@@ -3221,6 +4069,13 @@
       state.demoWords = [];
       state.demoTargetId = null;
       state.killHistory = [];
+      const sel = getActiveSelection();
+      if (sel.course && sel.mod && sel.lesson) {
+        const lWords = resolveLessonBaseWords(sel.course, sel.mod, sel.lesson, state.activeLessonIndex);
+        if (lWords.length > 0) {
+          updateHitSpotlightCard(lWords[0], false);
+        }
+      }
     }
 
     applyStaticUILocalization();
@@ -3245,6 +4100,7 @@
     const isHe = isHebrewUI();
     const targetMeta = TARGET_LANG_META[state.targetLang] || TARGET_LANG_META.de;
     const targetLangLocalName = targetMeta.names[state.nativeLang] || targetMeta.names.en;
+    const nativeLangLocalName = (tr.nativeLangNames && tr.nativeLangNames[state.nativeLang]) || state.nativeLang.toUpperCase();
 
     if (arcadeTitleScreen) arcadeTitleScreen.dir = isHe ? 'rtl' : 'ltr';
     if (overlayCard) overlayCard.dir = isHe ? 'rtl' : 'ltr';
@@ -3252,9 +4108,12 @@
     if (catalogDialogBody) catalogDialogBody.dir = isHe ? 'rtl' : 'ltr';
     if (customDialogBody) customDialogBody.dir = isHe ? 'rtl' : 'ltr';
     if (dictDialogBody) dictDialogBody.dir = isHe ? 'rtl' : 'ltr';
+    if (gameSettingsDialogBody) gameSettingsDialogBody.dir = isHe ? 'rtl' : 'ltr';
+    if (statsDialogBody) statsDialogBody.dir = isHe ? 'rtl' : 'ltr';
+    if (leaderboardDialogBody) leaderboardDialogBody.dir = isHe ? 'rtl' : 'ltr';
 
     if (labelNativeFilter) labelNativeFilter.textContent = tr.nativeFilterLabel;
-    if (labelTargetFilter) labelTargetFilter.textContent = tr.targetFilterLabel;
+    if (labelTargetFilter) labelTargetFilter.textContent = tr.chooseLangTitle;
 
     document.querySelectorAll('[data-tlang-name]').forEach(span => {
       const code = span.getAttribute('data-tlang-name');
@@ -3263,34 +4122,91 @@
       }
     });
 
+    // Z-LINGO 2.0: Навбар Главной страницы
+    if (arcadeLogoMain) arcadeLogoMain.textContent = 'Z-LINGO';
+    if (homeBrandSub) homeBrandSub.textContent = tr.homeBrandSub;
+    if (labelNavHome) labelNavHome.textContent = tr.navHome;
+    if (labelNavPlay) labelNavPlay.textContent = tr.navPlay;
+    if (labelNavCourses) labelNavCourses.textContent = tr.navCourses;
+    if (labelNavDecks) labelNavDecks.textContent = tr.navDecks;
+    if (labelNavStats) labelNavStats.textContent = tr.navStats;
+    if (labelNavLeaderboard) labelNavLeaderboard.textContent = tr.navLeaderboard;
+
+    // Hero-блок и рамка живого промо-боя
     const { course, mod, lesson } = getActiveSelection();
-    if (arcadeLogoMain) arcadeLogoMain.textContent = targetMeta.heroBrand;
-    if (arcadeLogoSub && course) {
-      arcadeLogoSub.textContent = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')} ▾`;
-    }
+    if (homeHeroTitleTop) homeHeroTitleTop.textContent = tr.heroTitleTop;
+    if (homeHeroTitleAccent) homeHeroTitleAccent.textContent = tr.heroTitleAccent;
     if (titleTagline) titleTagline.textContent = tr.titleTagline(targetLangLocalName);
-    if (titleArsenalLabel) titleArsenalLabel.textContent = tr.titleArsenalLabel;
+    if (labelPerkPlay) labelPerkPlay.textContent = tr.perkPlay;
+    if (labelPerkMemory) labelPerkMemory.textContent = tr.perkMemory;
+    if (labelPerkAnki) labelPerkAnki.textContent = tr.perkAnki;
+    if (labelArcadeLaunch) labelArcadeLaunch.textContent = tr.launchFreeBtn;
+
+    if (arcadeLogoSub && course) {
+      const lNum = state.activeLessonIndex + 1;
+      arcadeLogoSub.textContent = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')} · #${lNum} ▾`;
+    }
+    if (promoMonitorBadge && course) {
+      promoMonitorBadge.textContent = tr.promoMonitorBadge(
+        state.activeLessonIndex + 1,
+        getLocalizedField(course, 'titles').toUpperCase()
+      );
+    }
+
+    // Полоса 3 шагов и сетка Быстрого старта / Прогресса / Топа
+    if (labelStep1) labelStep1.textContent = tr.step1;
+    if (labelStep2) labelStep2.textContent = tr.step2;
+    if (labelStep3) labelStep3.textContent = tr.step3;
+
+    if (labelQuickStartTitle) labelQuickStartTitle.textContent = tr.quickStartTitle;
+    if (labelQuickAnkiBtn) labelQuickAnkiBtn.textContent = tr.quickAnkiBtn;
     if (labelOpenCatalogTitle) labelOpenCatalogTitle.textContent = tr.allCoursesBtn;
-    if (labelCatalogHud) labelCatalogHud.textContent = tr.coursesHudBtn;
-    if (btnSidebarCatalog) btnSidebarCatalog.textContent = `🗂️ ${tr.allCoursesBtn}`;
-    if (btnOverlayCatalog) btnOverlayCatalog.textContent = `🗂️ ${tr.allCoursesBtn}`;
+    if (titleArsenalLabel) titleArsenalLabel.textContent = tr.titleArsenalLabel;
+
+    if (labelHomeProgressTitle) labelHomeProgressTitle.textContent = tr.homeProgressTitle;
+    if (labelMetricLearned) labelMetricLearned.textContent = tr.metricLearned;
+    if (labelMetricDecks) labelMetricDecks.textContent = tr.metricDecks;
+    if (labelMetricStreak) labelMetricStreak.textContent = tr.metricStreak;
+    if (labelHomeTopTitle) labelHomeTopTitle.textContent = tr.homeTopTitle;
+    if (labelSeeAllTop) labelSeeAllTop.textContent = tr.seeAllTop;
 
     const courseWords = course ? getAllWordsInCourse(course) : [];
-    if (btnTitleVoice) btnTitleVoice.textContent = tr.titleVoiceLink;
+    const preset = state.speedPresets[state.speedPresetIndex] || state.speedPresets[0];
+
+    // Нижняя полоса возможностей (сохраняем дочерние иконки .feat-icon!)
+    if (labelFeatCourses) labelFeatCourses.textContent = tr.featCourses;
+    if (labelFeatAnki) labelFeatAnki.textContent = tr.featAnki;
+    if (labelFeatSettings) labelFeatSettings.textContent = tr.featSpeed(preset.label);
+    if (labelFeatVoice) labelFeatVoice.textContent = tr.featVoice;
     if (labelTitleDict) labelTitleDict.textContent = tr.titleDictLink(courseWords.length);
     if (labelTitleCustom) labelTitleCustom.textContent = tr.titleCustomLink;
+
+    // Боевой экран Академии Z-LINGO
+    if (labelAcademySub) labelAcademySub.textContent = tr.academySub;
+    if (hudLangPairText) {
+      hudLangPairText.textContent = `${targetMeta.flag} ${targetLangLocalName} → ${nativeLangLocalName}`;
+    }
+    if (labelCatalogHud) labelCatalogHud.textContent = tr.coursesHudBtn;
+    if (btnSidebarCatalog) btnSidebarCatalog.textContent = `${tr.seeAllTop} ▾`;
+    if (btnOverlayCatalog) btnOverlayCatalog.textContent = `🗂️ ${tr.allCoursesBtn}`;
     if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.overlayWeaponTitle;
     if (btnBackToTitle) btnBackToTitle.textContent = tr.backToMenuBtn;
 
-    if (course && mod && lesson && labelArcadeLaunch) {
-      const lTitle = getLocalizedField(lesson, 'titles');
-      if (lesson.isBoss) {
-        labelArcadeLaunch.textContent = tr.launchBossBtn(lTitle);
-      } else {
-        const wLen = (lesson.words || []).length;
-        labelArcadeLaunch.textContent = tr.launchLessonBtn(state.activeLessonIndex + 1, lTitle, tr.wordsShort(wLen));
-      }
+    if (labelSidebarDecksHeader) labelSidebarDecksHeader.textContent = tr.sidebarDecksHeader;
+    if (labelLessonsDrawerSummary) labelLessonsDrawerSummary.textContent = tr.lessonsDrawerSummary;
+    if (labelSidebarAnkiBtn) labelSidebarAnkiBtn.textContent = tr.quickAnkiBtn;
+    if (labelStudyModeHeader) labelStudyModeHeader.textContent = tr.studyModeHeader;
+    if (labelModeType) labelModeType.textContent = tr.modeType;
+    if (labelModeListen) labelModeListen.textContent = tr.modeListen;
+    if (labelModeTranslate) labelModeTranslate.textContent = tr.modeTranslate;
+    if (labelSidebarWeaponsHeader) labelSidebarWeaponsHeader.textContent = tr.sidebarWeaponsHeader;
+    if (labelSidebarGameSettings) labelSidebarGameSettings.textContent = tr.sidebarGameSettings;
+
+    if (labelHitBanner) {
+      labelHitBanner.textContent = state.lastSpotlightIsHit ? tr.hitBanner : tr.hitReadyBanner;
     }
+    if (labelHitKnow) labelHitKnow.textContent = tr.hitKnowBtn;
+    if (labelTodayCaption) labelTodayCaption.textContent = tr.todayCaption;
 
     if (labelPause) labelPause.textContent = tr.pause;
     if (labelScore) labelScore.textContent = tr.score;
@@ -3338,19 +4254,25 @@
     if (customDialogHint) customDialogHint.innerHTML = tr.customHint;
     if (btnSaveCustomWords) btnSaveCustomWords.textContent = tr.customSaveBtn;
 
-    const preset = state.speedPresets[state.speedPresetIndex] || state.speedPresets[0];
     if (btnSpeedMode) btnSpeedMode.textContent = preset.label;
-    if (btnTitleSpeed) btnTitleSpeed.textContent = preset.label;
     if (btnTargetLangHud) btnTargetLangHud.textContent = `${targetMeta.flag} ${targetMeta.code}`;
 
-    if (lesson && hudLevelTitle) {
+    if (course && hudLevelTitle) {
       hudLevelTitle.textContent = state.activeCustomRoundTitle
         ? state.activeCustomRoundTitle
-        : tr.lessonShort(state.activeLessonIndex + 1, getLocalizedField(lesson, 'titles'));
+        : `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')}`;
+    }
+    if (arenaWavePill) {
+      const waveNum = Math.max(1, Math.ceil((state.wordsDestroyedInLevel + 1) / 4));
+      arenaWavePill.textContent = tr.arenaWaveLabel(state.activeLessonIndex + 1, waveNum);
     }
 
+    updatePilotRankUI();
     updateLearnedProgressUI();
     updatePinnedCountUI();
+    updateStudyModeButtonsUI();
+    renderHomeDashboardWidgets();
+    refreshHitSpotlightPinState();
     onTtsStatusChanged();
   }
 
@@ -3362,7 +4284,7 @@
       const shortBadge = !ttsManager.enabled
         ? ' OFF'
         : (ttsManager.localApiKey || ttsManager.serverAvailable === true ? ' 3.8 TTS' : ' TTS');
-      btnOpenTtsSettings.innerHTML = `${ttsManager.enabled ? '🎙️' : '🔇'}<span class="hide-mobile" id="hudTtsBadge">${shortBadge}</span>`;
+      btnOpenTtsSettings.innerHTML = `${ttsManager.enabled ? '🎙️' : '🔇'}<span class="sr-only" id="hudTtsBadge">${shortBadge}</span>`;
     }
 
     if (!ttsStatusBanner) return;
@@ -3463,12 +4385,12 @@
   }
 
   function renderLevelSidebar() {
-    const { course, mod } = getActiveSelection();
+    const { course, mod, lesson } = getActiveSelection();
     if (!course || !mod) return;
     const tr = t();
 
     updateOriginBadgeElement(titleCourseOriginBadge, course, true);
-    updateOriginBadgeElement(sidebarOriginBadge, course, false);
+    updateOriginBadgeElement(sidebarOriginBadge, course, true);
     updateOriginBadgeElement(overlayOriginBadge, course, false);
 
     const courseTitle = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')}`;
@@ -3480,8 +4402,24 @@
         btnOpenCatalogTitle.title = `${courseTitle} — ${modTitle}`;
       }
     }
+    if (sidebarDeckThumb) {
+      sidebarDeckThumb.textContent = course.icon || '🚀';
+    }
     if (sidebarLevelsTitle) {
       sidebarLevelsTitle.textContent = courseTitle;
+    }
+    if (lesson && sidebarActiveLessonSub) {
+      sidebarActiveLessonSub.textContent = state.activeCustomRoundTitle
+        ? state.activeCustomRoundTitle
+        : tr.lessonShort(state.activeLessonIndex + 1, getLocalizedField(lesson, 'titles'));
+    }
+    if (lesson && !state.running) {
+      const baseWords = resolveLessonBaseWords(course, mod, lesson, state.activeLessonIndex);
+      const isDone = state.completedLessonIds.has(lesson.id);
+      const doneNum = isDone ? baseWords.length : 0;
+      const pct = baseWords.length > 0 ? Math.round((doneNum / baseWords.length) * 100) : 0;
+      if (sidebarDeckProgFill) sidebarDeckProgFill.style.width = `${pct}%`;
+      if (sidebarDeckProgNum) sidebarDeckProgNum.textContent = `${doneNum} / ${baseWords.length}`;
     }
 
     const totalWords = getAllWordsInCourse(course).length;
@@ -3518,6 +4456,7 @@
             <div class="level-card-name">${escapeHtml(lTitle)}</div>
           `;
           btn.addEventListener('click', () => {
+            if (sidebarLessonsDrawer) sidebarLessonsDrawer.open = false;
             selectCourseLesson(course.id, mIdx, lIdx, true);
           });
           levelListContainer.appendChild(btn);
@@ -3917,6 +4856,9 @@
     }
 
     centerOverlay.classList.add('hidden');
+    if (finalPool.length > 0) {
+      updateHitSpotlightCard(finalPool[finalPool.length - 1], false);
+    }
     applyStaticUILocalization();
     updateHudStats();
     updateBottomTargetUI();
@@ -3983,6 +4925,10 @@
       hitFlash: 0,
       spawnTime: performance.now()
     });
+
+    if (state.studyMode === 'listen' && !state.lockedWordId && state.activeWords.length === 1) {
+      ttsManager.speak(entry.withArticle || entry.word, state.targetLang);
+    }
 
     updateKeyboardNextHint();
     return true;
@@ -4082,8 +5028,10 @@
         saveSettingsPatch({ highScore: state.highScore });
       }
 
-      // Засчитываем выученное слово для прокачки оружия!
+      // Засчитываем выученное слово для прокачки оружия и обновляем карточку «ПОПАДАНИЕ!»
       recordWordLearned(wordObj.entry, state.targetLang);
+      updateHitSpotlightCard(wordObj.entry, true);
+      updatePilotRankUI();
 
       const pan = getHorizontalPan(wordObj.x);
       sound.playExplosion(state.combo, pan);
@@ -4203,7 +5151,10 @@
       (dictDialog && dictDialog.open) ||
       (customWordsDialog && customWordsDialog.open) ||
       (ttsSettingsDialog && ttsSettingsDialog.open) ||
-      (courseBrowserDialog && courseBrowserDialog.open)
+      (courseBrowserDialog && courseBrowserDialog.open) ||
+      (gameSettingsDialog && gameSettingsDialog.open) ||
+      (statsDialog && statsDialog.open) ||
+      (leaderboardDialog && leaderboardDialog.open)
     ) {
       return;
     }
@@ -4380,6 +5331,9 @@
       state.lockedWordId = chosen.id;
 
       ttsManager.prefetch(chosen.entry.withArticle || chosen.entry.word, state.targetLang);
+      if (state.studyMode === 'listen') {
+        ttsManager.speak(chosen.entry.withArticle || chosen.entry.word, state.targetLang);
+      }
 
       const matchRes = charsMatchTargetLang(char, chosen.text[chosen.typedCount]);
       state.lastAbsorbedUmlautE = matchRes.umlautSub;
@@ -4418,6 +5372,9 @@
     const locked = state.activeWords.find(w => w.id === state.lockedWordId);
     if (!locked) {
       bottomTargetPreview.innerHTML = `<span style="color: var(--text-muted);">${escapeHtml(t().targetIdle)}</span>`;
+      if (desktopTypingPreview) {
+        desktopTypingPreview.innerHTML = `<span style="color: #cbd5e1;">${escapeHtml(t().desktopPromptIdle)}</span>`;
+      }
       return;
     }
 
@@ -4425,16 +5382,25 @@
     const remainPart = locked.text.slice(locked.typedCount);
     const transText = getWordTranslation(locked.entry);
     const dirAttr = isRtlTranslation(locked.entry) ? ' dir="rtl"' : ' dir="ltr"';
+    const artBadge = locked.entry.article
+      ? `<span style="color: var(--accent-cyan);" dir="ltr">[${escapeHtml(locked.entry.article)}]</span> `
+      : '';
 
-    bottomTargetPreview.innerHTML = `
-      <span style="color: var(--accent-cyan);" dir="ltr">[${escapeHtml(locked.entry.article)}]</span>
-      <span dir="ltr"><span class="target-word-typed">${escapeHtml(typedPart)}</span><strong style="color:#fff;">${escapeHtml(remainPart)}</strong></span>
+    const lockedHtml = `
+      ${artBadge}<span dir="ltr"><span class="target-word-typed">${escapeHtml(typedPart)}</span><strong style="color:#fff;">${escapeHtml(remainPart)}</strong></span>
       <span style="color: var(--accent-amber);"${dirAttr}>— ${escapeHtml(transText)}</span>
     `;
+    bottomTargetPreview.innerHTML = lockedHtml;
+    if (desktopTypingPreview) {
+      desktopTypingPreview.innerHTML = `⌨️ ${lockedHtml}`;
+    }
   }
 
   function updateHudStats() {
     hudScore.textContent = state.score.toLocaleString();
+    if (homeScoreBadge) {
+      homeScoreBadge.textContent = Math.max(state.highScore, state.score).toLocaleString();
+    }
     if (hudCombo) hudCombo.textContent = `x${state.combo}`;
     if (hudLearnedCount) hudLearnedCount.textContent = String(learnedWordsSet.size);
 
@@ -4454,6 +5420,19 @@
     hudProgressBar.style.width = `${pct}%`;
     if (kbdProgressFill) kbdProgressFill.style.width = `${pct}%`;
     hudProgressText.textContent = `${state.wordsDestroyedInLevel} / ${state.totalWordsInLevel}`;
+
+    if (hudRingCircle) {
+      const ringCirc = 65.97;
+      hudRingCircle.style.strokeDashoffset = (ringCirc * (1 - pct / 100)).toFixed(2);
+    }
+    if (sidebarDeckProgFill) sidebarDeckProgFill.style.width = `${pct}%`;
+    if (sidebarDeckProgNum) {
+      sidebarDeckProgNum.textContent = `${state.wordsDestroyedInLevel} / ${state.totalWordsInLevel}`;
+    }
+    if (arenaWavePill) {
+      const waveNum = Math.max(1, Math.ceil((state.wordsDestroyedInLevel + 1) / 4));
+      arenaWavePill.textContent = t().arenaWaveLabel(state.activeLessonIndex + 1, waveNum);
+    }
   }
 
   function completeLevel() {
@@ -4853,26 +5832,6 @@
       ctx.fill();
     }
 
-    if (state.screenMode === 'play') {
-      ctx.save();
-      ctx.strokeStyle = 'rgba(45, 212, 191, 0.045)';
-      ctx.lineWidth = 1;
-      const gridSize = canvas.width < 520 ? 44 : 60;
-      for (let x = bounds.left; x <= bounds.right; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, bounds.bottom);
-        ctx.stroke();
-      }
-      for (let y = 0; y <= bounds.bottom; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(bounds.left, y);
-        ctx.lineTo(bounds.right, y);
-        ctx.stroke();
-      }
-      ctx.restore();
-    }
-
     for (const s of state.stars) {
       if (s.y > starClipBottom) continue;
       const twinkle = 0.78 + 0.22 * Math.sin(now * 0.003 + s.twinklePhase);
@@ -4891,6 +5850,35 @@
         ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
         ctx.fill();
       }
+    }
+
+    const hasClip = Boolean(bounds.clipRect);
+    if (hasClip) {
+      ctx.save();
+      roundRect(ctx, bounds.clipRect.x, bounds.clipRect.y, bounds.clipRect.w, bounds.clipRect.h, 16);
+      ctx.clip();
+    }
+
+    if (state.screenMode === 'play') {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(45, 212, 191, 0.045)';
+      ctx.lineWidth = 1;
+      const gridSize = canvas.width < 520 ? 44 : 60;
+      const gridTop = bounds.clipRect ? bounds.clipRect.y : 0;
+      const gridBottom = bounds.clipRect ? bounds.clipRect.y + bounds.clipRect.h : bounds.bottom;
+      for (let x = bounds.left; x <= bounds.right; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, gridTop);
+        ctx.lineTo(x, gridBottom);
+        ctx.stroke();
+      }
+      for (let y = gridTop; y <= gridBottom; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(bounds.left, y);
+        ctx.lineTo(bounds.right, y);
+        ctx.stroke();
+      }
+      ctx.restore();
     }
 
     const lockedWord = state.activeWords.find(w => w.id === state.lockedWordId);
@@ -5048,6 +6036,10 @@
     if (state.layoutWarningTimer > 0) {
       drawLayoutWarning(bounds);
     }
+
+    if (hasClip) {
+      ctx.restore();
+    }
   }
 
   function drawPlayerShip(now = 0) {
@@ -5061,7 +6053,7 @@
     ctx.rotate(angle + Math.PI / 2);
 
     const isTitle = state.screenMode === 'title';
-    const flameLen = (isTitle ? 48 : 23) + Math.sin(now * 0.03) * 4 + Math.random() * 4;
+    const flameLen = (isTitle ? 26 : 23) + Math.sin(now * 0.03) * 4 + Math.random() * 4;
     const grad = ctx.createLinearGradient(0, 11, 0, 11 + flameLen);
     grad.addColorStop(0, primary);
     grad.addColorStop(0.45, secondary);
@@ -5198,11 +6190,19 @@
     const innerContentW = totalW + starPrefixW;
     const boxW = innerContentW + padX * 2;
     const capsuleH = fontPx + 14;
-    const hasTopBadge = !state.typeWithArticle && Boolean(w.entry.article);
-    w.boxW = boxW + 16;
+    const badgeStr = getTopBadgeTextForWord(w.entry);
+    const hasTopBadge = Boolean(badgeStr);
+    let badgeBoxW = 0;
+    if (hasTopBadge) {
+      ctx.font = '800 12px Inter, sans-serif';
+      const maxBadgeW = Math.max(96, (bounds.right - bounds.left) - 24);
+      badgeBoxW = Math.min(maxBadgeW, ctx.measureText(badgeStr).width + 16);
+    }
+    const effectiveHalfW = Math.max(boxW + 16, badgeBoxW + 8) / 2;
+    w.boxW = effectiveHalfW * 2;
     w.boxH = capsuleH + (hasTopBadge ? 20 : 0);
 
-    const clampedDrawX = Math.max(bounds.left + boxW / 2 + 4, Math.min(bounds.right - boxW / 2 - 4, w.x));
+    const clampedDrawX = Math.max(bounds.left + effectiveHalfW + 2, Math.min(bounds.right - effectiveHalfW - 2, w.x));
     w.x = clampedDrawX;
 
     ctx.save();
@@ -5226,22 +6226,22 @@
     const boxY = -capsuleH / 2;
 
     if (hasTopBadge) {
-      const badgeStr = w.entry.article;
       ctx.shadowBlur = 0;
       ctx.font = '800 12px Inter, sans-serif';
-      const bw = ctx.measureText(badgeStr).width + 14;
       ctx.fillStyle = 'rgba(7, 13, 26, 0.96)';
       ctx.strokeStyle = style.main;
       ctx.lineWidth = 1.3;
-      roundRect(ctx, -bw / 2, boxY - 19, bw, 18, 6);
+      roundRect(ctx, -badgeBoxW / 2, boxY - 19, badgeBoxW, 18, 6);
       ctx.fill();
       ctx.stroke();
 
-      ctx.direction = 'ltr';
-      ctx.fillStyle = style.main;
+      ctx.direction = (state.studyMode === 'translate' && isRtlTranslation(w.entry) && (!w.entry.article || state.typeWithArticle))
+        ? 'rtl'
+        : 'ltr';
+      ctx.fillStyle = state.studyMode === 'translate' ? '#fde047' : style.main;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(badgeStr, 0, boxY - 10);
+      ctx.fillText(badgeStr, 0, boxY - 10, badgeBoxW - 10);
     }
 
     ctx.shadowBlur = isLocked ? 12 : 0;
@@ -5647,35 +6647,46 @@
     });
   }
 
-  if (btnArticleMode) {
-    btnArticleMode.addEventListener('click', () => {
-      state.typeWithArticle = !state.typeWithArticle;
-      saveSettingsPatch({ typeWithArticle: state.typeWithArticle });
-      const tr = t();
+  function toggleArticleTypingMode() {
+    state.typeWithArticle = !state.typeWithArticle;
+    saveSettingsPatch({ typeWithArticle: state.typeWithArticle });
+    const tr = t();
+    if (btnArticleMode) {
       btnArticleMode.textContent = state.typeWithArticle ? tr.articleMode : tr.badgeMode;
       btnArticleMode.classList.toggle('active', state.typeWithArticle);
+    }
 
-      state.activeWords.forEach(w => {
-        if (w.typedCount === 0) {
-          w.text = getTargetString(w.entry);
-          const m = measureWordCapsule(w.text, w.entry);
-          w.boxW = m.boxW;
-          w.boxH = m.boxH;
-        }
-      });
+    state.activeWords.forEach(w => {
+      if (w.typedCount === 0) {
+        w.text = getTargetString(w.entry);
+        const m = measureWordCapsule(w.text, w.entry);
+        w.boxW = m.boxW;
+        w.boxH = m.boxH;
+      }
+    });
+
+    if (gameSettingsDialog && gameSettingsDialog.open) {
+      renderGameSettingsModal();
+    }
+  }
+
+  if (btnArticleMode) {
+    btnArticleMode.addEventListener('click', () => {
+      toggleArticleTypingMode();
       btnArticleMode.blur();
     });
   }
 
-  function cycleSpeedPreset() {
-    state.speedPresetIndex = (state.speedPresetIndex + 1) % state.speedPresets.length;
+  function applySpeedPresetByIndex(newIndex) {
+    if (newIndex < 0 || newIndex >= state.speedPresets.length) return;
+    state.speedPresetIndex = newIndex;
     const preset = state.speedPresets[state.speedPresetIndex];
     saveSettingsPatch({
       speedPresetIndex: state.speedPresetIndex,
       speedMult: preset.mult
     });
     if (btnSpeedMode) btnSpeedMode.textContent = preset.label;
-    if (btnTitleSpeed) btnTitleSpeed.textContent = preset.label;
+    if (labelFeatSettings) labelFeatSettings.textContent = t().featSpeed(preset.label);
 
     state.activeWords.forEach(w => {
       if (w.baseSpeedUnscaled) {
@@ -5688,6 +6699,13 @@
       state.weaponBannerColor = '#38bdf8';
       state.weaponBannerTimer = 1.45;
     }
+    if (gameSettingsDialog && gameSettingsDialog.open) {
+      renderGameSettingsModal();
+    }
+  }
+
+  function cycleSpeedPreset() {
+    applySpeedPresetByIndex((state.speedPresetIndex + 1) % state.speedPresets.length);
   }
 
   btnSpeedMode.addEventListener('click', () => {
@@ -5703,13 +6721,20 @@
   }
 
   // Открытие 3-ступенчатого каталога курсов
-  [btnOpenCatalogTitle, btnTitleAllCourses, arcadeLogoSub, btnOpenCatalogHud, btnSidebarCatalog, btnOverlayCatalog].forEach(el => {
+  [btnOpenCatalogTitle, btnTitleAllCourses, arcadeLogoSub, btnOpenCatalogHud, btnSidebarCatalog, btnOverlayCatalog, btnNavCourses].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {
       openCourseCatalogModal('all');
       el.blur();
     });
   });
+
+  if (btnNavDecks) {
+    btnNavDecks.addEventListener('click', () => {
+      openCourseCatalogModal('user');
+      btnNavDecks.blur();
+    });
+  }
 
   document.querySelectorAll('.source-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -5718,12 +6743,25 @@
     });
   });
 
+  function resumePlayIfAllDialogsClosed() {
+    const anyOpen = (
+      (courseBrowserDialog && courseBrowserDialog.open) ||
+      (customWordsDialog && customWordsDialog.open) ||
+      (ttsSettingsDialog && ttsSettingsDialog.open) ||
+      (dictDialog && dictDialog.open) ||
+      (gameSettingsDialog && gameSettingsDialog.open) ||
+      (statsDialog && statsDialog.open) ||
+      (leaderboardDialog && leaderboardDialog.open)
+    );
+    if (!anyOpen && state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
+      state.paused = false;
+    }
+  }
+
   if (btnCloseCatalog) {
     btnCloseCatalog.addEventListener('click', () => {
       courseBrowserDialog.close();
-      if (state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
-        state.paused = false;
-      }
+      resumePlayIfAllDialogsClosed();
     });
   }
 
@@ -5735,7 +6773,7 @@
   }
 
   // Открытие окна импорта Anki .apkg / Своих слов
-  [btnSidebarAnki, btnOpenCustom, btnTitleCustom].forEach(el => {
+  [btnSidebarAnki, btnOpenCustom, btnTitleCustom, btnQuickStartAnki, btnFooterAnki].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {
       openCustomWordsModal('anki');
@@ -6017,13 +7055,405 @@
 
   btnCloseDict.addEventListener('click', () => {
     dictDialog.close();
-    if (state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
-      state.paused = false;
-    }
+    resumePlayIfAllDialogsClosed();
   });
 
   dictSearchInput.addEventListener('input', () => {
     renderFullDictionary(dictSearchInput.value);
+  });
+
+  // ==========================================================================
+  // 8) Z-LINGO 2.0: НОВЫЕ БЛОКИ (НАВИГАЦИЯ, РЕЖИМ ОБУЧЕНИЯ, ПОПАДАНИЕ, МОДАЛКИ)
+  // ==========================================================================
+  function setStudyMode(modeId) {
+    if (!['type', 'listen', 'translate'].includes(modeId)) return;
+    state.studyMode = modeId;
+    saveSettingsPatch({ studyMode: modeId });
+    updateStudyModeButtonsUI();
+
+    state.activeWords.forEach(w => {
+      const m = measureWordCapsule(w.text, w.entry);
+      w.boxW = m.boxW;
+      w.boxH = m.boxH;
+    });
+
+    const tr = t();
+    const modeLabel = modeId === 'listen' ? tr.modeListen : (modeId === 'translate' ? tr.modeTranslate : tr.modeType);
+    if (state.screenMode === 'play') {
+      state.weaponBannerText = tr.studyModeBanner(modeLabel);
+      state.weaponBannerColor = '#34d399';
+      state.weaponBannerTimer = 1.65;
+    }
+
+    if (modeId === 'listen' && state.activeWords.length > 0) {
+      const targetWord = state.activeWords.find(w => w.id === state.lockedWordId) || state.activeWords[0];
+      if (targetWord) {
+        ttsManager.speak(targetWord.entry.withArticle || targetWord.entry.word, state.targetLang, true);
+      }
+    }
+  }
+
+  if (studyModeGroup) {
+    studyModeGroup.addEventListener('click', (e) => {
+      const btn = e.target && e.target.closest && e.target.closest('.study-mode-btn');
+      if (!btn || !btn.dataset.studyMode) return;
+      sound.init();
+      setStudyMode(btn.dataset.studyMode);
+      btn.blur();
+    });
+  }
+
+  function toggleDesktopKeyboard(forceState) {
+    state.desktopKbdOpen = typeof forceState === 'boolean' ? forceState : !state.desktopKbdOpen;
+    saveSettingsPatch({ desktopKbdOpen: state.desktopKbdOpen });
+    document.body.classList.toggle('desktop-kbd-open', state.desktopKbdOpen);
+    if (btnToggleDesktopKbd) {
+      btnToggleDesktopKbd.classList.toggle('active', state.desktopKbdOpen);
+    }
+    resizeCanvas();
+    requestAnimationFrame(() => resizeCanvas());
+    if (gameSettingsDialog && gameSettingsDialog.open) {
+      renderGameSettingsModal();
+    }
+  }
+
+  if (btnToggleDesktopKbd) {
+    btnToggleDesktopKbd.classList.toggle('active', state.desktopKbdOpen);
+    btnToggleDesktopKbd.addEventListener('click', () => {
+      toggleDesktopKeyboard();
+      btnToggleDesktopKbd.blur();
+    });
+  }
+
+  // Навигация верхней шапки на Главной
+  [homeBrandLogo, btnNavHome].forEach(el => {
+    if (!el) return;
+    el.addEventListener('click', () => {
+      if (arcadeTitleScreen) {
+        arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (el.blur) el.blur();
+    });
+  });
+
+  if (btnNavPlay) {
+    btnNavPlay.addEventListener('click', () => {
+      launchFromTitleScreen();
+      btnNavPlay.blur();
+    });
+  }
+
+  // Циклическая кнопка испытания оружия прямо в промо-окне на Главной
+  if (btnPromoWeaponCycle) {
+    btnPromoWeaponCycle.addEventListener('click', () => {
+      sound.init();
+      const curIdx = WEAPONS.findIndex(w => w.id === state.weaponId);
+      const nextW = WEAPONS[(curIdx + 1) % WEAPONS.length];
+      equipWeapon(nextW.id, true);
+      btnPromoWeaponCycle.blur();
+    });
+  }
+
+  // Кнопка языковой пары в верхнем HUD Академии
+  if (btnHudLangPair) {
+    btnHudLangPair.addEventListener('click', (e) => {
+      sound.init();
+      if (e.shiftKey) {
+        const order = ['de', 'en', 'es'];
+        const nextT = order[(order.indexOf(state.targetLang) + 1) % order.length];
+        setTargetLanguage(nextT);
+        showLevelIntroOverlay();
+      } else {
+        const idx = state.nativeLangModes.findIndex(m => m.id === state.nativeLang);
+        const nextMode = state.nativeLangModes[(idx + 1) % state.nativeLangModes.length];
+        setNativeLanguage(nextMode.id);
+      }
+      btnHudLangPair.blur();
+    });
+  }
+
+  // Кликабельная активная карточка колоды в левом сайдбаре
+  if (sidebarActiveDeckCard) {
+    sidebarActiveDeckCard.addEventListener('click', () => {
+      openCourseCatalogModal('all');
+    });
+    sidebarActiveDeckCard.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openCourseCatalogModal('all');
+      }
+    });
+  }
+
+  // Карточка «🎯 ПОПАДАНИЕ!» справа: 🔊 Озвучить, ✓ Знаю, ↻ Повторить
+  if (btnHitSpeak) {
+    btnHitSpeak.addEventListener('click', () => {
+      sound.init();
+      if (state.lastSpotlightEntry) {
+        ttsManager.speak(state.lastSpotlightEntry.withArticle || state.lastSpotlightEntry.word, state.targetLang, true);
+      }
+      btnHitSpeak.blur();
+    });
+  }
+
+  if (btnHitKnow) {
+    btnHitKnow.addEventListener('click', () => {
+      sound.init();
+      const entry = state.lastSpotlightEntry;
+      if (!entry) return;
+      recordWordLearned(entry, state.targetLang);
+      if (isEntryPinned(entry, state.targetLang)) {
+        togglePinWord(entry, state.targetLang);
+      } else {
+        refreshHitSpotlightPinState();
+      }
+      updatePilotRankUI();
+      state.weaponBannerText = t().hitKnownToast(entry.word || entry.raw);
+      state.weaponBannerColor = '#4ade80';
+      state.weaponBannerTimer = 1.6;
+      sound._playTactileClick(sound.ctx ? sound.ctx.currentTime : 0, sound.masterGain, 2400, 0.06);
+      btnHitKnow.blur();
+    });
+  }
+
+  if (btnHitRepeat) {
+    btnHitRepeat.addEventListener('click', () => {
+      sound.init();
+      const entry = state.lastSpotlightEntry;
+      if (!entry) return;
+      togglePinWord(entry, state.targetLang);
+      refreshHitSpotlightPinState();
+      btnHitRepeat.blur();
+    });
+  }
+
+  // --- Модальное окно 1: Гибкие настройки игры ---
+  function renderGameSettingsModal() {
+    if (!gameSettingsDialog) return;
+    const tr = t();
+    if (gameSettingsDialogTitle) gameSettingsDialogTitle.textContent = tr.gameSettingsTitle;
+    if (labelSettingSpeed) labelSettingSpeed.textContent = tr.settingSpeed;
+    if (labelSettingArticle) labelSettingArticle.textContent = tr.settingArticle;
+    if (labelSettingDesktopKbd) labelSettingDesktopKbd.textContent = tr.settingDesktopKbd;
+    if (labelSettingVoiceStudio) labelSettingVoiceStudio.textContent = tr.settingVoiceStudio;
+    if (btnOpenVoiceFromSettings) btnOpenVoiceFromSettings.textContent = tr.openVoiceBtn;
+    if (labelSettingDictBtn) labelSettingDictBtn.textContent = tr.settingDictLabel;
+    if (btnOpenDictFromSettings) btnOpenDictFromSettings.textContent = tr.openDictBtn;
+
+    if (btnSettingsToggleArticle) {
+      btnSettingsToggleArticle.textContent = state.typeWithArticle ? tr.articleMode : tr.badgeMode;
+      btnSettingsToggleArticle.classList.toggle('active', state.typeWithArticle);
+    }
+    if (btnSettingsToggleKbd) {
+      btnSettingsToggleKbd.textContent = state.desktopKbdOpen ? tr.kbdShown : tr.kbdHidden;
+      btnSettingsToggleKbd.classList.toggle('active', state.desktopKbdOpen);
+    }
+
+    if (settingsSpeedGroup) {
+      settingsSpeedGroup.innerHTML = '';
+      state.speedPresets.forEach((sp, idx) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'hud-btn' + (idx === state.speedPresetIndex ? ' active' : '');
+        b.textContent = sp.label;
+        b.addEventListener('click', () => {
+          sound.init();
+          applySpeedPresetByIndex(idx);
+        });
+        settingsSpeedGroup.appendChild(b);
+      });
+    }
+  }
+
+  function openGameSettingsModal() {
+    if (!gameSettingsDialog) return;
+    if (state.running && !state.paused) state.paused = true;
+    renderGameSettingsModal();
+    gameSettingsDialog.showModal();
+  }
+
+  [btnHomeSettings, btnHudGameSettings, btnSidebarGameSettings].forEach(el => {
+    if (!el) return;
+    el.addEventListener('click', () => {
+      openGameSettingsModal();
+      el.blur();
+    });
+  });
+
+  if (btnSettingsToggleArticle) {
+    btnSettingsToggleArticle.addEventListener('click', () => {
+      sound.init();
+      toggleArticleTypingMode();
+    });
+  }
+  if (btnSettingsToggleKbd) {
+    btnSettingsToggleKbd.addEventListener('click', () => {
+      sound.init();
+      toggleDesktopKeyboard();
+    });
+  }
+  if (btnOpenVoiceFromSettings) {
+    btnOpenVoiceFromSettings.addEventListener('click', () => {
+      gameSettingsDialog.close();
+      openTtsStudioDialog();
+    });
+  }
+  if (btnOpenDictFromSettings) {
+    btnOpenDictFromSettings.addEventListener('click', () => {
+      gameSettingsDialog.close();
+      openDictionaryModal();
+    });
+  }
+  if (btnCloseGameSettings) {
+    btnCloseGameSettings.addEventListener('click', () => {
+      gameSettingsDialog.close();
+      resumePlayIfAllDialogsClosed();
+    });
+  }
+
+  // --- Модальное окно 2: Подробная статистика пилота ---
+  function renderStatsModal() {
+    if (!statsDialog || !statsModalGrid) return;
+    const tr = t();
+    if (statsDialogTitle) statsDialogTitle.textContent = tr.statsDialogTitle;
+
+    const accPct = state.shotsFired > 0
+      ? `${Math.round((state.shotsHit / state.shotsFired) * 100)}%`
+      : '100%';
+    const unlockedCount = WEAPONS.filter(isWeaponUnlocked).length;
+    const pinnedCount = getPinnedEntriesForTargetLang(state.targetLang).length;
+    const bestPts = Math.max(state.highScore, state.score);
+
+    const tiles = [
+      { icon: '📖', val: learnedWordsSet.size.toLocaleString(), label: tr.statTotalLearned },
+      { icon: '🌱', val: tr.todayWordsVal(todayLearnedSet.size), label: tr.statTodayLearned },
+      { icon: '🏆', val: bestPts.toLocaleString(), label: tr.statBestScore },
+      { icon: '🔥', val: tr.streakDays(dailyProgress.bestStreakDays || 1), label: tr.statBestStreak },
+      { icon: '✅', val: String(state.completedLessonIds.size), label: tr.statLessonsDone },
+      { icon: '🎯', val: accPct, label: tr.statAccuracy },
+      { icon: '🚀', val: `${unlockedCount} / ${WEAPONS.length}`, label: tr.statUnlockedWeapons },
+      { icon: '⭐', val: String(pinnedCount), label: tr.statPinnedCount }
+    ];
+
+    statsModalGrid.innerHTML = '';
+    tiles.forEach(tItem => {
+      const card = document.createElement('div');
+      card.className = 'stat-tile-card';
+      card.innerHTML = `
+        <div class="stat-tile-val">${escapeHtml(tItem.icon)} ${escapeHtml(tItem.val)}</div>
+        <div class="stat-tile-label">${escapeHtml(tItem.label)}</div>
+      `;
+      statsModalGrid.appendChild(card);
+    });
+  }
+
+  function openStatsModal() {
+    if (!statsDialog) return;
+    if (state.running && !state.paused) state.paused = true;
+    renderStatsModal();
+    statsDialog.showModal();
+  }
+
+  [btnNavStats, btnOpenStatsCard, btnHomeStreakChip].forEach(el => {
+    if (!el) return;
+    el.addEventListener('click', () => {
+      openStatsModal();
+      el.blur();
+    });
+  });
+
+  if (btnCloseStatsDialog) {
+    btnCloseStatsDialog.addEventListener('click', () => {
+      statsDialog.close();
+      resumePlayIfAllDialogsClosed();
+    });
+  }
+
+  // --- Модальное окно 3: Рейтинг недели и достижения ---
+  function renderLeaderboardModal() {
+    if (!leaderboardDialog) return;
+    const tr = t();
+    if (leaderboardDialogTitle) leaderboardDialogTitle.textContent = tr.leaderboardDialogTitle;
+    if (labelAchievementsHeading) labelAchievementsHeading.textContent = tr.achievementsHeading;
+
+    if (leaderboardFullList) {
+      leaderboardFullList.innerHTML = '';
+      const ranked = getMergedLeaderboardEntries();
+      ranked.forEach(row => {
+        const rankCls = row.rank === 1 ? 'r1' : (row.rank === 2 ? 'r2' : (row.rank === 3 ? 'r3' : ''));
+        const div = document.createElement('div');
+        div.className = 'mini-leader-row' + (row.isYou ? ' is-you' : '');
+        div.innerHTML = `
+          <span class="mini-leader-left">
+            <span class="leader-rank-badge ${rankCls}">${row.rank}</span>
+            <span class="leader-name">${escapeHtml(row.avatar)} ${escapeHtml(row.name)}</span>
+          </span>
+          <span class="leader-score">${row.score.toLocaleString()}</span>
+        `;
+        leaderboardFullList.appendChild(div);
+      });
+    }
+
+    if (achievementsGrid) {
+      const learnedCount = learnedWordsSet.size;
+      const achItems = [
+        { icon: '🌟', meta: tr.achFirstTen, ok: learnedCount >= 10 },
+        { icon: '🚀', meta: tr.achArsenalHalf, ok: learnedCount >= 35 },
+        { icon: '⚡', meta: tr.achTeslaMaster, ok: learnedCount >= 50 },
+        { icon: '🎯', meta: tr.achCombo8, ok: state.maxCombo >= 8 },
+        { icon: '🏅', meta: tr.achLesson3, ok: state.completedLessonIds.size >= 3 },
+        { icon: '🗂️', meta: tr.achAnkiDeck, ok: state.userCourses.length > 0 }
+      ];
+      achievementsGrid.innerHTML = '';
+      achItems.forEach(a => {
+        const div = document.createElement('div');
+        div.className = 'ach-card' + (a.ok ? ' unlocked' : '');
+        div.innerHTML = `
+          <span class="ach-icon">${a.icon}</span>
+          <div>
+            <div class="ach-title">${escapeHtml(a.meta.title)}</div>
+            <div class="ach-desc">${escapeHtml(a.meta.desc)}</div>
+          </div>
+        `;
+        achievementsGrid.appendChild(div);
+      });
+    }
+  }
+
+  function openLeaderboardModal() {
+    if (!leaderboardDialog) return;
+    if (state.running && !state.paused) state.paused = true;
+    renderLeaderboardModal();
+    leaderboardDialog.showModal();
+  }
+
+  [btnNavLeaderboard, btnOpenLeaderboardCard, pilotRankPill].forEach(el => {
+    if (!el) return;
+    el.addEventListener('click', () => {
+      openLeaderboardModal();
+      el.blur();
+    });
+  });
+
+  if (btnCloseLeaderboardDialog) {
+    btnCloseLeaderboardDialog.addEventListener('click', () => {
+      leaderboardDialog.close();
+      resumePlayIfAllDialogsClosed();
+    });
+  }
+
+  // Если любое модальное окно закрыто клавишей Esc или кликом по фону — возобновляем полёт
+  [
+    courseBrowserDialog,
+    customWordsDialog,
+    ttsSettingsDialog,
+    dictDialog,
+    gameSettingsDialog,
+    statsDialog,
+    leaderboardDialog
+  ].forEach(dlg => {
+    if (!dlg) return;
+    dlg.addEventListener('close', resumePlayIfAllDialogsClosed);
   });
 
   // --- Инициализация приложения ---
@@ -6035,7 +7465,17 @@
     renderZtypeKeyboard();
     setTargetLanguage(state.targetLang);
     setNativeLanguage(state.nativeLang);
+
+    const sel = getActiveSelection();
+    if (sel.course && sel.mod && sel.lesson) {
+      const startWords = resolveLessonBaseWords(sel.course, sel.mod, sel.lesson, state.activeLessonIndex);
+      if (startWords.length > 0) {
+        updateHitSpotlightCard(startWords[0], false);
+      }
+    }
+
     updatePilotRankUI();
+    renderHomeDashboardWidgets();
     resizeCanvas();
     requestAnimationFrame(() => {
       resizeCanvas();
