@@ -1,0 +1,14 @@
+# Local Anki test decks & binary archives (keep out of Git / Vercel)
+kolodi_test/
+*.apkg
+*.colpkg
+
+# Dependencies & local environment
+node_modules/
+.venv/
+.vercel/
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite

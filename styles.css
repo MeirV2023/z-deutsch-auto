@@ -4532,8 +4532,1284 @@ body.mode-play .sidebar-right {
 .leader-score,
 .stat-tile-val,
 .qs-prog-text,
-.active-deck-prog-num {
+.active-deck-prog-num,
+.decks-prog-pct,
+.decks-hero-metric-row strong {
   font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   ПОЛНОЭКРАННАЯ СТРАНИЦА «МОИ КОЛОДЫ» / «КУРСЫ» (#decksPageView)
+   ========================================================================== */
+.home-dashboard-view {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.home-dashboard-view.hidden,
+.decks-page-view.hidden,
+.decks-overview-pane.hidden,
+.deck-detail-pane.hidden {
+  display: none !important;
+}
+
+.decks-page-view {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 18px;
+}
+
+.decks-page-layout {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+/* --- Левый сайдбар фильтров --- */
+.decks-filter-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 8px;
+}
+
+.decks-filter-card {
+  border-radius: 18px;
+  padding: 16px 14px;
+  background: linear-gradient(180deg, rgba(9, 16, 34, 0.94) 0%, rgba(7, 12, 26, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.decks-sidebar-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #f8fafc;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.filter-bars-icon {
+  color: #38bdf8;
+  font-size: 1rem;
+}
+
+.decks-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.decks-filter-label {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.decks-filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.decks-filter-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 11px;
+  border-radius: 11px;
+  border: 1.5px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.78);
+  color: #cbd5e1;
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: start;
+}
+
+.decks-filter-row:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #ffffff;
+  background: rgba(30, 41, 59, 0.9);
+}
+
+.decks-filter-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.decks-lang-code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 25px;
+  padding: 2px 5px;
+  border-radius: 6px;
+  background: rgba(30, 41, 59, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+.decks-src-icon {
+  font-size: 0.92rem;
+  width: 20px;
+  text-align: center;
+}
+
+.decks-filter-check {
+  opacity: 0;
+  color: #34d399;
+  font-weight: 900;
+  transition: opacity 0.14s ease;
+}
+
+.decks-filter-row.active {
+  border-color: rgba(52, 211, 153, 0.82);
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.24), rgba(15, 23, 42, 0.92));
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.2);
+}
+
+.decks-filter-row.active .decks-lang-code {
+  color: #a7f3d0;
+  border-color: rgba(52, 211, 153, 0.55);
+  background: rgba(6, 78, 59, 0.65);
+}
+
+.decks-filter-row.active .decks-filter-check {
+  opacity: 1;
+}
+
+.decks-level-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.decks-level-pill {
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(15, 23, 42, 0.85);
+  color: #cbd5e1;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.decks-level-pill:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  color: #ffffff;
+}
+
+.decks-level-pill.active {
+  border-color: #34d399;
+  background: rgba(16, 185, 129, 0.22);
+  color: #ecfdf5;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.22);
+}
+
+/* Карточка прогресса внизу левого сайдбара */
+.decks-sidebar-progress-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 15px 14px 48px;
+  background: linear-gradient(180deg, rgba(10, 18, 38, 0.95) 0%, rgba(18, 16, 48, 0.96) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.52);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.decks-sidebar-prog-head {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+
+.decks-sidebar-prog-big {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.decks-sidebar-prog-big strong {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.decks-sidebar-prog-big span {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.decks-sidebar-prog-sub {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.decks-prog-bar-row {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.decks-prog-track {
+  flex: 1 1 auto;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.92);
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.decks-prog-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #34d399 0%, #2dd4bf 60%, #38bdf8 100%);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.55);
+  transition: width 0.3s ease;
+}
+
+.decks-prog-pct {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  min-width: 34px;
+  text-align: end;
+}
+
+.decks-sidebar-planet-art {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40px;
+  background:
+    radial-gradient(65% 95% at 24% 112%, rgba(56, 189, 248, 0.45) 0%, rgba(14, 165, 233, 0.12) 55%, transparent 75%),
+    radial-gradient(60% 95% at 82% 108%, rgba(168, 85, 247, 0.42) 0%, transparent 72%);
+  border-top: 1px solid rgba(129, 140, 248, 0.18);
+  pointer-events: none;
+}
+
+/* --- Правая колонка страницы «Мои колоды» --- */
+.decks-main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 0;
+}
+
+/* Верхний Hero-баннер колод */
+.decks-hero-banner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 18px 20px;
+  background:
+    radial-gradient(52% 95% at 62% 110%, rgba(14, 165, 233, 0.25) 0%, transparent 72%),
+    linear-gradient(135deg, rgba(9, 17, 36, 0.95) 0%, rgba(13, 23, 48, 0.92) 58%, rgba(16, 20, 48, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+}
+
+.decks-hero-bg-fx {
+  position: absolute;
+  top: 6px;
+  right: 325px;
+  width: 210px;
+  height: 70px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.decks-bg-shuttle {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.55));
+}
+
+.decks-hero-left {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.decks-hero-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.decks-folder-hero-icon {
+  font-size: 2.35rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 12px rgba(251, 191, 36, 0.4));
+}
+
+.decks-hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.65rem, 2.3vw, 2.15rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.12;
+  margin: 0;
+}
+
+.decks-hero-subtitle {
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  color: #94a3b8;
+  margin: 3px 0 0;
+}
+
+.decks-hero-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.decks-search-box {
+  flex: 1 1 250px;
+  min-width: 210px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  background: rgba(7, 13, 27, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.decks-search-box:focus-within {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+}
+
+.decks-search-icon {
+  font-size: 0.92rem;
+  opacity: 0.75;
+}
+
+.decks-search-box input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #f8fafc;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+}
+
+.decks-search-box input::placeholder {
+  color: #64748b;
+}
+
+.decks-amber-anki-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(245, 158, 11, 0.72);
+  background: linear-gradient(135deg, rgba(120, 53, 15, 0.48), rgba(30, 27, 18, 0.88));
+  color: #fef3c7;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.16);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.decks-amber-anki-btn:hover {
+  transform: translateY(-1px);
+  border-color: #fbbf24;
+  background: linear-gradient(135deg, rgba(180, 83, 9, 0.55), rgba(45, 32, 15, 0.92));
+}
+
+.decks-emerald-create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(167, 243, 208, 0.85);
+  background: linear-gradient(180deg, #34d399 0%, #10b981 65%, #059669 100%);
+  color: #022c22;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 22px rgba(16, 185, 129, 0.4);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.decks-emerald-create-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+.decks-hero-right {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: rgba(8, 15, 32, 0.82);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+}
+
+.decks-hero-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 178px;
+}
+
+.decks-hero-metric-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 5px 10px;
+  border-radius: 9px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.decks-hero-metric-row strong {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.decks-mascot-wrap {
+  width: 86px;
+  height: 92px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 6px 16px rgba(56, 189, 248, 0.3));
+}
+
+.decks-mascot-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Полоса подвкладок [Курсы | Мои колоды] и переключателя [Карточки | Список] */
+.decks-subbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.decks-subtabs-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.decks-subtab-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(148, 163, 184, 0.25);
+  background: rgba(12, 20, 38, 0.86);
+  color: #cbd5e1;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.decks-subtab-pill:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  color: #ffffff;
+}
+
+.decks-subtab-pill.active {
+  border-color: #34d399;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(14, 165, 233, 0.22));
+  color: #ecfdf5;
+  box-shadow: 0 0 18px rgba(16, 185, 129, 0.25);
+}
+
+.decks-subtab-pill.return-battle {
+  border-color: rgba(56, 189, 248, 0.72);
+  background: rgba(14, 165, 233, 0.22);
+  color: #e0f2fe;
+}
+
+.decks-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px;
+  border-radius: 12px;
+  background: rgba(9, 16, 33, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.decks-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.decks-view-btn.active {
+  border-color: rgba(52, 211, 153, 0.65);
+  background: rgba(16, 185, 129, 0.2);
+  color: #ecfdf5;
+}
+
+/* --- Секции «Продолжить обучение» и «Все колоды» --- */
+.decks-overview-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.decks-section-block {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.decks-section-heading {
+  font-family: var(--font-heading);
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.decks-play-tri {
+  color: #34d399;
+  font-size: 0.95rem;
+}
+
+.decks-count-muted {
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 1.02rem;
+}
+
+/* Полоса 3 карточек «Продолжить обучение» */
+.decks-continue-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.deck-continue-card {
+  border-radius: 16px;
+  padding: 13px 14px;
+  background: linear-gradient(145deg, rgba(11, 19, 39, 0.94) 0%, rgba(8, 14, 30, 0.95) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.deck-continue-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.55);
+}
+
+.deck-continue-card.is-active {
+  border-color: rgba(52, 211, 153, 0.62);
+}
+
+.deck-icon-tile {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.55rem;
+  background: radial-gradient(circle at 30% 25%, rgba(56, 189, 248, 0.28), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.deck-icon-tile.art-auto {
+  background: radial-gradient(circle at 30% 25%, rgba(244, 63, 94, 0.34), rgba(24, 16, 36, 0.95));
+  border-color: rgba(251, 113, 133, 0.42);
+}
+
+.deck-icon-tile.art-anki {
+  background: radial-gradient(circle at 30% 25%, rgba(245, 158, 11, 0.34), rgba(34, 22, 16, 0.95));
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+.deck-icon-tile.art-travel {
+  background: radial-gradient(circle at 30% 25%, rgba(139, 92, 246, 0.38), rgba(22, 18, 44, 0.95));
+  border-color: rgba(167, 139, 250, 0.48);
+}
+
+.deck-icon-tile.art-food {
+  background: radial-gradient(circle at 30% 25%, rgba(249, 115, 22, 0.34), rgba(32, 19, 16, 0.95));
+  border-color: rgba(251, 146, 60, 0.45);
+}
+
+.deck-icon-tile.art-chat,
+.deck-icon-tile.art-it {
+  background: radial-gradient(circle at 30% 25%, rgba(16, 185, 129, 0.34), rgba(12, 30, 32, 0.95));
+  border-color: rgba(52, 211, 153, 0.45);
+}
+
+.deck-cont-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.deck-badges-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.deck-tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.deck-tag-badge.creator {
+  background: rgba(14, 165, 233, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.48);
+  color: #bae6fd;
+}
+
+.deck-tag-badge.anki {
+  background: rgba(139, 92, 246, 0.25);
+  border: 1px solid rgba(167, 139, 250, 0.58);
+  color: #ddd6fe;
+}
+
+.deck-tag-badge.cefr {
+  background: rgba(30, 41, 59, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.34);
+  color: #e2e8f0;
+}
+
+.deck-cont-title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deck-cont-meta {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deck-cont-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(52, 211, 153, 0.72);
+  background: rgba(16, 185, 129, 0.16);
+  color: #a7f3d0;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.deck-cont-btn:hover {
+  background: #10b981;
+  color: #022c22;
+}
+
+/* --- Сетка «Все колоды» (Карточки 3 в ряд или Список) --- */
+.decks-all-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.decks-all-grid.list-mode {
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.deck-full-card {
+  position: relative;
+  border-radius: 18px;
+  padding: 16px;
+  background: linear-gradient(165deg, rgba(11, 19, 39, 0.95) 0%, rgba(7, 13, 28, 0.96) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.deck-full-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.55);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.58), 0 0 22px rgba(56, 189, 248, 0.12);
+}
+
+.deck-full-card.is-active {
+  border-color: rgba(52, 211, 153, 0.65);
+}
+
+.deck-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.deck-card-head-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.deck-card-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.deck-more-btn {
+  width: 28px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.14s ease;
+}
+
+.deck-more-btn:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #ffffff;
+}
+
+.deck-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.22;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.deck-card-desc {
+  font-size: 0.81rem;
+  color: #94a3b8;
+  line-height: 1.38;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.2em;
+}
+
+/* Плашка предупреждения, если в старом импорте в браузере не было русского перевода */
+.deck-broken-ru-alert {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(180, 83, 9, 0.22);
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  color: #fef3c7;
+  font-size: 0.76rem;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.deck-broken-ru-alert button {
+  padding: 4px 9px;
+  border-radius: 7px;
+  border: 1px solid rgba(251, 113, 133, 0.65);
+  background: rgba(159, 18, 57, 0.45);
+  color: #ffe4e6;
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* 3 мини-плитки уроков внутри карточки колоды */
+.deck-lessons-preview-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.deck-mini-lesson {
+  padding: 7px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.78);
+  color: #cbd5e1;
+  text-align: start;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  transition: all 0.14s ease;
+}
+
+.deck-mini-lesson:hover {
+  border-color: rgba(56, 189, 248, 0.6);
+  background: rgba(30, 41, 59, 0.92);
+}
+
+.deck-mini-lesson.done {
+  border-color: rgba(52, 211, 153, 0.62);
+  background: linear-gradient(180deg, rgba(6, 78, 59, 0.36), rgba(15, 23, 42, 0.86));
+}
+
+.deck-mini-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.deck-mini-check {
+  color: #34d399;
+  font-weight: 900;
+}
+
+.deck-mini-sub {
+  font-size: 0.71rem;
+  color: #94a3b8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.22;
+}
+
+.deck-progress-block {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.deck-lessons-count-sub {
+  font-size: 0.76rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* Нижние кнопки карточки колоды: [▶ Продолжить] [📖 Открыть] [✏️ Редактировать] */
+.deck-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.deck-btn-primary {
+  flex: 1.15 1 110px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(167, 243, 208, 0.8);
+  background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+  color: #022c22;
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.28);
+  transition: all 0.14s ease;
+}
+
+.deck-btn-primary:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+.deck-btn-secondary {
+  flex: 1 1 88px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(15, 23, 42, 0.88);
+  color: #e2e8f0;
+  font-family: var(--font-ui);
+  font-size: 0.81rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.deck-btn-secondary:hover {
+  border-color: rgba(56, 189, 248, 0.6);
+  color: #ffffff;
+  background: rgba(30, 41, 59, 0.95);
+}
+
+/* Режим «Список» */
+.decks-all-grid.list-mode .deck-full-card {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  gap: 16px;
+}
+
+.decks-all-grid.list-mode .deck-card-top {
+  flex: 1.4 1 280px;
+}
+
+.decks-all-grid.list-mode .deck-lessons-preview-row {
+  display: none;
+}
+
+.decks-all-grid.list-mode .deck-progress-block {
+  flex: 0.9 1 190px;
+  margin-top: 0;
+}
+
+.decks-all-grid.list-mode .deck-card-actions {
+  flex: 0 0 auto;
+}
+
+/* --- Встроенная страница деталей и редактирования колоды (#deckDetailPane) --- */
+.deck-detail-pane {
+  border-radius: 20px;
+  padding: 20px;
+  background: linear-gradient(165deg, rgba(10, 18, 37, 0.96) 0%, rgba(7, 13, 27, 0.97) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.58);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.deck-detail-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.deck-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e0f2fe;
+  font-family: var(--font-ui);
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.deck-back-btn:hover {
+  border-color: #38bdf8;
+  background: rgba(14, 165, 233, 0.22);
+}
+
+.deck-detail-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.deck-detail-title-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1 1 320px;
+}
+
+.deck-detail-title {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 4px 0;
+}
+
+.deck-detail-desc {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.deck-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.deck-delete-danger-btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 113, 133, 0.55);
+  background: rgba(159, 18, 57, 0.28);
+  color: #fecdd3;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.deck-delete-danger-btn:hover {
+  background: rgba(225, 29, 72, 0.5);
+  color: #ffffff;
+}
+
+/* Встроенная панель редактирования личной/Anki колоды */
+.deck-inline-editor {
+  border-radius: 14px;
+  padding: 15px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.deck-editor-grid {
+  display: grid;
+  grid-template-columns: minmax(200px, 2fr) minmax(120px, 1fr);
+  gap: 10px;
+}
+
+.deck-subdeck-pills {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.deck-detail-lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+  gap: 9px;
+  max-height: 330px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.deck-detail-words-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.deck-words-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.deck-word-item {
+  padding: 9px 12px;
+  border-radius: 11px;
+  background: rgba(15, 23, 42, 0.84);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.deck-word-item-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.deck-word-foreign {
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.deck-word-trans {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fde047;
+}
+
+.deck-word-item-btns {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+/* Баннер умного распознавания Anki в окне загрузки .apkg */
+.anki-auto-banner {
+  padding: 9px 12px;
+  border-radius: 11px;
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(14, 165, 233, 0.18));
+  border: 1px solid rgba(52, 211, 153, 0.55);
+  color: #d1fae5;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.anki-manual-cols-accordion {
+  margin: 2px 0;
+}
+
+.anki-confirm-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* Языковые акценты заголовков:
@@ -4556,6 +5832,12 @@ html[lang="he"] .dialog-title,
 html[lang="he"] .catalog-course-title,
 html[lang="he"] .sleft-section-title,
 html[lang="he"] .hit-header-text,
+html[lang="he"] .decks-hero-title,
+html[lang="he"] .decks-section-heading,
+html[lang="he"] .deck-card-title,
+html[lang="he"] .deck-cont-title,
+html[lang="he"] .deck-detail-title,
+html[lang="he"] .decks-sidebar-heading,
 [dir="rtl"] .hero-line-white,
 [dir="rtl"] .hero-line-gold,
 [dir="rtl"] .bento-card-title,
@@ -4564,13 +5846,30 @@ html[lang="he"] .hit-header-text,
 [dir="rtl"] .dialog-title,
 [dir="rtl"] .catalog-course-title,
 [dir="rtl"] .sleft-section-title,
-[dir="rtl"] .hit-header-text {
+[dir="rtl"] .hit-header-text,
+[dir="rtl"] .decks-hero-title,
+[dir="rtl"] .decks-section-heading,
+[dir="rtl"] .deck-card-title,
+[dir="rtl"] .deck-cont-title,
+[dir="rtl"] .deck-detail-title,
+[dir="rtl"] .decks-sidebar-heading {
   font-family: 'Rubik', 'Noto Sans Hebrew', sans-serif;
   font-weight: 700;
   font-style: normal;
 }
 
 /* Адаптивность для ноутбуков и мобильных устройств */
+@media (max-width: 1180px) {
+  .decks-continue-grid,
+  .decks-all-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .decks-hero-bg-fx {
+    display: none;
+  }
+}
+
 @media (max-width: 1120px) {
   .home-bento-grid {
     grid-template-columns: 215px minmax(0, 1fr);
@@ -4584,9 +5883,38 @@ html[lang="he"] .hit-header-text,
   .quickstart-cards-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .decks-hero-banner {
+    grid-template-columns: 1fr;
+  }
+
+  .decks-hero-right {
+    justify-content: space-between;
+  }
 }
 
 @media (max-width: 960px) {
+  .decks-page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .decks-filter-sidebar {
+    position: static;
+  }
+
+  .decks-continue-grid,
+  .decks-all-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .decks-all-grid.list-mode .deck-full-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .deck-editor-grid {
+    grid-template-columns: 1fr;
+  }
   body.mode-play .sidebar-left,
   body.mode-play .sidebar-right {
     display: none !important;

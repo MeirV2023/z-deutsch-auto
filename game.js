@@ -357,6 +357,61 @@
       customHint: 'Формат: <code>слово;перевод</code> (каждое с новой строки). Игра разобьёт список на уроки по 12 слов + Босс-урок!',
       customSaveBtn: 'Создать личный курс и играть 🚀',
 
+      // Полноэкранная страница «Мои колоды» / «Курсы»
+      decksFiltersTitle: 'Фильтры',
+      decksLangHeader: 'Язык обучения',
+      decksSourceHeader: 'Источник',
+      decksSrcAll: 'Все',
+      decksSrcOfficial: 'От создателя',
+      decksSrcUser: 'Личные / Anki',
+      decksLevelHeader: 'Уровень',
+      decksLevelAll: 'Все',
+      decksSidebarProgTitle: 'Ваш прогресс',
+      decksOfTotalDecks: (n) => `из ${n} колод`,
+      decksInProgressSub: 'в процессе обучения',
+      decksHeroTitleMy: 'Мои колоды',
+      decksHeroTitleCourses: 'Курсы и колоды',
+      decksHeroSub: 'Ваши личные курсы и импортированные Anki-колоды',
+      decksSearchPlaceholder: 'Поиск по названию, описанию или словам...',
+      decksImportAnkiBtn: 'Импорт Anki (.apkg)',
+      decksCreateBtn: 'Создать колоду',
+      decksStatTotal: 'Всего колод',
+      decksStatLearned: 'Выучено слов',
+      decksStatStreak: 'Текущая серия',
+      decksViewGrid: 'Карточки',
+      decksViewList: 'Список',
+      decksReturnBattle: 'Вернуться в бой',
+      decksContinueHeading: 'Продолжить обучение',
+      decksAllHeading: 'Все колоды',
+      decksContinueBtn: '▶ Продолжить',
+      decksOpenBtn: '📖 Открыть',
+      decksEditBtn: '✏️ Редактировать',
+      decksCreatorBadge: '🏛️ ОТ СОЗДАТЕЛЯ',
+      decksAnkiBadge: 'ANKI',
+      decksCustomBadge: 'ЛИЧНАЯ',
+      decksLessonsProgress: (done, total) => `${done} из ${total} уроков`,
+      decksMetaWordsLessons: (words, done, total) => `${words} сл. · ${done} из ${total} уроков`,
+      decksMiniLessonNum: (n) => `Ур. ${n}`,
+      decksEmptyFiltered: 'По выбранным фильтрам колод не найдено. Сбросьте фильтр или загрузите файл Anki (.apkg)!',
+      decksBackToAll: '← Назад ко всем колодам',
+      decksAllSections: (n) => `Все разделы (${n})`,
+      decksLessonsSectionTitle: (n) => `🎯 Уроки колоды (${n})`,
+      decksWordsSectionTitle: (n) => `📖 Слова и переводы (${n})`,
+      decksShowMoreWords: (rem) => `Показать ещё слова (осталось ${rem})`,
+      decksEditorHeading: '✏️ Редактирование личной колоды',
+      decksEditorTitleLabel: 'Название колоды:',
+      decksEditorLevelLabel: 'Уровень (CEFR):',
+      decksEditorAddLabel: 'Добавить новые слова (слово;перевод — каждое с новой строки):',
+      decksEditorSaveBtn: '💾 Сохранить изменения',
+      decksEditorCancelBtn: 'Отмена',
+      decksBrokenRuWarn: '⚠️ Старый импорт без русских переводов: удалите эту колоду и загрузите .apkg заново — русский перевод подтянется автоматически!',
+      decksBrokenRuDeleteBtn: '🗑️ Удалить старую',
+      ankiAutoMappedBanner: (cardsCount, modelsCount, subdecksCount) => modelsCount > 1
+        ? `✨ Авто-распознано ${modelsCount} типов карточек (${subdecksCount || 1} разд.) · русский перевод найден для ${cardsCount} сл.`
+        : `✨ Поля слова и перевода определены автоматически (${cardsCount} сл.)`,
+      ankiManualColsSummary: '⚙️ Настроить поля карточек вручную',
+      ankiSaveToDecksBtn: '📁 Сохранить в «Мои колоды»',
+
       // Gemini 3.8 TTS
       ttsDialogTitle: '🎙️ Студия озвучки Gemini 3.8 TTS',
       ttsEnableLabel: 'Произношение слов при взрыве:',
@@ -565,6 +620,60 @@
       customHint: 'Format: <code>word;translation</code> (one per line). Automatically split into 12-word lessons + Boss Review!',
       customSaveBtn: 'Create Personal Course & Play 🚀',
 
+      decksFiltersTitle: 'Filters',
+      decksLangHeader: 'Target language',
+      decksSourceHeader: 'Source',
+      decksSrcAll: 'All',
+      decksSrcOfficial: 'Official',
+      decksSrcUser: 'My Decks / Anki',
+      decksLevelHeader: 'Level',
+      decksLevelAll: 'All',
+      decksSidebarProgTitle: 'Your Progress',
+      decksOfTotalDecks: (n) => `of ${n} decks`,
+      decksInProgressSub: 'currently in progress',
+      decksHeroTitleMy: 'My Decks',
+      decksHeroTitleCourses: 'Courses & Decks',
+      decksHeroSub: 'Your personal courses, official packs & imported Anki decks',
+      decksSearchPlaceholder: 'Search by title, description or words...',
+      decksImportAnkiBtn: 'Import Anki (.apkg)',
+      decksCreateBtn: 'Create Deck',
+      decksStatTotal: 'Total decks',
+      decksStatLearned: 'Words learned',
+      decksStatStreak: 'Current streak',
+      decksViewGrid: 'Cards',
+      decksViewList: 'List',
+      decksReturnBattle: 'Back to Battle',
+      decksContinueHeading: 'Continue Learning',
+      decksAllHeading: 'All Decks',
+      decksContinueBtn: '▶ Continue',
+      decksOpenBtn: '📖 Open',
+      decksEditBtn: '✏️ Edit',
+      decksCreatorBadge: '🏛️ OFFICIAL',
+      decksAnkiBadge: 'ANKI',
+      decksCustomBadge: 'CUSTOM',
+      decksLessonsProgress: (done, total) => `${done} of ${total} lessons`,
+      decksMetaWordsLessons: (words, done, total) => `${words} wds · ${done} of ${total} lessons`,
+      decksMiniLessonNum: (n) => `Ls. ${n}`,
+      decksEmptyFiltered: 'No decks match your filters. Reset filters or import an Anki (.apkg) file!',
+      decksBackToAll: '← Back to all decks',
+      decksAllSections: (n) => `All sections (${n})`,
+      decksLessonsSectionTitle: (n) => `🎯 Deck Lessons (${n})`,
+      decksWordsSectionTitle: (n) => `📖 Words & Translations (${n})`,
+      decksShowMoreWords: (rem) => `Show more words (${rem} remaining)`,
+      decksEditorHeading: '✏️ Edit Personal Deck',
+      decksEditorTitleLabel: 'Deck title:',
+      decksEditorLevelLabel: 'Level (CEFR):',
+      decksEditorAddLabel: 'Append new words (word;translation — one per line):',
+      decksEditorSaveBtn: '💾 Save Changes',
+      decksEditorCancelBtn: 'Cancel',
+      decksBrokenRuWarn: '⚠️ Legacy import missing translations: remove this deck and re-upload your .apkg file to auto-extract translations!',
+      decksBrokenRuDeleteBtn: '🗑️ Remove Old',
+      ankiAutoMappedBanner: (cardsCount, modelsCount, subdecksCount) => modelsCount > 1
+        ? `✨ Auto-detected ${modelsCount} note types (${subdecksCount || 1} sections) · translations extracted for ${cardsCount} words`
+        : `✨ Word & translation columns auto-detected (${cardsCount} words)`,
+      ankiManualColsSummary: '⚙️ Customize card columns manually',
+      ankiSaveToDecksBtn: '📁 Save to My Decks',
+
       ttsDialogTitle: '🎙️ Gemini 3.8 TTS Voice Studio',
       ttsEnableLabel: 'Pronounce words on explosion:',
       ttsOn: '🔊 Enabled',
@@ -771,6 +880,60 @@
       ankiParsedOk: (n) => `✓ נקראו ${n} כרטיסים`,
       customHint: 'פורמט: <code>מילה;תרגום</code> (כל מילה בשורה חדשה). המשחק יחלק אוטומטית לשלבים קצרים של 12 מילים + שלב בוס!',
       customSaveBtn: 'צור קורס אישי ושחק 🚀',
+
+      decksFiltersTitle: 'מסננים',
+      decksLangHeader: 'שפת לימוד',
+      decksSourceHeader: 'מקור',
+      decksSrcAll: 'הכל',
+      decksSrcOfficial: 'מהיוצר',
+      decksSrcUser: 'אישי / Anki',
+      decksLevelHeader: 'רמה',
+      decksLevelAll: 'הכל',
+      decksSidebarProgTitle: 'ההתקדמות שלך',
+      decksOfTotalDecks: (n) => `מתוך ${n} חפיסות`,
+      decksInProgressSub: 'בתהליך למידה',
+      decksHeroTitleMy: 'החפיסות שלי',
+      decksHeroTitleCourses: 'קורסים וחפיסות',
+      decksHeroSub: 'הקורסים האישיים שלך וחפיסות Anki שיובאו',
+      decksSearchPlaceholder: 'חיפוש לפי שם, תיאור או מילים...',
+      decksImportAnkiBtn: 'ייבוא Anki (.apkg)',
+      decksCreateBtn: 'צור חפיסה',
+      decksStatTotal: 'סה״כ חפיסות',
+      decksStatLearned: 'מילים שנלמדו',
+      decksStatStreak: 'רצף נוכחי',
+      decksViewGrid: 'כרטיסים',
+      decksViewList: 'רשימה',
+      decksReturnBattle: 'חזרה לקרב',
+      decksContinueHeading: 'המשך למידה',
+      decksAllHeading: 'כל החפיסות',
+      decksContinueBtn: '▶ המשך',
+      decksOpenBtn: '📖 פתח',
+      decksEditBtn: '✏️ ערוך',
+      decksCreatorBadge: '🏛️ מהיוצר',
+      decksAnkiBadge: 'ANKI',
+      decksCustomBadge: 'אישית',
+      decksLessonsProgress: (done, total) => `${done} מתוך ${total} שלבים`,
+      decksMetaWordsLessons: (words, done, total) => `${words} מ׳ · ${done} מתוך ${total} שלבים`,
+      decksMiniLessonNum: (n) => `שלב ${n}`,
+      decksEmptyFiltered: 'לא נמצאו חפיסות לפי הסינון שנבחר. אפסו סינון או העלו קובץ Anki (.apkg)!',
+      decksBackToAll: '← חזרה לכל החפיסות',
+      decksAllSections: (n) => `כל הפרקים (${n})`,
+      decksLessonsSectionTitle: (n) => `🎯 שלבי החפיסה (${n})`,
+      decksWordsSectionTitle: (n) => `📖 מילים ותרגומים (${n})`,
+      decksShowMoreWords: (rem) => `הצג עוד מילים (נותרו ${rem})`,
+      decksEditorHeading: '✏️ עריכת חפיסה אישית',
+      decksEditorTitleLabel: 'שם החפיסה:',
+      decksEditorLevelLabel: 'רמה (CEFR):',
+      decksEditorAddLabel: 'הוסף מילים חדשות (מילה;תרגום — כל מילה בשורה חדשה):',
+      decksEditorSaveBtn: '💾 שמור שינויים',
+      decksEditorCancelBtn: 'ביטול',
+      decksBrokenRuWarn: '⚠️ ייבוא ישן ללא תרגומים: מחקו חפיסה זו והעלו מחדש את קובץ ה-.apkg!',
+      decksBrokenRuDeleteBtn: '🗑️ מחק ישנה',
+      ankiAutoMappedBanner: (cardsCount, modelsCount, subdecksCount) => modelsCount > 1
+        ? `✨ זוהו אוטומטית ${modelsCount} סוגי כרטיסים (${subdecksCount || 1} פרקים) · תרגומים חולצו עבור ${cardsCount} מילים`
+        : `✨ שדות המילה והתרגום זוהו אוטומטית (${cardsCount} מילים)`,
+      ankiManualColsSummary: '⚙️ הגדרת עמודות כרטיס ידנית',
+      ankiSaveToDecksBtn: '📁 שמור ב״החפיסות שלי״',
 
       ttsDialogTitle: '🎙️ אולפן קריינות Gemini 3.8 TTS',
       ttsEnableLabel: 'הגיית מילים בעת פיצוץ:',
@@ -1813,9 +1976,21 @@
     lastSpotlightIsHit: false,
     lastPromoRect: null,
 
-    // Трёхступенчатый выбор курса -> модуля -> урока + пользовательские курсы Anki
+    // Трёхступенчатый выбор курса -> модуля -> урока + полноэкранная страница «Мои колоды»
     userCourses: [],
     catalogSourceFilter: 'all', // 'all' | 'official' | 'user'
+    homeSubView: 'home', // 'home' | 'decks'
+    decksNavMode: 'decks', // 'decks' | 'courses'
+    decksViewMode: 'grid', // 'grid' | 'list'
+    decksLevelFilter: 'all',
+    decksSearchQuery: '',
+    openedDeckId: '',
+    openedDeckEditMode: false,
+    openedDeckSubdeckFilter: 'all',
+    openedDeckWordQuery: '',
+    openedDeckWordsLimit: 120,
+    decksOpenedFromPlay: false,
+    ankiManualOverride: false,
     activeCourseId: initialSave.activeCourseId || '',
     activeModuleIndex: Number(initialSave.activeModuleIndex) || 0,
     activeLessonIndex: Number(initialSave.activeLessonIndex) || 0,
@@ -1969,6 +2144,9 @@
     if (dictDialog && dictDialog.open) {
       renderFullDictionary(dictSearchInput.value);
     }
+    if (state.homeSubView === 'decks') {
+      renderDecksPage();
+    }
     return nowPinned;
   }
 
@@ -1981,6 +2159,7 @@
     if (learnedWordsSet.has(key)) {
       updateTodayLearnedUI();
       renderHomeDashboardWidgets();
+      if (state.homeSubView === 'decks') renderDecksPage();
       return;
     }
 
@@ -2002,6 +2181,7 @@
     updateTodayLearnedUI();
     updatePilotRankUI();
     renderHomeDashboardWidgets();
+    if (state.homeSubView === 'decks') renderDecksPage();
   }
 
   // --- Хелперы локализации и каталога курсов ---
@@ -2326,8 +2506,11 @@
   const btnDownloadSampleApkg = document.getElementById('btnDownloadSampleApkg');
   const ankiParseStatus = document.getElementById('ankiParseStatus');
   const ankiPreviewBox = document.getElementById('ankiPreviewBox');
+  const ankiAutoMapBanner = document.getElementById('ankiAutoMapBanner');
   const labelAnkiDeckName = document.getElementById('labelAnkiDeckName');
   const ankiDeckTitleInput = document.getElementById('ankiDeckTitleInput');
+  const ankiManualColsDetails = document.getElementById('ankiManualColsDetails');
+  const ankiManualColsSummary = document.getElementById('ankiManualColsSummary');
   const labelAnkiFront = document.getElementById('labelAnkiFront');
   const labelAnkiBack = document.getElementById('labelAnkiBack');
   const ankiFrontSelect = document.getElementById('ankiFrontSelect');
@@ -2335,6 +2518,7 @@
   const btnSwapAnkiCols = document.getElementById('btnSwapAnkiCols');
   const ankiSampleCards = document.getElementById('ankiSampleCards');
   const btnConfirmAnkiImport = document.getElementById('btnConfirmAnkiImport');
+  const btnSaveAnkiToDecks = document.getElementById('btnSaveAnkiToDecks');
   const manualDeckTitleInput = document.getElementById('manualDeckTitleInput');
   const customDialogHint = document.getElementById('customDialogHint');
   const customWordsInput = document.getElementById('customWordsInput');
@@ -2371,7 +2555,57 @@
   const labelDictPinnedFilter = document.getElementById('labelDictPinnedFilter');
   const dictFullList = document.getElementById('dictFullList');
 
-  // --- Z-LINGO 2.0: DOM-элементы Главной панели и Космической Академии ---
+  // --- Z-LINGO 2.0: DOM-элементы Главной панели, страницы «Мои колоды» и Космической Академии ---
+  const homeDashboardView = document.getElementById('homeDashboardView');
+  const decksPageView = document.getElementById('decksPageView');
+  const labelDecksFiltersTitle = document.getElementById('labelDecksFiltersTitle');
+  const labelDecksLangHeader = document.getElementById('labelDecksLangHeader');
+  const labelDecksSourceHeader = document.getElementById('labelDecksSourceHeader');
+  const decksSourceFilterGroup = document.getElementById('decksSourceFilterGroup');
+  const labelDecksSrcAll = document.getElementById('labelDecksSrcAll');
+  const labelDecksSrcOfficial = document.getElementById('labelDecksSrcOfficial');
+  const labelDecksSrcUser = document.getElementById('labelDecksSrcUser');
+  const labelDecksLevelHeader = document.getElementById('labelDecksLevelHeader');
+  const decksLevelFilterGroup = document.getElementById('decksLevelFilterGroup');
+  const btnDecksLevelAll = document.getElementById('btnDecksLevelAll');
+  const labelDecksSidebarProgTitle = document.getElementById('labelDecksSidebarProgTitle');
+  const decksSidebarStartedNum = document.getElementById('decksSidebarStartedNum');
+  const decksSidebarTotalLabel = document.getElementById('decksSidebarTotalLabel');
+  const labelDecksInProgressSub = document.getElementById('labelDecksInProgressSub');
+  const decksSidebarProgFill = document.getElementById('decksSidebarProgFill');
+  const decksSidebarProgPct = document.getElementById('decksSidebarProgPct');
+  const decksHeroTitle = document.getElementById('decksHeroTitle');
+  const decksHeroSubtitle = document.getElementById('decksHeroSubtitle');
+  const decksSearchInput = document.getElementById('decksSearchInput');
+  const btnDecksImportAnki = document.getElementById('btnDecksImportAnki');
+  const labelDecksImportAnkiBtn = document.getElementById('labelDecksImportAnkiBtn');
+  const btnDecksCreateDeck = document.getElementById('btnDecksCreateDeck');
+  const labelDecksCreateBtn = document.getElementById('labelDecksCreateBtn');
+  const labelDecksStatTotal = document.getElementById('labelDecksStatTotal');
+  const decksHeroTotalCount = document.getElementById('decksHeroTotalCount');
+  const labelDecksStatLearned = document.getElementById('labelDecksStatLearned');
+  const decksHeroLearnedCount = document.getElementById('decksHeroLearnedCount');
+  const labelDecksStatStreak = document.getElementById('labelDecksStatStreak');
+  const decksHeroStreakCount = document.getElementById('decksHeroStreakCount');
+  const btnDecksSubtabCourses = document.getElementById('btnDecksSubtabCourses');
+  const labelDecksSubtabCourses = document.getElementById('labelDecksSubtabCourses');
+  const btnDecksSubtabMyDecks = document.getElementById('btnDecksSubtabMyDecks');
+  const labelDecksSubtabMyDecks = document.getElementById('labelDecksSubtabMyDecks');
+  const btnDecksReturnBattle = document.getElementById('btnDecksReturnBattle');
+  const labelDecksReturnBattle = document.getElementById('labelDecksReturnBattle');
+  const btnDecksViewGrid = document.getElementById('btnDecksViewGrid');
+  const labelDecksViewGrid = document.getElementById('labelDecksViewGrid');
+  const btnDecksViewList = document.getElementById('btnDecksViewList');
+  const labelDecksViewList = document.getElementById('labelDecksViewList');
+  const decksOverviewPane = document.getElementById('decksOverviewPane');
+  const decksContinueSection = document.getElementById('decksContinueSection');
+  const labelDecksContinueHeading = document.getElementById('labelDecksContinueHeading');
+  const decksContinueGrid = document.getElementById('decksContinueGrid');
+  const labelDecksAllHeading = document.getElementById('labelDecksAllHeading');
+  const decksAllCountBadge = document.getElementById('decksAllCountBadge');
+  const decksAllGrid = document.getElementById('decksAllGrid');
+  const deckDetailPane = document.getElementById('deckDetailPane');
+
   const homeBrandLogo = document.getElementById('homeBrandLogo');
   const homeBrandSub = document.getElementById('homeBrandSub');
   const btnNavHome = document.getElementById('btnNavHome');
@@ -3713,6 +3947,14 @@
     sound.init();
     sound.playWarpLaunch();
 
+    state.decksOpenedFromPlay = false;
+    state.homeSubView = 'home';
+    if (homeDashboardView) homeDashboardView.classList.remove('hidden');
+    if (decksPageView) decksPageView.classList.add('hidden');
+    if (btnNavHome) btnNavHome.classList.add('active');
+    if (btnNavCourses) btnNavCourses.classList.remove('active');
+    if (btnNavDecks) btnNavDecks.classList.remove('active');
+
     state.screenMode = 'play';
     state.warpTimer = 0.65;
     state.demoWords = [];
@@ -3729,6 +3971,7 @@
     state.running = false;
     state.paused = false;
     state.gameOver = false;
+    state.decksOpenedFromPlay = false;
     state.activeWords = [];
     state.lockedWordId = null;
     state.activeQuiz = null;
@@ -3747,6 +3990,7 @@
     document.body.classList.remove('mode-play');
     document.body.classList.add('mode-title');
 
+    switchHomeSubView('home');
     resizeCanvas();
     updatePilotRankUI();
     renderLevelSidebar();
@@ -3759,7 +4003,7 @@
 
   // Мгновенный запуск промо-боя на стартовом экране: сразу спавнит слова в центре космоса, чтобы корабль стрелял с первой секунды!
   function seedTitleDemoWords() {
-    if (state.screenMode !== 'title') return;
+    if (state.screenMode !== 'title' || state.homeSubView !== 'home') return;
     const bounds = getPlayBounds();
     const corridorH = bounds.bottom - bounds.top;
     if (corridorH < 64) return;
@@ -4262,10 +4506,41 @@
     if (ankiDropSub) ankiDropSub.textContent = tr.ankiDropSub;
     if (btnDownloadSampleApkg) btnDownloadSampleApkg.textContent = tr.sampleApkgBtn;
     if (labelAnkiDeckName) labelAnkiDeckName.textContent = tr.ankiDeckNameLabel;
+    if (ankiManualColsSummary) ankiManualColsSummary.textContent = tr.ankiManualColsSummary;
     if (labelAnkiFront) labelAnkiFront.textContent = tr.ankiFrontLabel;
     if (labelAnkiBack) labelAnkiBack.textContent = tr.ankiBackLabel;
+    if (btnSaveAnkiToDecks) btnSaveAnkiToDecks.textContent = tr.ankiSaveToDecksBtn;
     if (customDialogHint) customDialogHint.innerHTML = tr.customHint;
     if (btnSaveCustomWords) btnSaveCustomWords.textContent = tr.customSaveBtn;
+
+    // Полноэкранная страница «Мои колоды» / «Курсы»
+    if (labelDecksFiltersTitle) labelDecksFiltersTitle.textContent = tr.decksFiltersTitle;
+    if (labelDecksLangHeader) labelDecksLangHeader.textContent = tr.decksLangHeader;
+    if (labelDecksSourceHeader) labelDecksSourceHeader.textContent = tr.decksSourceHeader;
+    if (labelDecksSrcAll) labelDecksSrcAll.textContent = tr.decksSrcAll;
+    if (labelDecksSrcOfficial) labelDecksSrcOfficial.textContent = tr.decksSrcOfficial;
+    if (labelDecksSrcUser) labelDecksSrcUser.textContent = tr.decksSrcUser;
+    if (labelDecksLevelHeader) labelDecksLevelHeader.textContent = tr.decksLevelHeader;
+    if (btnDecksLevelAll) btnDecksLevelAll.textContent = tr.decksLevelAll;
+    if (labelDecksSidebarProgTitle) labelDecksSidebarProgTitle.textContent = tr.decksSidebarProgTitle;
+    if (labelDecksInProgressSub) labelDecksInProgressSub.textContent = tr.decksInProgressSub;
+    if (decksHeroTitle) {
+      decksHeroTitle.textContent = state.decksNavMode === 'courses' ? tr.decksHeroTitleCourses : tr.decksHeroTitleMy;
+    }
+    if (decksHeroSubtitle) decksHeroSubtitle.textContent = tr.decksHeroSub;
+    if (decksSearchInput) decksSearchInput.placeholder = tr.decksSearchPlaceholder;
+    if (labelDecksImportAnkiBtn) labelDecksImportAnkiBtn.textContent = tr.decksImportAnkiBtn;
+    if (labelDecksCreateBtn) labelDecksCreateBtn.textContent = tr.decksCreateBtn;
+    if (labelDecksStatTotal) labelDecksStatTotal.textContent = tr.decksStatTotal;
+    if (labelDecksStatLearned) labelDecksStatLearned.textContent = tr.decksStatLearned;
+    if (labelDecksStatStreak) labelDecksStatStreak.textContent = tr.decksStatStreak;
+    if (labelDecksSubtabCourses) labelDecksSubtabCourses.textContent = tr.navCourses;
+    if (labelDecksSubtabMyDecks) labelDecksSubtabMyDecks.textContent = tr.navDecks;
+    if (labelDecksReturnBattle) labelDecksReturnBattle.textContent = tr.decksReturnBattle;
+    if (labelDecksViewGrid) labelDecksViewGrid.textContent = tr.decksViewGrid;
+    if (labelDecksViewList) labelDecksViewList.textContent = tr.decksViewList;
+    if (labelDecksContinueHeading) labelDecksContinueHeading.textContent = tr.decksContinueHeading;
+    if (labelDecksAllHeading) labelDecksAllHeading.textContent = tr.decksAllHeading;
 
     if (btnSpeedMode) btnSpeedMode.textContent = preset.label;
     if (btnTargetLangHud) btnTargetLangHud.textContent = `${targetMeta.flag} ${targetMeta.code}`;
@@ -4285,6 +4560,9 @@
     updatePinnedCountUI();
     updateStudyModeButtonsUI();
     renderHomeDashboardWidgets();
+    if (state.homeSubView === 'decks') {
+      renderDecksPage();
+    }
     refreshHitSpotlightPinState();
     onTtsStatusChanged();
   }
@@ -4554,132 +4832,982 @@
     }
   }
 
-  function renderCourseBrowserModal() {
-    if (!catalogCoursesContainer) return;
-    const tr = t();
-    const allForLang = getCoursesForTargetLang(state.targetLang);
+  // ==========================================================================
+  // ПОЛНОЭКРАННАЯ СТРАНИЦА «МОИ КОЛОДЫ» / «КУРСЫ» (БЕЗ ВСПЛЫВАЮЩИХ ОКОН!)
+  // ==========================================================================
+  function getDeckArtClass(course) {
+    if (!course) return '';
+    if (course.source === 'user') return course.originType === 'anki' ? 'art-anki' : 'art-it';
+    const id = String(course.id || '').toLowerCase();
+    const icon = course.icon || '';
+    if (id.includes('auto') || icon.includes('🚗') || icon.includes('🚙')) return 'art-auto';
+    if (id.includes('travel') || icon.includes('✈')) return 'art-travel';
+    if (id.includes('food') || icon.includes('🥐') || icon.includes('🍽')) return 'art-food';
+    if (id.includes('it') || id.includes('chat') || icon.includes('💻') || icon.includes('💬')) return 'art-it';
+    return '';
+  }
 
-    document.querySelectorAll('.source-tab-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.sourceFilter === state.catalogSourceFilter);
-    });
+  function normalizeCefrBucket(levelTag) {
+    const raw = String(levelTag || '').toUpperCase().replace(/-/g, '–').trim();
+    if (!raw) return 'A2–B1';
+    if (raw.includes('A1') && raw.includes('A2')) return 'A1–A2';
+    if (raw.includes('A2') && raw.includes('B1')) return 'A2–B1';
+    if (raw.includes('B1') && raw.includes('B2')) return 'B1–B2';
+    if (raw === 'A1') return 'A1–A2';
+    if (raw === 'A2') return 'A2–B1';
+    if (raw === 'B1') return 'B1';
+    if (raw === 'B2' || raw.includes('C1')) return 'B1–B2';
+    return raw;
+  }
 
-    const filtered = allForLang.filter(c => {
-      if (state.catalogSourceFilter === 'official') return c.source !== 'user';
-      if (state.catalogSourceFilter === 'user') return c.source === 'user';
-      return true;
-    });
+  function courseMatchesLevelFilter(course, filterVal) {
+    if (!filterVal || filterVal === 'all') return true;
+    const raw = String(course.levelTag || '').toUpperCase().replace(/-/g, '–');
+    const bucket = normalizeCefrBucket(course.levelTag);
+    if (bucket === filterVal) return true;
+    if (filterVal === 'B1' && raw.includes('B1')) return true;
+    if (filterVal === 'A1–A2' && (raw.includes('A1') || raw === 'A2')) return true;
+    if (filterVal === 'A2–B1' && (raw.includes('A2') || raw === 'A1–B1')) return true;
+    if (filterVal === 'B1–B2' && (raw.includes('B2') || raw.includes('C1'))) return true;
+    return false;
+  }
 
-    catalogCoursesContainer.innerHTML = '';
-    if (filtered.length === 0) {
-      const empty = document.createElement('div');
-      empty.className = 'kill-feed-empty';
-      empty.textContent = tr.emptyUserCourses;
-      catalogCoursesContainer.appendChild(empty);
-      return;
+  function computeDeckStats(course) {
+    const allWords = getAllWordsInCourse(course);
+    const totalWords = allWords.length;
+    let learnedInCourse = 0;
+    for (const w of allWords) {
+      if (learnedWordsSet.has(makeWordKey(course.targetLang, w))) {
+        learnedInCourse++;
+      }
     }
 
-    filtered.forEach(course => {
-      const isUser = course.source === 'user';
-      const card = document.createElement('div');
-      card.className = 'catalog-course-card' +
-        (isUser ? ' user-course' : '') +
-        (course.id === state.activeCourseId ? ' active-course' : '');
+    const flatLessons = [];
+    let nextModIdx = 0;
+    let nextLessonIdx = 0;
+    let foundNext = false;
 
-      const originLabel = !isUser
-        ? tr.originOfficial
-        : (course.originType === 'anki' ? tr.originUserAnki : tr.originUserCustom);
-      const totalWords = getAllWordsInCourse(course).length;
+    (course.modules || []).forEach((mod, mIdx) => {
+      (mod.lessons || []).forEach((ls, lIdx) => {
+        const isDone = state.completedLessonIds.has(ls.id);
+        if (!foundNext && !isDone) {
+          nextModIdx = mIdx;
+          nextLessonIdx = lIdx;
+          foundNext = true;
+        }
+        flatLessons.push({ mod, ls, mIdx, lIdx, isDone });
+      });
+    });
 
-      const header = document.createElement('div');
-      header.className = 'catalog-course-header';
-      header.innerHTML = `
-        <div class="catalog-course-title-group">
-          <div class="catalog-course-badges">
-            <span class="origin-badge ${isUser ? 'user' : 'official'}">${escapeHtml(originLabel)}</span>
-            <span class="level-tag-pill">${escapeHtml(course.levelTag || 'A1–B1')}</span>
-            <span class="sidebar-count">${escapeHtml(tr.wordsCount(totalWords))}</span>
+    const regularLessons = flatLessons.filter(x => !x.ls.isBoss);
+    const trackedLessons = regularLessons.length > 0 ? regularLessons : flatLessons;
+    const totalLessons = Math.max(1, trackedLessons.length);
+    const doneLessons = trackedLessons.filter(x => x.isDone).length;
+
+    const lessonRatio = doneLessons / totalLessons;
+    const wordRatio = totalWords > 0 ? learnedInCourse / totalWords : 0;
+    const pct = Math.min(100, Math.round(Math.max(lessonRatio, wordRatio) * 100));
+    const isStarted = doneLessons > 0 || learnedInCourse > 0 || course.id === state.activeCourseId;
+
+    return {
+      totalWords,
+      learnedInCourse,
+      totalLessons,
+      doneLessons,
+      pct,
+      isStarted,
+      nextModIdx,
+      nextLessonIdx,
+      previewLessons: trackedLessons.slice(0, 3)
+    };
+  }
+
+  function switchHomeSubView(subView) {
+    state.homeSubView = subView === 'decks' ? 'decks' : 'home';
+    const onDecks = state.homeSubView === 'decks';
+
+    if (homeDashboardView) homeDashboardView.classList.toggle('hidden', onDecks);
+    if (decksPageView) decksPageView.classList.toggle('hidden', !onDecks);
+
+    if (btnNavHome) btnNavHome.classList.toggle('active', !onDecks);
+    if (btnNavCourses) btnNavCourses.classList.toggle('active', onDecks && state.decksNavMode === 'courses');
+    if (btnNavDecks) btnNavDecks.classList.toggle('active', onDecks && state.decksNavMode !== 'courses');
+
+    if (btnDecksReturnBattle) {
+      btnDecksReturnBattle.classList.toggle('hidden', !state.decksOpenedFromPlay);
+    }
+
+    if (arcadeTitleScreen) {
+      arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    if (onDecks) {
+      state.demoWords = [];
+      state.demoTargetId = null;
+      renderDecksPage();
+    } else if (state.screenMode === 'title') {
+      resizeCanvas();
+      requestAnimationFrame(() => {
+        resizeCanvas();
+        seedTitleDemoWords();
+      });
+    }
+  }
+
+  function openDecksPage(opts = {}) {
+    if (courseBrowserDialog && courseBrowserDialog.open) {
+      courseBrowserDialog.close();
+    }
+
+    if (state.screenMode === 'play') {
+      state.paused = true;
+      state.decksOpenedFromPlay = true;
+      state.screenMode = 'title';
+      centerOverlay.classList.add('hidden');
+      if (arcadeTitleScreen) arcadeTitleScreen.hidden = false;
+      document.body.classList.remove('mode-play');
+      document.body.classList.add('mode-title');
+    }
+
+    if (opts.sourceFilter) {
+      state.catalogSourceFilter = opts.sourceFilter;
+    }
+    if (opts.navMode) {
+      state.decksNavMode = opts.navMode;
+    }
+    if (typeof opts.openCourseId === 'string') {
+      state.openedDeckId = opts.openCourseId;
+    } else {
+      state.openedDeckId = '';
+    }
+    state.openedDeckEditMode = Boolean(opts.editMode);
+    state.openedDeckSubdeckFilter = 'all';
+    state.openedDeckWordQuery = '';
+    state.openedDeckWordsLimit = 120;
+
+    switchHomeSubView('decks');
+  }
+
+  function resumeBattleFromDecksPage() {
+    if (!state.decksOpenedFromPlay) {
+      launchFromTitleScreen();
+      return;
+    }
+    state.decksOpenedFromPlay = false;
+    state.homeSubView = 'home';
+    if (homeDashboardView) homeDashboardView.classList.remove('hidden');
+    if (decksPageView) decksPageView.classList.add('hidden');
+    if (btnNavHome) btnNavHome.classList.add('active');
+    if (btnNavCourses) btnNavCourses.classList.remove('active');
+    if (btnNavDecks) btnNavDecks.classList.remove('active');
+
+    state.screenMode = 'play';
+    if (arcadeTitleScreen) arcadeTitleScreen.hidden = true;
+    document.body.classList.remove('mode-title');
+    document.body.classList.add('mode-play');
+    resizeCanvas();
+
+    if (state.running && !state.gameOver) {
+      state.paused = false;
+      centerOverlay.classList.add('hidden');
+    } else {
+      showLevelIntroOverlay();
+    }
+  }
+
+  function launchDeckLessonFromPage(courseId, modIdx = 0, lessonIdx = 0) {
+    state.decksOpenedFromPlay = false;
+    selectCourseLesson(courseId, modIdx, lessonIdx, false);
+    if (state.screenMode === 'title') {
+      launchFromTitleScreen();
+    } else {
+      startLevelNow();
+    }
+  }
+
+  async function removeUserDeckById(courseId) {
+    if (!window.AnkiImporter) return;
+    await window.AnkiImporter.deleteUserCourse(courseId);
+    state.userCourses = state.userCourses.filter(x => x.id !== courseId);
+    if (state.activeCourseId === courseId) {
+      state.activeCourseId = '';
+      ensureValidCourseSelection();
+    }
+    if (state.openedDeckId === courseId) {
+      state.openedDeckId = '';
+      state.openedDeckEditMode = false;
+    }
+    renderLevelSidebar();
+    applyStaticUILocalization();
+    renderDecksPage();
+  }
+
+  function renderDeckDetailPane(course, stats) {
+    if (!deckDetailPane || !course) return;
+    const tr = t();
+    const isUser = course.source === 'user';
+    const artCls = getDeckArtClass(course);
+    const originBadgeCls = !isUser ? 'creator' : 'anki';
+    const originText = !isUser
+      ? tr.decksCreatorBadge
+      : (course.originType === 'anki' ? tr.decksAnkiBadge : tr.decksCustomBadge);
+    const iconChar = course.icon || (isUser ? '📦' : '📚');
+    const cTitle = getLocalizedField(course, 'titles');
+    const cDesc = getLocalizedField(course, 'descriptions');
+    const health = isUser && window.AnkiImporter && window.AnkiImporter.inspectDeckTranslationHealth
+      ? window.AnkiImporter.inspectDeckTranslationHealth(course)
+      : null;
+
+    deckDetailPane.innerHTML = '';
+
+    // 1. Верхняя полоса с возвратом ко всем колодам и быстрыми действиями
+    const topbar = document.createElement('div');
+    topbar.className = 'deck-detail-topbar';
+
+    const backBtn = document.createElement('button');
+    backBtn.type = 'button';
+    backBtn.className = 'deck-back-btn';
+    backBtn.textContent = tr.decksBackToAll;
+    backBtn.addEventListener('click', () => {
+      state.openedDeckId = '';
+      state.openedDeckEditMode = false;
+      renderDecksPage();
+    });
+    topbar.appendChild(backBtn);
+
+    const actionsWrap = document.createElement('div');
+    actionsWrap.className = 'deck-detail-actions';
+
+    const playBtn = document.createElement('button');
+    playBtn.type = 'button';
+    playBtn.className = 'deck-btn-primary';
+    playBtn.textContent = tr.decksContinueBtn;
+    playBtn.addEventListener('click', () => {
+      launchDeckLessonFromPage(course.id, stats.nextModIdx, stats.nextLessonIdx);
+    });
+    actionsWrap.appendChild(playBtn);
+
+    if (isUser) {
+      const editToggleBtn = document.createElement('button');
+      editToggleBtn.type = 'button';
+      editToggleBtn.className = 'deck-btn-secondary';
+      editToggleBtn.textContent = tr.decksEditBtn;
+      editToggleBtn.addEventListener('click', () => {
+        state.openedDeckEditMode = !state.openedDeckEditMode;
+        renderDeckDetailPane(course, stats);
+      });
+      actionsWrap.appendChild(editToggleBtn);
+
+      const delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'deck-delete-danger-btn';
+      delBtn.textContent = tr.deleteDeckBtn;
+      delBtn.addEventListener('click', () => removeUserDeckById(course.id));
+      actionsWrap.appendChild(delBtn);
+    }
+
+    topbar.appendChild(actionsWrap);
+    deckDetailPane.appendChild(topbar);
+
+    // 2. Шапка колоды и прогресс
+    const heroRow = document.createElement('div');
+    heroRow.className = 'deck-detail-hero';
+    heroRow.innerHTML = `
+      <div class="deck-detail-title-wrap">
+        <div class="deck-icon-tile ${artCls}">${escapeHtml(iconChar)}</div>
+        <div>
+          <div class="deck-badges-inline">
+            <span class="deck-tag-badge ${originBadgeCls}">${escapeHtml(originText)}</span>
+            <span class="deck-tag-badge cefr">${escapeHtml(course.levelTag || 'A2–B1')}</span>
+            <span class="deck-tag-badge cefr">${escapeHtml(tr.wordsCount(stats.totalWords))}</span>
           </div>
-          <div class="catalog-course-title">${escapeHtml(course.icon || '📚')} ${escapeHtml(getLocalizedField(course, 'titles'))}</div>
-          <div class="catalog-course-desc">${escapeHtml(getLocalizedField(course, 'descriptions'))}</div>
+          <h2 class="deck-detail-title">${escapeHtml(cTitle)}</h2>
+          <p class="deck-detail-desc">${escapeHtml(cDesc)}</p>
+        </div>
+      </div>
+      <div style="min-width: 220px; flex: 0 1 280px;">
+        <div class="decks-prog-bar-row">
+          <div class="decks-prog-track">
+            <div class="decks-prog-fill" style="width: ${stats.pct}%;"></div>
+          </div>
+          <span class="decks-prog-pct">${stats.pct}%</span>
+        </div>
+        <div class="deck-lessons-count-sub" style="margin-top: 5px;">
+          ${escapeHtml(tr.decksLessonsProgress(stats.doneLessons, stats.totalLessons))}
+        </div>
+      </div>
+    `;
+    deckDetailPane.appendChild(heroRow);
+
+    if (health && health.brokenRu && state.nativeLang === 'ru') {
+      const warnEl = document.createElement('div');
+      warnEl.className = 'deck-broken-ru-alert';
+      warnEl.innerHTML = `<span>${escapeHtml(tr.decksBrokenRuWarn)}</span>`;
+      const fixDelBtn = document.createElement('button');
+      fixDelBtn.type = 'button';
+      fixDelBtn.textContent = tr.decksBrokenRuDeleteBtn;
+      fixDelBtn.addEventListener('click', () => removeUserDeckById(course.id));
+      warnEl.appendChild(fixDelBtn);
+      deckDetailPane.appendChild(warnEl);
+    }
+
+    // 3. Встроенный редактор колоды (для личных и Anki-колод)
+    if (isUser && state.openedDeckEditMode) {
+      const editorBox = document.createElement('div');
+      editorBox.className = 'deck-inline-editor';
+      editorBox.innerHTML = `
+        <div style="font-weight: 800; color: #6ee7b7; font-size: 0.95rem;">${escapeHtml(tr.decksEditorHeading)}</div>
+        <div class="deck-editor-grid">
+          <div class="anki-field-col">
+            <label>${escapeHtml(tr.decksEditorTitleLabel)}</label>
+            <input type="text" class="dict-search-input" id="inlineEditDeckTitle" value="${escapeHtml(cTitle)}" />
+          </div>
+          <div class="anki-field-col">
+            <label>${escapeHtml(tr.decksEditorLevelLabel)}</label>
+            <select class="dict-search-input" id="inlineEditDeckLevel">
+              ${['A1–A2', 'A2–B1', 'B1', 'B1–B2', 'C1'].map(lv =>
+                `<option value="${lv}"${(course.levelTag || 'A2–B1') === lv ? ' selected' : ''}>${lv}</option>`
+              ).join('')}
+            </select>
+          </div>
+        </div>
+        <div class="anki-field-col">
+          <label>${escapeHtml(tr.decksEditorAddLabel)}</label>
+          <textarea class="custom-words-textarea" id="inlineEditAppendWords" rows="4" placeholder="der Bahnhof;вокзал&#10;abfahren;отправляться"></textarea>
+        </div>
+        <div class="deck-card-actions" style="justify-content: flex-start;">
+          <button type="button" class="deck-btn-primary" style="flex: 0 0 auto;" id="btnInlineSaveDeck">${escapeHtml(tr.decksEditorSaveBtn)}</button>
+          <button type="button" class="deck-btn-secondary" style="flex: 0 0 auto;" id="btnInlineCancelDeck">${escapeHtml(tr.decksEditorCancelBtn)}</button>
+        </div>
+      `;
+      deckDetailPane.appendChild(editorBox);
+
+      const saveBtn = editorBox.querySelector('#btnInlineSaveDeck');
+      const cancelBtn = editorBox.querySelector('#btnInlineCancelDeck');
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          state.openedDeckEditMode = false;
+          renderDeckDetailPane(course, stats);
+        });
+      }
+      if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+          const titleInp = editorBox.querySelector('#inlineEditDeckTitle');
+          const levelSel = editorBox.querySelector('#inlineEditDeckLevel');
+          const appendArea = editorBox.querySelector('#inlineEditAppendWords');
+          const existingWords = getAllWordsInCourse(course);
+          const addedWords = [];
+          if (appendArea && appendArea.value.trim()) {
+            for (const line of appendArea.value.split(/\r?\n/)) {
+              const trimmed = line.trim();
+              if (!trimmed || (!trimmed.includes(';') && !trimmed.includes('\t'))) continue;
+              const delim = trimmed.includes(';') ? ';' : '\t';
+              const parts = trimmed.split(delim).map(s => s.trim());
+              if (parts.length >= 2 && parts[0] && parts[1]) {
+                const wEntry = window.AnkiImporter.normalizeCardToWordEntry(parts[0], parts[1], course.targetLang, parts[2] || '');
+                if (wEntry) addedWords.push(wEntry);
+              }
+            }
+          }
+          const combined = [...existingWords, ...addedWords];
+          if (combined.length === 0) return;
+
+          const rebuilt = window.AnkiImporter.buildUserCourse({
+            id: course.id,
+            title: (titleInp && titleInp.value.trim()) || cTitle,
+            targetLang: course.targetLang,
+            originType: course.originType || 'custom',
+            levelTag: (levelSel && levelSel.value) || course.levelTag || 'A2–B1',
+            createdAt: course.createdAt,
+            words: combined,
+            lessonSize: 12
+          });
+          await window.AnkiImporter.saveUserCourse(rebuilt);
+          state.userCourses = state.userCourses.map(c => c.id === course.id ? rebuilt : c);
+          state.openedDeckEditMode = false;
+          renderLevelSidebar();
+          applyStaticUILocalization();
+          renderDecksPage();
+        });
+      }
+    }
+
+    // 4. Фильтр разделов / подколод (особенно удобно для Anki с 10 подколодами!)
+    const modules = course.modules || [];
+    if (modules.length > 1) {
+      const pillsRow = document.createElement('div');
+      pillsRow.className = 'deck-subdeck-pills';
+
+      const allPill = document.createElement('button');
+      allPill.type = 'button';
+      allPill.className = 'decks-level-pill' + (state.openedDeckSubdeckFilter === 'all' ? ' active' : '');
+      allPill.textContent = tr.decksAllSections(modules.length);
+      allPill.addEventListener('click', () => {
+        state.openedDeckSubdeckFilter = 'all';
+        state.openedDeckWordsLimit = 120;
+        renderDeckDetailPane(course, stats);
+      });
+      pillsRow.appendChild(allPill);
+
+      modules.forEach((mod, mIdx) => {
+        const p = document.createElement('button');
+        p.type = 'button';
+        const key = String(mIdx);
+        p.className = 'decks-level-pill' + (state.openedDeckSubdeckFilter === key ? ' active' : '');
+        p.textContent = getLocalizedField(mod, 'titles');
+        p.addEventListener('click', () => {
+          state.openedDeckSubdeckFilter = key;
+          state.openedDeckWordsLimit = 120;
+          renderDeckDetailPane(course, stats);
+        });
+        pillsRow.appendChild(p);
+      });
+
+      deckDetailPane.appendChild(pillsRow);
+    }
+
+    // 5. Все уроки выбранного раздела (клик сразу запускает урок!)
+    const visibleModules = state.openedDeckSubdeckFilter === 'all'
+      ? modules.map((m, idx) => ({ mod: m, mIdx: idx }))
+      : modules
+        .map((m, idx) => ({ mod: m, mIdx: idx }))
+        .filter(item => String(item.mIdx) === state.openedDeckSubdeckFilter);
+
+    const allVisibleLessons = [];
+    visibleModules.forEach(({ mod, mIdx }) => {
+      (mod.lessons || []).forEach((ls, lIdx) => {
+        allVisibleLessons.push({ mod, mIdx, ls, lIdx });
+      });
+    });
+
+    const lessonsHeading = document.createElement('h3');
+    lessonsHeading.className = 'decks-section-heading';
+    lessonsHeading.style.fontSize = '1.02rem';
+    lessonsHeading.textContent = tr.decksLessonsSectionTitle(allVisibleLessons.length);
+    deckDetailPane.appendChild(lessonsHeading);
+
+    const lessonsGrid = document.createElement('div');
+    lessonsGrid.className = 'deck-detail-lessons-grid';
+    allVisibleLessons.forEach(({ mod, mIdx, ls, lIdx }) => {
+      const isDone = state.completedLessonIds.has(ls.id);
+      const lTitle = getLocalizedField(ls, 'titles');
+      const resolvedCount = ls.isBoss ? 14 : (ls.words || []).length;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'deck-mini-lesson' + (isDone ? ' done' : '');
+      btn.innerHTML = `
+        <div class="deck-mini-top">
+          <span>${escapeHtml(ls.isBoss ? lTitle : `${tr.decksMiniLessonNum(lIdx + 1)} · ${tr.wordsShort(resolvedCount)}`)}</span>
+          ${isDone ? '<span class="deck-mini-check">✓</span>' : ''}
+        </div>
+        <div class="deck-mini-sub">${escapeHtml(ls.isBoss ? tr.bossMetaLabel : `${getLocalizedField(mod, 'titles')} — ${lTitle}`)}</div>
+      `;
+      btn.addEventListener('click', () => {
+        launchDeckLessonFromPage(course.id, mIdx, lIdx);
+      });
+      lessonsGrid.appendChild(btn);
+    });
+    deckDetailPane.appendChild(lessonsGrid);
+
+    // 6. Список слов и переводов с живым поиском, озвучкой и звёздочкой ⭐
+    const wordsBox = document.createElement('div');
+    wordsBox.className = 'deck-detail-words-box';
+
+    const sectionWords = [];
+    const seenRaw = new Set();
+    visibleModules.forEach(({ mod }) => {
+      (mod.lessons || []).forEach(ls => {
+        if (ls.isBoss) return;
+        (ls.words || []).forEach(w => {
+          const k = w.raw || w.word;
+          if (!seenRaw.has(k)) {
+            seenRaw.add(k);
+            sectionWords.push(w);
+          }
+        });
+      });
+    });
+
+    const q = (state.openedDeckWordQuery || '').trim().toLowerCase();
+    const filteredWords = q
+      ? sectionWords.filter(w => {
+          const trMap = w.translations || {};
+          return (
+            String(w.raw || '').toLowerCase().includes(q) ||
+            String(w.word || '').toLowerCase().includes(q) ||
+            String(trMap.ru || '').toLowerCase().includes(q) ||
+            String(trMap.en || '').toLowerCase().includes(q) ||
+            String(trMap.he || '').toLowerCase().includes(q)
+          );
+        })
+      : sectionWords;
+
+    const wordsTopBar = document.createElement('div');
+    wordsTopBar.className = 'deck-detail-topbar';
+    wordsTopBar.style.borderBottom = 'none';
+    wordsTopBar.style.paddingBottom = '0';
+
+    const wTitle = document.createElement('h3');
+    wTitle.className = 'decks-section-heading';
+    wTitle.style.fontSize = '1.02rem';
+    wTitle.textContent = tr.decksWordsSectionTitle(filteredWords.length);
+    wordsTopBar.appendChild(wTitle);
+
+    const wSearch = document.createElement('input');
+    wSearch.type = 'search';
+    wSearch.className = 'dict-search-input';
+    wSearch.style.maxWidth = '320px';
+    wSearch.placeholder = tr.dictSearchPlaceholder;
+    wSearch.value = state.openedDeckWordQuery;
+    wSearch.addEventListener('input', () => {
+      state.openedDeckWordQuery = wSearch.value;
+      state.openedDeckWordsLimit = 120;
+      renderDeckDetailPane(course, stats);
+      const nextInput = deckDetailPane.querySelector('.deck-detail-words-box input[type="search"]');
+      if (nextInput) {
+        nextInput.focus();
+        const len = nextInput.value.length;
+        nextInput.setSelectionRange(len, len);
+      }
+    });
+    wordsTopBar.appendChild(wSearch);
+    wordsBox.appendChild(wordsTopBar);
+
+    const wordsGrid = document.createElement('div');
+    wordsGrid.className = 'deck-words-list-grid';
+    const visibleSlice = filteredWords.slice(0, state.openedDeckWordsLimit);
+
+    visibleSlice.forEach(item => {
+      const wCard = document.createElement('div');
+      wCard.className = 'deck-word-item';
+      const pinned = isEntryPinned(item, course.targetLang);
+      const transStr = getWordTranslation(item);
+      const rtlAttr = isRtlTranslation(item) ? ' dir="rtl"' : ' dir="ltr"';
+
+      wCard.innerHTML = `
+        <div class="deck-word-item-main">
+          <div class="deck-word-foreign" dir="ltr">${escapeHtml(item.raw)}</div>
+          <div class="deck-word-trans"${rtlAttr}>${escapeHtml(transStr)}</div>
+        </div>
+        <div class="deck-word-item-btns">
+          <button type="button" class="hud-btn btn-speak-w" title="TTS">🔊</button>
+          <button type="button" class="pin-star-btn${pinned ? ' pinned' : ''}" title="${escapeHtml(tr.pinTooltip)}">${pinned ? '⭐' : '☆'}</button>
+          ${isUser && state.openedDeckEditMode ? '<button type="button" class="hud-btn btn-del-w" title="Удалить слово">✕</button>' : ''}
         </div>
       `;
 
-      if (isUser) {
-        const delBtn = document.createElement('button');
-        delBtn.type = 'button';
-        delBtn.className = 'delete-course-btn';
-        delBtn.textContent = tr.deleteDeckBtn;
-        delBtn.addEventListener('click', async (e) => {
-          e.stopPropagation();
-          await window.AnkiImporter.deleteUserCourse(course.id);
-          state.userCourses = state.userCourses.filter(x => x.id !== course.id);
-          if (state.activeCourseId === course.id) {
-            state.activeCourseId = '';
-            ensureValidCourseSelection();
-          }
-          renderLevelSidebar();
-          applyStaticUILocalization();
-          renderCourseBrowserModal();
+      const speakBtn = wCard.querySelector('.btn-speak-w');
+      if (speakBtn) {
+        speakBtn.addEventListener('click', () => {
+          sound.init();
+          ttsManager.speak(item.withArticle || item.word, course.targetLang, true);
         });
-        header.appendChild(delBtn);
+      }
+      const starBtn = wCard.querySelector('.pin-star-btn');
+      if (starBtn) {
+        starBtn.addEventListener('click', () => {
+          togglePinWord(item, course.targetLang);
+        });
+      }
+      const delWordBtn = wCard.querySelector('.btn-del-w');
+      if (delWordBtn) {
+        delWordBtn.addEventListener('click', async () => {
+          const remaining = getAllWordsInCourse(course).filter(x => (x.raw || x.word) !== (item.raw || item.word));
+          if (remaining.length === 0) return;
+          const rebuilt = window.AnkiImporter.buildUserCourse({
+            id: course.id,
+            title: cTitle,
+            targetLang: course.targetLang,
+            originType: course.originType || 'custom',
+            levelTag: course.levelTag || 'A2–B1',
+            createdAt: course.createdAt,
+            words: remaining,
+            lessonSize: 12
+          });
+          await window.AnkiImporter.saveUserCourse(rebuilt);
+          state.userCourses = state.userCourses.map(c => c.id === course.id ? rebuilt : c);
+          renderLevelSidebar();
+          renderDecksPage();
+        });
       }
 
-      card.appendChild(header);
+      wordsGrid.appendChild(wCard);
+    });
 
-      (course.modules || []).forEach((mod, mIdx) => {
-        const modBlock = document.createElement('div');
-        modBlock.className = 'catalog-module-block';
+    wordsBox.appendChild(wordsGrid);
 
-        const modTitleEl = document.createElement('div');
-        modTitleEl.className = 'catalog-module-title';
-        modTitleEl.textContent = getLocalizedField(mod, 'titles');
-        modBlock.appendChild(modTitleEl);
-
-        const lessonsRow = document.createElement('div');
-        lessonsRow.className = 'catalog-lessons-row';
-
-        (mod.lessons || []).forEach((ls, lIdx) => {
-          const isDone = state.completedLessonIds.has(ls.id);
-          const lBtn = document.createElement('button');
-          lBtn.type = 'button';
-          lBtn.className = 'catalog-lesson-btn' +
-            (ls.isBoss ? ' boss' : '') +
-            (isDone ? ' completed' : '');
-
-          const lTitle = getLocalizedField(ls, 'titles');
-          const metaStr = ls.isBoss
-            ? tr.bossMetaLabel
-            : tr.wordsCount((ls.words || []).length);
-
-          lBtn.innerHTML = `
-            <span class="catalog-lesson-top">${isDone ? '✓ ' : ''}${escapeHtml(ls.isBoss ? lTitle : `${lIdx + 1}. ${lTitle}`)}</span>
-            <span class="catalog-lesson-meta">${escapeHtml(metaStr)}</span>
-          `;
-
-          lBtn.addEventListener('click', () => {
-            courseBrowserDialog.close();
-            selectCourseLesson(course.id, mIdx, lIdx, false);
-            if (state.screenMode === 'title') {
-              launchFromTitleScreen();
-            }
-          });
-
-          lessonsRow.appendChild(lBtn);
-        });
-
-        modBlock.appendChild(lessonsRow);
-        card.appendChild(modBlock);
+    if (filteredWords.length > visibleSlice.length) {
+      const moreBtn = document.createElement('button');
+      moreBtn.type = 'button';
+      moreBtn.className = 'deck-btn-secondary';
+      moreBtn.style.alignSelf = 'center';
+      moreBtn.textContent = tr.decksShowMoreWords(filteredWords.length - visibleSlice.length);
+      moreBtn.addEventListener('click', () => {
+        state.openedDeckWordsLimit += 150;
+        renderDeckDetailPane(course, stats);
       });
+      wordsBox.appendChild(moreBtn);
+    }
 
-      catalogCoursesContainer.appendChild(card);
+    deckDetailPane.appendChild(wordsBox);
+  }
+
+  function renderDecksPage() {
+    if (!decksPageView) return;
+    const tr = t();
+    const allForLang = getCoursesForTargetLang(state.targetLang);
+    const statsById = new Map();
+    let startedCount = 0;
+
+    allForLang.forEach(c => {
+      const st = computeDeckStats(c);
+      statsById.set(c.id, st);
+      if (st.isStarted) startedCount++;
+    });
+
+    // 1. Синхронизация шапки, подвкладок и боковых фильтров
+    if (decksHeroTitle) {
+      decksHeroTitle.textContent = state.decksNavMode === 'courses' ? tr.decksHeroTitleCourses : tr.decksHeroTitleMy;
+    }
+    if (btnNavCourses && state.homeSubView === 'decks') {
+      btnNavCourses.classList.toggle('active', state.decksNavMode === 'courses');
+    }
+    if (btnNavDecks && state.homeSubView === 'decks') {
+      btnNavDecks.classList.toggle('active', state.decksNavMode !== 'courses');
+    }
+    if (btnDecksSubtabCourses) {
+      btnDecksSubtabCourses.classList.toggle('active', state.decksNavMode === 'courses');
+    }
+    if (btnDecksSubtabMyDecks) {
+      btnDecksSubtabMyDecks.classList.toggle('active', state.decksNavMode !== 'courses');
+    }
+    if (btnDecksReturnBattle) {
+      btnDecksReturnBattle.classList.toggle('hidden', !state.decksOpenedFromPlay);
+    }
+    if (btnDecksViewGrid) {
+      btnDecksViewGrid.classList.toggle('active', state.decksViewMode !== 'list');
+    }
+    if (btnDecksViewList) {
+      btnDecksViewList.classList.toggle('active', state.decksViewMode === 'list');
+    }
+    if (decksAllGrid) {
+      decksAllGrid.classList.toggle('list-mode', state.decksViewMode === 'list');
+    }
+
+    if (decksSourceFilterGroup) {
+      decksSourceFilterGroup.querySelectorAll('.decks-source-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.sourceFilter === state.catalogSourceFilter);
+      });
+    }
+    if (decksLevelFilterGroup) {
+      decksLevelFilterGroup.querySelectorAll('.decks-level-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.levelFilter === state.decksLevelFilter);
+      });
+    }
+
+    // 2. Карточка прогресса в левом сайдбаре и 3 метрики в Hero-баннере
+    const totalDecksCount = allForLang.length;
+    const sidebarPct = totalDecksCount > 0 ? Math.round((startedCount / totalDecksCount) * 100) : 0;
+    if (decksSidebarStartedNum) decksSidebarStartedNum.textContent = String(startedCount);
+    if (decksSidebarTotalLabel) decksSidebarTotalLabel.textContent = tr.decksOfTotalDecks(totalDecksCount);
+    if (decksSidebarProgFill) decksSidebarProgFill.style.width = `${sidebarPct}%`;
+    if (decksSidebarProgPct) decksSidebarProgPct.textContent = `${sidebarPct}%`;
+
+    if (decksHeroTotalCount) decksHeroTotalCount.textContent = String(totalDecksCount);
+    if (decksHeroLearnedCount) decksHeroLearnedCount.textContent = learnedWordsSet.size.toLocaleString();
+    if (decksHeroStreakCount) decksHeroStreakCount.textContent = tr.streakDays(dailyProgress.streakDays || 1);
+
+    // 3. Если открыта конкретная колода — показываем встроенную страницу деталей вместо обзора
+    if (state.openedDeckId) {
+      const openedCourse = allForLang.find(c => c.id === state.openedDeckId);
+      if (openedCourse) {
+        if (decksOverviewPane) decksOverviewPane.classList.add('hidden');
+        if (deckDetailPane) deckDetailPane.classList.remove('hidden');
+        renderDeckDetailPane(openedCourse, statsById.get(openedCourse.id) || computeDeckStats(openedCourse));
+        return;
+      }
+      state.openedDeckId = '';
+      state.openedDeckEditMode = false;
+    }
+
+    if (decksOverviewPane) decksOverviewPane.classList.remove('hidden');
+    if (deckDetailPane) deckDetailPane.classList.add('hidden');
+
+    // 4. Полоса «▶ Продолжить обучение» (до 3 колод: активная + пользовательские Anki + начатые)
+    if (decksContinueGrid && decksContinueSection) {
+      const prioritized = allForLang.slice().sort((a, b) => {
+        const aActive = a.id === state.activeCourseId ? 1 : 0;
+        const bActive = b.id === state.activeCourseId ? 1 : 0;
+        if (aActive !== bActive) return bActive - aActive;
+        const aUser = a.source === 'user' ? 1 : 0;
+        const bUser = b.source === 'user' ? 1 : 0;
+        if (aUser !== bUser) return bUser - aUser;
+        const stA = statsById.get(a.id);
+        const stB = statsById.get(b.id);
+        return (stB ? stB.pct : 0) - (stA ? stA.pct : 0);
+      }).slice(0, 3);
+
+      decksContinueSection.classList.toggle('hidden', prioritized.length === 0);
+      decksContinueGrid.innerHTML = '';
+
+      prioritized.forEach(course => {
+        const st = statsById.get(course.id) || computeDeckStats(course);
+        const isUser = course.source === 'user';
+        const artCls = getDeckArtClass(course);
+        const badgeCls = !isUser ? 'creator' : 'anki';
+        const badgeText = !isUser
+          ? tr.decksCreatorBadge
+          : (course.originType === 'anki' ? tr.decksAnkiBadge : tr.decksCustomBadge);
+        const iconChar = course.icon || (isUser ? '📦' : '📚');
+        const titleStr = getLocalizedField(course, 'titles');
+
+        const contCard = document.createElement('div');
+        contCard.className = 'deck-continue-card' + (course.id === state.activeCourseId ? ' is-active' : '');
+        contCard.innerHTML = `
+          <div class="deck-icon-tile ${artCls}">${escapeHtml(iconChar)}</div>
+          <div class="deck-cont-body">
+            <div class="deck-badges-inline">
+              <span class="deck-tag-badge ${badgeCls}">${escapeHtml(badgeText)}</span>
+              <span class="deck-tag-badge cefr">${escapeHtml(course.levelTag || 'A2–B1')}</span>
+            </div>
+            <div class="deck-cont-title" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</div>
+            <div class="deck-cont-meta">${escapeHtml(tr.decksMetaWordsLessons(st.totalWords.toLocaleString(), st.doneLessons, st.totalLessons))}</div>
+            <div class="decks-prog-bar-row">
+              <div class="decks-prog-track">
+                <div class="decks-prog-fill" style="width: ${st.pct}%;"></div>
+              </div>
+              <span class="decks-prog-pct">${st.pct}%</span>
+            </div>
+          </div>
+          <button type="button" class="deck-cont-btn">${escapeHtml(tr.decksContinueBtn)}</button>
+        `;
+
+        const btn = contCard.querySelector('.deck-cont-btn');
+        if (btn) {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            launchDeckLessonFromPage(course.id, st.nextModIdx, st.nextLessonIdx);
+          });
+        }
+        contCard.addEventListener('click', () => {
+          state.openedDeckId = course.id;
+          state.openedDeckEditMode = false;
+          state.openedDeckSubdeckFilter = 'all';
+          state.openedDeckWordQuery = '';
+          state.openedDeckWordsLimit = 120;
+          renderDecksPage();
+        });
+        decksContinueGrid.appendChild(contCard);
+      });
+    }
+
+    // 5. Сетка «📚 Все колоды (N)» с учётом фильтров источника, уровня CEFR и строки поиска
+    const searchQ = (state.decksSearchQuery || '').trim().toLowerCase();
+    const filteredDecks = allForLang.filter(course => {
+      if (state.catalogSourceFilter === 'official' && course.source === 'user') return false;
+      if (state.catalogSourceFilter === 'user' && course.source !== 'user') return false;
+      if (!courseMatchesLevelFilter(course, state.decksLevelFilter)) return false;
+
+      if (!searchQ) return true;
+      const tStr = getLocalizedField(course, 'titles').toLowerCase();
+      const dStr = getLocalizedField(course, 'descriptions').toLowerCase();
+      if (tStr.includes(searchQ) || dStr.includes(searchQ)) return true;
+
+      const words = getAllWordsInCourse(course);
+      for (const w of words) {
+        if (
+          String(w.raw || '').toLowerCase().includes(searchQ) ||
+          String((w.translations && w.translations.ru) || '').toLowerCase().includes(searchQ) ||
+          String((w.translations && w.translations.en) || '').toLowerCase().includes(searchQ)
+        ) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    // Сортируем так, чтобы личные/Anki и активная колода были сразу на виду в первом ряду (как на макете!)
+    const orderedDecks = filteredDecks.slice().sort((a, b) => {
+      const aFirst = a.id === state.activeCourseId ? 2 : (a.source === 'user' ? 1 : 0);
+      const bFirst = b.id === state.activeCourseId ? 2 : (b.source === 'user' ? 1 : 0);
+      if (aFirst !== bFirst) return bFirst - aFirst;
+      return 0;
+    });
+
+    if (decksAllCountBadge) {
+      decksAllCountBadge.textContent = `(${orderedDecks.length})`;
+    }
+    if (!decksAllGrid) return;
+    decksAllGrid.innerHTML = '';
+
+    if (orderedDecks.length === 0) {
+      const emptyBox = document.createElement('div');
+      emptyBox.className = 'kill-feed-empty';
+      emptyBox.style.gridColumn = '1 / -1';
+      emptyBox.style.padding = '28px';
+      emptyBox.textContent = state.catalogSourceFilter === 'user' && !searchQ && state.decksLevelFilter === 'all'
+        ? tr.emptyUserCourses
+        : tr.decksEmptyFiltered;
+      decksAllGrid.appendChild(emptyBox);
+      return;
+    }
+
+    orderedDecks.forEach(course => {
+      const st = statsById.get(course.id) || computeDeckStats(course);
+      const isUser = course.source === 'user';
+      const artCls = getDeckArtClass(course);
+      const badgeCls = !isUser ? 'creator' : 'anki';
+      const badgeText = !isUser
+        ? tr.decksCreatorBadge
+        : (course.originType === 'anki' ? tr.decksAnkiBadge : tr.decksCustomBadge);
+      const iconChar = course.icon || (isUser ? '📦' : '📚');
+      const titleStr = getLocalizedField(course, 'titles');
+      const descStr = getLocalizedField(course, 'descriptions');
+      const health = isUser && window.AnkiImporter && window.AnkiImporter.inspectDeckTranslationHealth
+        ? window.AnkiImporter.inspectDeckTranslationHealth(course)
+        : null;
+
+      const card = document.createElement('article');
+      card.className = 'deck-full-card' + (course.id === state.activeCourseId ? ' is-active' : '');
+
+      const topDiv = document.createElement('div');
+      topDiv.className = 'deck-card-top';
+      topDiv.innerHTML = `
+        <div class="deck-icon-tile ${artCls}">${escapeHtml(iconChar)}</div>
+        <div class="deck-card-head-info">
+          <div class="deck-card-top-bar">
+            <div class="deck-badges-inline">
+              <span class="deck-tag-badge ${badgeCls}">${escapeHtml(badgeText)}</span>
+              <span class="deck-tag-badge cefr">${escapeHtml(course.levelTag || 'A2–B1')}</span>
+            </div>
+            <button type="button" class="deck-more-btn" aria-label="More">•••</button>
+          </div>
+          <h3 class="deck-card-title">${escapeHtml(titleStr)}</h3>
+          <p class="deck-card-desc">${escapeHtml(descStr)}</p>
+        </div>
+      `;
+      const moreBtn = topDiv.querySelector('.deck-more-btn');
+      if (moreBtn) {
+        moreBtn.addEventListener('click', () => {
+          state.openedDeckId = course.id;
+          state.openedDeckEditMode = isUser;
+          state.openedDeckSubdeckFilter = 'all';
+          state.openedDeckWordQuery = '';
+          state.openedDeckWordsLimit = 120;
+          renderDecksPage();
+        });
+      }
+      card.appendChild(topDiv);
+
+      if (health && health.brokenRu && state.nativeLang === 'ru') {
+        const warnRow = document.createElement('div');
+        warnRow.className = 'deck-broken-ru-alert';
+        warnRow.innerHTML = `<span>${escapeHtml(tr.decksBrokenRuWarn)}</span>`;
+        const quickDel = document.createElement('button');
+        quickDel.type = 'button';
+        quickDel.textContent = tr.decksBrokenRuDeleteBtn;
+        quickDel.addEventListener('click', () => removeUserDeckById(course.id));
+        warnRow.appendChild(quickDel);
+        card.appendChild(warnRow);
+      }
+
+      // 3 мини-плитки первых уроков колоды
+      if (st.previewLessons.length > 0) {
+        const previewRow = document.createElement('div');
+        previewRow.className = 'deck-lessons-preview-row';
+        st.previewLessons.forEach((pItem, idx) => {
+          const miniBtn = document.createElement('button');
+          miniBtn.type = 'button';
+          miniBtn.className = 'deck-mini-lesson' + (pItem.isDone ? ' done' : '');
+          const cleanLessonName = getLocalizedField(pItem.ls, 'titles');
+          miniBtn.innerHTML = `
+            <div class="deck-mini-top">
+              <span>${escapeHtml(tr.decksMiniLessonNum(idx + 1))}</span>
+              ${pItem.isDone ? '<span class="deck-mini-check">✓</span>' : ''}
+            </div>
+            <div class="deck-mini-sub">${escapeHtml(cleanLessonName)}</div>
+          `;
+          miniBtn.addEventListener('click', () => {
+            launchDeckLessonFromPage(course.id, pItem.mIdx, pItem.lIdx);
+          });
+          previewRow.appendChild(miniBtn);
+        });
+        card.appendChild(previewRow);
+      }
+
+      // Полоса прогресса + счётчик уроков
+      const progBlock = document.createElement('div');
+      progBlock.className = 'deck-progress-block';
+      progBlock.innerHTML = `
+        <div class="decks-prog-bar-row">
+          <div class="decks-prog-track">
+            <div class="decks-prog-fill" style="width: ${st.pct}%;"></div>
+          </div>
+          <span class="decks-prog-pct">${st.pct}%</span>
+        </div>
+        <div class="deck-lessons-count-sub">${escapeHtml(tr.decksLessonsProgress(st.doneLessons, st.totalLessons))}</div>
+      `;
+      card.appendChild(progBlock);
+
+      // Кнопки карточки: [▶ Продолжить] [📖 Открыть] + [✏️ Редактировать] для личных/Anki
+      const actRow = document.createElement('div');
+      actRow.className = 'deck-card-actions';
+
+      const contBtn = document.createElement('button');
+      contBtn.type = 'button';
+      contBtn.className = 'deck-btn-primary';
+      contBtn.textContent = tr.decksContinueBtn;
+      contBtn.addEventListener('click', () => {
+        launchDeckLessonFromPage(course.id, st.nextModIdx, st.nextLessonIdx);
+      });
+      actRow.appendChild(contBtn);
+
+      const openBtn = document.createElement('button');
+      openBtn.type = 'button';
+      openBtn.className = 'deck-btn-secondary';
+      openBtn.textContent = tr.decksOpenBtn;
+      openBtn.addEventListener('click', () => {
+        state.openedDeckId = course.id;
+        state.openedDeckEditMode = false;
+        state.openedDeckSubdeckFilter = 'all';
+        state.openedDeckWordQuery = '';
+        state.openedDeckWordsLimit = 120;
+        renderDecksPage();
+        if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      actRow.appendChild(openBtn);
+
+      if (isUser) {
+        const editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.className = 'deck-btn-secondary';
+        editBtn.textContent = tr.decksEditBtn;
+        editBtn.addEventListener('click', () => {
+          state.openedDeckId = course.id;
+          state.openedDeckEditMode = true;
+          state.openedDeckSubdeckFilter = 'all';
+          state.openedDeckWordQuery = '';
+          state.openedDeckWordsLimit = 120;
+          renderDecksPage();
+          if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        actRow.appendChild(editBtn);
+      }
+
+      card.appendChild(actRow);
+      decksAllGrid.appendChild(card);
     });
   }
 
-  function openCourseCatalogModal(initialFilter = 'all') {
-    if (state.running && !state.paused) state.paused = true;
-    state.catalogSourceFilter = initialFilter;
-    renderCourseBrowserModal();
-    courseBrowserDialog.showModal();
+  function renderCourseBrowserModal() {
+    renderDecksPage();
+  }
+
+  function openCourseCatalogModal(initialFilter = 'all', navMode = 'decks') {
+    openDecksPage({
+      sourceFilter: initialFilter,
+      navMode
+    });
   }
 
   // ==========================================================================
@@ -5169,6 +6297,36 @@
       (statsDialog && statsDialog.open) ||
       (leaderboardDialog && leaderboardDialog.open)
     ) {
+      return;
+    }
+
+    const activeEl = document.activeElement;
+    const isTypingInInput = Boolean(
+      activeEl && (
+        activeEl.tagName === 'INPUT' ||
+        activeEl.tagName === 'TEXTAREA' ||
+        activeEl.tagName === 'SELECT' ||
+        activeEl.isContentEditable
+      )
+    );
+
+    if (state.screenMode === 'title' && state.homeSubView === 'decks') {
+      if (e.key === 'Escape' && !isTypingInInput) {
+        e.preventDefault();
+        if (state.openedDeckId) {
+          state.openedDeckId = '';
+          state.openedDeckEditMode = false;
+          renderDecksPage();
+        } else if (state.decksOpenedFromPlay) {
+          resumeBattleFromDecksPage();
+        } else {
+          switchHomeSubView('home');
+        }
+      }
+      return;
+    }
+
+    if (isTypingInInput) {
       return;
     }
 
@@ -5730,7 +6888,9 @@
     state.ship.recoil = Math.max(0, state.ship.recoil - dt * 35);
 
     if (state.screenMode === 'title') {
-      updateTitleDemo(dt, now);
+      if (state.homeSubView === 'home') {
+        updateTitleDemo(dt, now);
+      }
       return;
     }
 
@@ -5863,6 +7023,11 @@
         ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
         ctx.fill();
       }
+    }
+
+    // На полноэкранной странице «Мои колоды» рендерим только звёздное небо и туманности на фоне
+    if (state.screenMode === 'title' && state.homeSubView !== 'home') {
+      return;
     }
 
     const hasClip = Boolean(bounds.clipRect);
@@ -6475,25 +7640,38 @@
     }
   }
 
+  function extractAnkiWordsForCurrentPreview(data) {
+    if (!data || !window.AnkiImporter) return [];
+    const frontIdx = Number(ankiFrontSelect ? ankiFrontSelect.value : 0) || 0;
+    const backIdx = Number(ankiBackSelect ? ankiBackSelect.value : 1) || 1;
+    const manualOverride = state.ankiManualOverride ? { frontIdx, backIdx } : null;
+    if (window.AnkiImporter.extractNormalizedWordsFromParsedDeck) {
+      return window.AnkiImporter.extractNormalizedWordsFromParsedDeck(data, state.importTargetLang, manualOverride);
+    }
+    return (data.rows || [])
+      .map(r => window.AnkiImporter.normalizeCardToWordEntry(r[frontIdx], r[backIdx], state.importTargetLang, r[2] || ''))
+      .filter(Boolean);
+  }
+
   function renderAnkiPreviewCards() {
     const data = state.parsedAnkiData;
     if (!data || !ankiSampleCards) return;
+    const tr = t();
 
-    const frontIdx = Number(ankiFrontSelect.value) || 0;
-    const backIdx = Number(ankiBackSelect.value) || 1;
+    const normalizedWords = extractAnkiWordsForCurrentPreview(data);
+    const validCount = normalizedWords.length;
+    const previewItems = normalizedWords.slice(0, 8);
 
-    const previewItems = [];
-    let validCount = 0;
-    for (const row of data.rows) {
-      const entry = window.AnkiImporter.normalizeCardToWordEntry(
-        row[frontIdx],
-        row[backIdx],
-        state.importTargetLang,
-        row[2] || ''
-      );
-      if (entry) {
-        validCount++;
-        if (previewItems.length < 5) previewItems.push(entry);
+    if (ankiAutoMapBanner) {
+      if (data.autoMapped && !state.ankiManualOverride && validCount > 0) {
+        ankiAutoMapBanner.textContent = tr.ankiAutoMappedBanner(
+          validCount,
+          data.modelCount || 1,
+          data.subdeckCount || 1
+        );
+        ankiAutoMapBanner.classList.remove('hidden');
+      } else {
+        ankiAutoMapBanner.classList.add('hidden');
       }
     }
 
@@ -6501,16 +7679,22 @@
     previewItems.forEach(item => {
       const rowEl = document.createElement('div');
       rowEl.className = 'anki-preview-item';
+      const transText = getWordTranslation(item);
+      const rtlAttr = isRtlTranslation(item) ? ' dir="rtl"' : ' dir="ltr"';
       rowEl.innerHTML = `
-        <strong style="color:#fff; font-family: var(--font-mono);" dir="ltr">${escapeHtml(item.raw)}</strong>
-        <span style="color: var(--accent-amber);">${escapeHtml(getWordTranslation(item))}</span>
+        <strong style="color:#fff; font-family: var(--font-ui);" dir="ltr">${escapeHtml(item.raw)}</strong>
+        <span style="color: var(--accent-amber); font-weight: 600;"${rtlAttr}>${escapeHtml(transText)}</span>
       `;
       ankiSampleCards.appendChild(rowEl);
     });
 
     if (btnConfirmAnkiImport) {
-      btnConfirmAnkiImport.textContent = t().ankiConfirmBtn(validCount);
+      btnConfirmAnkiImport.textContent = tr.ankiConfirmBtn(validCount);
       btnConfirmAnkiImport.disabled = validCount === 0;
+    }
+    if (btnSaveAnkiToDecks) {
+      btnSaveAnkiToDecks.textContent = tr.ankiSaveToDecksBtn;
+      btnSaveAnkiToDecks.disabled = validCount === 0;
     }
   }
 
@@ -6519,10 +7703,16 @@
     ankiParseStatus.classList.remove('error');
     ankiParseStatus.textContent = '⏳ ...';
     ankiPreviewBox.classList.add('hidden');
+    state.ankiManualOverride = false;
 
     try {
       const parsed = await window.AnkiImporter.parseUploadedDeckFile(file);
       state.parsedAnkiData = parsed;
+      state.ankiManualOverride = false;
+
+      if (parsed.detectedTargetLang && TARGET_LANG_META[parsed.detectedTargetLang]) {
+        setImportTargetLang(parsed.detectedTargetLang);
+      }
 
       ankiDeckTitleInput.value = parsed.deckName;
       ankiFrontSelect.innerHTML = '';
@@ -6540,10 +7730,21 @@
         ankiBackSelect.appendChild(opt2);
       });
 
-      ankiFrontSelect.value = '0';
-      ankiBackSelect.value = parsed.fieldNames.length > 1 ? '1' : '0';
+      const defFront = typeof parsed.detectedFrontIdx === 'number' ? parsed.detectedFrontIdx : 0;
+      const defBack = typeof parsed.detectedBackIdx === 'number'
+        ? parsed.detectedBackIdx
+        : (parsed.fieldNames.length > 1 ? 1 : 0);
+      ankiFrontSelect.value = String(defFront);
+      ankiBackSelect.value = String(defBack);
 
-      ankiParseStatus.textContent = t().ankiParsedOk(parsed.rows.length);
+      if (ankiManualColsDetails) {
+        ankiManualColsDetails.open = !parsed.autoMapped;
+      }
+
+      const countNum = Array.isArray(parsed.autoCards) && parsed.autoCards.length > 0
+        ? parsed.autoCards.length
+        : parsed.rows.length;
+      ankiParseStatus.textContent = t().ankiParsedOk(countNum);
       ankiPreviewBox.classList.remove('hidden');
       renderAnkiPreviewCards();
     } catch (err) {
@@ -6739,26 +7940,102 @@
     });
   }
 
-  // Открытие 3-ступенчатого каталога курсов
+  // Открытие полноэкранной страницы «Курсы» / «Мои колоды» (без всплывающей модалки!)
   [btnOpenCatalogTitle, btnTitleAllCourses, arcadeLogoSub, btnOpenCatalogHud, btnSidebarCatalog, btnOverlayCatalog, btnNavCourses].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {
-      openCourseCatalogModal('all');
+      openDecksPage({ sourceFilter: 'all', navMode: 'courses' });
       el.blur();
     });
   });
 
   if (btnNavDecks) {
     btnNavDecks.addEventListener('click', () => {
-      openCourseCatalogModal('user');
+      openDecksPage({ sourceFilter: 'all', navMode: 'decks' });
       btnNavDecks.blur();
+    });
+  }
+
+  if (btnDecksSubtabCourses) {
+    btnDecksSubtabCourses.addEventListener('click', () => {
+      state.decksNavMode = 'courses';
+      state.catalogSourceFilter = 'official';
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
+  if (btnDecksSubtabMyDecks) {
+    btnDecksSubtabMyDecks.addEventListener('click', () => {
+      state.decksNavMode = 'decks';
+      state.catalogSourceFilter = 'all';
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
+  if (btnDecksReturnBattle) {
+    btnDecksReturnBattle.addEventListener('click', () => {
+      resumeBattleFromDecksPage();
+      btnDecksReturnBattle.blur();
+    });
+  }
+
+  if (btnDecksViewGrid) {
+    btnDecksViewGrid.addEventListener('click', () => {
+      state.decksViewMode = 'grid';
+      renderDecksPage();
+    });
+  }
+
+  if (btnDecksViewList) {
+    btnDecksViewList.addEventListener('click', () => {
+      state.decksViewMode = 'list';
+      renderDecksPage();
+    });
+  }
+
+  if (decksSourceFilterGroup) {
+    decksSourceFilterGroup.addEventListener('click', (e) => {
+      const btn = e.target && e.target.closest && e.target.closest('.decks-source-btn');
+      if (!btn || !btn.dataset.sourceFilter) return;
+      state.catalogSourceFilter = btn.dataset.sourceFilter;
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
+  if (decksLevelFilterGroup) {
+    decksLevelFilterGroup.addEventListener('click', (e) => {
+      const btn = e.target && e.target.closest && e.target.closest('.decks-level-pill');
+      if (!btn || !btn.dataset.levelFilter) return;
+      state.decksLevelFilter = btn.dataset.levelFilter;
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
+  if (decksSearchInput) {
+    decksSearchInput.addEventListener('input', () => {
+      state.decksSearchQuery = decksSearchInput.value || '';
+      if (state.openedDeckId) {
+        state.openedDeckId = '';
+      }
+      renderDecksPage();
+    });
+  }
+
+  if (btnDecksCreateDeck) {
+    btnDecksCreateDeck.addEventListener('click', () => {
+      openCustomWordsModal('manual');
+      btnDecksCreateDeck.blur();
     });
   }
 
   document.querySelectorAll('.source-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       state.catalogSourceFilter = btn.dataset.sourceFilter || 'all';
-      renderCourseBrowserModal();
+      renderDecksPage();
     });
   });
 
@@ -6792,7 +8069,7 @@
   }
 
   // Открытие окна импорта Anki .apkg / Своих слов
-  [btnSidebarAnki, btnOpenCustom, btnTitleCustom, btnQuickStartAnki, btnFooterAnki].forEach(el => {
+  [btnSidebarAnki, btnOpenCustom, btnTitleCustom, btnQuickStartAnki, btnFooterAnki, btnDecksImportAnki].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {
       openCustomWordsModal('anki');
@@ -6848,10 +8125,21 @@
     });
   }
 
-  if (ankiFrontSelect) ankiFrontSelect.addEventListener('change', renderAnkiPreviewCards);
-  if (ankiBackSelect) ankiBackSelect.addEventListener('change', renderAnkiPreviewCards);
+  if (ankiFrontSelect) {
+    ankiFrontSelect.addEventListener('change', () => {
+      state.ankiManualOverride = true;
+      renderAnkiPreviewCards();
+    });
+  }
+  if (ankiBackSelect) {
+    ankiBackSelect.addEventListener('change', () => {
+      state.ankiManualOverride = true;
+      renderAnkiPreviewCards();
+    });
+  }
   if (btnSwapAnkiCols) {
     btnSwapAnkiCols.addEventListener('click', () => {
+      state.ankiManualOverride = true;
       const tmp = ankiFrontSelect.value;
       ankiFrontSelect.value = ankiBackSelect.value;
       ankiBackSelect.value = tmp;
@@ -6859,7 +8147,7 @@
     });
   }
 
-  async function finalizeAndLaunchUserCourse(userCourse) {
+  async function finalizeAndLaunchUserCourse(userCourse, openOnDecksPage = false) {
     await window.AnkiImporter.saveUserCourse(userCourse);
     state.userCourses = [userCourse, ...state.userCourses.filter(c => c.id !== userCourse.id)];
     customWordsDialog.close();
@@ -6869,6 +8157,16 @@
     }
 
     selectCourseLesson(userCourse.id, 0, 0, false);
+
+    if (openOnDecksPage) {
+      openDecksPage({
+        sourceFilter: 'all',
+        navMode: 'decks',
+        openCourseId: userCourse.id
+      });
+      return;
+    }
+
     if (state.screenMode === 'title') {
       launchFromTitleScreen();
     } else {
@@ -6876,27 +8174,34 @@
     }
   }
 
+  async function buildAndImportCurrentAnkiDeck(openOnDecksPage = false) {
+    const data = state.parsedAnkiData;
+    if (!data) return;
+    const words = extractAnkiWordsForCurrentPreview(data);
+    if (words.length === 0) return;
+
+    const deckTitle = (ankiDeckTitleInput && ankiDeckTitleInput.value.trim()) || data.deckName || 'Anki Deck';
+    const userCourse = window.AnkiImporter.buildUserCourse({
+      title: deckTitle,
+      targetLang: state.importTargetLang,
+      originType: 'anki',
+      levelTag: data.levelTag || undefined,
+      words,
+      lessonSize: 12
+    });
+
+    await finalizeAndLaunchUserCourse(userCourse, openOnDecksPage);
+  }
+
   if (btnConfirmAnkiImport) {
-    btnConfirmAnkiImport.addEventListener('click', async () => {
-      const data = state.parsedAnkiData;
-      if (!data) return;
-      const frontIdx = Number(ankiFrontSelect.value) || 0;
-      const backIdx = Number(ankiBackSelect.value) || 1;
-      const words = data.rows
-        .map(r => window.AnkiImporter.normalizeCardToWordEntry(r[frontIdx], r[backIdx], state.importTargetLang, r[2] || ''))
-        .filter(Boolean);
+    btnConfirmAnkiImport.addEventListener('click', () => {
+      buildAndImportCurrentAnkiDeck(false);
+    });
+  }
 
-      if (words.length === 0) return;
-
-      const userCourse = window.AnkiImporter.buildUserCourse({
-        title: ankiDeckTitleInput.value || data.deckName || 'Anki Deck',
-        targetLang: state.importTargetLang,
-        originType: 'anki',
-        words,
-        lessonSize: 12
-      });
-
-      await finalizeAndLaunchUserCourse(userCourse);
+  if (btnSaveAnkiToDecks) {
+    btnSaveAnkiToDecks.addEventListener('click', () => {
+      buildAndImportCurrentAnkiDeck(true);
     });
   }
 
@@ -7144,11 +8449,15 @@
     });
   }
 
-  // Навигация верхней шапки на Главной
+  // Навигация верхней шапки на Главной (возвращает с «Моих колод» обратно на Главную!)
   [homeBrandLogo, btnNavHome].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {
-      if (arcadeTitleScreen) {
+      if (state.decksOpenedFromPlay) {
+        returnToTitleScreen();
+      } else if (state.homeSubView !== 'home') {
+        switchHomeSubView('home');
+      } else if (arcadeTitleScreen) {
         arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
       }
       if (el.blur) el.blur();

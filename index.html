@@ -42,7 +42,7 @@
             📖 <span id="labelNavCourses">Курсы</span>
           </button>
           <button type="button" class="home-nav-pill" id="btnNavDecks">
-            🗂️ <span id="labelNavDecks">Мои колоды</span>
+            📁 <span id="labelNavDecks">Мои колоды</span>
           </button>
           <button type="button" class="home-nav-pill" id="btnNavStats">
             📊 <span id="labelNavStats">Статистика</span>
@@ -71,6 +71,8 @@
         </div>
       </nav>
 
+      <!-- ПОДЭКРАН А: ГЛАВНЫЙ ДАШБОРД С ПРОМО-БОЕМ -->
+      <div class="home-dashboard-view" id="homeDashboardView">
       <!-- 2. Hero-секция: призыв к игре слева + ЖИВОЕ ПРОМО-ОКНО КОРАБЛЯ справа -->
       <div class="home-hero-grid">
         <div class="home-hero-copy">
@@ -304,6 +306,260 @@
           <span id="labelTitleDict">Словарь курса</span>
         </button>
       </footer>
+      </div><!-- /#homeDashboardView -->
+
+      <!-- ====================================================================
+           ПОДЭКРАН Б: ПОЛНОЭКРАННАЯ СТРАНИЦА «МОИ КОЛОДЫ» / «КУРСЫ» (БЕЗ МОДАЛКИ!)
+           ==================================================================== -->
+      <div class="decks-page-view hidden" id="decksPageView">
+        <div class="decks-page-layout">
+          <!-- Левая колонка фильтров + карточка прогресса -->
+          <aside class="decks-filter-sidebar" aria-label="Фильтры колод">
+            <div class="decks-filter-card">
+              <div class="decks-sidebar-heading">
+                <span class="filter-bars-icon" aria-hidden="true">☰</span>
+                <span id="labelDecksFiltersTitle">Фильтры</span>
+              </div>
+
+              <!-- Язык обучения -->
+              <div class="decks-filter-group">
+                <div class="decks-filter-label">🌐 <span id="labelDecksLangHeader">Язык обучения</span></div>
+                <div class="decks-filter-list">
+                  <button type="button" class="decks-filter-row target-lang-pill active" data-target-lang="de">
+                    <span class="decks-filter-left">
+                      <span class="decks-lang-code">DE</span>
+                      <span data-tlang-name="de">Немецкий</span>
+                    </span>
+                    <span class="decks-filter-check">✓</span>
+                  </button>
+                  <button type="button" class="decks-filter-row target-lang-pill" data-target-lang="en">
+                    <span class="decks-filter-left">
+                      <span class="decks-lang-code">GB</span>
+                      <span data-tlang-name="en">Английский</span>
+                    </span>
+                    <span class="decks-filter-check">✓</span>
+                  </button>
+                  <button type="button" class="decks-filter-row target-lang-pill" data-target-lang="es">
+                    <span class="decks-filter-left">
+                      <span class="decks-lang-code">ES</span>
+                      <span data-tlang-name="es">Испанский</span>
+                    </span>
+                    <span class="decks-filter-check">✓</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Источник -->
+              <div class="decks-filter-group">
+                <div class="decks-filter-label">❖ <span id="labelDecksSourceHeader">Источник</span></div>
+                <div class="decks-filter-list" id="decksSourceFilterGroup">
+                  <button type="button" class="decks-filter-row decks-source-btn active" data-source-filter="all">
+                    <span class="decks-filter-left">
+                      <span class="decks-src-icon">◉</span>
+                      <span id="labelDecksSrcAll">Все</span>
+                    </span>
+                    <span class="decks-filter-check">✓</span>
+                  </button>
+                  <button type="button" class="decks-filter-row decks-source-btn" data-source-filter="official">
+                    <span class="decks-filter-left">
+                      <span class="decks-src-icon">🏛️</span>
+                      <span id="labelDecksSrcOfficial">От создателя</span>
+                    </span>
+                    <span class="decks-filter-check">✓</span>
+                  </button>
+                  <button type="button" class="decks-filter-row decks-source-btn" data-source-filter="user">
+                    <span class="decks-filter-left">
+                      <span class="decks-src-icon">👤</span>
+                      <span id="labelDecksSrcUser">Личные / Anki</span>
+                    </span>
+                    <span class="decks-filter-check">✓</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Уровень CEFR -->
+              <div class="decks-filter-group">
+                <div class="decks-filter-label">📊 <span id="labelDecksLevelHeader">Уровень</span></div>
+                <div class="decks-level-pills" id="decksLevelFilterGroup">
+                  <button type="button" class="decks-level-pill active" data-level-filter="all" id="btnDecksLevelAll">Все</button>
+                  <button type="button" class="decks-level-pill" data-level-filter="A1–A2">A1–A2</button>
+                  <button type="button" class="decks-level-pill" data-level-filter="A2–B1">A2–B1</button>
+                  <button type="button" class="decks-level-pill" data-level-filter="B1">B1</button>
+                  <button type="button" class="decks-level-pill" data-level-filter="B1–B2">B1–B2</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Космическая карточка прогресса по колодам -->
+            <div class="decks-sidebar-progress-card">
+              <div class="decks-sidebar-prog-head">📊 <span id="labelDecksSidebarProgTitle">Ваш прогресс</span></div>
+              <div class="decks-sidebar-prog-big">
+                <strong id="decksSidebarStartedNum">0</strong>
+                <span id="decksSidebarTotalLabel">из 7 колод</span>
+              </div>
+              <div class="decks-sidebar-prog-sub" id="labelDecksInProgressSub">в процессе обучения</div>
+              <div class="decks-prog-bar-row">
+                <div class="decks-prog-track">
+                  <div class="decks-prog-fill" id="decksSidebarProgFill" style="width: 0%;"></div>
+                </div>
+                <span class="decks-prog-pct" id="decksSidebarProgPct">0%</span>
+              </div>
+              <div class="decks-sidebar-planet-art" aria-hidden="true"></div>
+            </div>
+          </aside>
+
+          <!-- Правая основная область страницы «Мои колоды» -->
+          <div class="decks-main-column">
+            <!-- Верхний космический баннер с поиском, импортом Anki, статистикой и маскотом -->
+            <div class="decks-hero-banner">
+              <div class="decks-hero-bg-fx" aria-hidden="true">
+                <svg class="decks-bg-shuttle" viewBox="0 0 220 72" fill="none">
+                  <defs>
+                    <linearGradient id="shuttleTrailGrad" x1="0" y1="54" x2="178" y2="18" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0" />
+                      <stop offset="65%" stop-color="#38bdf8" stop-opacity="0.45" />
+                      <stop offset="100%" stop-color="#67e8f9" stop-opacity="0.95" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M8 58 Q96 42 176 20" stroke="url(#shuttleTrailGrad)" stroke-width="3.2" stroke-linecap="round" />
+                  <polygon points="202,13 173,13 181,21 176,30" fill="#e0f2fe" stroke="#38bdf8" stroke-width="1.5" />
+                </svg>
+              </div>
+
+              <div class="decks-hero-left">
+                <div class="decks-hero-title-row">
+                  <span class="decks-folder-hero-icon" aria-hidden="true">📁</span>
+                  <div>
+                    <h1 class="decks-hero-title" id="decksHeroTitle">Мои колоды</h1>
+                    <p class="decks-hero-subtitle" id="decksHeroSubtitle">
+                      Ваши личные курсы и импортированные Anki-колоды
+                    </p>
+                  </div>
+                </div>
+
+                <div class="decks-hero-controls">
+                  <label class="decks-search-box" for="decksSearchInput">
+                    <span class="decks-search-icon" aria-hidden="true">🔍</span>
+                    <input
+                      type="search"
+                      id="decksSearchInput"
+                      placeholder="Поиск по названию, описанию или словам..."
+                      autocomplete="off"
+                    />
+                  </label>
+
+                  <button type="button" class="decks-amber-anki-btn" id="btnDecksImportAnki">
+                    📦 <span id="labelDecksImportAnkiBtn">Импорт Anki (.apkg)</span>
+                  </button>
+
+                  <button type="button" class="decks-emerald-create-btn" id="btnDecksCreateDeck">
+                    ＋ <span id="labelDecksCreateBtn">Создать колоду</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="decks-hero-right">
+                <div class="decks-hero-metrics">
+                  <div class="decks-hero-metric-row">
+                    <span>📚 <span id="labelDecksStatTotal">Всего колод</span></span>
+                    <strong id="decksHeroTotalCount">7</strong>
+                  </div>
+                  <div class="decks-hero-metric-row">
+                    <span>⚡ <span id="labelDecksStatLearned">Выучено слов</span></span>
+                    <strong id="decksHeroLearnedCount">0</strong>
+                  </div>
+                  <div class="decks-hero-metric-row">
+                    <span>🔥 <span id="labelDecksStatStreak">Текущая серия</span></span>
+                    <strong id="decksHeroStreakCount">1 дн.</strong>
+                  </div>
+                </div>
+
+                <!-- Космический робот-астронавт Z-Lingo -->
+                <div class="decks-mascot-wrap" aria-hidden="true">
+                  <svg class="decks-mascot-svg" viewBox="0 0 112 118" fill="none">
+                    <defs>
+                      <linearGradient id="suitGrad" x1="20" y1="16" x2="92" y2="108" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#f8fafc" />
+                        <stop offset="55%" stop-color="#cbd5e1" />
+                        <stop offset="100%" stop-color="#94a3b8" />
+                      </linearGradient>
+                      <linearGradient id="visorGrad" x1="30" y1="28" x2="82" y2="62" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#09152b" />
+                        <stop offset="100%" stop-color="#0f294a" />
+                      </linearGradient>
+                    </defs>
+                    <!-- Ушки шлема -->
+                    <path d="M28 30 L22 12 L41 21 Z" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
+                    <path d="M84 30 L90 12 L71 21 Z" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
+                    <!-- Поднятая приветствующая лапка -->
+                    <rect x="10" y="52" width="16" height="26" rx="8" transform="rotate(-28 18 65)" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
+                    <rect x="84" y="62" width="15" height="24" rx="7.5" transform="rotate(14 91 74)" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
+                    <!-- Туловище и ножки скафандра -->
+                    <rect x="34" y="68" width="44" height="32" rx="14" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.6" />
+                    <rect x="37" y="94" width="15" height="17" rx="7" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
+                    <rect x="60" y="94" width="15" height="17" rx="7" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
+                    <!-- Звёздочка на груди -->
+                    <polygon points="56,75 58.6,80.4 64.5,81.2 60.2,85.3 61.3,91.1 56,88.3 50.7,91.1 51.8,85.3 47.5,81.2 53.4,80.4" fill="#fbbf24" />
+                    <!-- Шлем и неоновый визор -->
+                    <rect x="22" y="18" width="68" height="54" rx="25" fill="url(#suitGrad)" stroke="#94a3b8" stroke-width="1.8" />
+                    <rect x="30" y="27" width="52" height="36" rx="16" fill="url(#visorGrad)" stroke="#38bdf8" stroke-width="1.6" />
+                    <!-- Светящиеся глазки и улыбка -->
+                    <path d="M40 45 Q45 38 50 45" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" />
+                    <path d="M62 45 Q67 38 72 45" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" />
+                    <path d="M51 52 Q56 57 61 52" stroke="#34d399" stroke-width="2.6" stroke-linecap="round" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Переключатель вкладок [Курсы | Мои колоды] и вида [Карточки | Список] -->
+            <div class="decks-subbar-row">
+              <div class="decks-subtabs-left">
+                <button type="button" class="decks-subtab-pill" id="btnDecksSubtabCourses">
+                  📖 <span id="labelDecksSubtabCourses">Курсы</span>
+                </button>
+                <button type="button" class="decks-subtab-pill active" id="btnDecksSubtabMyDecks">
+                  📁 <span id="labelDecksSubtabMyDecks">Мои колоды</span>
+                </button>
+                <button type="button" class="decks-subtab-pill return-battle hidden" id="btnDecksReturnBattle">
+                  🚀 <span id="labelDecksReturnBattle">Вернуться в бой</span>
+                </button>
+              </div>
+
+              <div class="decks-view-toggle">
+                <button type="button" class="decks-view-btn active" id="btnDecksViewGrid">
+                  ⊞ <span id="labelDecksViewGrid">Карточки</span>
+                </button>
+                <button type="button" class="decks-view-btn" id="btnDecksViewList">
+                  ☰ <span id="labelDecksViewList">Список</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- ОБЗОР КОЛОД: Продолжить обучение + Все колоды -->
+            <div id="decksOverviewPane" class="decks-overview-pane">
+              <section class="decks-section-block" id="decksContinueSection">
+                <h2 class="decks-section-heading">
+                  <span class="decks-play-tri" aria-hidden="true">▶</span>
+                  <span id="labelDecksContinueHeading">Продолжить обучение</span>
+                </h2>
+                <div class="decks-continue-grid" id="decksContinueGrid"></div>
+              </section>
+
+              <section class="decks-section-block">
+                <h2 class="decks-section-heading">
+                  📚 <span id="labelDecksAllHeading">Все колоды</span>
+                  <span class="decks-count-muted" id="decksAllCountBadge">(0)</span>
+                </h2>
+                <div class="decks-all-grid" id="decksAllGrid"></div>
+              </section>
+            </div>
+
+            <!-- ВСТРОЕННАЯ СТРАНИЦА ОТКРЫТОЙ КОЛОДЫ / РЕДАКТОРА (БЕЗ ВСПЛЫВАЮЩЕГО ОКНА!) -->
+            <div id="deckDetailPane" class="deck-detail-pane hidden"></div>
+          </div>
+        </div>
+      </div><!-- /#decksPageView -->
     </div>
   </section>
 
@@ -705,6 +961,8 @@
         </div>
 
         <div class="anki-preview-box hidden" id="ankiPreviewBox">
+          <div class="anki-auto-banner hidden" id="ankiAutoMapBanner"></div>
+
           <div class="anki-field-selectors">
             <div class="anki-field-col">
               <label for="ankiDeckTitleInput" id="labelAnkiDeckName">Название личного курса:</label>
@@ -712,23 +970,29 @@
             </div>
           </div>
 
-          <div class="anki-columns-row">
-            <div class="anki-field-col">
-              <label for="ankiFrontSelect" id="labelAnkiFront">Слово (летит в космосе):</label>
-              <select class="dict-search-input" id="ankiFrontSelect"></select>
+          <details class="words-accordion anki-manual-cols-accordion" id="ankiManualColsDetails">
+            <summary id="ankiManualColsSummary">⚙️ Настроить поля карточек вручную</summary>
+            <div class="anki-columns-row">
+              <div class="anki-field-col">
+                <label for="ankiFrontSelect" id="labelAnkiFront">Слово (летит в космосе):</label>
+                <select class="dict-search-input" id="ankiFrontSelect"></select>
+              </div>
+              <button type="button" class="hud-btn swap-cols-btn" id="btnSwapAnkiCols" title="Поменять поля местами">⇄</button>
+              <div class="anki-field-col">
+                <label for="ankiBackSelect" id="labelAnkiBack">Перевод (при взрыве):</label>
+                <select class="dict-search-input" id="ankiBackSelect"></select>
+              </div>
             </div>
-            <button type="button" class="hud-btn swap-cols-btn" id="btnSwapAnkiCols" title="Поменять поля местами">⇄</button>
-            <div class="anki-field-col">
-              <label for="ankiBackSelect" id="labelAnkiBack">Перевод (при взрыве):</label>
-              <select class="dict-search-input" id="ankiBackSelect"></select>
-            </div>
-          </div>
+          </details>
 
           <div class="anki-preview-list" id="ankiSampleCards"></div>
 
-          <div class="overlay-actions">
+          <div class="overlay-actions anki-confirm-actions">
             <button type="button" class="primary-btn" id="btnConfirmAnkiImport">
               🚀 Создать личный курс Anki и играть!
+            </button>
+            <button type="button" class="hud-btn" id="btnSaveAnkiToDecks">
+              📁 Сохранить в «Мои колоды»
             </button>
           </div>
         </div>
