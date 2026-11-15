@@ -3,39 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Z-DEUTSCH: AUTO — Космический немецкий шутер (Gemini 3.8 TTS · RU / עברית)</title>
+  <title>Z-LINGO — Космический языковой шутер (DE · EN · ES | Gemini 3.8 TTS | Anki .apkg)</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="mode-title">
   <!-- Живой космический холст -->
-  <canvas id="gameCanvas" aria-label="Игровое поле космического клавиатурного шутера Z-Deutsch"></canvas>
+  <canvas id="gameCanvas" aria-label="Игровое поле космического клавиатурного шутера Z-Lingo"></canvas>
 
   <!-- ========================================================================
        АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН (Чёткие карточки сверху и снизу + арена боя по центру)
        ======================================================================== -->
-  <section class="arcade-title-screen" id="arcadeTitleScreen" aria-label="Главный экран игры Z-Deutsch: Auto">
-    <!-- Верхняя шапка титульного экрана с плотной подложкой (слова за ней не мешают чтению) -->
+  <section class="arcade-title-screen" id="arcadeTitleScreen" aria-label="Главный экран игры Z-Lingo">
+    <!-- Верхняя шапка титульного экрана -->
     <div class="title-header-card" id="titleHeaderCard">
       <div class="title-top-bar">
-        <div class="pilot-rank-pill" id="pilotRankPill" title="Ваш ранг пилота и лучший счёт">
+        <div class="pilot-rank-pill" id="pilotRankPill" title="Ваш ранг пилота, выученные слова и рекорд">
           <span class="pilot-rank-icon">🎖️</span>
-          <span id="pilotRankText">КАДЕТ · РЕКОРД: 0</span>
+          <span id="pilotRankText">КАДЕТ · 📖 0 СЛ. · РЕКОРД: 0</span>
         </div>
 
-        <div class="lang-quick-group">
-          <button type="button" class="hud-btn lang-quick-btn active" data-lang="ru">🇷🇺 RU</button>
-          <button type="button" class="hud-btn lang-quick-btn" data-lang="he">🇮🇱 עברית</button>
-          <button type="button" class="hud-btn lang-quick-btn" data-lang="both">🇷🇺+🇮🇱</button>
+        <!-- Фильтр 2: Перевод / Интерфейс (авто-определяется через navigator.language при первом входе) -->
+        <div class="lang-filter-inline" title="Язык интерфейса и перевода при взрыве">
+          <span class="lang-filter-caption" id="labelNativeFilter">Перевод:</span>
+          <div class="lang-quick-group">
+            <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
+            <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
+            <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
+          </div>
         </div>
       </div>
 
       <div class="title-hero-center">
         <div class="arcade-logo-row">
-          <h1 class="arcade-logo-main">🚀 Z-DEUTSCH</h1>
-          <span class="arcade-logo-sub">AUTO</span>
+          <h1 class="arcade-logo-main" id="arcadeLogoMain">🚀 Z-DEUTSCH</h1>
+          <span class="arcade-logo-sub" id="arcadeLogoSub">🚗 AUTO</span>
         </div>
         <p class="title-tagline" id="titleTagline">
-          Сбивайте немецкие слова по буквам и запоминайте перевод при взрыве!
+          Сбивайте слова по буквам, запоминайте перевод при взрыве и открывайте новое оружие!
         </p>
       </div>
     </div>
@@ -43,22 +47,50 @@
     <!-- Открытое окно космоса посередине: здесь летает корабль и стреляет выбранным оружием -->
     <div class="title-space-window" id="titleSpaceWindow" aria-hidden="true"></div>
 
-    <!-- Нижняя панель управления и выбора оружия -->
+    <!-- Нижняя панель управления, прокачки оружия, выбора курса и быстрого старта -->
     <div class="title-bottom-dock" id="titleBottomDock">
+      <!-- Арсенал с прокачкой за выученные слова -->
       <div class="arsenal-panel">
         <div class="arsenal-header">
-          <span class="arsenal-label" id="titleArsenalLabel">⚔️ Выберите оружие:</span>
+          <div class="arsenal-header-left">
+            <span class="arsenal-label" id="titleArsenalLabel">⚔️ Оружие корабля:</span>
+            <span class="learned-progress-pill" id="learnedProgressPill">📖 Выучено: 0 сл.</span>
+          </div>
           <span class="arsenal-desc" id="titleWeaponDesc">Двойные плазменные импульсы с комбо-гармоникой</span>
         </div>
         <div class="weapon-selector-row" id="titleWeaponRow">
-          <!-- Генерируется из WEAPONS в game.js -->
+          <!-- Генерируется из WEAPONS в game.js с индикацией прокачки -->
         </div>
       </div>
 
-      <!-- Выбор уровня перед стартом -->
-      <div class="title-mission-strip">
+      <!-- Компактная карточка активного курса / модуля / коротких уроков -->
+      <div class="active-course-strip" id="titleCourseStrip">
+        <div class="active-course-top">
+          <div class="active-course-info">
+            <span class="origin-badge official" id="titleCourseOriginBadge">🏛️ ОТ СОЗДАТЕЛЯ</span>
+            <span class="active-course-name" id="titleCourseName">🚗 Авто и дорога · Модуль 1</span>
+          </div>
+          <div class="active-course-actions">
+            <button type="button" class="hud-btn course-catalog-btn" id="btnOpenCatalogTitle">
+              🗂️ <span id="labelOpenCatalogTitle">Все курсы</span>
+            </button>
+            <button type="button" class="hud-btn anki-btn" id="btnOpenAnkiTitle">
+              📦 <span id="labelOpenAnkiTitle">Anki .apkg</span>
+            </button>
+          </div>
+        </div>
         <div class="mobile-level-Chips" id="titleStageChips">
-          <!-- Генерируется из levels в game.js -->
+          <!-- Короткие уроки текущего модуля (Ур. 1, Ур. 2, Ур. 3, 👹 Босс) -->
+        </div>
+      </div>
+
+      <!-- Фильтр 1: «Я учу» в один клик прямо над кнопкой «Начать игру» -->
+      <div class="target-lang-bar" id="titleTargetLangBar">
+        <span class="target-lang-label" id="labelTargetFilter">🎯 Я учу:</span>
+        <div class="target-lang-pills">
+          <button type="button" class="target-lang-pill active" data-target-lang="de">🇩🇪 <span data-tlang-name="de">Немецкий</span></button>
+          <button type="button" class="target-lang-pill" data-target-lang="en">🇬🇧 <span data-tlang-name="en">Английский</span></button>
+          <button type="button" class="target-lang-pill" data-target-lang="es">🇪🇸 <span data-tlang-name="es">Испанский</span></button>
         </div>
       </div>
 
@@ -66,16 +98,16 @@
       <div class="title-launch-wrap">
         <button type="button" class="arcade-launch-btn" id="btnArcadeLaunch">
           <span class="launch-glow"></span>
-          <span class="launch-text" id="labelArcadeLaunch">🚀 Начать игру · Уровень 1</span>
+          <span class="launch-text" id="labelArcadeLaunch">🚀 Начать игру · Урок 1</span>
         </button>
       </div>
 
-      <!-- Нижние кнопки настроек (единый читабельный размер) -->
+      <!-- Нижние кнопки настроек -->
       <div class="title-utility-links">
         <button type="button" class="arcade-link-btn" id="btnTitleSpeed">🐌 0.5x</button>
         <button type="button" class="arcade-link-btn highlight-ai" id="btnTitleVoice">🎙️ Озвучка AI</button>
-        <button type="button" class="arcade-link-btn" id="btnTitleDict">📚 <span id="labelTitleDict">Словарь (73)</span></button>
-        <button type="button" class="arcade-link-btn" id="btnTitleCustom">➕ <span id="labelTitleCustom">Свои слова</span></button>
+        <button type="button" class="arcade-link-btn" id="btnTitleDict">📚 <span id="labelTitleDict">Словарь</span></button>
+        <button type="button" class="arcade-link-btn" id="btnTitleCustom">➕ <span id="labelTitleCustom">Anki / Свои слова</span></button>
       </div>
     </div>
   </section>
@@ -91,13 +123,13 @@
       <button type="button" class="hud-btn home-icon-btn hide-mobile" id="btnHudHome" title="На главный экран">
         🏠
       </button>
-      <div class="level-indicator" id="btnQuickLevels" title="Нажмите, чтобы выбрать уровень">
-        <div class="level-indicator-title" id="hudLevelTitle">Ур. 1: Отпуск</div>
+      <div class="level-indicator" id="btnQuickLevels" title="Нажмите, чтобы выбрать курс, модуль или урок">
+        <div class="level-indicator-title" id="hudLevelTitle">Ур. 1: Кузов и свет</div>
         <div class="level-progress-wrap">
           <div class="level-progress-bar">
             <div class="level-progress-fill" id="hudProgressBar"></div>
           </div>
-          <span id="hudProgressText">0 / 10</span>
+          <span id="hudProgressText">0 / 12</span>
         </div>
       </div>
     </div>
@@ -112,8 +144,8 @@
         <span class="stat-value accent-emerald" id="hudCombo">x1</span>
       </div>
       <div class="stat-item hide-mobile">
-        <span class="stat-label" id="labelAccuracy">Точность</span>
-        <span class="stat-value" id="hudAccuracy">100%</span>
+        <span class="stat-label" id="labelLearnedHud">Выучено</span>
+        <span class="stat-value" id="hudLearnedCount">0</span>
       </div>
       <div class="stat-item">
         <span class="stat-label hide-mobile" id="labelShield">Щит</span>
@@ -122,16 +154,19 @@
     </div>
 
     <div class="controls-cluster">
-      <button type="button" class="hud-btn weapon-hud-btn" id="btnWeaponMode" title="Сменить оружие корабля (клавиши 1–6)">
+      <button type="button" class="hud-btn weapon-hud-btn" id="btnWeaponMode" title="Сменить открытое оружие корабля (клавиши 1–6)">
         ⚡<span class="hide-mobile" id="hudWeaponLabel"> Плазма</span>
       </button>
       <button type="button" class="hud-btn emp-btn hide-mobile" id="btnEmp" title="Взорвать ближайшие слова и показать их перевод (Enter)">
         💥 EMP (<span id="empCount">2</span>)
       </button>
-      <button type="button" class="hud-btn active" id="btnLangMode" title="Язык перевода и интерфейса: Русский / Иврит (עברית) / Оба">
+      <button type="button" class="hud-btn hide-mobile" id="btnTargetLangHud" title="Изучаемый язык (Я учу)">
+        🇩🇪 DE
+      </button>
+      <button type="button" class="hud-btn active" id="btnLangMode" title="Язык перевода и интерфейса (RU / EN / עברית)">
         🇷🇺 RU
       </button>
-      <button type="button" class="hud-btn" id="btnSpeedMode" title="Скорость полёта немецких слов (0.25x / 0.5x / 0.75x / 1.0x / 1.35x)">
+      <button type="button" class="hud-btn" id="btnSpeedMode" title="Скорость полёта слов (0.25x / 0.5x / 0.75x / 1.0x / 1.35x)">
         🐌 0.5x
       </button>
       <button type="button" class="hud-btn hide-mobile" id="btnArticleMode" title="Печатать только слово или вместе с артиклем">
@@ -140,41 +175,53 @@
       <button type="button" class="hud-btn ai-voice-btn active" id="btnOpenTtsSettings" title="Настройки озвучки Gemini 3.8 TTS">
         🎙️<span class="hide-mobile" id="hudTtsBadge"> 3.8 TTS</span>
       </button>
-      <button type="button" class="hud-btn hide-mobile" id="btnOpenDict" title="Открыть полный словарь уровня Auto (73 слова)">
-        📚<span id="labelDictBtn"> Словарь</span>
+      <button type="button" class="hud-btn hide-mobile" id="btnOpenCatalogHud" title="Открыть каталог всех курсов и модулей">
+        🗂️ <span id="labelCatalogHud">Курсы</span>
       </button>
-      <button type="button" class="hud-btn hide-mobile" id="btnOpenCustom" title="Добавить свои немецкие слова">
-        ➕ <span id="labelCustomBtn">Свои слова</span>
+      <button type="button" class="hud-btn hide-mobile" id="btnOpenCustom" title="Импорт колоды Anki (.apkg) или своих слов">
+        📦 <span id="labelCustomBtn">Anki</span>
       </button>
     </div>
   </header>
 
-  <!-- Левая панель (ПК): Подуровни главного курса AUTO -->
+  <!-- Левая панель (ПК): Трёхступенчатая навигация по активному курсу -->
   <aside class="sidebar-left">
-    <div class="sidebar-header">
-      <span class="sidebar-title" id="sidebarLevelsTitle">🚗 Уровни «AUTO»</span>
-      <span class="sidebar-count" id="totalWordsCounter">73 слова</span>
+    <div class="sidebar-course-box">
+      <div class="sidebar-course-top">
+        <span class="origin-badge official" id="sidebarOriginBadge">🏛️ ОТ СОЗДАТЕЛЯ</span>
+        <span class="sidebar-count" id="totalWordsCounter">73 сл.</span>
+      </div>
+      <div class="sidebar-course-title" id="sidebarLevelsTitle">🚗 Авто и дорога</div>
+      <div class="sidebar-course-btns">
+        <button type="button" class="hud-btn full-w-btn" id="btnSidebarCatalog">🗂️ Все курсы</button>
+        <button type="button" class="hud-btn anki-btn" id="btnSidebarAnki" title="Загрузить файл Anki .apkg">📦 .apkg</button>
+      </div>
     </div>
     <div class="level-list scrollable" id="levelListContainer">
-      <!-- Генерируется из words.js -->
+      <!-- Модули -> Короткие уроки + Босс-уроки -->
     </div>
   </aside>
 
-  <!-- Правая панель (ПК): Журнал взрывов -->
+  <!-- Правая панель (ПК): Журнал взрывов + кнопка «Повторить ещё раз» (⭐) -->
   <aside class="sidebar-right">
     <div class="sidebar-header">
       <span class="sidebar-title" id="sidebarKillsTitle">💥 Взорванные слова</span>
-      <button type="button" class="hud-btn" id="btnClearFeed" title="Очистить список">
-        Очистить
-      </button>
+      <div class="sidebar-right-actions">
+        <button type="button" class="hud-btn pin-drill-btn" id="btnDrillPinned" title="Запустить тренировку отмеченных звёздочкой слов">
+          ⭐ <span id="pinnedCountBadge">0</span>
+        </button>
+        <button type="button" class="hud-btn" id="btnClearFeed" title="Очистить список">
+          ✕
+        </button>
+      </div>
     </div>
     <div class="kill-feed scrollable" id="killFeedContainer">
       <div class="kill-feed-empty">
-        Сбивайте летящие немецкие слова!<br><br>
-        При взрыве перевод (🇷🇺 / 🇮🇱 עברית) всплывает прямо в космосе и сохраняется здесь.
+        Сбивайте летящие слова!<br><br>
+        Нажмите <strong>☆</strong> рядом с незнакомым словом, чтобы игра чаще подкидывала его в следующих раундах.
       </div>
     </div>
-    <div class="gender-legend" title="Цветовая подсказка рода существительных">
+    <div class="gender-legend" id="genderLegendBar" title="Цветовая подсказка категорий слов">
       <span class="legend-dot legend-der" id="legendDer">der (м.р.)</span>
       <span class="legend-dot legend-die" id="legendDie">die (ж.р.)</span>
       <span class="legend-dot legend-das" id="legendDas">das (ср.р.)</span>
@@ -182,7 +229,7 @@
     </div>
   </aside>
 
-  <!-- Встроенная космическая клавиатура в стиле ZType (внизу экрана) -->
+  <!-- Встроенная космическая клавиатура в стиле ZType (адаптируется под DE / EN / ES) -->
   <section class="ztype-keyboard-dock" id="ztypeKeyboard" aria-label="Экранная клавиатура ZType">
     <div class="ztype-kbd-topline">
       <div class="ztype-kbd-topline-fill" id="kbdProgressFill"></div>
@@ -192,80 +239,55 @@
       Нажимайте буквы, чтобы стрелять по словам...
     </div>
 
-    <div class="ztype-keys-container">
-      <div class="ztype-key-row">
-        <button type="button" class="zkey" data-key="q">Q</button>
-        <button type="button" class="zkey" data-key="w">W</button>
-        <button type="button" class="zkey" data-key="e">E</button>
-        <button type="button" class="zkey" data-key="r">R</button>
-        <button type="button" class="zkey" data-key="t">T</button>
-        <button type="button" class="zkey" data-key="y">Y</button>
-        <button type="button" class="zkey" data-key="u">U<span class="uml-sub">ü</span></button>
-        <button type="button" class="zkey" data-key="i">I</button>
-        <button type="button" class="zkey" data-key="o">O<span class="uml-sub">ö</span></button>
-        <button type="button" class="zkey" data-key="p">P</button>
-      </div>
-
-      <div class="ztype-key-row row-middle">
-        <button type="button" class="zkey" data-key="a">A<span class="uml-sub">ä</span></button>
-        <button type="button" class="zkey" data-key="s">S<span class="uml-sub">ß</span></button>
-        <button type="button" class="zkey" data-key="d">D</button>
-        <button type="button" class="zkey" data-key="f">F</button>
-        <button type="button" class="zkey" data-key="g">G</button>
-        <button type="button" class="zkey" data-key="h">H</button>
-        <button type="button" class="zkey" data-key="j">J</button>
-        <button type="button" class="zkey" data-key="k">K</button>
-        <button type="button" class="zkey" data-key="l">L</button>
-      </div>
-
-      <div class="ztype-key-row row-bottom">
-        <button type="button" class="zkey zkey-fn" data-action="reset" title="Сбросить прицел (Backspace)">⌫</button>
-        <button type="button" class="zkey" data-key="z">Z</button>
-        <button type="button" class="zkey" data-key="x">X</button>
-        <button type="button" class="zkey" data-key="c">C</button>
-        <button type="button" class="zkey" data-key="v">V</button>
-        <button type="button" class="zkey" data-key="b">B</button>
-        <button type="button" class="zkey" data-key="n">N</button>
-        <button type="button" class="zkey" data-key="m">M</button>
-        <button type="button" class="zkey zkey-emp" data-action="emp" id="btnKbdEmp" title="EMP-взрыв (Enter)">⚡<span class="emp-mini-badge" id="kbdEmpCount">2</span></button>
-      </div>
+    <div class="ztype-keys-container" id="ztypeKeysContainer">
+      <!-- Генерируется под выбранный изучаемый язык (DE с ä/ö/ü/ß, EN чистая QWERTY, ES с клавишей Ñ и ударениями) -->
     </div>
   </section>
 
-  <!-- Центральный оверлей: Пауза / Победа на уровне / Поражение -->
+  <!-- Центральный оверлей: Пауза / Победа на уроке / Поражение -->
   <section class="center-overlay hidden" id="centerOverlay">
     <div class="overlay-card scrollable" id="overlayCard">
       <div class="overlay-top-bar">
-        <span class="overlay-badge" id="overlayBadge">КАМПАНИЯ AUTO · ЭТАП 1 ИЗ 6</span>
+        <div class="overlay-badges-wrap">
+          <span class="origin-badge official" id="overlayOriginBadge">🏛️ ОТ СОЗДАТЕЛЯ</span>
+          <span class="overlay-badge" id="overlayBadge">МОДУЛЬ 1 · УРОК 1</span>
+        </div>
         <div class="lang-quick-group">
-          <button type="button" class="hud-btn lang-quick-btn active" data-lang="ru">🇷🇺 RU</button>
-          <button type="button" class="hud-btn lang-quick-btn" data-lang="he">🇮🇱 עברית</button>
-          <button type="button" class="hud-btn lang-quick-btn" data-lang="both">🇷🇺+🇮🇱</button>
+          <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
+          <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
+          <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
         </div>
       </div>
 
-      <h2 class="overlay-title" id="overlayTitle">Уровень 1: Отпуск и путешествия</h2>
+      <h2 class="overlay-title" id="overlayTitle">Урок 1: Кузов и свет</h2>
       <p class="overlay-desc" id="overlayDesc">
-        Сбивайте немецкие слова буква за буквой! При взрыве слова всплывает его перевод и звучит произношение.
+        Сбивайте слова буква за буквой! При взрыве всплывает перевод и звучит произношение.
       </p>
 
-      <!-- Быстрая смена оружия прямо в меню паузы / между уровнями -->
+      <!-- Прокачка и смена оружия в меню паузы / между уроками -->
       <div class="overlay-arsenal-box">
-        <div class="overlay-arsenal-title" id="overlayWeaponTitle">⚔️ Оружие корабля:</div>
+        <div class="arsenal-header-left">
+          <span class="overlay-arsenal-title" id="overlayWeaponTitle">⚔️ Оружие корабля:</span>
+          <span class="learned-progress-pill" id="overlayLearnedPill">📖 Выучено: 0 сл.</span>
+        </div>
         <div class="weapon-selector-row compact" id="overlayWeaponRow"></div>
       </div>
 
-      <!-- Выбор подуровня -->
-      <div class="mobile-level-Chips" id="overlayLevelChips"></div>
+      <!-- Выбор урока текущего модуля + кнопка смены курса -->
+      <div class="overlay-course-row">
+        <div class="mobile-level-Chips" id="overlayLevelChips"></div>
+      </div>
 
       <div class="overlay-actions">
-        <button type="button" class="primary-btn" id="btnStartLevel">🚀 В бой! Начать уровень</button>
-        <button type="button" class="secondary-btn" id="btnNextLevel" style="display: none;">Следующий уровень ➔</button>
-        <button type="button" class="secondary-btn" id="btnPracticeMistakes" style="display: none;">🎯 Сложные слова</button>
+        <button type="button" class="primary-btn" id="btnStartLevel">🚀 В бой! Начать урок</button>
+        <button type="button" class="secondary-btn" id="btnNextLevel" style="display: none;">Следующий урок ➔</button>
+        <button type="button" class="secondary-btn" id="btnPracticePinned" style="display: none;">⭐ Повторить отмеченные</button>
+        <button type="button" class="secondary-btn" id="btnPracticeMistakes" style="display: none;">🎯 Ошибки</button>
+        <button type="button" class="secondary-btn" id="btnOverlayCatalog">🗂️ Все курсы</button>
         <button type="button" class="secondary-btn" id="btnBackToTitle">🏠 В меню</button>
       </div>
 
-      <!-- Мини-блиц после прохождения уровня -->
+      <!-- Мини-блиц после прохождения урока -->
       <div class="quiz-box" id="levelQuizBox" style="display: none;">
         <div class="quiz-header">
           <span id="quizHeaderTitle">🧠 БЛИЦ: Выберите перевод!</span>
@@ -276,11 +298,144 @@
       </div>
 
       <details class="words-accordion">
-        <summary id="overlayWordsHeader">📋 Посмотреть слова этого уровня (10)</summary>
+        <summary id="overlayWordsHeader">📋 Посмотреть слова этого урока (12)</summary>
         <div class="overlay-Words-preview scrollable" id="overlayWordsPreview"></div>
       </details>
     </div>
   </section>
+
+  <!-- ========================================================================
+       МОДАЛЬНОЕ ОКНО: 3-СТУПЕНЧАТЫЙ КАТАЛОГ КУРСОВ (ОТ СОЗДАТЕЛЯ + ЛИЧНЫЕ ANKI)
+       ======================================================================== -->
+  <dialog class="modern-dialog wide-dialog" id="courseBrowserDialog" closedby="any">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="catalogDialogTitle">🗂️ Курсы, модули и уроки</h2>
+      <button type="button" class="dialog-close" id="btnCloseCatalog" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="dialog-body scrollable" id="catalogDialogBody">
+      <!-- Верхняя панель фильтров: Изучаемый язык + Источник курса (Все / От создателя / Личные) -->
+      <div class="catalog-toolbar">
+        <div class="target-lang-pills compact">
+          <button type="button" class="target-lang-pill active" data-target-lang="de">🇩🇪 <span data-tlang-name="de">Немецкий</span></button>
+          <button type="button" class="target-lang-pill" data-target-lang="en">🇬🇧 <span data-tlang-name="en">Английский</span></button>
+          <button type="button" class="target-lang-pill" data-target-lang="es">🇪🇸 <span data-tlang-name="es">Испанский</span></button>
+        </div>
+
+        <div class="source-filter-tabs" id="catalogSourceTabs">
+          <button type="button" class="hud-btn source-tab-btn active" data-source-filter="all" id="tabSourceAll">Все</button>
+          <button type="button" class="hud-btn source-tab-btn" data-source-filter="official" id="tabSourceOfficial">🏛️ От создателя</button>
+          <button type="button" class="hud-btn source-tab-btn" data-source-filter="user" id="tabSourceUser">👤 Мои / Anki</button>
+        </div>
+
+        <button type="button" class="hud-btn anki-btn" id="btnOpenAnkiFromCatalog">
+          📦 <span id="labelImportFromCatalog">Загрузить Anki (.apkg)</span>
+        </button>
+      </div>
+
+      <div class="catalog-courses-grid" id="catalogCoursesContainer">
+        <!-- Карточки курсов (Уровень 1) -> Модули (Уровень 2) -> Короткие уроки и Босс-уроки (Уровень 3) -->
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ========================================================================
+       МОДАЛЬНОЕ ОКНО: ИМПОРТ КОЛОД ANKI (.APKG) ИЛИ СВОИХ СЛОВ
+       ======================================================================== -->
+  <dialog class="modern-dialog" id="customWordsDialog" closedby="any">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="customDialogTitle">📦 Импорт колоды Anki (.apkg) или своих слов</h2>
+      <button type="button" class="dialog-close" id="btnCloseCustom" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="dialog-body scrollable" id="customDialogBody">
+      <!-- Переключатель вкладок: Файл Anki .apkg | Ручной список -->
+      <div class="import-mode-tabs">
+        <button type="button" class="hud-btn import-tab-btn active" data-import-tab="anki" id="tabImportAnki">
+          📦 Файл Anki (.apkg / .tsv)
+        </button>
+        <button type="button" class="hud-btn import-tab-btn" data-import-tab="manual" id="tabImportManual">
+          ✍️ Вставить список текстом
+        </button>
+      </div>
+
+      <!-- Общий выбор языка изучаемых слов для личного курса -->
+      <div class="import-lang-row">
+        <span class="tts-field-label" id="importTargetLangLabel">Язык изучаемых слов в колоде:</span>
+        <div class="target-lang-pills compact" id="importTargetLangGroup">
+          <button type="button" class="import-tlang-btn active" data-import-lang="de">🇩🇪 DE</button>
+          <button type="button" class="import-tlang-btn" data-import-lang="en">🇬🇧 EN</button>
+          <button type="button" class="import-tlang-btn" data-import-lang="es">🇪🇸 ES</button>
+        </div>
+      </div>
+
+      <!-- ВКЛАДКА 1: ЗАГРУЗКА .APKG -->
+      <div id="ankiImportPane" class="import-pane">
+        <label class="anki-dropzone" id="ankiDropzone" for="ankiFileInput">
+          <span class="anki-drop-icon">📦</span>
+          <span class="anki-drop-title" id="ankiDropTitle">Перетащите файл .apkg сюда или нажмите для выбора</span>
+          <span class="anki-drop-sub" id="ankiDropSub">Поддерживаются Anki 2.0 / 2.1 / 23.10+ (.apkg, .colpkg, .tsv, .csv, .txt)</span>
+          <input type="file" id="ankiFileInput" accept=".apkg,.colpkg,.tsv,.csv,.txt" hidden />
+        </label>
+
+        <div class="anki-sample-row">
+          <button type="button" class="hud-btn" id="btnDownloadSampleApkg">
+            📥 Скачать тестовый файл .apkg (12 слов)
+          </button>
+          <span class="anki-status-text" id="ankiParseStatus"></span>
+        </div>
+
+        <!-- Блок предпросмотра и выбора колонок (появляется после чтения файла) -->
+        <div class="anki-preview-box hidden" id="ankiPreviewBox">
+          <div class="anki-field-selectors">
+            <div class="anki-field-col">
+              <label for="ankiDeckTitleInput" id="labelAnkiDeckName">Название личного курса:</label>
+              <input type="text" class="dict-search-input" id="ankiDeckTitleInput" />
+            </div>
+          </div>
+
+          <div class="anki-columns-row">
+            <div class="anki-field-col">
+              <label for="ankiFrontSelect" id="labelAnkiFront">Слово (летит в космосе):</label>
+              <select class="dict-search-input" id="ankiFrontSelect"></select>
+            </div>
+            <button type="button" class="hud-btn swap-cols-btn" id="btnSwapAnkiCols" title="Поменять поля местами">⇄</button>
+            <div class="anki-field-col">
+              <label for="ankiBackSelect" id="labelAnkiBack">Перевод (при взрыве):</label>
+              <select class="dict-search-input" id="ankiBackSelect"></select>
+            </div>
+          </div>
+
+          <div class="anki-preview-list" id="ankiSampleCards"></div>
+
+          <div class="overlay-actions">
+            <button type="button" class="primary-btn" id="btnConfirmAnkiImport">
+              🚀 Создать личный курс Anki и играть!
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ВКЛАДКА 2: РУЧНОЙ ВВОД СПИСКА -->
+      <div id="manualImportPane" class="import-pane hidden">
+        <input
+          type="text"
+          class="dict-search-input"
+          id="manualDeckTitleInput"
+          placeholder="Название вашего набора (например: Мои слова к экзамену)"
+        />
+        <p class="dialog-hint-text" id="customDialogHint">
+          Формат: <code>изучаемое слово;перевод</code> (каждое с новой строки). Игра автоматически разобьёт список на короткие уроки по 12 слов и добавит Босс-урок!
+        </p>
+        <textarea
+          class="custom-words-textarea"
+          id="customWordsInput"
+          placeholder="der Autobahnraser, -;лихач на автобане&#10;die Hupe, -n;клаксон, гудок&#10;überholen;обгонять"
+        ></textarea>
+        <div class="overlay-actions">
+          <button type="button" class="primary-btn" id="btnSaveCustomWords">Создать личный курс и играть 🚀</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
 
   <!-- ========================================================================
        МОДАЛЬНОЕ ОКНО: СТУДИЯ ОЗВУЧКИ GEMINI 3.8 TTS
@@ -296,7 +451,7 @@
       </div>
 
       <div class="tts-row-between">
-        <span class="tts-field-label" id="ttsEnableLabel">Произношение немецких слов при взрыве:</span>
+        <span class="tts-field-label" id="ttsEnableLabel">Произношение слов при взрыве:</span>
         <button type="button" class="hud-btn active" id="btnToggleTtsMaster">🔊 Включено</button>
       </div>
 
@@ -305,7 +460,7 @@
         <div class="tts-model-grid" id="ttsModelGrid">
           <button type="button" class="tts-option-card active" data-model="gemini-3.8-flash-tts">
             <span class="tts-opt-title">✨ gemini-3.8-flash-tts</span>
-            <span class="tts-opt-sub" id="ttsModelFlashDesc">Студийное HD качество и живая немецкая интонация</span>
+            <span class="tts-opt-sub" id="ttsModelFlashDesc">Студийное HD качество и живая интонация носителя</span>
           </button>
           <button type="button" class="tts-option-card" data-model="gemini-3.8-flash-lite-tts">
             <span class="tts-opt-title">⚡ gemini-3.8-flash-lite-tts</span>
@@ -323,7 +478,7 @@
 
       <div class="tts-test-row">
         <button type="button" class="primary-btn" id="btnTestGeminiVoice">
-          ▶️ Проверить голос («der Kofferraum»)
+          ▶️ Проверить голос
         </button>
       </div>
 
@@ -350,45 +505,30 @@
     </div>
   </dialog>
 
-  <!-- Модальное окно: Полный словарь всех 73 слов категории AUTO -->
+  <!-- Модальное окно: Словарь активного курса с фильтром отмеченных звёздочкой ⭐ слов -->
   <dialog class="modern-dialog" id="dictDialog" closedby="any">
     <div class="dialog-header">
-      <h2 class="dialog-title" id="dictDialogTitle">📚 Словарь «AUTO» (73 слова)</h2>
+      <h2 class="dialog-title" id="dictDialogTitle">📚 Словарь курса</h2>
       <button type="button" class="dialog-close" id="btnCloseDict" aria-label="Закрыть">✕</button>
     </div>
-    <div class="dialog-body scrollable">
-      <input
-        type="search"
-        class="dict-search-input"
-        id="dictSearchInput"
-        placeholder="Поиск: немецкий, русский или עברית..."
-      />
+    <div class="dialog-body scrollable" id="dictDialogBody">
+      <div class="dict-filter-row">
+        <input
+          type="search"
+          class="dict-search-input"
+          id="dictSearchInput"
+          placeholder="Поиск слова или перевода..."
+        />
+        <button type="button" class="hud-btn" id="btnDictOnlyPinned" title="Показать только слова со звёздочкой">
+          ⭐ <span id="labelDictPinnedFilter">Отмеченные</span>
+        </button>
+      </div>
       <div id="dictFullList" class="overlay-Words-preview scrollable" style="max-height: 58vh;"></div>
     </div>
   </dialog>
 
-  <!-- Модальное окно: Добавление своего списка слов -->
-  <dialog class="modern-dialog" id="customWordsDialog" closedby="any">
-    <div class="dialog-header">
-      <h2 class="dialog-title" id="customDialogTitle">➕ Добавить свои немецкие слова</h2>
-      <button type="button" class="dialog-close" id="btnCloseCustom" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="dialog-body scrollable">
-      <p class="dialog-hint-text" id="customDialogHint">
-        Формат: <code>немецкое слово;перевод RU;перевод HE</code> (каждое с новой строки).
-      </p>
-      <textarea
-        class="custom-words-textarea"
-        id="customWordsInput"
-        placeholder="der Autobahnraser, -;лихач на автобане;נהג משתולל&#10;die Hupe, -n;клаксон, гудок;צופר"
-      ></textarea>
-      <div class="overlay-actions">
-        <button type="button" class="primary-btn" id="btnSaveCustomWords">Создать уровень и играть 🚀</button>
-      </div>
-    </div>
-  </dialog>
-
   <script src="words.js"></script>
+  <script src="anki-import.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

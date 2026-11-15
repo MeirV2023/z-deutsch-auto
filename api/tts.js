@@ -15,6 +15,12 @@ const ALLOWED_MODELS = new Set([
   'gemini-3.8-flash-lite-tts'
 ]);
 
+const LANG_SPEECH_STYLE = {
+  de: 'clear, natural Standard German pronunciation, crisp diction, warm studio voice',
+  en: 'clear, natural Standard English pronunciation, crisp diction, warm studio voice',
+  es: 'clear, natural Standard Spanish pronunciation, crisp diction, warm studio voice'
+};
+
 const ALLOWED_VOICES = new Set([
   'Kore',
   'Puck',
@@ -119,6 +125,9 @@ module.exports = async function handler(req, res) {
   const requestedVoice = String(body.voice || query.voice || 'Kore').trim();
   const voice = ALLOWED_VOICES.has(requestedVoice) ? requestedVoice : 'Kore';
 
+  const requestedLang = String(body.lang || query.lang || 'de').trim().toLowerCase().slice(0, 2);
+  const speechStyle = LANG_SPEECH_STYLE[requestedLang] || LANG_SPEECH_STYLE.de;
+
   const headerKey = req.headers['x-gemini-api-key']
     ? String(req.headers['x-gemini-api-key']).trim()
     : '';
@@ -150,7 +159,7 @@ module.exports = async function handler(req, res) {
             text: rawText,
             annotations: [{
               type: 'speech_metadata',
-              style: 'clear, natural Standard German pronunciation, crisp diction, warm studio voice'
+              style: speechStyle
             }]
           }]
         }],

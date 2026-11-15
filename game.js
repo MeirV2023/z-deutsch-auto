@@ -1,121 +1,196 @@
 (() => {
   'use strict';
 
-  // --- Константы цветов по родам немецких слов ---
+  // --- Цветовая кодировка категорий и артиклей (DE / EN / ES) ---
   const ARTICLE_COLORS = {
+    // Deutsch
     'der': { main: '#38bdf8', glow: 'rgba(56, 189, 248, 0.45)', label: 'der' },
     'die': { main: '#fb7185', glow: 'rgba(251, 113, 133, 0.45)', label: 'die' },
     'das': { main: '#34d399', glow: 'rgba(52, 211, 153, 0.45)', label: 'das' },
     'Pl.': { main: '#fbbf24', glow: 'rgba(251, 191, 36, 0.45)', label: 'Pl.' },
     'der/die': { main: '#60a5fa', glow: 'rgba(96, 165, 250, 0.45)', label: 'der/die' },
+    // Español
+    'el': { main: '#38bdf8', glow: 'rgba(56, 189, 248, 0.45)', label: 'el' },
+    'los': { main: '#38bdf8', glow: 'rgba(56, 189, 248, 0.45)', label: 'los' },
+    'la': { main: '#fb7185', glow: 'rgba(251, 113, 133, 0.45)', label: 'la' },
+    'las': { main: '#fb7185', glow: 'rgba(251, 113, 133, 0.45)', label: 'las' },
+    'Verbo': { main: '#a78bfa', glow: 'rgba(167, 139, 250, 0.45)', label: 'Verbo' },
+    // English & Shared POS
+    'Noun': { main: '#38bdf8', glow: 'rgba(56, 189, 248, 0.45)', label: 'Noun' },
     'Verb': { main: '#a78bfa', glow: 'rgba(167, 139, 250, 0.45)', label: 'Verb' },
-    'Adj.': { main: '#c084fc', glow: 'rgba(192, 132, 252, 0.45)', label: 'Adj.' },
+    'Adj.': { main: '#34d399', glow: 'rgba(52, 211, 153, 0.45)', label: 'Adj.' },
     'Adv.': { main: '#e879f9', glow: 'rgba(232, 121, 249, 0.45)', label: 'Adv.' },
     'Pron.': { main: '#f472b6', glow: 'rgba(244, 114, 182, 0.45)', label: 'Pron.' }
   };
 
-  function getArticleStyle(article) {
-    return ARTICLE_COLORS[article] || { main: '#38bdf8', glow: 'rgba(56, 189, 248, 0.4)', label: article || 'DE' };
+  function getArticleStyle(article, fallbackLang = 'de') {
+    return ARTICLE_COLORS[article] || {
+      main: '#38bdf8',
+      glow: 'rgba(56, 189, 248, 0.4)',
+      label: article || fallbackLang.toUpperCase()
+    };
   }
 
-  // --- Арсенал из 5 уникальных видов космического оружия ---
+  // --- Арсенал из 6 видов оружия с прокачкой за выученные слова ---
   const WEAPONS = [
     {
       id: 'plasma',
       key: '1',
       icon: '⚡',
+      unlockWords: 0,
       color: '#22d3ee',
       secondaryColor: '#34d399',
       recoilBoost: 1.0,
-      ruName: 'Плазма',
-      heName: 'פלזמה',
-      ruDesc: 'Сдвоенные плазменные импульсы с нарастающей комбо-гармоникой',
-      heDesc: 'צמד פולסי פלזמה מהירים עם הרמוניית קומבו מתגברת'
+      names: { ru: 'Плазма', en: 'Plasma', he: 'פלזמה' },
+      descs: {
+        ru: 'Сдвоенные плазменные импульсы с нарастающей комбо-гармоникой',
+        en: 'Twin plasma pulses with rising combo harmonics',
+        he: 'צמד פולסי פלזמה מהירים עם הרמוניית קומבו מתגברת'
+      }
+    },
+    {
+      id: 'gravity',
+      key: '2',
+      icon: '🌀',
+      unlockWords: 8,
+      color: '#2dd4bf',
+      secondaryColor: '#38bdf8',
+      recoilBoost: 2.2,
+      names: { ru: 'Грави-волна', en: 'Gravity Wave', he: 'גל כבידה' },
+      descs: {
+        ru: 'Антигравитация: сразу много слов разлетаются высоко к самому началу экрана!',
+        en: 'Anti-gravity surge: blasts multiple words all the way back to the top!',
+        he: 'אנטי-כבידה: הודף בבת אחת מילים רבות חזרה למעלה לתחילת המסך!'
+      }
     },
     {
       id: 'railgun',
-      key: '2',
+      key: '3',
       icon: '🔴',
+      unlockWords: 20,
       color: '#fb7185',
       secondaryColor: '#f43f5e',
       recoilBoost: 1.75,
-      ruName: 'Рельсотрон',
-      heName: 'תותח מסילה',
-      ruDesc: 'Мощный гиперлуч с басовым ударом, кольцами волны и сильной отдачей',
-      heDesc: 'קרן על-קולית עוצמתית עם הדף חזק וטבעות הדף'
-    },
-    {
-      id: 'tesla',
-      key: '3',
-      icon: '🌩️',
-      color: '#a78bfa',
-      secondaryColor: '#38bdf8',
-      recoilBoost: 1.15,
-      ruName: 'Тесла',
-      heName: 'טסלה',
-      ruDesc: 'Ветвящаяся дуга молнии с электрическим треском и цепными искрами',
-      heDesc: 'קשת ברק מתפצלת עם פריקה חשמלית וניצוצות'
+      names: { ru: 'Рельсотрон', en: 'Railgun', he: 'תותח מסילה' },
+      descs: {
+        ru: 'Мощный гиперлуч с басовым ударом, кольцами волны и сильной отдачей',
+        en: 'Hyper-velocity beam with sonic shockwaves and heavy recoil',
+        he: 'קרן על-קולית עוצמתית עם הדף חזק וטבעות הדף'
+      }
     },
     {
       id: 'missiles',
       key: '4',
       icon: '🚀',
+      unlockWords: 35,
       color: '#fb923c',
       secondaryColor: '#fbbf24',
       recoilBoost: 1.35,
-      ruName: 'Ракеты',
-      heName: 'טילים',
-      ruDesc: 'Самонаводящийся рой микро-ракет с дымным шлейфом и микро-взрывом',
-      heDesc: 'נחיל טילי מיקרו מתבייתים עם שובל אש ופיצוץ ממוקד'
+      names: { ru: 'Ракеты', en: 'Missiles', he: 'טילים' },
+      descs: {
+        ru: 'Самонаводящийся рой микро-ракет с дымным шлейфом и микро-взрывом',
+        en: 'Homing micro-missile swarm with fiery smoke trails',
+        he: 'נחיל טילי מיקרו מתבייתים עם שובל אש ופיצוץ ממוקד'
+      }
+    },
+    {
+      id: 'tesla',
+      key: '5',
+      icon: '🌩️',
+      unlockWords: 50,
+      color: '#a78bfa',
+      secondaryColor: '#38bdf8',
+      recoilBoost: 1.15,
+      names: { ru: 'Тесла', en: 'Tesla Coil', he: 'טסלה' },
+      descs: {
+        ru: 'Ветвящаяся дуга молнии с электрическим треском (открывается за 50 слов!)',
+        en: 'Branching high-voltage lightning arc (unlocks at 50 learned words!)',
+        he: 'קשת ברק מתפצלת עם פריקה חשמלית (נפתח ב-50 מילים!)'
+      }
     },
     {
       id: 'synth',
-      key: '5',
+      key: '6',
       icon: '🎵',
+      unlockWords: 70,
       color: '#e879f9',
       secondaryColor: '#22d3ee',
       recoilBoost: 1.1,
-      ruName: 'Неон-Синт',
-      heName: 'סינת׳ווייב',
-      ruDesc: 'Призма-лазер: каждая буква играет мелодичную ноту в стиле Synthwave!',
-      heDesc: 'לייזר פריזמה מנגן: כל אות מפיקה צליל סינת׳ווייב מלודי!'
-    },
-    {
-      id: 'gravity',
-      key: '6',
-      icon: '🌀',
-      color: '#2dd4bf',
-      secondaryColor: '#38bdf8',
-      recoilBoost: 2.2,
-      ruName: 'Грави-волна',
-      heName: 'גל כבידה',
-      ruDesc: 'Антигравитация: сразу много слов разлетаются высоко к самому началу экрана!',
-      heDesc: 'אנטי-כבידה: הודף בבת אחת מילים רבות חזרה למעלה לתחילת המסך!'
+      names: { ru: 'Неон-Синт', en: 'Neon Synth', he: 'סינת׳ווייב' },
+      descs: {
+        ru: 'Призма-лазер: каждая буква играет мелодичную ноту в стиле Synthwave!',
+        en: 'Prism laser: every typed letter plays a melodic Synthwave note!',
+        he: 'לייזר פריזמה מנגן: כל אות מפיקה צליל סינת׳ווייב מלודי!'
+      }
     }
   ];
 
   // --- Студийные голоса Gemini 3.8 TTS ---
   const GEMINI_VOICES = [
-    { id: 'Kore', ruTone: 'Чёткий студийный (Ж)', heTone: 'אולפני וברור (נ)' },
-    { id: 'Puck', ruTone: 'Энергичный и живой (М)', heTone: 'אנרגטי וחי (ג)' },
-    { id: 'Charon', ruTone: 'Глубокий диктор (М)', heTone: 'קריין עמוק (ג)' },
-    { id: 'Aoede', ruTone: 'Мягкий и тёплый (Ж)', heTone: 'רך ונעים (נ)' },
-    { id: 'Fenrir', ruTone: 'Динамичный драйв (М)', heTone: 'דינמי ונמרץ (ג)' },
-    { id: 'Leda', ruTone: 'Чистый и светлый (Ж)', heTone: 'צלול ובהיר (נ)' }
+    { id: 'Kore', tones: { ru: 'Чёткий студийный (Ж)', en: 'Crisp studio (F)', he: 'אולפני וברור (נ)' } },
+    { id: 'Puck', tones: { ru: 'Энергичный и живой (М)', en: 'Energetic & bright (M)', he: 'אנרגטי וחי (ג)' } },
+    { id: 'Charon', tones: { ru: 'Глубокий диктор (М)', en: 'Deep narrator (M)', he: 'קריין עמוק (ג)' } },
+    { id: 'Aoede', tones: { ru: 'Мягкий и тёплый (Ж)', en: 'Warm & smooth (F)', he: 'רך ונעים (נ)' } },
+    { id: 'Fenrir', tones: { ru: 'Динамичный драйв (М)', en: 'Dynamic drive (M)', he: 'דינמי ונמרץ (ג)' } },
+    { id: 'Leda', tones: { ru: 'Чистый и светлый (Ж)', en: 'Clear & light (F)', he: 'צלול ובהיר (נ)' } }
   ];
 
-  // --- Полная локализация интерфейса (RU / עברית) ---
+  const TARGET_LANG_META = {
+    de: {
+      flag: '🇩🇪',
+      code: 'DE',
+      heroBrand: '🚀 Z-DEUTSCH',
+      sampleWord: 'der Kofferraum',
+      speechStyle: 'clear, natural Standard German pronunciation, crisp diction, warm studio voice',
+      bcp47: 'de-DE',
+      names: { ru: 'Немецкий', en: 'German', he: 'גרמנית' }
+    },
+    en: {
+      flag: '🇬🇧',
+      code: 'EN',
+      heroBrand: '🚀 Z-ENGLISH',
+      sampleWord: 'destination',
+      speechStyle: 'clear, natural English pronunciation, crisp diction, warm studio voice',
+      bcp47: 'en-US',
+      names: { ru: 'Английский', en: 'English', he: 'אנגלית' }
+    },
+    es: {
+      flag: '🇪🇸',
+      code: 'ES',
+      heroBrand: '🚀 Z-ESPAÑOL',
+      speechStyle: 'clear, natural Spanish pronunciation, crisp diction, warm studio voice',
+      sampleWord: 'la autopista',
+      bcp47: 'es-ES',
+      names: { ru: 'Испанский', en: 'Spanish', he: 'ספרדית' }
+    }
+  };
+
+  // --- Полная локализация интерфейса (RU / EN / עברית) ---
   const UI_TEXT = {
     ru: {
-      titleTagline: 'Сбивайте немецкие слова по буквам и запоминайте перевод при взрыве!',
-      titleArsenalLabel: '⚔️ Выберите оружие:',
-      launchMissionBtn: (lvlNum, name) => `🚀 Начать игру · Уровень ${lvlNum}: ${name}`,
-      launchAutoBtn: '🚀 Начать игру · Главный AUTO-марафон (73)',
+      nativeFilterLabel: 'Перевод:',
+      targetFilterLabel: '🎯 Я учу:',
+      titleTagline: (langName) => `Сбивайте слова (${langName}) по буквам, запоминайте перевод и открывайте оружие!`,
+      titleArsenalLabel: '⚔️ Оружие за слова:',
+      learnedPill: (done, nextGoal, nextWeapon) =>
+        nextGoal ? `📖 Выучено: ${done} / ${nextGoal} до «${nextWeapon}»` : `📖 Выучено: ${done} сл. (Весь арсенал открыт!)`,
+      lockedWeaponHint: (icon, name, needMore, totalNeed) =>
+        `🔒 Выучите ещё ${needMore} сл., чтобы открыть ${icon} ${name} (нужно ${totalNeed})`,
+      unlockedWeaponBanner: (icon, name) => `🎉 ОТКРЫТО НОВОЕ ОРУЖИЕ: ${icon} ${name}!`,
+      lockTagShort: (n) => `🔒 ${n} сл.`,
+
+      originOfficial: '🏛️ ОТ СОЗДАТЕЛЯ',
+      originUserAnki: '👤 ЛИЧНЫЙ · ANKI',
+      originUserCustom: '👤 ЛИЧНЫЙ КУРС',
+      allCoursesBtn: 'Все курсы',
+      coursesHudBtn: 'Курсы',
+      launchLessonBtn: (num, title, count) => `🚀 Начать игру · Урок ${num}: ${title} (${count})`,
+      launchBossBtn: (title) => `👹 В бой! ${title}`,
       titleVoiceLink: '🎙️ Озвучка AI',
       titleDictLink: (n) => `Словарь (${n})`,
-      titleCustomLink: 'Свои слова',
-      ranks: ['КАДЕТ', 'ПИЛОТ АВТОБАНА', 'ШТУРМАН ГАЛАКТИКИ', 'КОМАНДОР AUTO'],
-      rankLine: (rank, best) => `${rank} · РЕКОРД: ${best}`,
+      titleCustomLink: 'Anki / Свои слова',
+      ranks: ['КАДЕТ', 'ПИЛОТ ГАЛАКТИКИ', 'ШТУРМАН ЛИНГВО', 'КОМАНДОР СЛОВАРЯ'],
+      rankLine: (rank, learned, best) => `${rank} · 📖 ${learned} СЛ. · РЕКОРД: ${best}`,
       overlayWeaponTitle: '⚔️ Оружие корабля:',
       backToMenuBtn: '🏠 В меню',
       weaponBanner: (icon, name) => `${icon} Оружие: ${name}`,
@@ -125,83 +200,247 @@
       pause: 'Пауза',
       score: 'Очки',
       combo: 'Комбо',
-      accuracy: 'Точность',
+      learnedHud: 'Выучено',
       shield: 'Щит',
       badgeMode: '🏷️ Бейдж',
       articleMode: '🏷️ С артиклем',
-      dictBtn: ' Словарь',
-      customBtn: 'Свои слова',
-      sidebarLevels: '🚗 Уровни «AUTO»',
-      wordsCount: (n) => `${n} слова`,
+      customBtn: 'Anki',
+      wordsCount: (n) => `${n} сл.`,
       wordsShort: (n) => `${n} сл.`,
       sidebarKills: '💥 Взорванные слова',
-      clearBtn: 'Очистить',
-      killFeedEmpty: 'Сбивайте летящие немецкие слова!<br><br>При взрыве перевод всплывает прямо в космосе и сохраняется здесь.',
-      legendDer: 'der (м.р.)',
-      legendDie: 'die (ж.р.)',
-      legendDas: 'das (ср.р.)',
-      legendVerb: 'Глаг./Пр.',
+      killFeedEmpty: 'Сбивайте летящие слова!<br><br>Нажмите <strong>☆</strong> («Повторить ещё раз») рядом со словом — игра сохранит его и будет чаще подкидывать в следующих раундах!',
+      pinTooltip: 'Повторить ещё раз (чаще подкидывать в следующих раундах)',
+      pinAddedBanner: (w) => `⭐ «${w}» добавлено в повтор!`,
+      pinRemovedBanner: (w) => `☆ «${w}» убрано из повтора`,
+      drillPinnedBtn: (n) => `⭐ Повторить отмеченные (${n})`,
+      pinnedRoundTitle: '⭐ Тренировка отмеченных слов',
+
+      legends: {
+        de: ['der (м.р.)', 'die (ж.р.)', 'das (ср.р.)', 'Глаг./Пр.'],
+        en: ['Noun (сущ.)', 'Adj. (прил.)', 'Verb (глаг.)', 'Adv./Пр.'],
+        es: ['el (м.р.)', 'la (ж.р.)', 'Verbo (глаг.)', 'Adj./Пр.']
+      },
+
       targetIdle: 'Нажимайте буквы, чтобы стрелять по словам...',
-      levelShort: (num, title) => `Ур.${num}: ${title}`,
-      levelBadgeMain: '🏆 ГЛАВНЫЙ AUTO',
-      levelBadgeNum: (num) => `УРОВЕНЬ ${num}`,
-      autoAllShort: 'AUTO (Все слова)',
-      introBadgeMain: '🏆 ГЛАВНЫЙ УРОВЕНЬ: AUTO (73 СЛОВА)',
-      introBadgeStep: (num, total) => `КАМПАНИЯ AUTO · УРОВЕНЬ ${num} ИЗ ${total}`,
-      wordsInLevelHeader: (n) => `📋 Посмотреть слова этого уровня (${n})`,
-      learnedWordsHeader: (n) => `📋 Выученные слова (${n})`,
-      startLevelBtn: '🚀 В бой! Начать уровень',
+      lessonShort: (num, title) => `Ур.${num}: ${title}`,
+      lessonBadgeBoss: '👹 БОСС-УРОК',
+      lessonBadgeNum: (num) => `УРОК ${num}`,
+      introBadge: (modTitle, num, total) => `${modTitle.toUpperCase()} · УРОК ${num} ИЗ ${total}`,
+      wordsInLevelHeader: (n) => `📋 Слова этого урока (${n})`,
+      learnedWordsHeader: (n) => `📋 Пройденные слова (${n})`,
+      startLevelBtn: '🚀 В бой! Начать урок',
       retryBtn: '🔄 Ещё раз',
       tryAgainBtn: '🚀 Попробовать снова',
-      resumeBtn: '▶ Продолжить уровень',
-      nextLevelBtn: (num) => `Следующий: Ур.${num} ➔`,
-      mistakesBtn: '🎯 Сложные слова',
-      completeBadge: (maxCombo) => `🎉 УРОВЕНЬ ПРОЙДЕН! МАКС. КОМБО: x${maxCombo}`,
+      resumeBtn: '▶ Продолжить урок',
+      nextLevelBtn: (title) => `Дальше: ${title} ➔`,
+      mistakesBtn: (n) => `🎯 Ошибки (${n})`,
+      completeBadge: (maxCombo) => `🎉 УРОК ПРОЙДЕН! МАКС. КОМБО: x${maxCombo}`,
       completeTitle: (name) => `Отличная стрельба! «${name}» зачищен`,
-      completeDesc: 'Вы успешно сбили все слова уровня. Пройдите быстрый <strong>блиц из 3 вопросов</strong> или переходите к следующему уровню!',
-      quizHeader: '🧠 БЛИЦ: Выберите перевод!',
+      completeDesc: 'Все слова сбиты! Пройдите быстрый <strong>блиц из 3 вопросов</strong> или переходите к следующему короткому уроку!',
+      quizHeader: '🧠 БЛИЦ: Выберите верный перевод!',
       quizDoneScore: (c, t) => `${c} / ${t} верно!`,
       quizDoneTitle: (c, t) => `✨ Блиц завершён! Результат: ${c} из ${t}`,
       gameOverBadge: '💥 ЩИТ КОРАБЛЯ ПРОБИТ',
-      gameOverTitle: (name) => `Уровень «${name}» не завершён`,
-      gameOverDesc: (done, total) => `Сбито слов: <strong>${done} из ${total}</strong>. Попробуйте ещё раз!`,
+      gameOverTitle: (name) => `Урок «${name}» не завершён`,
+      gameOverDesc: (done, total) => `Сбито слов: <strong>${done} из ${total}</strong>. Длинные слова летят медленнее, а вы всегда можете включить скорость 0.25x или 0.5x!`,
       pauseBadge: '⏸ ИГРА НА ПАУЗЕ',
-      pauseDesc: (done, total) => `Прогресс: <strong>${done} / ${total}</strong> слов. Смените оружие, выберите уровень или продолжайте бой:`,
-      dictTitle: (n) => `📚 Словарь «AUTO» (${n} слова)`,
-      dictSearchPlaceholder: 'Поиск: немецкий, русский или עברית...',
-      customTitle: '➕ Добавить свои немецкие слова',
-      customHint: 'Формат: <code>немецкое слово;перевод RU;перевод HE</code> (каждое с новой строки).',
-      customSaveBtn: 'Создать уровень и играть 🚀',
-      layoutWarning: '⚠️ Переключите раскладку на DE / EN!',
+      pauseDesc: (done, total) => `Прогресс: <strong>${done} / ${total}</strong> слов. Смените оружие, выберите курс или продолжайте бой:`,
+      dictTitle: (courseTitle, n) => `📚 Словарь: ${courseTitle} (${n} сл.)`,
+      dictSearchPlaceholder: 'Поиск слова или перевода...',
+      dictPinnedFilter: 'Отмеченные',
+      layoutWarning: '⚠️ Переключите раскладку клавиатуры на латиницу!',
 
-      // Gemini 3.8 TTS диалог
+      // Каталог курсов и импорт Anki
+      catalogTitle: '🗂️ Трёхступенчатый каталог курсов и уроков',
+      tabAll: 'Все курсы',
+      tabOfficial: '🏛️ От создателя',
+      tabUser: '👤 Личные / Anki',
+      importAnkiBtn: 'Загрузить Anki (.apkg)',
+      deleteDeckBtn: '🗑️ Удалить',
+      emptyUserCourses: 'У вас пока нет личных курсов для этого языка. Загрузите файл Anki (.apkg) или добавьте свой список слов!',
+      bossMetaLabel: 'Повторение 3 уроков + ⭐',
+      customTitle: '📦 Импорт Anki (.apkg) или своих слов',
+      tabImportAnki: '📦 Файл Anki (.apkg / .tsv)',
+      tabImportManual: '✍️ Вставить текстом',
+      importLangLabel: 'Язык изучаемых слов:',
+      ankiDropTitle: 'Перетащите файл .apkg сюда или нажмите для выбора',
+      ankiDropSub: 'Поддерживаются колоды Anki 2.0 / 2.1 / 23.10+ (.apkg, .colpkg, .tsv, .csv, .txt)',
+      sampleApkgBtn: '📥 Скачать тестовый .apkg (12 слов)',
+      ankiDeckNameLabel: 'Название личного курса:',
+      ankiFrontLabel: 'Изучаемое слово (летит):',
+      ankiBackLabel: 'Перевод (при взрыве):',
+      ankiConfirmBtn: (n) => `🚀 Импортировать (${n} карт.) и играть!`,
+      ankiParsedOk: (n) => `✓ Прочитано карточек: ${n}`,
+      customHint: 'Формат: <code>слово;перевод</code> (каждое с новой строки). Игра разобьёт список на уроки по 12 слов + Босс-урок!',
+      customSaveBtn: 'Создать личный курс и играть 🚀',
+
+      // Gemini 3.8 TTS
       ttsDialogTitle: '🎙️ Студия озвучки Gemini 3.8 TTS',
-      ttsEnableLabel: 'Произношение немецких слов при взрыве:',
+      ttsEnableLabel: 'Произношение слов при взрыве:',
       ttsOn: '🔊 Включено',
       ttsOff: '🔇 Выключено',
       ttsModelLabel: 'Языковая аудио-модель Gemini 3.8:',
-      ttsModelFlashDesc: 'Максимальное студийное HD качество и живая немецкая дикция',
+      ttsModelFlashDesc: 'Максимальное студийное HD качество и живая дикция носителя',
       ttsModelLiteDesc: 'Сверхбыстрый отклик для скоростной печати',
       ttsVoiceLabel: 'Студийный голос:',
-      ttsTestBtn: '▶️ Прослушать голос («der Kofferraum»)',
+      ttsTestBtn: (sample) => `▶️ Прослушать голос («${sample}»)`,
       ttsTestingBtn: '⏳ Генерация аудио Gemini 3.8...',
       ttsApiKeySummary: '🔑 Настройка ключа GEMINI_API_KEY (Vercel / Браузер)',
-      ttsApiKeyHint: 'На Vercel добавьте переменную <code>GEMINI_API_KEY</code> в настройках проекта (Settings → Environment Variables) — и все слова будут озвучиваться через серверный кэш <code>/api/tts</code>. Или вставьте свой ключ ниже (сохраняется только локально в вашем браузере):',
+      ttsApiKeyHint: 'На Vercel добавьте переменную <code>GEMINI_API_KEY</code> в настройках проекта — и все слова будут озвучиваться через серверный кэш <code>/api/tts</code>. Либо вставьте свой ключ ниже:',
       ttsStatusReadyServer: (model, voice) => `✨ Активен: ${model} · голос ${voice} (сервер Vercel)`,
       ttsStatusReadyLocal: (model, voice) => `✨ Активен: ${model} · голос ${voice} (локальный ключ API)`,
-      ttsStatusFallback: '🔊 Сейчас активен встроенный голос браузера. Добавьте GEMINI_API_KEY в Vercel или ниже для студийного голоса Gemini 3.8 TTS!',
+      ttsStatusFallback: '🔊 Активен встроенный системный голос браузера. Добавьте GEMINI_API_KEY для Gemini 3.8 TTS!',
       ttsStatusMuted: '🔇 Озвучка слов выключена'
     },
+
+    en: {
+      nativeFilterLabel: 'Interface / Trans:',
+      targetFilterLabel: '🎯 I am learning:',
+      titleTagline: (langName) => `Shoot ${langName} words letter by letter, learn translations on impact & unlock weapons!`,
+      titleArsenalLabel: '⚔️ Arsenal Progression:',
+      learnedPill: (done, nextGoal, nextWeapon) =>
+        nextGoal ? `📖 Learned: ${done} / ${nextGoal} for ${nextWeapon}` : `📖 Learned: ${done} words (All weapons unlocked!)`,
+      lockedWeaponHint: (icon, name, needMore, totalNeed) =>
+        `🔒 Learn ${needMore} more words to unlock ${icon} ${name} (${totalNeed} needed)`,
+      unlockedWeaponBanner: (icon, name) => `🎉 WEAPON UNLOCKED: ${icon} ${name}!`,
+      lockTagShort: (n) => `🔒 ${n} w.`,
+
+      originOfficial: '🏛️ OFFICIAL',
+      originUserAnki: '👤 MY DECK · ANKI',
+      originUserCustom: '👤 MY CUSTOM DECK',
+      allCoursesBtn: 'All Courses',
+      coursesHudBtn: 'Courses',
+      launchLessonBtn: (num, title, count) => `🚀 Start Game · Lesson ${num}: ${title} (${count})`,
+      launchBossBtn: (title) => `👹 Fight Boss! ${title}`,
+      titleVoiceLink: '🎙️ AI Voice',
+      titleDictLink: (n) => `Dictionary (${n})`,
+      titleCustomLink: 'Anki / Custom',
+      ranks: ['CADET', 'GALAXY PILOT', 'LINGO NAVIGATOR', 'LEXICON COMMANDER'],
+      rankLine: (rank, learned, best) => `${rank} · 📖 ${learned} W. · BEST: ${best}`,
+      overlayWeaponTitle: '⚔️ Ship Weapon:',
+      backToMenuBtn: '🏠 Main Menu',
+      weaponBanner: (icon, name) => `${icon} Weapon: ${name}`,
+      speedBanner: (label) => `Word descent speed: ${label}`,
+      gravitySurgeBanner: '🌀 GRAVITY WAVE: WORDS BLASTED TO THE TOP!',
+
+      pause: 'Pause',
+      score: 'Score',
+      combo: 'Combo',
+      learnedHud: 'Learned',
+      shield: 'Shield',
+      badgeMode: '🏷️ Badge',
+      articleMode: '🏷️ Type Article',
+      customBtn: 'Anki',
+      wordsCount: (n) => `${n} words`,
+      wordsShort: (n) => `${n} w.`,
+      sidebarKills: '💥 Exploded Words',
+      killFeedEmpty: 'Shoot falling words!<br><br>Click <strong>☆</strong> ("Repeat again") next to unfamiliar words so the game mixes them into upcoming rounds more often.',
+      pinTooltip: 'Repeat again (boost frequency in upcoming rounds)',
+      pinAddedBanner: (w) => `⭐ "${w}" pinned for extra review!`,
+      pinRemovedBanner: (w) => `☆ "${w}" unpinned`,
+      drillPinnedBtn: (n) => `⭐ Practice Pinned (${n})`,
+      pinnedRoundTitle: '⭐ Pinned Words Drill',
+
+      legends: {
+        de: ['der (masc.)', 'die (fem.)', 'das (neut.)', 'Verb/Other'],
+        en: ['Noun', 'Adjective', 'Verb', 'Adv./Other'],
+        es: ['el (masc.)', 'la (fem.)', 'Verbo', 'Adj./Other']
+      },
+
+      targetIdle: 'Type or tap letters to shoot incoming words...',
+      lessonShort: (num, title) => `L${num}: ${title}`,
+      lessonBadgeBoss: '👹 BOSS REVIEW',
+      lessonBadgeNum: (num) => `LESSON ${num}`,
+      introBadge: (modTitle, num, total) => `${modTitle.toUpperCase()} · LESSON ${num} OF ${total}`,
+      wordsInLevelHeader: (n) => `📋 Preview lesson words (${n})`,
+      learnedWordsHeader: (n) => `📋 Cleared words (${n})`,
+      startLevelBtn: '🚀 Launch Lesson!',
+      retryBtn: '🔄 Replay',
+      tryAgainBtn: '🚀 Try Again',
+      resumeBtn: '▶ Resume Lesson',
+      nextLevelBtn: (title) => `Next: ${title} ➔`,
+      mistakesBtn: (n) => `🎯 Mistakes (${n})`,
+      completeBadge: (maxCombo) => `🎉 LESSON CLEARED! MAX COMBO: x${maxCombo}`,
+      completeTitle: (name) => `Great shooting! "${name}" cleared`,
+      completeDesc: 'All words destroyed! Take a quick <strong>3-question blitz</strong> or jump into the next short lesson!',
+      quizHeader: '🧠 BLITZ: Pick the right translation!',
+      quizDoneScore: (c, t) => `${c} / ${t} correct!`,
+      quizDoneTitle: (c, t) => `✨ Blitz complete! Score: ${c} of ${t}`,
+      gameOverBadge: '💥 SHIP SHIELD BREACHED',
+      gameOverTitle: (name) => `Lesson "${name}" incomplete`,
+      gameOverDesc: (done, total) => `Words cleared: <strong>${done} of ${total}</strong>. Long compound words auto-slow down, and you can switch speed to 0.25x or 0.5x anytime!`,
+      pauseBadge: '⏸ GAME PAUSED',
+      pauseDesc: (done, total) => `Progress: <strong>${done} / ${total}</strong> words. Switch weapon, browse courses or resume:`,
+      dictTitle: (courseTitle, n) => `📚 Dictionary: ${courseTitle} (${n} words)`,
+      dictSearchPlaceholder: 'Search word or translation...',
+      dictPinnedFilter: 'Pinned',
+      layoutWarning: '⚠️ Switch keyboard layout to Latin characters!',
+
+      catalogTitle: '🗂️ 3-Tier Courses, Modules & Short Lessons',
+      tabAll: 'All Courses',
+      tabOfficial: '🏛️ Official',
+      tabUser: '👤 My Decks / Anki',
+      importAnkiBtn: 'Import Anki (.apkg)',
+      deleteDeckBtn: '🗑️ Delete',
+      emptyUserCourses: 'No personal decks for this language yet. Upload an Anki .apkg file or paste your own words!',
+      bossMetaLabel: 'Mixes last 3 lessons + ⭐',
+      customTitle: '📦 Import Anki Deck (.apkg) or Custom Words',
+      tabImportAnki: '📦 Anki File (.apkg / .tsv)',
+      tabImportManual: '✍️ Paste Text List',
+      importLangLabel: 'Target language in deck:',
+      ankiDropTitle: 'Drop an .apkg file here or click to browse',
+      ankiDropSub: 'Supports Anki 2.0 / 2.1 / 23.10+ (.apkg, .colpkg, .tsv, .csv, .txt)',
+      sampleApkgBtn: '📥 Download sample .apkg (12 words)',
+      ankiDeckNameLabel: 'Personal course title:',
+      ankiFrontLabel: 'Target word (falling):',
+      ankiBackLabel: 'Translation (on explosion):',
+      ankiConfirmBtn: (n) => `🚀 Import (${n} cards) & Play!`,
+      ankiParsedOk: (n) => `✓ Parsed ${n} cards`,
+      customHint: 'Format: <code>word;translation</code> (one per line). Automatically split into 12-word lessons + Boss Review!',
+      customSaveBtn: 'Create Personal Course & Play 🚀',
+
+      ttsDialogTitle: '🎙️ Gemini 3.8 TTS Voice Studio',
+      ttsEnableLabel: 'Pronounce words on explosion:',
+      ttsOn: '🔊 Enabled',
+      ttsOff: '🔇 Muted',
+      ttsModelLabel: 'Gemini 3.8 Audio Model:',
+      ttsModelFlashDesc: 'Studio HD quality & natural native intonation',
+      ttsModelLiteDesc: 'Ultra-low latency for rapid typing',
+      ttsVoiceLabel: 'Studio Voice:',
+      ttsTestBtn: (sample) => `▶️ Test Voice ("${sample}")`,
+      ttsTestingBtn: '⏳ Generating Gemini 3.8 audio...',
+      ttsApiKeySummary: '🔑 Configure GEMINI_API_KEY (Vercel / Browser)',
+      ttsApiKeyHint: 'Add <code>GEMINI_API_KEY</code> in Vercel project settings for automatic server-cached TTS via <code>/api/tts</code>, or paste a local browser key below:',
+      ttsStatusReadyServer: (model, voice) => `✨ Active: ${model} · voice ${voice} (Vercel server)`,
+      ttsStatusReadyLocal: (model, voice) => `✨ Active: ${model} · voice ${voice} (Local API key)`,
+      ttsStatusFallback: '🔊 Using built-in browser voice. Add GEMINI_API_KEY for studio Gemini 3.8 TTS!',
+      ttsStatusMuted: '🔇 Word pronunciation is muted'
+    },
+
     he: {
-      titleTagline: 'פוצצו מילים בגרמנית אות אחר אות וזכרו את התרגום בפיצוץ!',
-      titleArsenalLabel: '⚔️ בחרו נשק לחללית:',
-      launchMissionBtn: (lvlNum, name) => `🚀 התחל משחק · שלב ${lvlNum}: ${name}`,
-      launchAutoBtn: '🚀 התחל משחק · מרתון AUTO הראשי (73)',
+      nativeFilterLabel: 'תרגום / ממשק:',
+      targetFilterLabel: '🎯 אני לומד:',
+      titleTagline: (langName) => `פוצצו מילים ב${langName} אות אחר אות, זכרו את התרגום בפיצוץ ופתחו נשקים חדשים!`,
+      titleArsenalLabel: '⚔️ שדרוג נשקים ממילים:',
+      learnedPill: (done, nextGoal, nextWeapon) =>
+        nextGoal ? `📖 נלמדו: ${done} / ${nextGoal} ל-«${nextWeapon}»` : `📖 נלמדו: ${done} מילים (כל הנשקים פתוחים!)`,
+      lockedWeaponHint: (icon, name, needMore, totalNeed) =>
+        `🔒 למדו עוד ${needMore} מילים כדי לפתוח את ${icon} ${name} (נדרש ${totalNeed})`,
+      unlockedWeaponBanner: (icon, name) => `🎉 נשק חדש נפתח: ${icon} ${name}!`,
+      lockTagShort: (n) => `🔒 ${n} מיל׳`,
+
+      originOfficial: '🏛️ רשמי מהאתר',
+      originUserAnki: '👤 אישי · ANKI',
+      originUserCustom: '👤 קורס אישי',
+      allCoursesBtn: 'כל הקורסים',
+      coursesHudBtn: 'קורסים',
+      launchLessonBtn: (num, title, count) => `🚀 התחל משחק · שלב ${num}: ${title} (${count})`,
+      launchBossBtn: (title) => `👹 לקרב בוס! ${title}`,
       titleVoiceLink: '🎙️ קריינות AI',
       titleDictLink: (n) => `מילון (${n})`,
-      titleCustomLink: 'מילים משלך',
-      ranks: ['צוער חלל', 'טייס אוטובאן', 'נווט גלקטי', 'מפקד AUTO'],
-      rankLine: (rank, best) => `${rank} · שיא: ${best}`,
+      titleCustomLink: 'Anki / מילים משלך',
+      ranks: ['צוער חלל', 'טייס גלקטי', 'נווט שפות', 'מפקד המילון'],
+      rankLine: (rank, learned, best) => `${rank} · 📖 ${learned} מיל׳ · שיא: ${best}`,
       overlayWeaponTitle: '⚔️ נשק החללית:',
       backToMenuBtn: '🏠 מסך ראשי',
       weaponBanner: (icon, name) => `${icon} נשק: ${name}`,
@@ -211,108 +450,158 @@
       pause: 'הפסקה',
       score: 'ניקוד',
       combo: 'רצף',
-      accuracy: 'דיוק',
+      learnedHud: 'נלמדו',
       shield: 'מגן',
       badgeMode: '🏷️ תגית',
       articleMode: '🏷️ עם תווית',
-      dictBtn: ' מילון',
-      customBtn: 'מילים משלך',
-      sidebarLevels: '🚗 שלבי «AUTO»',
+      customBtn: 'Anki',
       wordsCount: (n) => `${n} מילים`,
       wordsShort: (n) => `${n} מיל׳`,
       sidebarKills: '💥 מילים שפוצצו',
-      clearBtn: 'נקה',
-      killFeedEmpty: 'פוצצו את המילים בגרמנית!<br><br>בעת הפיצוץ התרגום לעברית יופיע בחלל ויישמר כאן לחזרה.',
-      legendDer: 'der (זכר)',
-      legendDie: 'die (נקבה)',
-      legendDas: 'das (נייטרלי)',
-      legendVerb: 'פועל/אחר',
+      killFeedEmpty: 'פוצצו את המילים המעופפות!<br><br>לחצו על <strong>☆</strong> ליד מילה קשה כדי לשמור אותה ולתרגל אותה בתדירות גבוהה יותר בסיבובים הבאים.',
+      pinTooltip: 'חזור שוב (יופיע יותר בסיבובים הבאים)',
+      pinAddedBanner: (w) => `⭐ «${w}» נשמר לחזרה!`,
+      pinRemovedBanner: (w) => `☆ «${w}» הוסר מרשימת החזרה`,
+      drillPinnedBtn: (n) => `⭐ תרגול מסומנות (${n})`,
+      pinnedRoundTitle: '⭐ תרגול מילים מסומנות בכוכב',
+
+      legends: {
+        de: ['der (זכר)', 'die (נקבה)', 'das (נייטרלי)', 'פועל/אחר'],
+        en: ['Noun (שם עצם)', 'Adj. (תואר)', 'Verb (פועל)', 'אחר'],
+        es: ['el (זכר)', 'la (נקבה)', 'Verbo (פועל)', 'תואר/אחר']
+      },
+
       targetIdle: 'הקישו על האותיות כדי לירות במילים...',
-      levelShort: (num, title) => `שלב ${num}: ${title}`,
-      levelBadgeMain: '🏆 שלב AUTO ראשי',
-      levelBadgeNum: (num) => `שלב ${num}`,
-      autoAllShort: 'AUTO (כל המילים)',
-      introBadgeMain: '🏆 השלב הראשי: AUTO (73 מילים)',
-      introBadgeStep: (num, total) => `קמפיין AUTO · שלב ${num} מתוך ${total}`,
-      wordsInLevelHeader: (n) => `📋 הצג את מילות השלב (${n})`,
+      lessonShort: (num, title) => `שלב ${num}: ${title}`,
+      lessonBadgeBoss: '👹 שלב בוס',
+      lessonBadgeNum: (num) => `שלב ${num}`,
+      introBadge: (modTitle, num, total) => `${modTitle} · שלב ${num} מתוך ${total}`,
+      wordsInLevelHeader: (n) => `📋 הצג מילים בשלב זה (${n})`,
       learnedWordsHeader: (n) => `📋 מילים שנלמדו (${n})`,
       startLevelBtn: '🚀 לקרב! התחל שלב',
       retryBtn: '🔄 שחק שוב',
       tryAgainBtn: '🚀 נסה שוב',
       resumeBtn: '▶ המשך בשלב',
-      nextLevelBtn: (num) => `הבא: שלב ${num} ➔`,
-      mistakesBtn: '🎯 מילים קשות',
+      nextLevelBtn: (title) => `הבא: ${title} ➔`,
+      mistakesBtn: (n) => `🎯 טעויות (${n})`,
       completeBadge: (maxCombo) => `🎉 השלב הושלם! רצף שיא: x${maxCombo}`,
-      completeTitle: (name) => `ירייה מעולה! השלב «${name}» הושלם`,
-      completeDesc: 'פוצצתם בהצלחה את כל המילים בשלב! ענו על <strong>חידון בזק של 3 שאלות</strong> או עברו לשלב הבא!',
+      completeTitle: (name) => `ירייה מעולה! «${name}» הושלם`,
+      completeDesc: 'פוצצתם את כל המילים! ענו על <strong>חידון בזק של 3 שאלות</strong> או המשיכו לשלב הקצר הבא!',
       quizHeader: '🧠 חידון בזק: בחרו את התרגום הנכון!',
       quizDoneScore: (c, t) => `${c} / ${t} נכון!`,
       quizDoneTitle: (c, t) => `✨ החידון הסתיים! תוצאה: ${c} מתוך ${t}`,
       gameOverBadge: '💥 מגן החללית נפרץ',
       gameOverTitle: (name) => `השלב «${name}» לא הושלם`,
-      gameOverDesc: (done, total) => `מילים שפוצצו: <strong>${done} מתוך ${total}</strong>. נסו שוב!`,
+      gameOverDesc: (done, total) => `מילים שפוצצו: <strong>${done} מתוך ${total}</strong>. מילים ארוכות מאטות אוטומטית, וניתן לבחור מהירות 0.25x או 0.5x!`,
       pauseBadge: '⏸ המשחק בהפסקה',
-      pauseDesc: (done, total) => `התקדמות: <strong>${done} / ${total}</strong> מילים. החליפו נשק, בחרו שלב או המשיכו בקרב:`,
-      dictTitle: (n) => `📚 מילון «AUTO» (${n} מילים)`,
-      dictSearchPlaceholder: 'חיפוש: גרמנית, עברית או רוסית...',
-      customTitle: '➕ הוספת מילים משלך בגרמנית',
-      customHint: 'פורמט: <code>מילה בגרמנית;תרגום</code> (כל מילה בשורה חדשה).',
-      customSaveBtn: 'צור שלב ושחק 🚀',
-      layoutWarning: '⚠️ החליפו מקלדת ל-DE / EN!',
+      pauseDesc: (done, total) => `התקדמות: <strong>${done} / ${total}</strong> מילים. החליפו נשק, בחרו קורס או המשיכו:`,
+      dictTitle: (courseTitle, n) => `📚 מילון: ${courseTitle} (${n} מילים)`,
+      dictSearchPlaceholder: 'חיפוש מילה או תרגום...',
+      dictPinnedFilter: 'מסומנות ב-⭐',
+      layoutWarning: '⚠️ החליפו מקלדת לאותיות לטיניות!',
+
+      catalogTitle: '🗂️ קטלוג קורסים, מודולים ושלבים',
+      tabAll: 'הכל',
+      tabOfficial: '🏛️ רשמי מהאתר',
+      tabUser: '👤 אישי / Anki',
+      importAnkiBtn: 'ייבוא Anki (.apkg)',
+      deleteDeckBtn: '🗑️ מחק',
+      emptyUserCourses: 'עדיין אין קורסים אישיים בשפה זו. העלו קובץ Anki (.apkg) או הדביקו רשימת מילים משלכם!',
+      bossMetaLabel: 'חזרה על 3 שלבים + ⭐',
+      customTitle: '📦 ייבוא חפיסת Anki (.apkg) או מילים משלך',
+      tabImportAnki: '📦 קובץ Anki (.apkg / .tsv)',
+      tabImportManual: '✍️ הדבקת טקסט',
+      importLangLabel: 'שפת הלימוד בחפיסה:',
+      ankiDropTitle: 'גררו קובץ .apkg לכאן או לחצו לבחירה',
+      ankiDropSub: 'תומך ב-Anki 2.0 / 2.1 / 23.10+ (.apkg, .colpkg, .tsv, .csv, .txt)',
+      sampleApkgBtn: '📥 הורד קובץ .apkg לדוגמה (12 מילים)',
+      ankiDeckNameLabel: 'שם הקורס האישי:',
+      ankiFrontLabel: 'מילה ללימוד (בחלל):',
+      ankiBackLabel: 'תרגום (בפיצוץ):',
+      ankiConfirmBtn: (n) => `🚀 ייבא (${n} כרטיסים) ושחק!`,
+      ankiParsedOk: (n) => `✓ נקראו ${n} כרטיסים`,
+      customHint: 'פורמט: <code>מילה;תרגום</code> (כל מילה בשורה חדשה). המשחק יחלק אוטומטית לשלבים קצרים של 12 מילים + שלב בוס!',
+      customSaveBtn: 'צור קורס אישי ושחק 🚀',
 
       ttsDialogTitle: '🎙️ אולפן קריינות Gemini 3.8 TTS',
-      ttsEnableLabel: 'הגיית מילים בגרמנית בעת פיצוץ:',
+      ttsEnableLabel: 'הגיית מילים בעת פיצוץ:',
       ttsOn: '🔊 מופעל',
       ttsOff: '🔇 מושתק',
       ttsModelLabel: 'מודל קול Gemini 3.8:',
-      ttsModelFlashDesc: 'איכות אולפן HD מקסימלית והגייה גרמנית טבעית',
+      ttsModelFlashDesc: 'איכות אולפן HD מקסימלית והגייה טבעית',
       ttsModelLiteDesc: 'תגובה מהירה במיוחד להקלדה מהירה',
       ttsVoiceLabel: 'קול אולפן:',
-      ttsTestBtn: '▶️ בדיקת קול («der Kofferraum»)',
+      ttsTestBtn: (sample) => `▶️ בדיקת קול («${sample}»)`,
       ttsTestingBtn: '⏳ מפיק אודיו ב-Gemini 3.8...',
       ttsApiKeySummary: '🔑 הגדרת מפתח GEMINI_API_KEY (ב-Vercel או בדפדפן)',
-      ttsApiKeyHint: 'ב-Vercel מומלץ להוסיף משתנה סביבה <code>GEMINI_API_KEY</code> בהגדרות הפרויקט — או להדביק מפתח אישי למטה (נשמר מקומית בדפדפן בלבד):',
+      ttsApiKeyHint: 'ב-Vercel מומלץ להוסיף משתנה סביבה <code>GEMINI_API_KEY</code> בהגדרות הפרויקט — או להדביק מפתח אישי למטה:',
       ttsStatusReadyServer: (model, voice) => `✨ פעיל: ${model} · קול ${voice} (שרת Vercel)`,
       ttsStatusReadyLocal: (model, voice) => `✨ פעיל: ${model} · קול ${voice} (מפתח מקומי)`,
-      ttsStatusFallback: '🔊 פעיל קול מובנה של הדפדפן. הוסיפו GEMINI_API_KEY ב-Vercel או למטה להפעלת Gemini 3.8 TTS!',
+      ttsStatusFallback: '🔊 פעיל קול מובנה של הדפדפן. הוסיפו GEMINI_API_KEY להפעלת Gemini 3.8 TTS!',
       ttsStatusMuted: '🔇 הקראת המילים כבויה'
     }
   };
 
-  // --- Хранилище прогресса и настроек (localStorage) ---
+  // --- Сохранение прогресса, выученных слов и слов со звёздочкой (localStorage) ---
   const STORAGE_KEY = 'zdeutsch_save_v2';
+  const PINNED_STORAGE_KEY = 'zlingo_pinned_words_v1';
+  const LEARNED_STORAGE_KEY = 'zlingo_learned_words_v1';
   const KEY_STORAGE_NAME = 'zdeutsch_gemini_api_key';
 
-  function loadSavedSettings() {
+  function loadJsonStorage(key, fallback) {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
     } catch (_) {
-      return {};
+      return fallback;
     }
   }
 
-  function saveSettingsPatch(patch) {
+  function saveJsonStorage(key, val) {
     try {
-      const prev = loadSavedSettings();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...prev, ...patch }));
+      localStorage.setItem(key, JSON.stringify(val));
     } catch (_) {}
   }
 
+  function loadSavedSettings() {
+    return loadJsonStorage(STORAGE_KEY, {});
+  }
+
+  function saveSettingsPatch(patch) {
+    const prev = loadSavedSettings();
+    saveJsonStorage(STORAGE_KEY, { ...prev, ...patch });
+  }
+
+  // Авто-определение языка интерфейса и перевода по navigator.language при первом входе!
+  function detectBrowserNativeLanguage() {
+    const candidates = Array.isArray(navigator.languages) && navigator.languages.length > 0
+      ? navigator.languages
+      : [navigator.language || 'en'];
+    for (const rawTag of candidates) {
+      const tag = String(rawTag || '').toLowerCase();
+      if (/^(ru|uk|be|kk)/.test(tag)) return 'ru';
+      if (/^(he|iw)/.test(tag)) return 'he';
+      if (/^en/.test(tag)) return 'en';
+    }
+    const primary = String(candidates[0] || '').toLowerCase();
+    if (/^(ru|uk|be|kk)/.test(primary)) return 'ru';
+    if (/^(he|iw)/.test(primary)) return 'he';
+    return 'en';
+  }
+
+  function detectDefaultTargetLanguage() {
+    const primary = String(navigator.language || '').toLowerCase();
+    // Если браузер немецкий — по умолчанию предложим учить английский, иначе немецкий (с 1-клик переключателем над кнопкой старта)
+    if (primary.startsWith('de')) return 'en';
+    return 'de';
+  }
+
   // ==========================================================================
-  // МНОГОСЛОЙНЫЙ СИНТЕЗАТОР ЗВУКА (SoundEngine 2.0)
+  // МНОГОСЛОЙНЫЙ СИНТЕЗАТОР ЗВУКА (SoundEngine 2.0 + Фанфара открытия оружия)
   // ==========================================================================
   const SYNTH_SCALE_HZ = [
-    293.66, // D4
-    349.23, // F4
-    392.00, // G4
-    440.00, // A4
-    523.25, // C5
-    587.33, // D5
-    698.46, // F5
-    783.99, // G5
-    880.00, // A5
-    1046.50 // C6
+    293.66, 349.23, 392.00, 440.00, 523.25,
+    587.33, 698.46, 783.99, 880.00, 1046.50
   ];
 
   class SoundEngine {
@@ -364,9 +653,8 @@
       return this.masterGain;
     }
 
-    // Тактильный механический щелчок клавиши при каждом выстреле
     _playTactileClick(now, dest, freq = 2100, vol = 0.06) {
-      if (!this.noiseBuffer) return;
+      if (!this.noiseBuffer || !dest) return;
       const src = this.ctx.createBufferSource();
       src.buffer = this.noiseBuffer;
 
@@ -398,9 +686,7 @@
       const letterStep = Math.min(280, pitchIndex * 24);
 
       if (weaponId === 'plasma') {
-        // 1. Щелчок затвора + двойной расстроенный плазменный импульс + гармонический обертон
         this._playTactileClick(now, dest, 2400, 0.055);
-
         const base = 520 + letterStep + comboBoost * 0.5;
         [-7, 7].forEach(detuneCents => {
           const osc = this.ctx.createOscillator();
@@ -425,7 +711,6 @@
           osc.stop(now + 0.1);
         });
 
-        // Кристальный пинг комбо
         const ping = this.ctx.createOscillator();
         const pg = this.ctx.createGain();
         ping.type = 'sine';
@@ -437,9 +722,7 @@
         ping.start(now);
         ping.stop(now + 0.07);
       } else if (weaponId === 'railgun') {
-        // 2. Мощный рельсотрон: глубокий саб-бас + металлический звон катушек + импульсный щелчок
         this._playTactileClick(now, dest, 1750, 0.09);
-
         const sub = this.ctx.createOscillator();
         const subGain = this.ctx.createGain();
         sub.type = 'sine';
@@ -464,7 +747,6 @@
         rail.start(now);
         rail.stop(now + 0.12);
       } else if (weaponId === 'tesla') {
-        // 3. Тесла-дуга: высоковольтный треск + резонансный свип фильтра
         if (this.noiseBuffer) {
           const nz = this.ctx.createBufferSource();
           nz.buffer = this.noiseBuffer;
@@ -497,9 +779,7 @@
         zap.start(now);
         zap.stop(now + 0.095);
       } else if (weaponId === 'missiles') {
-        // 4. Микро-ракета: пневматический пуск "пшш-вжух" + упругий микро-хлопок детонации
         this._playTactileClick(now, dest, 1900, 0.05);
-
         if (this.noiseBuffer) {
           const whoosh = this.ctx.createBufferSource();
           whoosh.buffer = this.noiseBuffer;
@@ -532,9 +812,7 @@
         pop.start(popTime);
         pop.stop(popTime + 0.085);
       } else if (weaponId === 'synth') {
-        // 5. Неоновый Синтвейв: мягкий ASMR-"thock" клавиши + стерео мелодичная нота!
         this._playTactileClick(now, dest, 1450, 0.055);
-
         const noteHz = SYNTH_SCALE_HZ[(this.synthNoteCursor++) % SYNTH_SCALE_HZ.length];
         [-6, 6].forEach(detune => {
           const lead = this.ctx.createOscillator();
@@ -559,9 +837,7 @@
           lead.stop(now + 0.185);
         });
       } else if (weaponId === 'gravity') {
-        // 6. Антигравитационная волна: восходящий саб-импульс + стерео-аккорд подъёма
         this._playTactileClick(now, dest, 1650, 0.06);
-
         const lift = this.ctx.createOscillator();
         const liftGain = this.ctx.createGain();
         lift.type = 'sine';
@@ -589,7 +865,6 @@
         });
       }
 
-      // Дополнительный кристальный акцент на последней букве слова
       if (isFinalLetter) {
         const fin = this.ctx.createOscillator();
         const fg = this.ctx.createGain();
@@ -614,7 +889,6 @@
       const dest = this._createPanDest(pan);
       if (!dest) return;
 
-      // Саб-бас удар взрыва
       const sub = this.ctx.createOscillator();
       const subGain = this.ctx.createGain();
       sub.type = 'triangle';
@@ -627,7 +901,6 @@
       sub.start(now);
       sub.stop(now + 0.4);
 
-      // Тёплый фильтрованный шумовой "бум"
       if (this.noiseBuffer) {
         const boom = this.ctx.createBufferSource();
         boom.buffer = this.noiseBuffer;
@@ -646,7 +919,6 @@
         boom.start(now, 0, 0.35);
       }
 
-      // Победный аккорд (повышается с ростом комбо)
       const semitoneShift = Math.min(7, Math.floor((combo - 1) / 2));
       const mult = Math.pow(2, semitoneShift / 12);
       [523.25 * mult, 659.25 * mult, 783.99 * mult].forEach((freq, idx) => {
@@ -662,6 +934,45 @@
         chime.start(t0);
         chime.stop(t0 + 0.29);
       });
+    }
+
+    playUnlockFanfare() {
+      if (!this.sfxEnabled) return;
+      this.init();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((hz, i) => {
+        const osc = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        osc.type = 'triangle';
+        const t0 = now + i * 0.08;
+        osc.frequency.setValueAtTime(hz, t0);
+        g.gain.setValueAtTime(0.11, t0);
+        g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.36);
+        osc.connect(g);
+        g.connect(this.masterGain);
+        osc.start(t0);
+        osc.stop(t0 + 0.38);
+      });
+    }
+
+    playStarChime(active = true) {
+      if (!this.sfxEnabled) return;
+      this.init();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(active ? 740 : 520, now);
+      osc.frequency.exponentialRampToValueAtTime(active ? 1174.66 : 360, now + 0.11);
+      g.gain.setValueAtTime(0.075, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      osc.connect(g);
+      g.connect(this.masterGain);
+      osc.start(now);
+      osc.stop(now + 0.125);
     }
 
     playWeaponEquip(weaponId) {
@@ -686,7 +997,6 @@
       const dest = this.masterGain;
       const dur = 0.28 + 0.14 * strength;
 
-      // Мощный восходящий антигравитационный импульс
       const sub = this.ctx.createOscillator();
       const sg = this.ctx.createGain();
       sub.type = 'sine';
@@ -794,7 +1104,7 @@
   const sound = new SoundEngine();
 
   // ==========================================================================
-  // МЕНЕДЖЕР ВЫСОКОКАЧЕСТВЕННОЙ ОЗВУЧКИ GEMINI 3.8 TTS (С КЭШЕМ И ПРЕДЗАГРУЗКОЙ)
+  // МЕНЕДЖЕР ОЗВУЧКИ GEMINI 3.8 TTS (МУЛЬТИЯЗЫЧНЫЙ DE / EN / ES + КЭШ)
   // ==========================================================================
   class GeminiTTSManager {
     constructor(soundEngine) {
@@ -803,10 +1113,10 @@
       this.model = 'gemini-3.8-flash-tts';
       this.voice = 'Kore';
       this.localApiKey = '';
-      this.serverAvailable = null; // null = ещё не проверяли, true = работает, false = нет ключа на сервере
+      this.serverAvailable = null;
 
-      this.memoryBufferCache = new Map(); // cacheKey -> AudioBuffer
-      this.inflightPromises = new Map();  // cacheKey -> Promise<AudioBuffer|null>
+      this.memoryBufferCache = new Map();
+      this.inflightPromises = new Map();
       this.prefetchQueue = [];
       this.activePrefetches = 0;
       this.currentSource = null;
@@ -853,12 +1163,11 @@
     canAttemptGemini() {
       if (this.localApiKey) return true;
       const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
-      if (isHttp && this.serverAvailable !== false) return true;
-      return false;
+      return isHttp && this.serverAvailable !== false;
     }
 
-    _cacheKey(text) {
-      return `${this.model}|${this.voice}|${text.trim()}`;
+    _cacheKey(text, lang) {
+      return `${this.model}|${this.voice}|${lang || 'de'}|${text.trim()}`;
     }
 
     _openDb() {
@@ -936,8 +1245,9 @@
       return bytes.buffer;
     }
 
-    async _fetchWavArrayBuffer(cleanText) {
-      // Вариант А: Если пользователь указал свой ключ в настройках браузера — прямой запрос к Gemini 3.8 Interactions API
+    async _fetchWavArrayBuffer(cleanText, lang = 'de') {
+      const meta = TARGET_LANG_META[lang] || TARGET_LANG_META.de;
+
       if (this.localApiKey) {
         const res = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
           method: 'POST',
@@ -955,7 +1265,7 @@
                 text: cleanText,
                 annotations: [{
                   type: 'speech_metadata',
-                  style: 'clear, natural Standard German pronunciation, crisp diction, warm studio voice'
+                  style: meta.speechStyle
                 }]
               }]
             }],
@@ -973,13 +1283,13 @@
         return this._base64ToArrayBuffer(b64);
       }
 
-      // Вариант Б: Серверный прокси /api/tts на Vercel с глобальным CDN-кэшированием
       const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
       if (isHttp && this.serverAvailable !== false) {
         const params = new URLSearchParams({
           text: cleanText,
           voice: this.voice,
-          model: this.model
+          model: this.model,
+          lang
         });
         const res = await fetch(`/api/tts?${params.toString()}`, { method: 'GET' });
         if (res.status === 503 || res.status === 404) {
@@ -996,15 +1306,14 @@
       return null;
     }
 
-    async getOrFetchAudioBuffer(text) {
+    async getOrFetchAudioBuffer(text, lang = 'de') {
       const cleanText = String(text || '').trim();
       if (!cleanText) return null;
 
-      const key = this._cacheKey(cleanText);
+      const key = this._cacheKey(cleanText, lang);
       if (this.memoryBufferCache.has(key)) {
         return this.memoryBufferCache.get(key);
       }
-
       if (this.inflightPromises.has(key)) {
         return this.inflightPromises.get(key);
       }
@@ -1017,7 +1326,7 @@
           let wavBytes = await this._readFromIdb(key);
           if (!wavBytes) {
             if (!this.canAttemptGemini()) return null;
-            wavBytes = await this._fetchWavArrayBuffer(cleanText);
+            wavBytes = await this._fetchWavArrayBuffer(cleanText, lang);
             if (!wavBytes) return null;
             this._writeToIdb(key, wavBytes.slice(0));
           }
@@ -1036,45 +1345,43 @@
       return promise;
     }
 
-    // Фоновая предзагрузка слов, летящих на экране (чтобы в момент взрыва озвучка звучала без задержки!)
-    prefetch(text) {
+    prefetch(text, lang = 'de') {
       if (!this.enabled || !this.canAttemptGemini()) return;
       const cleanText = String(text || '').trim();
       if (!cleanText) return;
-      const key = this._cacheKey(cleanText);
+      const key = this._cacheKey(cleanText, lang);
       if (this.memoryBufferCache.has(key) || this.inflightPromises.has(key)) return;
-      if (this.prefetchQueue.includes(cleanText)) return;
+      if (this.prefetchQueue.some(q => q.text === cleanText && q.lang === lang)) return;
 
-      this.prefetchQueue.push(cleanText);
+      this.prefetchQueue.push({ text: cleanText, lang });
       this._drainPrefetchQueue();
     }
 
     _drainPrefetchQueue() {
       while (this.activePrefetches < 2 && this.prefetchQueue.length > 0) {
-        const nextText = this.prefetchQueue.shift();
+        const nextItem = this.prefetchQueue.shift();
         this.activePrefetches++;
-        this.getOrFetchAudioBuffer(nextText).finally(() => {
+        this.getOrFetchAudioBuffer(nextItem.text, nextItem.lang).finally(() => {
           this.activePrefetches--;
           this._drainPrefetchQueue();
         });
       }
     }
 
-    async speakGerman(text, forceSpeak = false) {
+    async speak(text, lang = 'de', forceSpeak = false) {
       if (!this.enabled && !forceSpeak) return false;
       const cleanText = String(text || '').trim();
       if (!cleanText) return false;
 
       if (this.canAttemptGemini()) {
-        const buffer = await this.getOrFetchAudioBuffer(cleanText);
+        const buffer = await this.getOrFetchAudioBuffer(cleanText, lang);
         if (buffer) {
           this._playDecodedBuffer(buffer);
           return true;
         }
       }
 
-      // Плавный резервный фолбэк на системный немецкий голос, если ключ ещё не задан
-      this._speakBrowserFallback(cleanText);
+      this._speakBrowserFallback(cleanText, lang);
       return false;
     }
 
@@ -1100,17 +1407,18 @@
       this.currentSource = src;
     }
 
-    _speakBrowserFallback(text) {
+    _speakBrowserFallback(text, lang = 'de') {
       if (!('speechSynthesis' in window)) return;
       try {
+        const meta = TARGET_LANG_META[lang] || TARGET_LANG_META.de;
         window.speechSynthesis.cancel();
         const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = 'de-DE';
+        utter.lang = meta.bcp47;
         utter.rate = 0.96;
         utter.volume = 0.95;
         const voices = window.speechSynthesis.getVoices();
-        const deVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('de'));
-        if (deVoice) utter.voice = deVoice;
+        const matchedVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith(lang));
+        if (matchedVoice) utter.voice = matchedVoice;
         window.speechSynthesis.speak(utter);
       } catch (_) {}
     }
@@ -1118,61 +1426,86 @@
 
   const ttsManager = new GeminiTTSManager(sound);
 
-  // --- Подготовка уровней: 6 тематических подуровней + 7-й Главный уровень "AUTO (Все 73 слова)" ---
-  const baseLevels = window.AUTO_CAMPAIGN.levels.slice();
-  const allAutoWords = baseLevels.flatMap(l => l.words);
-
-  const levels = [
-    ...baseLevels,
-    {
-      id: 'level-auto-all',
-      number: 7,
-      name: 'ГЛАВНЫЙ УРОВЕНЬ: AUTO (Все слова)',
-      heName: 'השלב הראשי: AUTO (כל 73 המילים)',
-      deName: 'Auto-Marathon (73 Wörter)',
-      description: 'Финальный главный уровень AUTO: все 73 слова из всех категорий в динамичном космическом потоке!',
-      heDescription: 'השלב המרכזי של AUTO: כל 73 המילים מכל הקטגוריות בזרימה קוסמית דינמית!',
-      speedMultiplier: 1.0,
-      spawnIntervalMs: 2550,
-      words: allAutoWords
-    }
-  ];
-
-  // Восстановление пройденных уровней из сохранения
+  // ==========================================================================
+  // СОСТОЯНИЕ ИГРЫ, ПРОГРЕСС СЛОВАРЯ И 3-СТУПЕНЧАТАЯ НАВИГАЦИЯ ПО КУРСАМ
+  // ==========================================================================
   const initialSave = loadSavedSettings();
-  if (Array.isArray(initialSave.completedLevelIds)) {
-    levels.forEach(lvl => {
-      if (initialSave.completedLevelIds.includes(lvl.id)) {
-        lvl.completed = true;
+
+  // Восстановление выученных слов (для прокачки оружия)
+  const savedLearnedArr = loadJsonStorage(LEARNED_STORAGE_KEY, []);
+  const learnedWordsSet = new Set(Array.isArray(savedLearnedArr) ? savedLearnedArr : []);
+
+  // Если у игрока уже были закрытые уровни в старой версии — зачисляем стартовый бонус, чтобы не терялся прогресс
+  if (learnedWordsSet.size === 0 && Array.isArray(initialSave.completedLevelIds) && initialSave.completedLevelIds.length > 0) {
+    const deAuto = (window.GAME_CATALOG.courses.de || [])[0];
+    if (deAuto) {
+      const creditLessons = Math.min(initialSave.completedLevelIds.length, 4);
+      let credited = 0;
+      for (const mod of deAuto.modules) {
+        for (const ls of mod.lessons) {
+          if (ls.isBoss) continue;
+          if (credited < creditLessons) {
+            ls.words.forEach(w => learnedWordsSet.add(`de::${w.word.toLowerCase()}`));
+            credited++;
+          }
+        }
       }
-    });
+      saveJsonStorage(LEARNED_STORAGE_KEY, Array.from(learnedWordsSet));
+    }
   }
 
-  // --- Состояние игры ---
+  // Восстановление слов со звёздочкой ⭐ («Повторить ещё раз»)
+  const savedPinnedObj = loadJsonStorage(PINNED_STORAGE_KEY, {});
+  const pinnedWordsMap = new Map(Object.entries(savedPinnedObj || {}));
+
+  function determineInitialNativeLang() {
+    if (initialSave.nativeLang && UI_TEXT[initialSave.nativeLang]) {
+      return initialSave.nativeLang;
+    }
+    if (initialSave.translationLang === 'he') return 'he';
+    if (initialSave.translationLang === 'ru') return 'ru';
+    return detectBrowserNativeLanguage();
+  }
+
+  const initialNativeLang = determineInitialNativeLang();
+  const initialTargetLang = (initialSave.targetLang && TARGET_LANG_META[initialSave.targetLang])
+    ? initialSave.targetLang
+    : detectDefaultTargetLanguage();
+
   const state = {
-    screenMode: 'title', // 'title' (аркадный стартовый экран) | 'play' (боевой режим)
-    currentLevelIndex: 0,
+    screenMode: 'title', // 'title' | 'play'
     running: false,
     paused: false,
     gameOver: false,
     overlayMode: 'pause', // 'intro' | 'complete' | 'gameover' | 'pause'
     activeQuiz: null,
 
-    // Язык перевода: 'ru' (Русский), 'he' (Иврит עברית), 'both' (Оба языка)
-    translationLang: initialSave.translationLang || 'ru',
-    langModes: [
-      { id: 'ru', label: '🇷🇺 RU' },
-      { id: 'he', label: '🇮🇱 עברית' },
-      { id: 'both', label: '🇷🇺+🇮🇱' }
+    // Два независимых языковых фильтра
+    targetLang: initialTargetLang, // 'de' | 'en' | 'es'
+    nativeLang: initialNativeLang, // 'ru' | 'en' | 'he'
+    nativeLangModes: [
+      { id: 'ru', short: '🇷🇺 RU' },
+      { id: 'en', short: '🇬🇧 EN' },
+      { id: 'he', short: '🇮🇱 עברית' }
     ],
 
-    // Выбранное оружие
-    weaponId: WEAPONS.some(w => w.id === initialSave.weaponId) ? initialSave.weaponId : 'plasma',
+    // Трёхступенчатый выбор курса -> модуля -> урока + пользовательские курсы Anki
+    userCourses: [],
+    catalogSourceFilter: 'all', // 'all' | 'official' | 'user'
+    activeCourseId: initialSave.activeCourseId || '',
+    activeModuleIndex: Number(initialSave.activeModuleIndex) || 0,
+    activeLessonIndex: Number(initialSave.activeLessonIndex) || 0,
+    completedLessonIds: new Set(Array.isArray(initialSave.completedLessonIds) ? initialSave.completedLessonIds : []),
+    activeCustomRoundTitle: '',
+
+    // Арсенал и прогресс прокачки за выученные слова
+    weaponId: 'plasma',
     missileAlternateSide: 1,
     weaponBannerText: '',
+    weaponBannerColor: '',
     weaponBannerTimer: 0,
 
-    // Настройки игрока (включая новую сверхмедленную скорость 0.25x!)
+    // Скорость и режим ввода артикля
     typeWithArticle: Boolean(initialSave.typeWithArticle),
     speedPresetIndex: (() => {
       const presets = [0.25, 0.5, 0.75, 1.0, 1.35];
@@ -1180,11 +1513,7 @@
         const idx = presets.findIndex(m => Math.abs(m - initialSave.speedMult) < 0.03);
         if (idx !== -1) return idx;
       }
-      if (typeof initialSave.speedPresetIndex === 'number') {
-        const legacyMap = [1, 2, 3, 4];
-        return legacyMap[initialSave.speedPresetIndex] ?? 1;
-      }
-      return 1; // 0.5x по умолчанию, 0.25x доступна в один цикл кнопки
+      return 1; // 0.5x по умолчанию, 0.25x в один клик
     })(),
     speedPresets: [
       { mult: 0.25, label: '🦥 0.25x' },
@@ -1194,7 +1523,7 @@
       { mult: 1.35, label: '⚡ 1.35x' }
     ],
 
-    // Метрики и рекорды
+    // Очки и боевые показатели
     score: 0,
     highScore: Number(initialSave.highScore) || 0,
     combo: 1,
@@ -1205,24 +1534,25 @@
     maxShields: 4,
     empCharges: 2,
 
-    // Эффект гиперпрыжка при старте с титульного экрана
     warpTimer: 0,
-
-    // Автопилот-демо для живого титульного экрана
     demoWords: [],
-    demoSpawnTimer: 0.4,
+    demoSpawnTimer: 0.35,
     demoFireTimer: 0.25,
     demoTargetId: null,
 
-    // Очередь слов текущего уровня
     wordQueue: [],
+    currentRoundPool: [],
     totalWordsInLevel: 0,
     wordsDestroyedInLevel: 0,
     spawnTimer: 0,
     mistakeWordsMap: new Map(),
     killHistory: [],
+    dictOnlyPinned: false,
 
-    // Игровые объекты на холсте
+    // Состояние диалога импорта Anki .apkg
+    importTargetLang: initialTargetLang,
+    parsedAnkiData: null,
+
     activeWords: [],
     lockedWordId: null,
     lastAbsorbedUmlautE: false,
@@ -1239,7 +1569,6 @@
     nebulae: [],
     layoutWarningTimer: 0,
 
-    // Корабль игрока
     ship: {
       x: 0,
       y: 0,
@@ -1252,68 +1581,297 @@
 
   let nextEntityId = 1;
 
+  // Проверяем, открыто ли сохранённое оружие у игрока
+  function isWeaponUnlocked(weaponObj) {
+    return learnedWordsSet.size >= (weaponObj.unlockWords || 0);
+  }
+
+  if (
+    initialSave.weaponId &&
+    WEAPONS.some(w => w.id === initialSave.weaponId && isWeaponUnlocked(w))
+  ) {
+    state.weaponId = initialSave.weaponId;
+  } else {
+    state.weaponId = 'plasma';
+  }
+
+  function getNextLockedWeapon() {
+    return WEAPONS.find(w => !isWeaponUnlocked(w)) || null;
+  }
+
+  function makeWordKey(targetLang, entry) {
+    return `${targetLang}::${String(entry.word || entry.raw || '').trim().toLowerCase()}`;
+  }
+
+  function isEntryPinned(entry, targetLang = state.targetLang) {
+    if (!entry) return false;
+    return pinnedWordsMap.has(makeWordKey(targetLang, entry));
+  }
+
+  function getPinnedEntriesForTargetLang(targetLang = state.targetLang) {
+    const prefix = `${targetLang}::`;
+    const list = [];
+    for (const [k, val] of pinnedWordsMap.entries()) {
+      if (k.startsWith(prefix) && val && val.word) {
+        list.push(val);
+      }
+    }
+    return list;
+  }
+
+  function togglePinWord(entry, targetLang = state.targetLang) {
+    if (!entry) return false;
+    const key = makeWordKey(targetLang, entry);
+    const nowPinned = !pinnedWordsMap.has(key);
+    if (nowPinned) {
+      pinnedWordsMap.set(key, entry);
+    } else {
+      pinnedWordsMap.delete(key);
+    }
+    saveJsonStorage(PINNED_STORAGE_KEY, Object.fromEntries(pinnedWordsMap.entries()));
+    sound.playStarChime(nowPinned);
+
+    const tr = t();
+    state.weaponBannerText = nowPinned ? tr.pinAddedBanner(entry.word) : tr.pinRemovedBanner(entry.word);
+    state.weaponBannerColor = '#fde047';
+    state.weaponBannerTimer = 1.65;
+
+    updatePinnedCountUI();
+    rerenderKillFeed();
+    if (!centerOverlay.classList.contains('hidden')) {
+      refreshOverlayContent();
+    }
+    if (dictDialog && dictDialog.open) {
+      renderFullDictionary(dictSearchInput.value);
+    }
+    return nowPinned;
+  }
+
+  function recordWordLearned(entry, targetLang = state.targetLang) {
+    if (!entry) return;
+    const prevCount = learnedWordsSet.size;
+    const key = makeWordKey(targetLang, entry);
+    if (learnedWordsSet.has(key)) return;
+
+    learnedWordsSet.add(key);
+    saveJsonStorage(LEARNED_STORAGE_KEY, Array.from(learnedWordsSet));
+    const newCount = learnedWordsSet.size;
+
+    // Проверяем, открылась ли новая пушка!
+    const newlyUnlocked = WEAPONS.find(w => w.unlockWords > prevCount && w.unlockWords <= newCount);
+    if (newlyUnlocked) {
+      sound.playUnlockFanfare();
+      state.weaponBannerText = t().unlockedWeaponBanner(newlyUnlocked.icon, getWeaponName(newlyUnlocked));
+      state.weaponBannerColor = '#fde047';
+      state.weaponBannerTimer = 3.2;
+    }
+
+    renderWeaponSelectors();
+    updateLearnedProgressUI();
+    updatePilotRankUI();
+  }
+
+  // --- Хелперы локализации и каталога курсов ---
+  function isHebrewUI() {
+    return state.nativeLang === 'he';
+  }
+
+  function t() {
+    return UI_TEXT[state.nativeLang] || UI_TEXT.ru;
+  }
+
+  function getLocalizedField(obj, fieldName = 'titles') {
+    if (!obj) return '';
+    const map = obj[fieldName];
+    if (map && typeof map === 'object') {
+      return map[state.nativeLang] || map.en || map.ru || map.he || '';
+    }
+    return '';
+  }
+
   function getCurrentWeapon() {
     return WEAPONS.find(w => w.id === state.weaponId) || WEAPONS[0];
   }
 
-  function isHebrewUI() {
-    return state.translationLang === 'he';
-  }
-
-  function t() {
-    return isHebrewUI() ? UI_TEXT.he : UI_TEXT.ru;
-  }
-
   function getWeaponName(w) {
-    return isHebrewUI() ? w.heName : w.ruName;
+    return (w.names && (w.names[state.nativeLang] || w.names.en)) || w.id;
   }
 
   function getWeaponDesc(w) {
-    return isHebrewUI() ? w.heDesc : w.ruDesc;
+    return (w.descs && (w.descs[state.nativeLang] || w.descs.en)) || '';
   }
 
-  function getLevelTitle(lvl) {
-    if (isHebrewUI() && lvl.heName) return lvl.heName;
-    return lvl.name;
-  }
-
-  function getLevelDesc(lvl) {
-    if (isHebrewUI() && lvl.heDescription) return lvl.heDescription;
-    return lvl.description;
-  }
-
-  function getWordTranslation(entry, langOverride = null) {
-    const lang = langOverride || state.translationLang;
-    const ru = entry.ru || '';
-    const he = entry.he || '';
-
-    if (lang === 'he') return he || ru;
-    if (lang === 'both') {
-      if (ru && he && ru !== he) return `${ru} · ${he}`;
-      return ru || he;
+  function getWordTranslation(entry) {
+    if (!entry) return '';
+    if (entry.translations && typeof entry.translations === 'object') {
+      return entry.translations[state.nativeLang] || entry.translations.en || entry.translations.ru || entry.translations.he || '';
     }
-    return ru || he;
+    if (state.nativeLang === 'he') return entry.he || entry.ru || '';
+    return entry.ru || entry.he || '';
   }
 
-  function isRtlTranslation(entry, langOverride = null) {
-    const lang = langOverride || state.translationLang;
-    return lang === 'he' && Boolean(entry && entry.he);
+  function isRtlTranslation(entry) {
+    const txt = getWordTranslation(entry);
+    return state.nativeLang === 'he' || /[\u0590-\u05FF]/.test(txt);
+  }
+
+  function getCoursesForTargetLang(targetLang = state.targetLang) {
+    const official = (window.GAME_CATALOG && window.GAME_CATALOG.courses && window.GAME_CATALOG.courses[targetLang]) || [];
+    const personal = state.userCourses.filter(c => c.targetLang === targetLang);
+    return [...official, ...personal];
+  }
+
+  function ensureValidCourseSelection() {
+    const available = getCoursesForTargetLang(state.targetLang);
+    if (available.length === 0) return null;
+
+    let course = available.find(c => c.id === state.activeCourseId);
+    if (!course) {
+      course = available[0];
+      state.activeCourseId = course.id;
+      state.activeModuleIndex = 0;
+      state.activeLessonIndex = 0;
+    }
+
+    if (!course.modules || course.modules.length === 0) return course;
+    if (state.activeModuleIndex < 0 || state.activeModuleIndex >= course.modules.length) {
+      state.activeModuleIndex = 0;
+      state.activeLessonIndex = 0;
+    }
+
+    const mod = course.modules[state.activeModuleIndex];
+    if (!mod.lessons || mod.lessons.length === 0) return course;
+    if (state.activeLessonIndex < 0 || state.activeLessonIndex >= mod.lessons.length) {
+      state.activeLessonIndex = 0;
+    }
+
+    return course;
+  }
+
+  function getActiveSelection() {
+    const course = ensureValidCourseSelection();
+    if (!course) return { course: null, mod: null, lesson: null };
+    const mod = course.modules[state.activeModuleIndex] || course.modules[0];
+    const lesson = (mod && mod.lessons && mod.lessons[state.activeLessonIndex]) || (mod && mod.lessons && mod.lessons[0]) || null;
+    return { course, mod, lesson };
+  }
+
+  function getAllWordsInCourse(course) {
+    if (!course || !Array.isArray(course.modules)) return [];
+    const seen = new Set();
+    const out = [];
+    for (const mod of course.modules) {
+      for (const ls of (mod.lessons || [])) {
+        if (ls.isBoss) continue;
+        for (const w of (ls.words || [])) {
+          const k = w.raw || w.word;
+          if (!seen.has(k)) {
+            seen.add(k);
+            out.push(w);
+          }
+        }
+      }
+    }
+    return out;
+  }
+
+  function getAllWordsInTargetLang(targetLang = state.targetLang) {
+    const courses = getCoursesForTargetLang(targetLang);
+    const seen = new Set();
+    const out = [];
+    for (const c of courses) {
+      for (const w of getAllWordsInCourse(c)) {
+        const k = w.raw || w.word;
+        if (!seen.has(k)) {
+          seen.add(k);
+          out.push(w);
+        }
+      }
+    }
+    return out;
+  }
+
+  // Сборка слов для урока (для каждого 4-го Босс-урока — умный микс предыдущих 3 уроков + ошибок + ⭐!)
+  function resolveLessonBaseWords(course, mod, lesson, lessonIdx) {
+    if (!lesson) return [];
+    if (!lesson.isBoss) {
+      return Array.isArray(lesson.words) ? lesson.words.slice() : [];
+    }
+
+    const preceding = (mod.lessons || [])
+      .slice(0, lessonIdx)
+      .filter(l => !l.isBoss)
+      .slice(-3);
+
+    const moduleWords = preceding.flatMap(l => l.words || []);
+    if (moduleWords.length === 0) {
+      return getAllWordsInCourse(course).slice(0, 12);
+    }
+
+    const priority = [];
+    const regular = [];
+    const added = new Set();
+
+    // 1. Сначала слова из этих 3 уроков, где игрок ошибался или поставил звёздочку ⭐
+    for (const w of moduleWords) {
+      const k = w.raw || w.word;
+      if (added.has(k)) continue;
+      if (state.mistakeWordsMap.has(k) || isEntryPinned(w, course.targetLang)) {
+        priority.push(w);
+        added.add(k);
+      } else {
+        regular.push(w);
+        added.add(k);
+      }
+    }
+
+    // 2. Плюс до 3 отмеченных ⭐ слов из других модулей этого языка
+    for (const pw of getPinnedEntriesForTargetLang(course.targetLang)) {
+      const k = pw.raw || pw.word;
+      if (!added.has(k) && priority.length < 10) {
+        priority.push(pw);
+        added.add(k);
+      }
+    }
+
+    const bossCount = Math.min(14, priority.length + regular.length);
+    return [...shuffleArray(priority), ...shuffleArray(regular)].slice(0, bossCount);
+  }
+
+  function updateOriginBadgeElement(badgeEl, course) {
+    if (!badgeEl || !course) return;
+    const tr = t();
+    const isUser = course.source === 'user';
+    badgeEl.classList.toggle('official', !isUser);
+    badgeEl.classList.toggle('user', isUser);
+    badgeEl.textContent = !isUser
+      ? tr.originOfficial
+      : (course.originType === 'anki' ? tr.originUserAnki : tr.originUserCustom);
   }
 
   // --- DOM-элементы ---
   const canvas = document.getElementById('gameCanvas');
   const ctx = canvas.getContext('2d');
 
-  // Титульный аркадный экран
+  // Титульный экран
   const arcadeTitleScreen = document.getElementById('arcadeTitleScreen');
   const titleHeaderCard = document.getElementById('titleHeaderCard');
-  const titleSpaceWindow = document.getElementById('titleSpaceWindow');
   const titleBottomDock = document.getElementById('titleBottomDock');
   const pilotRankText = document.getElementById('pilotRankText');
+  const labelNativeFilter = document.getElementById('labelNativeFilter');
+  const labelTargetFilter = document.getElementById('labelTargetFilter');
+  const arcadeLogoMain = document.getElementById('arcadeLogoMain');
+  const arcadeLogoSub = document.getElementById('arcadeLogoSub');
   const titleTagline = document.getElementById('titleTagline');
   const titleArsenalLabel = document.getElementById('titleArsenalLabel');
+  const learnedProgressPill = document.getElementById('learnedProgressPill');
   const titleWeaponDesc = document.getElementById('titleWeaponDesc');
   const titleWeaponRow = document.getElementById('titleWeaponRow');
+  const titleCourseOriginBadge = document.getElementById('titleCourseOriginBadge');
+  const titleCourseName = document.getElementById('titleCourseName');
+  const btnOpenCatalogTitle = document.getElementById('btnOpenCatalogTitle');
+  const labelOpenCatalogTitle = document.getElementById('labelOpenCatalogTitle');
+  const btnOpenAnkiTitle = document.getElementById('btnOpenAnkiTitle');
   const titleStageChips = document.getElementById('titleStageChips');
   const btnArcadeLaunch = document.getElementById('btnArcadeLaunch');
   const labelArcadeLaunch = document.getElementById('labelArcadeLaunch');
@@ -1324,16 +1882,24 @@
   const btnTitleCustom = document.getElementById('btnTitleCustom');
   const labelTitleCustom = document.getElementById('labelTitleCustom');
 
-  // Боевой HUD
+  // Верхний HUD
   const labelPause = document.getElementById('labelPause');
   const labelScore = document.getElementById('labelScore');
   const labelCombo = document.getElementById('labelCombo');
-  const labelAccuracy = document.getElementById('labelAccuracy');
+  const labelLearnedHud = document.getElementById('labelLearnedHud');
+  const hudLearnedCount = document.getElementById('hudLearnedCount');
   const labelShield = document.getElementById('labelShield');
-  const labelDictBtn = document.getElementById('labelDictBtn');
+  const labelCatalogHud = document.getElementById('labelCatalogHud');
   const labelCustomBtn = document.getElementById('labelCustomBtn');
+
+  const sidebarOriginBadge = document.getElementById('sidebarOriginBadge');
   const sidebarLevelsTitle = document.getElementById('sidebarLevelsTitle');
+  const btnSidebarCatalog = document.getElementById('btnSidebarCatalog');
+  const btnSidebarAnki = document.getElementById('btnSidebarAnki');
   const sidebarKillsTitle = document.getElementById('sidebarKillsTitle');
+  const btnDrillPinned = document.getElementById('btnDrillPinned');
+  const pinnedCountBadge = document.getElementById('pinnedCountBadge');
+
   const legendDer = document.getElementById('legendDer');
   const legendDie = document.getElementById('legendDie');
   const legendDas = document.getElementById('legendDas');
@@ -1344,47 +1910,50 @@
   const hudProgressText = document.getElementById('hudProgressText');
   const hudScore = document.getElementById('hudScore');
   const hudCombo = document.getElementById('hudCombo');
-  const hudAccuracy = document.getElementById('hudAccuracy');
   const hudShields = document.getElementById('hudShields');
   const empCountEl = document.getElementById('empCount');
 
   const btnWeaponMode = document.getElementById('btnWeaponMode');
-  const hudWeaponLabel = document.getElementById('hudWeaponLabel');
   const btnEmp = document.getElementById('btnEmp');
+  const btnTargetLangHud = document.getElementById('btnTargetLangHud');
   const btnLangMode = document.getElementById('btnLangMode');
   const btnArticleMode = document.getElementById('btnArticleMode');
   const btnSpeedMode = document.getElementById('btnSpeedMode');
   const btnOpenTtsSettings = document.getElementById('btnOpenTtsSettings');
-  const hudTtsBadge = document.getElementById('hudTtsBadge');
-  const btnOpenDict = document.getElementById('btnOpenDict');
+  const btnOpenCatalogHud = document.getElementById('btnOpenCatalogHud');
   const btnOpenCustom = document.getElementById('btnOpenCustom');
   const btnPause = document.getElementById('btnPause');
   const btnHudHome = document.getElementById('btnHudHome');
   const btnQuickLevels = document.getElementById('btnQuickLevels');
   const btnClearFeed = document.getElementById('btnClearFeed');
 
+  // Экранная клавиатура ZType
   const ztypeKeyboard = document.getElementById('ztypeKeyboard');
+  const ztypeKeysContainer = document.getElementById('ztypeKeysContainer');
   const kbdProgressFill = document.getElementById('kbdProgressFill');
-  const btnKbdEmp = document.getElementById('btnKbdEmp');
-  const kbdEmpCount = document.getElementById('kbdEmpCount');
   const levelListContainer = document.getElementById('levelListContainer');
   const overlayLevelChips = document.getElementById('overlayLevelChips');
   const totalWordsCounter = document.getElementById('totalWordsCounter');
   const killFeedContainer = document.getElementById('killFeedContainer');
   const bottomTargetPreview = document.getElementById('bottomTargetPreview');
 
+  // Центральный оверлей
   const centerOverlay = document.getElementById('centerOverlay');
   const overlayCard = document.getElementById('overlayCard');
+  const overlayOriginBadge = document.getElementById('overlayOriginBadge');
   const overlayBadge = document.getElementById('overlayBadge');
   const overlayTitle = document.getElementById('overlayTitle');
   const overlayDesc = document.getElementById('overlayDesc');
   const overlayWeaponTitle = document.getElementById('overlayWeaponTitle');
+  const overlayLearnedPill = document.getElementById('overlayLearnedPill');
   const overlayWeaponRow = document.getElementById('overlayWeaponRow');
   const overlayWordsHeader = document.getElementById('overlayWordsHeader');
   const overlayWordsPreview = document.getElementById('overlayWordsPreview');
   const btnStartLevel = document.getElementById('btnStartLevel');
   const btnNextLevel = document.getElementById('btnNextLevel');
+  const btnPracticePinned = document.getElementById('btnPracticePinned');
   const btnPracticeMistakes = document.getElementById('btnPracticeMistakes');
+  const btnOverlayCatalog = document.getElementById('btnOverlayCatalog');
   const btnBackToTitle = document.getElementById('btnBackToTitle');
 
   const levelQuizBox = document.getElementById('levelQuizBox');
@@ -1392,6 +1961,49 @@
   const quizScoreText = document.getElementById('quizScoreText');
   const quizQuestionWord = document.getElementById('quizQuestionWord');
   const quizOptionsGrid = document.getElementById('quizOptionsGrid');
+
+  // Диалог 3-ступенчатого каталога курсов
+  const courseBrowserDialog = document.getElementById('courseBrowserDialog');
+  const catalogDialogBody = document.getElementById('catalogDialogBody');
+  const catalogDialogTitle = document.getElementById('catalogDialogTitle');
+  const btnCloseCatalog = document.getElementById('btnCloseCatalog');
+  const tabSourceAll = document.getElementById('tabSourceAll');
+  const tabSourceOfficial = document.getElementById('tabSourceOfficial');
+  const tabSourceUser = document.getElementById('tabSourceUser');
+  const btnOpenAnkiFromCatalog = document.getElementById('btnOpenAnkiFromCatalog');
+  const labelImportFromCatalog = document.getElementById('labelImportFromCatalog');
+  const catalogCoursesContainer = document.getElementById('catalogCoursesContainer');
+
+  // Диалог импорта Anki .apkg и своих слов
+  const customWordsDialog = document.getElementById('customWordsDialog');
+  const customDialogBody = document.getElementById('customDialogBody');
+  const customDialogTitle = document.getElementById('customDialogTitle');
+  const btnCloseCustom = document.getElementById('btnCloseCustom');
+  const tabImportAnki = document.getElementById('tabImportAnki');
+  const tabImportManual = document.getElementById('tabImportManual');
+  const importTargetLangLabel = document.getElementById('importTargetLangLabel');
+  const ankiImportPane = document.getElementById('ankiImportPane');
+  const manualImportPane = document.getElementById('manualImportPane');
+  const ankiDropzone = document.getElementById('ankiDropzone');
+  const ankiDropTitle = document.getElementById('ankiDropTitle');
+  const ankiDropSub = document.getElementById('ankiDropSub');
+  const ankiFileInput = document.getElementById('ankiFileInput');
+  const btnDownloadSampleApkg = document.getElementById('btnDownloadSampleApkg');
+  const ankiParseStatus = document.getElementById('ankiParseStatus');
+  const ankiPreviewBox = document.getElementById('ankiPreviewBox');
+  const labelAnkiDeckName = document.getElementById('labelAnkiDeckName');
+  const ankiDeckTitleInput = document.getElementById('ankiDeckTitleInput');
+  const labelAnkiFront = document.getElementById('labelAnkiFront');
+  const labelAnkiBack = document.getElementById('labelAnkiBack');
+  const ankiFrontSelect = document.getElementById('ankiFrontSelect');
+  const ankiBackSelect = document.getElementById('ankiBackSelect');
+  const btnSwapAnkiCols = document.getElementById('btnSwapAnkiCols');
+  const ankiSampleCards = document.getElementById('ankiSampleCards');
+  const btnConfirmAnkiImport = document.getElementById('btnConfirmAnkiImport');
+  const manualDeckTitleInput = document.getElementById('manualDeckTitleInput');
+  const customDialogHint = document.getElementById('customDialogHint');
+  const customWordsInput = document.getElementById('customWordsInput');
+  const btnSaveCustomWords = document.getElementById('btnSaveCustomWords');
 
   // Диалог Gemini 3.8 TTS
   const ttsSettingsDialog = document.getElementById('ttsSettingsDialog');
@@ -1414,28 +2026,25 @@
   const btnSaveApiKey = document.getElementById('btnSaveApiKey');
   const btnClearApiKey = document.getElementById('btnClearApiKey');
 
+  // Диалог словаря
   const dictDialog = document.getElementById('dictDialog');
+  const dictDialogBody = document.getElementById('dictDialogBody');
   const dictDialogTitle = document.getElementById('dictDialogTitle');
   const btnCloseDict = document.getElementById('btnCloseDict');
   const dictSearchInput = document.getElementById('dictSearchInput');
+  const btnDictOnlyPinned = document.getElementById('btnDictOnlyPinned');
+  const labelDictPinnedFilter = document.getElementById('labelDictPinnedFilter');
   const dictFullList = document.getElementById('dictFullList');
 
-  const customWordsDialog = document.getElementById('customWordsDialog');
-  const customDialogTitle = document.getElementById('customDialogTitle');
-  const customDialogHint = document.getElementById('customDialogHint');
-  const btnCloseCustom = document.getElementById('btnCloseCustom');
-  const customWordsInput = document.getElementById('customWordsInput');
-  const btnSaveCustomWords = document.getElementById('btnSaveCustomWords');
-
-  // --- Размеры игрового поля ---
+  // --- Геометрия игрового поля ---
   function getPlayBounds() {
     if (state.screenMode === 'title') {
       const headerRect = titleHeaderCard ? titleHeaderCard.getBoundingClientRect() : null;
       const dockRect = titleBottomDock ? titleBottomDock.getBoundingClientRect() : null;
       const headerBottom = headerRect && headerRect.height > 0 ? headerRect.bottom : 140;
-      const dockTop = dockRect && dockRect.height > 0 ? dockRect.top : (canvas.height - 260);
-      const safeTop = Math.max(16, headerBottom + 10);
-      const safeBottom = Math.max(safeTop + 70, dockTop - 10);
+      const dockTop = dockRect && dockRect.height > 0 ? dockRect.top : (canvas.height - 280);
+      const safeTop = Math.max(14, headerBottom + 8);
+      const safeBottom = Math.max(safeTop + 60, dockTop - 8);
       return {
         left: 16,
         right: Math.max(280, canvas.width - 16),
@@ -1446,8 +2055,8 @@
     }
 
     const isDesktopWide = window.innerWidth > 960;
-    const leftPad = isDesktopWide ? 264 : 8;
-    const rightPad = isDesktopWide ? 294 : 8;
+    const leftPad = isDesktopWide ? 272 : 8;
+    const rightPad = isDesktopWide ? 296 : 8;
 
     const kbdRect = ztypeKeyboard ? ztypeKeyboard.getBoundingClientRect() : { height: 185 };
     const kbdHeight = kbdRect.height > 20 ? kbdRect.height : 185;
@@ -1472,7 +2081,7 @@
     const bounds = getPlayBounds();
     state.ship.x = bounds.centerX;
     state.ship.targetY = state.screenMode === 'title'
-      ? Math.max(bounds.top + 48, bounds.bottom - 26)
+      ? Math.max(bounds.top + 42, bounds.bottom - 24)
       : bounds.bottom - 24;
     if (!state.ship.y) state.ship.y = state.ship.targetY;
     initStars();
@@ -1512,29 +2121,169 @@
 
   window.addEventListener('resize', resizeCanvas);
 
-  function getTargetString(wordEntry) {
-    return state.typeWithArticle ? wordEntry.withArticle : wordEntry.word;
+  // ==========================================================================
+  // ДИНАМИЧЕСКАЯ РАСКЛАДКА КЛАВИАТУРЫ ZTYPE И СОПОСТАВЛЕНИЕ БУКВ (DE / EN / ES)
+  // ==========================================================================
+  const KEYBOARD_LAYOUTS = {
+    de: [
+      [
+        { k: 'q', l: 'Q' }, { k: 'w', l: 'W' }, { k: 'e', l: 'E' }, { k: 'r', l: 'R' }, { k: 't', l: 'T' },
+        { k: 'y', l: 'Y' }, { k: 'u', l: 'U', sub: 'ü' }, { k: 'i', l: 'I' }, { k: 'o', l: 'O', sub: 'ö' }, { k: 'p', l: 'P' }
+      ],
+      [
+        { k: 'a', l: 'A', sub: 'ä' }, { k: 's', l: 'S', sub: 'ß' }, { k: 'd', l: 'D' }, { k: 'f', l: 'F' },
+        { k: 'g', l: 'G' }, { k: 'h', l: 'H' }, { k: 'j', l: 'J' }, { k: 'k', l: 'K' }, { k: 'l', l: 'L' }
+      ],
+      [
+        { action: 'reset' },
+        { k: 'z', l: 'Z' }, { k: 'x', l: 'X' }, { k: 'c', l: 'C' }, { k: 'v', l: 'V' },
+        { k: 'b', l: 'B' }, { k: 'n', l: 'N' }, { k: 'm', l: 'M' },
+        { action: 'emp' }
+      ]
+    ],
+    en: [
+      [
+        { k: 'q', l: 'Q' }, { k: 'w', l: 'W' }, { k: 'e', l: 'E' }, { k: 'r', l: 'R' }, { k: 't', l: 'T' },
+        { k: 'y', l: 'Y' }, { k: 'u', l: 'U' }, { k: 'i', l: 'I' }, { k: 'o', l: 'O' }, { k: 'p', l: 'P' }
+      ],
+      [
+        { k: 'a', l: 'A' }, { k: 's', l: 'S' }, { k: 'd', l: 'D' }, { k: 'f', l: 'F' },
+        { k: 'g', l: 'G' }, { k: 'h', l: 'H' }, { k: 'j', l: 'J' }, { k: 'k', l: 'K' }, { k: 'l', l: 'L' }
+      ],
+      [
+        { action: 'reset' },
+        { k: 'z', l: 'Z' }, { k: 'x', l: 'X' }, { k: 'c', l: 'C' }, { k: 'v', l: 'V' },
+        { k: 'b', l: 'B' }, { k: 'n', l: 'N' }, { k: 'm', l: 'M' },
+        { action: 'emp' }
+      ]
+    ],
+    es: [
+      [
+        { k: 'q', l: 'Q' }, { k: 'w', l: 'W' }, { k: 'e', l: 'E', sub: 'é' }, { k: 'r', l: 'R' }, { k: 't', l: 'T' },
+        { k: 'y', l: 'Y' }, { k: 'u', l: 'U', sub: 'ú' }, { k: 'i', l: 'I', sub: 'í' }, { k: 'o', l: 'O', sub: 'ó' }, { k: 'p', l: 'P' }
+      ],
+      [
+        { k: 'a', l: 'A', sub: 'á' }, { k: 's', l: 'S' }, { k: 'd', l: 'D' }, { k: 'f', l: 'F' },
+        { k: 'g', l: 'G' }, { k: 'h', l: 'H' }, { k: 'j', l: 'J' }, { k: 'k', l: 'K' }, { k: 'l', l: 'L' }, { k: 'ñ', l: 'Ñ' }
+      ],
+      [
+        { action: 'reset' },
+        { k: 'z', l: 'Z' }, { k: 'x', l: 'X' }, { k: 'c', l: 'C' }, { k: 'v', l: 'V' },
+        { k: 'b', l: 'B' }, { k: 'n', l: 'N' }, { k: 'm', l: 'M' },
+        { action: 'emp' }
+      ]
+    ]
+  };
+
+  function bindVirtualKeyListeners(btn) {
+    let lastTriggerTs = 0;
+    const triggerOnce = (e) => {
+      const now = performance.now();
+      if (now - lastTriggerTs < 35) {
+        if (e && e.cancelable) e.preventDefault();
+        return;
+      }
+      lastTriggerTs = now;
+      handleVirtualKeyPress(btn, e);
+    };
+
+    if (window.PointerEvent) {
+      btn.addEventListener('pointerdown', triggerOnce);
+    } else {
+      btn.addEventListener('touchstart', triggerOnce, { passive: false });
+      btn.addEventListener('mousedown', triggerOnce);
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
   }
 
-  function mapGermanCharToBaseKey(ch) {
+  function renderZtypeKeyboard() {
+    if (!ztypeKeysContainer) return;
+    const rows = KEYBOARD_LAYOUTS[state.targetLang] || KEYBOARD_LAYOUTS.de;
+    ztypeKeysContainer.innerHTML = '';
+
+    rows.forEach((rowItems, rIdx) => {
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'ztype-key-row' +
+        (rIdx === 1 ? ' row-middle' + (state.targetLang === 'es' ? ' es-row' : '') : '') +
+        (rIdx === 2 ? ' row-bottom' : '');
+
+      rowItems.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+
+        if (item.action === 'reset') {
+          btn.className = 'zkey zkey-fn';
+          btn.dataset.action = 'reset';
+          btn.title = 'Backspace';
+          btn.textContent = '⌫';
+        } else if (item.action === 'emp') {
+          btn.className = 'zkey zkey-emp';
+          btn.dataset.action = 'emp';
+          btn.id = 'btnKbdEmp';
+          btn.title = 'EMP (Enter)';
+          btn.style.opacity = state.empCharges <= 0 ? '0.42' : '1';
+          btn.innerHTML = `⚡<span class="emp-mini-badge" id="kbdEmpCount">${state.empCharges}</span>`;
+        } else {
+          btn.className = 'zkey';
+          btn.dataset.key = item.k;
+          btn.innerHTML = item.sub
+            ? `${escapeHtml(item.l)}<span class="uml-sub">${escapeHtml(item.sub)}</span>`
+            : escapeHtml(item.l);
+        }
+
+        bindVirtualKeyListeners(btn);
+        rowDiv.appendChild(btn);
+      });
+
+      ztypeKeysContainer.appendChild(rowDiv);
+    });
+
+    updateKeyboardNextHint();
+  }
+
+  function getTargetString(wordEntry) {
+    if (!wordEntry) return '';
+    return state.typeWithArticle ? (wordEntry.withArticle || wordEntry.word) : wordEntry.word;
+  }
+
+  function mapTargetCharToBaseKey(ch) {
     if (!ch) return '';
     const low = ch.toLowerCase();
-    if (low === 'ä') return 'a';
-    if (low === 'ö') return 'o';
-    if (low === 'ü') return 'u';
+    if (low === 'ñ') {
+      return state.targetLang === 'es' ? 'ñ' : 'n';
+    }
+    if (low === 'ä' || low === 'á' || low === 'à' || low === 'â') return 'a';
+    if (low === 'é' || low === 'è' || low === 'ê' || low === 'ë') return 'e';
+    if (low === 'í' || low === 'ì' || low === 'î' || low === 'ï') return 'i';
+    if (low === 'ö' || low === 'ó' || low === 'ò' || low === 'ô') return 'o';
+    if (low === 'ü' || low === 'ú' || low === 'ù' || low === 'û') return 'u';
     if (low === 'ß') return 's';
     return low;
   }
 
-  function charsMatchGerman(inputChar, targetChar) {
+  function charsMatchTargetLang(inputChar, targetChar) {
+    if (!inputChar || !targetChar) return { matched: false, umlautSub: false, eszettSub: false };
     const inp = inputChar.toLowerCase();
     const tgt = targetChar.toLowerCase();
     if (inp === tgt) return { matched: true, umlautSub: false, eszettSub: false };
 
+    // Немецкие умлауты и эсцет
     if (tgt === 'ä' && inp === 'a') return { matched: true, umlautSub: true, eszettSub: false };
     if (tgt === 'ö' && inp === 'o') return { matched: true, umlautSub: true, eszettSub: false };
     if (tgt === 'ü' && inp === 'u') return { matched: true, umlautSub: true, eszettSub: false };
     if (tgt === 'ß' && inp === 's') return { matched: true, umlautSub: false, eszettSub: true };
+
+    // Испанские диакритики и ñ (чтобы удобно печатать и с испанской, и со стандартной клавиатуры!)
+    if ((tgt === 'á' || tgt === 'à') && (inp === 'a' || inp === 'á')) return { matched: true, umlautSub: false, eszettSub: false };
+    if ((tgt === 'é' || tgt === 'è') && (inp === 'e' || inp === 'é')) return { matched: true, umlautSub: false, eszettSub: false };
+    if ((tgt === 'í' || tgt === 'ì') && (inp === 'i' || inp === 'í')) return { matched: true, umlautSub: false, eszettSub: false };
+    if ((tgt === 'ó' || tgt === 'ò') && (inp === 'o' || inp === 'ó')) return { matched: true, umlautSub: false, eszettSub: false };
+    if ((tgt === 'ú' || tgt === 'ù') && (inp === 'u' || inp === 'ú')) return { matched: true, umlautSub: false, eszettSub: false };
+    if (tgt === 'ñ' && (inp === 'ñ' || inp === 'n')) return { matched: true, umlautSub: false, eszettSub: false };
 
     return { matched: false, umlautSub: false, eszettSub: false };
   }
@@ -1554,23 +2303,233 @@
     return Math.max(-0.65, Math.min(0.65, (x - bounds.centerX) / halfSpan));
   }
 
-  // --- Ранг пилота и рекорд на титульном экране ---
-  function updatePilotRankUI() {
-    if (!pilotRankText) return;
-    const completedCount = levels.filter(l => l.completed).length;
-    const tr = t();
-    let rankIdx = 0;
-    if (completedCount >= 6 || state.highScore >= 18000) rankIdx = 3;
-    else if (completedCount >= 3 || state.highScore >= 7500) rankIdx = 2;
-    else if (completedCount >= 1 || state.highScore >= 2000) rankIdx = 1;
-
-    const rankName = tr.ranks[rankIdx] || tr.ranks[0];
-    pilotRankText.textContent = tr.rankLine(rankName, state.highScore.toLocaleString('ru-RU'));
+  // ==========================================================================
+  // 1) ФОРМУЛА АВТО-ЗАМЕДЛЕНИЯ ДЛИННЫХ СОСТАВНЫХ СЛОВ (> 14 СИМВОЛОВ)
+  //    Например, Kfz-Haftpflichtversicherung (27 букв) падает на ~70% медленнее!
+  // ==========================================================================
+  function computeWordLengthSpeedFactor(charCount) {
+    const len = Math.max(1, charCount);
+    if (len <= 7) {
+      return 1.04;
+    }
+    if (len <= 14) {
+      // Плавное снижение с 1.00 (8 букв) до 0.74 (14 букв)
+      return 1.04 - (len - 7) * 0.043;
+    }
+    // Для длинных и составных слов (> 14 символов) включается прогрессивное защитное замедление:
+    // 18 букв -> 0.52x, 22 буквы -> 0.39x, 27 букв -> 0.30x
+    return Math.max(0.27, 0.74 * Math.pow(14 / len, 1.38));
   }
 
-  // --- Разлёт сразу множества слов высоко наверх к самому началу экрана (Грави-волна) ---
+  function getWordFontPx(textLength) {
+    const isMobile = canvas.width < 520;
+    if (!isMobile) {
+      if (textLength >= 24) return 16;
+      return textLength >= 19 ? 17.5 : 20;
+    }
+    if (textLength >= 22) return 13.5;
+    if (textLength >= 17) return 15.2;
+    if (textLength >= 13) return 16.8;
+    return 18.5;
+  }
+
+  function measureWordCapsule(text, entry) {
+    const fontPx = getWordFontPx(text.length);
+    ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
+    const textW = ctx.measureText(text).width;
+    const padX = canvas.width < 520 ? 10 : 13;
+    const starExtra = entry && isEntryPinned(entry) ? 16 : 0;
+    const boxW = textW + padX * 2 + starExtra + 16; // +16 под правый индикатор цели
+    const hasTopBadge = !state.typeWithArticle && Boolean(entry && entry.article);
+    const boxH = fontPx + 14 + (hasTopBadge ? 20 : 0);
+    return { boxW, boxH, fontPx };
+  }
+
+  // ==========================================================================
+  // 4) АНТИ-НАЛОЖЕНИЕ ПЛАШЕК СЛОВ В ПОЛЁТЕ И ПРИ СПАВНЕ
+  //    Проверяет габариты по X и Y; если верхнее быстрое слово догоняет нижнее,
+  //    временно выравнивает его скорость и мягко разводит плашки по горизонтали!
+  // ==========================================================================
+  function findSafeSpawnX(boxW, boxH, spawnY, wordList, bounds) {
+    const halfW = Math.min((bounds.right - bounds.left) * 0.48, boxW / 2 + 6);
+    const minX = bounds.left + halfW;
+    const maxX = Math.max(minX + 2, bounds.right - halfW);
+
+    // Генерируем равномерную сетку дорожек + случайное смещение
+    const candidates = [];
+    const laneCount = 9;
+    for (let i = 0; i < laneCount; i++) {
+      const frac = laneCount === 1 ? 0.5 : i / (laneCount - 1);
+      const jitter = (Math.random() - 0.5) * 28;
+      const cx = Math.max(minX, Math.min(maxX, minX + frac * (maxX - minX) + jitter));
+      candidates.push(cx);
+    }
+    const shuffled = shuffleArray(candidates);
+
+    let bestX = shuffled[0] || bounds.centerX;
+    let bestClearance = -Infinity;
+
+    for (const candX of shuffled) {
+      let minScore = Infinity;
+      let hardOverlap = false;
+
+      for (const other of wordList) {
+        const otherW = other.boxW || 130;
+        const otherH = other.boxH || 48;
+        const reqX = (boxW + otherW) * 0.5 + 16;
+        const reqY = (boxH + otherH) * 0.5 + 22;
+        const dx = Math.abs(other.x - candX);
+        const dy = Math.abs(other.y - spawnY);
+
+        if (dy < reqY && dx < reqX) {
+          hardOverlap = true;
+          minScore = Math.min(minScore, (dx - reqX) + (dy - reqY));
+        } else if (dy < reqY + 65) {
+          minScore = Math.min(minScore, dx - reqX * 0.65);
+        }
+      }
+
+      if (!hardOverlap) {
+        return { x: candX, clear: true };
+      }
+      if (minScore > bestClearance) {
+        bestClearance = minScore;
+        bestX = candX;
+      }
+    }
+
+    return { x: bestX, clear: wordList.length === 0 };
+  }
+
+  function resolveWordCollisions(wordList, bounds, dt, minTopY) {
+    if (!wordList || wordList.length < 2) return;
+
+    // Обновляем габариты и сбрасываем временное торможение кадра
+    for (const w of wordList) {
+      if (!w.boxW || !w.boxH) {
+        const m = measureWordCapsule(w.text, w.entry);
+        w.boxW = m.boxW;
+        w.boxH = m.boxH;
+      }
+      w.frameVy = w.vy;
+    }
+
+    // Сортируем снизу вверх (сначала нижние слова, чтобы верхние подстраивались под нижние)
+    const byBottomFirst = wordList.slice().sort((a, b) => b.y - a.y);
+
+    for (let i = 0; i < byBottomFirst.length; i++) {
+      const lower = byBottomFirst[i];
+      for (let j = i + 1; j < byBottomFirst.length; j++) {
+        const upper = byBottomFirst[j]; // upper.y <= lower.y
+
+        const minSepX = (upper.boxW + lower.boxW) * 0.5 + 14;
+        const minSepY = (upper.boxH + lower.boxH) * 0.5 + 16;
+        const dx = upper.x - lower.x;
+        const absDx = Math.abs(dx);
+        const dy = lower.y - upper.y;
+
+        // Если верхнее слово догоняет нижнее в одной вертикальной полосе:
+        if (absDx < minSepX && dy < minSepY + 30) {
+          // 1. Временно выравниваем вертикальную скорость верхнего слова по нижнему!
+          if (upper.frameVy > lower.frameVy * 0.92) {
+            upper.frameVy = lower.frameVy * 0.92;
+          }
+
+          // 2. Мягко разводим слова по горизонтали туда, где больше места до края арены
+          let dir = dx === 0 ? ((upper.id % 2 === 0) ? 1 : -1) : Math.sign(dx);
+          const upperHalf = upper.boxW * 0.5 + 8;
+          if (upper.x + dir * 24 > bounds.right - upperHalf) dir = -1;
+          if (upper.x + dir * 24 < bounds.left + upperHalf) dir = 1;
+
+          const overlapRatioX = 1 - absDx / Math.max(1, minSepX);
+          const steerSpeed = (38 + 52 * overlapRatioX) * dt;
+          upper.x += dir * steerSpeed;
+          lower.x -= dir * steerSpeed * 0.35;
+
+          // 3. Если плашки уже зашли в зону пересечения (например, после спавна или грави-волны) — мягко раздвигаем и по Y
+          if (dy < minSepY) {
+            const pushUp = Math.min((minSepY - dy) * 0.55, 90 * dt + 1.5);
+            if (upper.y - pushUp >= minTopY) {
+              upper.y -= pushUp;
+            } else {
+              lower.y += pushUp * 0.5;
+            }
+          }
+        }
+      }
+    }
+
+    // Применяем горизонтальные границы арены после разведения
+    for (const w of wordList) {
+      const half = Math.min((bounds.right - bounds.left) * 0.48, (w.boxW || 110) * 0.5 + 4);
+      w.x = Math.max(bounds.left + half, Math.min(bounds.right - half, w.x));
+    }
+  }
+
+  function separateFloatingTranslations(bounds) {
+    const list = state.floatingTranslations;
+    if (list.length < 2) return;
+    for (let i = 0; i < list.length; i++) {
+      for (let j = i + 1; j < list.length; j++) {
+        const a = list[i];
+        const b = list[j];
+        const dy = Math.abs(a.y - b.y);
+        const dx = Math.abs(a.x - b.x);
+        if (dy < 66 && dx < 210) {
+          if (a.y <= b.y) {
+            a.y = Math.max(bounds.top + 38, b.y - 68);
+          } else {
+            b.y = Math.max(bounds.top + 38, a.y - 68);
+          }
+        }
+      }
+    }
+  }
+
+  // --- Ранг пилота, прогресс выученных слов и счётчик ⭐ ---
+  function updatePilotRankUI() {
+    if (!pilotRankText) return;
+    const learnedCount = learnedWordsSet.size;
+    const tr = t();
+    let rankIdx = 0;
+    if (learnedCount >= 70 || state.highScore >= 22000) rankIdx = 3;
+    else if (learnedCount >= 35 || state.highScore >= 9000) rankIdx = 2;
+    else if (learnedCount >= 10 || state.highScore >= 2500) rankIdx = 1;
+
+    const rankName = tr.ranks[rankIdx] || tr.ranks[0];
+    pilotRankText.textContent = tr.rankLine(rankName, learnedCount, state.highScore.toLocaleString());
+  }
+
+  function updateLearnedProgressUI() {
+    const learnedCount = learnedWordsSet.size;
+    const nextW = getNextLockedWeapon();
+    const tr = t();
+    const text = nextW
+      ? tr.learnedPill(learnedCount, nextW.unlockWords, getWeaponName(nextW))
+      : tr.learnedPill(learnedCount, 0, '');
+
+    if (learnedProgressPill) learnedProgressPill.textContent = text;
+    if (overlayLearnedPill) overlayLearnedPill.textContent = text;
+    if (hudLearnedCount) hudLearnedCount.textContent = String(learnedCount);
+  }
+
+  function updatePinnedCountUI() {
+    const pinnedForLang = getPinnedEntriesForTargetLang(state.targetLang);
+    const count = pinnedForLang.length;
+    if (pinnedCountBadge) pinnedCountBadge.textContent = String(count);
+    if (btnDrillPinned) {
+      btnDrillPinned.disabled = count === 0;
+      btnDrillPinned.style.opacity = count === 0 ? '0.5' : '1';
+      btnDrillPinned.title = t().drillPinnedBtn(count);
+    }
+    if (btnPracticePinned) {
+      btnPracticePinned.textContent = t().drillPinnedBtn(count);
+      btnPracticePinned.style.display = count > 0 ? 'inline-flex' : 'none';
+    }
+  }
+
+  // --- Разлёт сразу множества слов к началу экрана (Грави-волна) ---
   function scatterWordsToTop(wordList, bounds, strength = 1.0, minTopOffset = 34) {
-    // Выпускаем широкую дугообразную антигравитационную волну от корабля вверх
     state.repulsorWaves.push({
       x: state.ship.x,
       y: state.ship.y - 12,
@@ -1592,19 +2551,17 @@
 
     sorted.forEach((w, idx) => {
       const slotFrac = count === 1 ? 0.5 : idx / (count - 1);
-      const targetX = startX + slotFrac * spanW + (Math.random() - 0.5) * 32;
+      const targetX = startX + slotFrac * spanW + (Math.random() - 0.5) * 28;
       let desiredDx = (targetX - w.x) * (0.5 + 0.5 * strength);
       if (Math.abs(desiredDx) < 26) {
         desiredDx = (idx % 2 === 0 ? -1 : 1) * (30 + Math.random() * 28) * strength;
       }
       w.pushVx = desiredDx * 3.0;
 
-      const rowOffset = (idx % 3) * 24;
+      const rowOffset = (idx % 3) * 32;
       const startLineY = bounds.top + minTopOffset + rowOffset + Math.random() * 10;
       const currentDist = Math.max(42, w.y - startLineY);
-      const liftDist = strength >= 0.85
-        ? currentDist
-        : Math.max(58, currentDist * 0.62);
+      const liftDist = strength >= 0.85 ? currentDist : Math.max(58, currentDist * 0.62);
 
       w.pushVy = Math.min(w.pushVy || 0, -(liftDist * 2.95 + (w.vy || 16) * 0.8));
       w.hitFlash = Math.max(w.hitFlash || 0, 0.85);
@@ -1613,10 +2570,23 @@
     });
   }
 
-  // --- Смена и рендер оружия ---
+  // --- Смена и прокачка оружия ---
   function equipWeapon(weaponId, withPreviewShot = true) {
     const found = WEAPONS.find(w => w.id === weaponId);
     if (!found) return;
+
+    // Если пушка ещё закрыта — подсказываем игроку, сколько слов осталось выучить!
+    if (!isWeaponUnlocked(found)) {
+      const needMore = Math.max(1, found.unlockWords - learnedWordsSet.size);
+      const msg = t().lockedWeaponHint(found.icon, getWeaponName(found), needMore, found.unlockWords);
+      sound.playMiss();
+      if (titleWeaponDesc) titleWeaponDesc.textContent = msg;
+      state.weaponBannerText = msg;
+      state.weaponBannerColor = '#fbbf24';
+      state.weaponBannerTimer = 2.4;
+      return;
+    }
+
     state.weaponId = found.id;
     saveSettingsPatch({ weaponId: found.id });
 
@@ -1626,45 +2596,49 @@
     if (withPreviewShot) {
       sound.playWeaponEquip(found.id);
 
-      // Показываем баннер на холсте в боевом режиме или делаем живой залп на стартовом экране
       if (state.screenMode === 'play') {
         if (found.id === 'gravity' && state.running && !state.paused && state.gravityEquipCooldown <= 0) {
           const bounds = getPlayBounds();
-          // Если на поле ещё мало слов, сразу выпускаем до 4 слов из очереди и эффектно разбрасываем их веером к самому началу!
           const needExtra = Math.min(Math.max(0, 4 - state.activeWords.length), state.wordQueue.length);
           for (let k = 0; k < needExtra; k++) {
-            spawnNextWord();
-            const spawned = state.activeWords[state.activeWords.length - 1];
-            if (spawned) {
-              spawned.y = bounds.top + Math.min(180, (bounds.bottom - bounds.top) * (0.34 + k * 0.07));
+            if (spawnNextWord(true)) {
+              const spawned = state.activeWords[state.activeWords.length - 1];
+              if (spawned) {
+                spawned.y = bounds.top + Math.min(180, (bounds.bottom - bounds.top) * (0.32 + k * 0.08));
+              }
             }
           }
           scatterWordsToTop(state.activeWords, bounds, 1.0, 34);
           state.spawnTimer = Math.max(state.spawnTimer, 2.8);
           state.gravityEquipCooldown = 5.0;
           state.weaponBannerText = t().gravitySurgeBanner;
+          state.weaponBannerColor = found.color;
           state.weaponBannerTimer = 2.0;
         } else {
           state.weaponBannerText = t().weaponBanner(found.icon, getWeaponName(found));
+          state.weaponBannerColor = found.color;
           state.weaponBannerTimer = 1.6;
         }
       } else {
         const bounds = getPlayBounds();
         const corridorH = bounds.bottom - bounds.top;
+        const langPool = getAllWordsInTargetLang(state.targetLang);
         if (found.id === 'gravity' && corridorH >= 120) {
-          // На стартовом экране сразу наполняем космос 5 словами и эффектно разбрасываем их к самому верху окна!
-          while (state.demoWords.length < 5 && allAutoWords.length > 0) {
-            const sample = allAutoWords[Math.floor(Math.random() * allAutoWords.length)];
-            const margin = Math.min(130, canvas.width * 0.2);
-            const rx = margin + Math.random() * Math.max(60, canvas.width - margin * 2);
+          while (state.demoWords.length < 5 && langPool.length > 0) {
+            const sample = langPool[Math.floor(Math.random() * langPool.length)];
+            const meas = measureWordCapsule(sample.word, sample);
+            const pos = findSafeSpawnX(meas.boxW, meas.boxH, bounds.top + corridorH * 0.45, state.demoWords, bounds);
             state.demoWords.push({
               id: nextEntityId++,
               entry: sample,
               text: sample.word,
               typedCount: 0,
-              x: rx,
-              y: bounds.top + corridorH * (0.42 + Math.random() * 0.25),
+              boxW: meas.boxW,
+              boxH: meas.boxH,
+              x: pos.x,
+              y: bounds.top + corridorH * (0.38 + Math.random() * 0.25),
               vy: Math.max(9, Math.min(16, corridorH * 0.065)),
+              frameVy: 12,
               pushVx: 0,
               pushVy: 0,
               recoilY: 0,
@@ -1698,18 +2672,28 @@
 
   function renderWeaponSelectors() {
     const current = getCurrentWeapon();
+    const tr = t();
     [titleWeaponRow, overlayWeaponRow].forEach(container => {
       if (!container) return;
       container.innerHTML = '';
       WEAPONS.forEach(w => {
+        const unlocked = isWeaponUnlocked(w);
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'weapon-pill-btn' + (w.id === current.id ? ' active' : '');
+        btn.className = 'weapon-pill-btn' +
+          (w.id === current.id ? ' active' : '') +
+          (!unlocked ? ' locked' : '');
         btn.style.setProperty('--w-color', w.color);
-        btn.title = `${getWeaponName(w)} — ${getWeaponDesc(w)}`;
+
+        const needMore = Math.max(0, w.unlockWords - learnedWordsSet.size);
+        btn.title = unlocked
+          ? `${getWeaponName(w)} — ${getWeaponDesc(w)}`
+          : tr.lockedWeaponHint(w.icon, getWeaponName(w), needMore, w.unlockWords);
+
         btn.innerHTML = `
-          <span class="weapon-pill-icon">${w.icon}</span>
+          <span class="weapon-pill-icon">${unlocked ? w.icon : '🔒'}</span>
           <span class="weapon-pill-name">${escapeHtml(getWeaponName(w))}</span>
+          ${!unlocked ? `<span class="weapon-lock-tag">${escapeHtml(tr.lockTagShort(w.unlockWords))}</span>` : ''}
         `;
         btn.addEventListener('click', () => {
           equipWeapon(w.id, true);
@@ -1756,7 +2740,6 @@
     const perpY = Math.cos(angle);
 
     if (weaponId === 'plasma') {
-      // Двойные параллельные плазменные разряды с крыльев
       [-7, 7].forEach(offset => {
         state.lasers.push({
           kind: 'plasma',
@@ -1773,7 +2756,6 @@
       });
       spawnParticles(targetX, targetY + 4, w.color, 7, 105);
     } else if (weaponId === 'railgun') {
-      // Мощный пробивной рельсовый гиперлуч + звуковые кольца вдоль траектории
       state.lasers.push({
         kind: 'railgun',
         x1: noseX,
@@ -1798,7 +2780,6 @@
       });
       spawnParticles(targetX, targetY, '#fda4af', 10, 145);
     } else if (weaponId === 'tesla') {
-      // Ветвящаяся электрическая молния
       const mainBolt = buildLightningPoints(noseX, noseY, targetX, targetY, 9, 18);
       const midPoint = mainBolt[Math.floor(mainBolt.length / 2)];
       const branchBolt = buildLightningPoints(
@@ -1821,7 +2802,6 @@
       });
       spawnParticles(targetX, targetY, '#c4b5fd', 8, 120);
     } else if (weaponId === 'missiles') {
-      // Изогнутая самонаводящаяся микро-ракета + тонкий луч целеуказателя
       state.missileAlternateSide *= -1;
       const curveSign = state.missileAlternateSide;
       const dist = Math.hypot(dx, dy);
@@ -1854,7 +2834,6 @@
         color: w.color
       });
     } else if (weaponId === 'synth') {
-      // Хроматический неоновый луч Synthwave + музыкальная пульсирующая волна
       const hueColors = ['#e879f9', '#22d3ee', '#fbbf24', '#34d399'];
       const noteColor = hueColors[sound.synthNoteCursor % hueColors.length];
       state.lasers.push({
@@ -1880,7 +2859,6 @@
       });
       spawnParticles(targetX, targetY, noteColor, 8, 115);
     } else if (weaponId === 'gravity') {
-      // Широкий антигравитационный тракторный луч + импульсное кольцо подъёма
       state.lasers.push({
         kind: 'gravity',
         x1: noseX,
@@ -1905,7 +2883,7 @@
     }
   }
 
-  // --- Переключение между Аркадным Титульным Экраном и Игрой ---
+  // --- Переключение между титульным экраном и боем ---
   function launchFromTitleScreen() {
     if (state.screenMode !== 'title') return;
     sound.init();
@@ -1952,17 +2930,14 @@
     applyStaticUILocalization();
   }
 
-  // --- Живой Автопилот на Аркадном Титульном Экране (строго в центральном окне космоса) ---
   function updateTitleDemo(dt) {
     const bounds = getPlayBounds();
     const corridorH = bounds.bottom - bounds.top;
 
-    // Плавное покачивание корабля в нижней части открытого космического окна
-    state.ship.targetY = Math.max(bounds.top + 44, bounds.bottom - 26);
+    state.ship.targetY = Math.max(bounds.top + 42, bounds.bottom - 24);
     state.ship.x = canvas.width / 2 + Math.sin(performance.now() * 0.0011) * 24;
 
-    // На очень узких по высоте экранах (альбомная ориентация телефона) не спавним демо-слова, чтобы не теснить карточки
-    if (corridorH < 120) {
+    if (corridorH < 110) {
       state.demoWords = [];
       state.demoTargetId = null;
       return;
@@ -1970,29 +2945,37 @@
 
     const spawnY = bounds.top + 24;
     const maxDemoWords = state.weaponId === 'gravity' ? 4 : 2;
+    const demoPool = getAllWordsInTargetLang(state.targetLang);
 
     state.demoSpawnTimer -= dt;
-    if (state.demoSpawnTimer <= 0 && state.demoWords.length < maxDemoWords) {
-      const sample = allAutoWords[Math.floor(Math.random() * allAutoWords.length)];
+    if (state.demoSpawnTimer <= 0 && state.demoWords.length < maxDemoWords && demoPool.length > 0) {
+      const sample = demoPool[Math.floor(Math.random() * demoPool.length)];
       if (sample) {
-        const margin = Math.min(150, canvas.width * 0.24);
-        const rx = margin + Math.random() * Math.max(60, canvas.width - margin * 2);
-        state.demoWords.push({
-          id: nextEntityId++,
-          entry: sample,
-          text: sample.word,
-          typedCount: 0,
-          x: rx,
-          y: spawnY,
-          vy: Math.max(9, Math.min(16, corridorH * 0.065)),
-          pushVx: 0,
-          pushVy: 0,
-          recoilY: 0,
-          hitFlash: 0
-        });
+        const meas = measureWordCapsule(sample.word, sample);
+        const pos = findSafeSpawnX(meas.boxW, meas.boxH, spawnY, state.demoWords, bounds);
+        if (pos.clear) {
+          state.demoWords.push({
+            id: nextEntityId++,
+            entry: sample,
+            text: sample.word,
+            typedCount: 0,
+            boxW: meas.boxW,
+            boxH: meas.boxH,
+            x: pos.x,
+            y: spawnY,
+            vy: Math.max(9, Math.min(16, corridorH * 0.065)) * computeWordLengthSpeedFactor(sample.word.length),
+            frameVy: 12,
+            pushVx: 0,
+            pushVy: 0,
+            recoilY: 0,
+            hitFlash: 0
+          });
+        }
       }
-      state.demoSpawnTimer = state.weaponId === 'gravity' ? 1.15 : 1.85;
+      state.demoSpawnTimer = state.weaponId === 'gravity' ? 1.2 : 1.85;
     }
+
+    resolveWordCollisions(state.demoWords, bounds, dt, bounds.top + 22);
 
     for (let i = state.demoWords.length - 1; i >= 0; i--) {
       const dw = state.demoWords[i];
@@ -2011,7 +2994,7 @@
         dw.y = Math.max(bounds.top + 22, dw.y - dw.recoilY * 6 * dt);
         dw.recoilY = Math.max(0, dw.recoilY - 24 * dt);
       } else {
-        dw.y += dw.vy * dt;
+        dw.y += (dw.frameVy ?? dw.vy) * dt;
       }
 
       if (dw.y < bounds.top + 22) {
@@ -2020,13 +3003,12 @@
       }
       if (dw.hitFlash > 0) dw.hitFlash = Math.max(0, dw.hitFlash - dt * 5);
 
-      if (dw.y > state.ship.y - 38) {
+      if (dw.y > state.ship.y - 36) {
         state.demoWords.splice(i, 1);
         if (state.demoTargetId === dw.id) state.demoTargetId = null;
       }
     }
 
-    // Автоприцеливание и красивая демонстрационная стрельба выбранным оружием
     state.demoFireTimer -= dt;
     if (state.demoFireTimer <= 0 && state.demoWords.length > 0) {
       let target = state.demoWords.find(w => w.id === state.demoTargetId);
@@ -2039,7 +3021,7 @@
         target.typedCount++;
         target.hitFlash = 1.0;
         target.recoilY = 2.6;
-        const style = getArticleStyle(target.entry.article);
+        const style = getArticleStyle(target.entry.article, state.targetLang);
         spawnWeaponVisualEffect(state.weaponId, target.x, target.y, style.main);
 
         if (state.weaponId === 'gravity' && target.typedCount % 2 === 1) {
@@ -2047,7 +3029,6 @@
         }
 
         if (target.typedCount >= target.text.length) {
-          // Красивый беззвучный взрыв слова с показом перевода внутри космического окна
           const idx = state.demoWords.findIndex(w => w.id === target.id);
           if (idx !== -1) state.demoWords.splice(idx, 1);
           state.demoTargetId = null;
@@ -2071,6 +3052,7 @@
             life: 0,
             maxLife: 2.5
           });
+          separateFloatingTranslations(bounds);
           state.demoFireTimer = 0.65;
         } else {
           state.demoFireTimer = 0.14;
@@ -2081,16 +3063,20 @@
     }
   }
 
-  // --- Переключение языка перевода и ВСЕГО меню (RU / עברית / Оба) ---
-  function setTranslationLanguage(langId) {
-    state.translationLang = langId;
-    saveSettingsPatch({ translationLang: langId });
+  // ==========================================================================
+  // 5) ПЕРЕКЛЮЧЕНИЕ ФИЛЬТРА 1 («Я учу») И ФИЛЬТРА 2 («Перевод / Интерфейс»)
+  // ==========================================================================
+  function setNativeLanguage(langId) {
+    if (!UI_TEXT[langId]) return;
+    state.nativeLang = langId;
+    saveSettingsPatch({ nativeLang: langId });
+    document.documentElement.lang = langId;
 
-    const modeObj = state.langModes.find(m => m.id === langId) || state.langModes[0];
-    if (btnLangMode) btnLangMode.textContent = modeObj.label;
+    const modeObj = state.nativeLangModes.find(m => m.id === langId) || state.nativeLangModes[0];
+    if (btnLangMode) btnLangMode.textContent = modeObj.short;
 
-    document.querySelectorAll('.lang-quick-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === langId);
+    document.querySelectorAll('.native-lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.nativeLang === langId);
     });
 
     applyStaticUILocalization();
@@ -2100,7 +3086,12 @@
     refreshOverlayContent();
     renderTtsSettingsUI();
     updatePilotRankUI();
+    updateLearnedProgressUI();
+    updatePinnedCountUI();
 
+    if (courseBrowserDialog && courseBrowserDialog.open) {
+      renderCourseBrowserModal();
+    }
     if (state.activeQuiz && levelQuizBox.style.display !== 'none') {
       renderCurrentQuizQuestion(false);
     }
@@ -2111,65 +3102,154 @@
     updateBottomTargetUI();
   }
 
-  // --- Локализация всех статичных подписей интерфейса ---
+  function setTargetLanguage(targetLangId) {
+    if (!TARGET_LANG_META[targetLangId]) return;
+    const changed = state.targetLang !== targetLangId;
+    state.targetLang = targetLangId;
+    saveSettingsPatch({ targetLang: targetLangId });
+
+    document.querySelectorAll('.target-lang-pill').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.targetLang === targetLangId);
+    });
+
+    const meta = TARGET_LANG_META[targetLangId];
+    if (btnTargetLangHud) {
+      btnTargetLangHud.textContent = `${meta.flag} ${meta.code}`;
+    }
+
+    ensureValidCourseSelection();
+    renderZtypeKeyboard();
+
+    if (changed) {
+      state.demoWords = [];
+      state.demoTargetId = null;
+      state.killHistory = [];
+    }
+
+    applyStaticUILocalization();
+    renderLevelSidebar();
+    refreshOverlayContent();
+    renderTtsSettingsUI();
+    updatePinnedCountUI();
+    rerenderKillFeed();
+    updateBottomTargetUI();
+
+    if (courseBrowserDialog && courseBrowserDialog.open) {
+      renderCourseBrowserModal();
+    }
+  }
+
   function applyStaticUILocalization() {
     const tr = t();
     const isHe = isHebrewUI();
+    const targetMeta = TARGET_LANG_META[state.targetLang] || TARGET_LANG_META.de;
+    const targetLangLocalName = targetMeta.names[state.nativeLang] || targetMeta.names.en;
 
     if (arcadeTitleScreen) arcadeTitleScreen.dir = isHe ? 'rtl' : 'ltr';
     if (overlayCard) overlayCard.dir = isHe ? 'rtl' : 'ltr';
     if (ttsDialogBody) ttsDialogBody.dir = isHe ? 'rtl' : 'ltr';
+    if (catalogDialogBody) catalogDialogBody.dir = isHe ? 'rtl' : 'ltr';
+    if (customDialogBody) customDialogBody.dir = isHe ? 'rtl' : 'ltr';
+    if (dictDialogBody) dictDialogBody.dir = isHe ? 'rtl' : 'ltr';
 
-    if (titleTagline) titleTagline.textContent = tr.titleTagline;
+    if (labelNativeFilter) labelNativeFilter.textContent = tr.nativeFilterLabel;
+    if (labelTargetFilter) labelTargetFilter.textContent = tr.targetFilterLabel;
+
+    document.querySelectorAll('[data-tlang-name]').forEach(span => {
+      const code = span.getAttribute('data-tlang-name');
+      if (TARGET_LANG_META[code]) {
+        span.textContent = TARGET_LANG_META[code].names[state.nativeLang] || TARGET_LANG_META[code].names.en;
+      }
+    });
+
+    const { course, mod, lesson } = getActiveSelection();
+    if (arcadeLogoMain) arcadeLogoMain.textContent = targetMeta.heroBrand;
+    if (arcadeLogoSub && course) {
+      arcadeLogoSub.textContent = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')}`;
+    }
+    if (titleTagline) titleTagline.textContent = tr.titleTagline(targetLangLocalName);
     if (titleArsenalLabel) titleArsenalLabel.textContent = tr.titleArsenalLabel;
+    if (labelOpenCatalogTitle) labelOpenCatalogTitle.textContent = tr.allCoursesBtn;
+    if (labelCatalogHud) labelCatalogHud.textContent = tr.coursesHudBtn;
+    if (btnSidebarCatalog) btnSidebarCatalog.textContent = `🗂️ ${tr.allCoursesBtn}`;
+    if (btnOverlayCatalog) btnOverlayCatalog.textContent = `🗂️ ${tr.allCoursesBtn}`;
+
+    const courseWords = course ? getAllWordsInCourse(course) : [];
     if (btnTitleVoice) btnTitleVoice.textContent = tr.titleVoiceLink;
-    if (labelTitleDict) labelTitleDict.textContent = tr.titleDictLink(allAutoWords.length);
+    if (labelTitleDict) labelTitleDict.textContent = tr.titleDictLink(courseWords.length);
     if (labelTitleCustom) labelTitleCustom.textContent = tr.titleCustomLink;
     if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.overlayWeaponTitle;
     if (btnBackToTitle) btnBackToTitle.textContent = tr.backToMenuBtn;
 
-    const lvl = levels[state.currentLevelIndex];
-    if (lvl && labelArcadeLaunch) {
-      labelArcadeLaunch.textContent = lvl.id === 'level-auto-all'
-        ? tr.launchAutoBtn
-        : tr.launchMissionBtn(lvl.number, getLevelTitle(lvl).split(',')[0]);
+    if (course && mod && lesson && labelArcadeLaunch) {
+      const lTitle = getLocalizedField(lesson, 'titles');
+      if (lesson.isBoss) {
+        labelArcadeLaunch.textContent = tr.launchBossBtn(lTitle);
+      } else {
+        const wLen = (lesson.words || []).length;
+        labelArcadeLaunch.textContent = tr.launchLessonBtn(state.activeLessonIndex + 1, lTitle, tr.wordsShort(wLen));
+      }
     }
 
     if (labelPause) labelPause.textContent = tr.pause;
     if (labelScore) labelScore.textContent = tr.score;
     if (labelCombo) labelCombo.textContent = tr.combo;
-    if (labelAccuracy) labelAccuracy.textContent = tr.accuracy;
+    if (labelLearnedHud) labelLearnedHud.textContent = tr.learnedHud;
     if (labelShield) labelShield.textContent = tr.shield;
+
     if (btnArticleMode) {
       btnArticleMode.textContent = state.typeWithArticle ? tr.articleMode : tr.badgeMode;
       btnArticleMode.classList.toggle('active', state.typeWithArticle);
     }
-    if (labelDictBtn) labelDictBtn.textContent = tr.dictBtn;
     if (labelCustomBtn) labelCustomBtn.textContent = tr.customBtn;
-    if (sidebarLevelsTitle) sidebarLevelsTitle.textContent = tr.sidebarLevels;
     if (sidebarKillsTitle) sidebarKillsTitle.textContent = tr.sidebarKills;
-    if (btnClearFeed) btnClearFeed.textContent = tr.clearBtn;
-    if (legendDer) legendDer.textContent = tr.legendDer;
-    if (legendDie) legendDie.textContent = tr.legendDie;
-    if (legendDas) legendDas.textContent = tr.legendDas;
-    if (legendVerb) legendVerb.textContent = tr.legendVerb;
+
+    const leg = tr.legends[state.targetLang] || tr.legends.de;
+    if (legendDer) legendDer.textContent = leg[0];
+    if (legendDie) legendDie.textContent = leg[1];
+    if (legendDas) legendDas.textContent = leg[2];
+    if (legendVerb) legendVerb.textContent = leg[3];
+
     if (quizHeaderTitle) quizHeaderTitle.textContent = tr.quizHeader;
-    if (dictDialogTitle) dictDialogTitle.textContent = tr.dictTitle(allAutoWords.length);
+    if (dictDialogTitle && course) {
+      dictDialogTitle.textContent = tr.dictTitle(getLocalizedField(course, 'titles'), courseWords.length);
+    }
     if (dictSearchInput) dictSearchInput.placeholder = tr.dictSearchPlaceholder;
+    if (labelDictPinnedFilter) labelDictPinnedFilter.textContent = tr.dictPinnedFilter;
+
+    // Каталог и окно Anki
+    if (catalogDialogTitle) catalogDialogTitle.textContent = tr.catalogTitle;
+    if (tabSourceAll) tabSourceAll.textContent = tr.tabAll;
+    if (tabSourceOfficial) tabSourceOfficial.textContent = tr.tabOfficial;
+    if (tabSourceUser) tabSourceUser.textContent = tr.tabUser;
+    if (labelImportFromCatalog) labelImportFromCatalog.textContent = tr.importAnkiBtn;
+
     if (customDialogTitle) customDialogTitle.textContent = tr.customTitle;
+    if (tabImportAnki) tabImportAnki.textContent = tr.tabImportAnki;
+    if (tabImportManual) tabImportManual.textContent = tr.tabImportManual;
+    if (importTargetLangLabel) importTargetLangLabel.textContent = tr.importLangLabel;
+    if (ankiDropTitle) ankiDropTitle.textContent = tr.ankiDropTitle;
+    if (ankiDropSub) ankiDropSub.textContent = tr.ankiDropSub;
+    if (btnDownloadSampleApkg) btnDownloadSampleApkg.textContent = tr.sampleApkgBtn;
+    if (labelAnkiDeckName) labelAnkiDeckName.textContent = tr.ankiDeckNameLabel;
+    if (labelAnkiFront) labelAnkiFront.textContent = tr.ankiFrontLabel;
+    if (labelAnkiBack) labelAnkiBack.textContent = tr.ankiBackLabel;
     if (customDialogHint) customDialogHint.innerHTML = tr.customHint;
     if (btnSaveCustomWords) btnSaveCustomWords.textContent = tr.customSaveBtn;
 
     const preset = state.speedPresets[state.speedPresetIndex] || state.speedPresets[0];
     if (btnSpeedMode) btnSpeedMode.textContent = preset.label;
     if (btnTitleSpeed) btnTitleSpeed.textContent = preset.label;
+    if (btnTargetLangHud) btnTargetLangHud.textContent = `${targetMeta.flag} ${targetMeta.code}`;
 
-    if (lvl && hudLevelTitle) {
-      hudLevelTitle.textContent = lvl.id === 'level-auto-all'
-        ? tr.autoAllShort
-        : tr.levelShort(lvl.number, getLevelTitle(lvl));
+    if (lesson && hudLevelTitle) {
+      hudLevelTitle.textContent = state.activeCustomRoundTitle
+        ? state.activeCustomRoundTitle
+        : tr.lessonShort(state.activeLessonIndex + 1, getLocalizedField(lesson, 'titles'));
     }
 
+    updateLearnedProgressUI();
+    updatePinnedCountUI();
     onTtsStatusChanged();
   }
 
@@ -2185,7 +3265,6 @@
     }
 
     if (!ttsStatusBanner) return;
-
     if (!ttsManager.enabled) {
       ttsStatusBanner.textContent = tr.ttsStatusMuted;
       ttsStatusBanner.classList.add('fallback');
@@ -2204,6 +3283,7 @@
   function renderTtsSettingsUI() {
     if (!ttsSettingsDialog) return;
     const tr = t();
+    const meta = TARGET_LANG_META[state.targetLang] || TARGET_LANG_META.de;
 
     if (ttsDialogTitle) ttsDialogTitle.textContent = tr.ttsDialogTitle;
     if (ttsEnableLabel) ttsEnableLabel.textContent = tr.ttsEnableLabel;
@@ -2215,7 +3295,7 @@
     if (ttsModelFlashDesc) ttsModelFlashDesc.textContent = tr.ttsModelFlashDesc;
     if (ttsModelLiteDesc) ttsModelLiteDesc.textContent = tr.ttsModelLiteDesc;
     if (ttsVoiceLabel) ttsVoiceLabel.textContent = tr.ttsVoiceLabel;
-    if (btnTestGeminiVoice) btnTestGeminiVoice.textContent = tr.ttsTestBtn;
+    if (btnTestGeminiVoice) btnTestGeminiVoice.textContent = tr.ttsTestBtn(meta.sampleWord);
     if (ttsApiKeySummary) ttsApiKeySummary.textContent = tr.ttsApiKeySummary;
     if (ttsApiKeyHint) ttsApiKeyHint.innerHTML = tr.ttsApiKeyHint;
     if (geminiApiKeyInput && document.activeElement !== geminiApiKeyInput) {
@@ -2234,9 +3314,10 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'tts-voice-btn' + (v.id === ttsManager.voice ? ' active' : '');
+        const toneLabel = (v.tones && (v.tones[state.nativeLang] || v.tones.en)) || '';
         btn.innerHTML = `
           <span class="tts-voice-name">🎙️ ${escapeHtml(v.id)}</span>
-          <span class="tts-voice-tone">${escapeHtml(isHebrewUI() ? v.heTone : v.ruTone)}</span>
+          <span class="tts-voice-tone">${escapeHtml(toneLabel)}</span>
         `;
         btn.addEventListener('click', () => {
           ttsManager.voice = v.id;
@@ -2251,143 +3332,134 @@
     onTtsStatusChanged();
   }
 
-  // --- Перерисовка содержимого центрального меню ---
-  function refreshOverlayContent() {
-    const lvl = levels[state.currentLevelIndex];
-    if (!lvl) return;
-    const tr = t();
-    const title = getLevelTitle(lvl);
-    const desc = getLevelDesc(lvl);
+  // ==========================================================================
+  // 6 & 8) 3-СТУПЕНЧАТАЯ СТРУКТУРА КУРСОВ + ЧЁТКАЯ МАРКИРОВКА (САЙТ vs ЛИЧНЫЕ)
+  // ==========================================================================
+  function getNextLessonPointer() {
+    const { course, mod } = getActiveSelection();
+    if (!course || !mod) return null;
 
-    btnPracticeMistakes.textContent = tr.mistakesBtn;
-    btnPracticeMistakes.style.display = state.mistakeWordsMap.size > 0 ? 'inline-flex' : 'none';
-
-    if (state.overlayMode === 'intro') {
-      overlayBadge.textContent = lvl.id === 'level-auto-all'
-        ? tr.introBadgeMain
-        : tr.introBadgeStep(lvl.number, levels.length - 1);
-      overlayTitle.textContent = `${title} (${lvl.deName})`;
-      overlayDesc.innerHTML = escapeHtml(desc);
-      overlayWordsHeader.textContent = tr.wordsInLevelHeader(lvl.words.length);
-      btnStartLevel.textContent = tr.startLevelBtn;
-      btnStartLevel.style.display = 'inline-flex';
-      btnNextLevel.style.display = 'none';
-    } else if (state.overlayMode === 'complete') {
-      overlayBadge.textContent = tr.completeBadge(state.maxCombo);
-      overlayTitle.textContent = tr.completeTitle(title);
-      overlayDesc.innerHTML = tr.completeDesc;
-      overlayWordsHeader.textContent = tr.learnedWordsHeader(lvl.words.length);
-      btnStartLevel.textContent = tr.retryBtn;
-      btnStartLevel.style.display = 'inline-flex';
-      if (state.currentLevelIndex < levels.length - 1) {
-        btnNextLevel.style.display = 'inline-flex';
-        btnNextLevel.textContent = tr.nextLevelBtn(levels[state.currentLevelIndex + 1].number);
-      } else {
-        btnNextLevel.style.display = 'none';
-      }
-    } else if (state.overlayMode === 'gameover') {
-      overlayBadge.textContent = tr.gameOverBadge;
-      overlayTitle.textContent = tr.gameOverTitle(title);
-      overlayDesc.innerHTML = tr.gameOverDesc(state.wordsDestroyedInLevel, state.totalWordsInLevel);
-      overlayWordsHeader.textContent = tr.wordsInLevelHeader(lvl.words.length);
-      btnStartLevel.textContent = tr.tryAgainBtn;
-      btnStartLevel.style.display = 'inline-flex';
-      btnNextLevel.style.display = 'none';
-    } else if (state.overlayMode === 'pause') {
-      overlayBadge.textContent = tr.pauseBadge;
-      overlayTitle.textContent = title;
-      overlayDesc.innerHTML = tr.pauseDesc(state.wordsDestroyedInLevel, state.totalWordsInLevel);
-      overlayWordsHeader.textContent = tr.wordsInLevelHeader(lvl.words.length);
-      btnStartLevel.textContent = tr.resumeBtn;
-      btnStartLevel.style.display = 'inline-flex';
-      btnNextLevel.style.display = 'none';
+    if (state.activeLessonIndex + 1 < mod.lessons.length) {
+      return {
+        courseId: course.id,
+        moduleIndex: state.activeModuleIndex,
+        lessonIndex: state.activeLessonIndex + 1,
+        lesson: mod.lessons[state.activeLessonIndex + 1]
+      };
     }
-
-    renderWordsPreviewList(lvl.words, overlayWordsPreview);
+    if (state.activeModuleIndex + 1 < course.modules.length) {
+      const nextMod = course.modules[state.activeModuleIndex + 1];
+      if (nextMod && nextMod.lessons && nextMod.lessons.length > 0) {
+        return {
+          courseId: course.id,
+          moduleIndex: state.activeModuleIndex + 1,
+          lessonIndex: 0,
+          lesson: nextMod.lessons[0]
+        };
+      }
+    }
+    return null;
   }
 
-  // --- Отрисовка списка уровней (боковая панель ПК + чипы в меню + чипы на титульном экране) ---
   function renderLevelSidebar() {
-    if (levelListContainer) levelListContainer.innerHTML = '';
-    if (overlayLevelChips) overlayLevelChips.innerHTML = '';
-    if (titleStageChips) titleStageChips.innerHTML = '';
+    const { course, mod } = getActiveSelection();
+    if (!course || !mod) return;
     const tr = t();
 
-    const totalWords = levels
-      .filter(l => l.id !== 'level-auto-all')
-      .reduce((acc, l) => acc + l.words.length, 0);
+    updateOriginBadgeElement(titleCourseOriginBadge, course);
+    updateOriginBadgeElement(sidebarOriginBadge, course);
+    updateOriginBadgeElement(overlayOriginBadge, course);
+
+    const courseTitle = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')}`;
+    const modTitle = getLocalizedField(mod, 'titles');
+    if (titleCourseName) {
+      titleCourseName.textContent = `${courseTitle} · ${modTitle}`;
+    }
+    if (sidebarLevelsTitle) {
+      sidebarLevelsTitle.textContent = courseTitle;
+    }
+
+    const totalWords = getAllWordsInCourse(course).length;
     if (totalWordsCounter) totalWordsCounter.textContent = tr.wordsCount(totalWords);
 
-    levels.forEach((lvl, idx) => {
-      const localTitle = getLevelTitle(lvl);
+    // 1. Левая панель ПК: все модули курса и короткие уроки внутри них
+    if (levelListContainer) {
+      levelListContainer.innerHTML = '';
+      course.modules.forEach((mObj, mIdx) => {
+        const modHeader = document.createElement('div');
+        modHeader.className = 'module-divider-label';
+        modHeader.textContent = getLocalizedField(mObj, 'titles');
+        levelListContainer.appendChild(modHeader);
 
-      // 1. Карточка для левой панели на ПК
-      if (levelListContainer) {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'level-card' +
-          (idx === state.currentLevelIndex ? ' active' : '') +
-          (lvl.completed ? ' completed' : '');
+        (mObj.lessons || []).forEach((ls, lIdx) => {
+          const isCurrent = mIdx === state.activeModuleIndex && lIdx === state.activeLessonIndex;
+          const isDone = state.completedLessonIds.has(ls.id);
+          const lTitle = getLocalizedField(ls, 'titles');
+          const resolvedWords = resolveLessonBaseWords(course, mObj, ls, lIdx);
 
-        const badgeLabel = lvl.id === 'level-auto-all'
-          ? tr.levelBadgeMain
-          : tr.levelBadgeNum(lvl.number);
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'level-card' +
+            (isCurrent ? ' active' : '') +
+            (isDone ? ' completed' : '') +
+            (ls.isBoss ? ' boss' : '');
 
-        btn.innerHTML = `
-          <div class="level-card-top">
-            <span class="level-badge">${lvl.completed ? '✓ ' : ''}${badgeLabel}</span>
-            <span class="level-word-count">${tr.wordsShort(lvl.words.length)}</span>
-          </div>
-          <div class="level-card-name">${escapeHtml(localTitle)}</div>
-          <div class="level-card-sub" dir="ltr">${escapeHtml(lvl.deName)}</div>
-        `;
-
-        btn.addEventListener('click', () => {
-          selectLevel(idx, true);
+          const badgeLabel = ls.isBoss ? tr.lessonBadgeBoss : tr.lessonBadgeNum(lIdx + 1);
+          btn.innerHTML = `
+            <div class="level-card-top">
+              <span class="level-badge">${isDone ? '✓ ' : ''}${escapeHtml(badgeLabel)}</span>
+              <span class="level-word-count">${escapeHtml(tr.wordsShort(resolvedWords.length))}</span>
+            </div>
+            <div class="level-card-name">${escapeHtml(lTitle)}</div>
+          `;
+          btn.addEventListener('click', () => {
+            selectCourseLesson(course.id, mIdx, lIdx, true);
+          });
+          levelListContainer.appendChild(btn);
         });
-        levelListContainer.appendChild(btn);
-      }
+      });
+    }
 
-      const shortChipLabel = lvl.id === 'level-auto-all'
-        ? `🏆 AUTO (${lvl.words.length})`
-        : `${lvl.completed ? '✓ ' : ''}${tr.levelShort(lvl.number, localTitle.split(',')[0])}`;
-
-      // 2. Чип для центрального оверлея
-      if (overlayLevelChips) {
+    // 2. Компактные чипы ТЕКУЩЕГО модуля (3 коротких урока + 1 Босс — никакой бесконечной прокрутки!)
+    [overlayLevelChips, titleStageChips].forEach((chipBox, boxIdx) => {
+      if (!chipBox) return;
+      chipBox.innerHTML = '';
+      (mod.lessons || []).forEach((ls, lIdx) => {
+        const isCurrent = lIdx === state.activeLessonIndex;
+        const isDone = state.completedLessonIds.has(ls.id);
+        const lTitle = getLocalizedField(ls, 'titles');
         const chip = document.createElement('button');
         chip.type = 'button';
         chip.className = 'level-chip-btn' +
-          (idx === state.currentLevelIndex ? ' active' : '') +
-          (lvl.completed ? ' completed' : '');
-        chip.textContent = shortChipLabel;
+          (isCurrent ? ' active' : '') +
+          (isDone ? ' completed' : '') +
+          (ls.isBoss ? ' boss' : '');
+        chip.textContent = ls.isBoss
+          ? `${isDone ? '✓ ' : ''}${lTitle}`
+          : `${isDone ? '✓ ' : ''}${tr.lessonShort(lIdx + 1, lTitle)}`;
         chip.addEventListener('click', () => {
-          selectLevel(idx, true);
+          if (boxIdx === 1 && state.screenMode === 'title') {
+            selectCourseLesson(course.id, state.activeModuleIndex, lIdx, false);
+          } else {
+            selectCourseLesson(course.id, state.activeModuleIndex, lIdx, true);
+          }
         });
-        overlayLevelChips.appendChild(chip);
-      }
-
-      // 3. Чип выбора миссии на аркадном титульном экране
-      if (titleStageChips) {
-        const tChip = document.createElement('button');
-        tChip.type = 'button';
-        tChip.className = 'level-chip-btn' +
-          (idx === state.currentLevelIndex ? ' active' : '') +
-          (lvl.completed ? ' completed' : '');
-        tChip.textContent = shortChipLabel;
-        tChip.addEventListener('click', () => {
-          state.currentLevelIndex = idx;
-          sound.init();
-          sound._playTactileClick(sound.ctx ? sound.ctx.currentTime : 0, sound.masterGain, 2200, 0.05);
-          renderLevelSidebar();
-          applyStaticUILocalization();
-        });
-        titleStageChips.appendChild(tChip);
-      }
+        chipBox.appendChild(chip);
+      });
     });
   }
 
-  function selectLevel(levelIndex, showStartOverlay = true) {
-    state.currentLevelIndex = levelIndex;
+  function selectCourseLesson(courseId, moduleIndex, lessonIndex, showIntro = true) {
+    state.activeCourseId = courseId;
+    state.activeModuleIndex = moduleIndex;
+    state.activeLessonIndex = lessonIndex;
+    state.activeCustomRoundTitle = '';
+    saveSettingsPatch({
+      activeCourseId: courseId,
+      activeModuleIndex: moduleIndex,
+      activeLessonIndex: lessonIndex
+    });
+
     state.running = false;
     state.paused = false;
     state.gameOver = false;
@@ -2396,47 +3468,258 @@
     state.lasers = [];
     state.missiles = [];
 
-    const lvl = levels[levelIndex];
-    const tr = t();
-    hudLevelTitle.textContent = lvl.id === 'level-auto-all'
-      ? tr.autoAllShort
-      : tr.levelShort(lvl.number, getLevelTitle(lvl));
-    hudProgressBar.style.width = '0%';
-    if (kbdProgressFill) kbdProgressFill.style.width = '0%';
-    hudProgressText.textContent = `0 / ${lvl.words.length}`;
+    const { course, mod, lesson } = getActiveSelection();
+    if (course && mod && lesson) {
+      const pool = resolveLessonBaseWords(course, mod, lesson, state.activeLessonIndex);
+      hudProgressBar.style.width = '0%';
+      if (kbdProgressFill) kbdProgressFill.style.width = '0%';
+      hudProgressText.textContent = `0 / ${pool.length}`;
+    }
 
     renderLevelSidebar();
     applyStaticUILocalization();
     updateBottomTargetUI();
 
     if (state.screenMode === 'title') {
+      sound.init();
+      sound._playTactileClick(sound.ctx ? sound.ctx.currentTime : 0, sound.masterGain, 2200, 0.05);
       return;
     }
 
-    if (showStartOverlay) {
+    if (showIntro) {
       showLevelIntroOverlay();
     } else {
       startLevelNow();
     }
   }
 
+  function renderCourseBrowserModal() {
+    if (!catalogCoursesContainer) return;
+    const tr = t();
+    const allForLang = getCoursesForTargetLang(state.targetLang);
+
+    document.querySelectorAll('.source-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.sourceFilter === state.catalogSourceFilter);
+    });
+
+    const filtered = allForLang.filter(c => {
+      if (state.catalogSourceFilter === 'official') return c.source !== 'user';
+      if (state.catalogSourceFilter === 'user') return c.source === 'user';
+      return true;
+    });
+
+    catalogCoursesContainer.innerHTML = '';
+    if (filtered.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'kill-feed-empty';
+      empty.textContent = tr.emptyUserCourses;
+      catalogCoursesContainer.appendChild(empty);
+      return;
+    }
+
+    filtered.forEach(course => {
+      const isUser = course.source === 'user';
+      const card = document.createElement('div');
+      card.className = 'catalog-course-card' +
+        (isUser ? ' user-course' : '') +
+        (course.id === state.activeCourseId ? ' active-course' : '');
+
+      const originLabel = !isUser
+        ? tr.originOfficial
+        : (course.originType === 'anki' ? tr.originUserAnki : tr.originUserCustom);
+      const totalWords = getAllWordsInCourse(course).length;
+
+      const header = document.createElement('div');
+      header.className = 'catalog-course-header';
+      header.innerHTML = `
+        <div class="catalog-course-title-group">
+          <div class="catalog-course-badges">
+            <span class="origin-badge ${isUser ? 'user' : 'official'}">${escapeHtml(originLabel)}</span>
+            <span class="level-tag-pill">${escapeHtml(course.levelTag || 'A1–B1')}</span>
+            <span class="sidebar-count">${escapeHtml(tr.wordsCount(totalWords))}</span>
+          </div>
+          <div class="catalog-course-title">${escapeHtml(course.icon || '📚')} ${escapeHtml(getLocalizedField(course, 'titles'))}</div>
+          <div class="catalog-course-desc">${escapeHtml(getLocalizedField(course, 'descriptions'))}</div>
+        </div>
+      `;
+
+      if (isUser) {
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'delete-course-btn';
+        delBtn.textContent = tr.deleteDeckBtn;
+        delBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          await window.AnkiImporter.deleteUserCourse(course.id);
+          state.userCourses = state.userCourses.filter(x => x.id !== course.id);
+          if (state.activeCourseId === course.id) {
+            state.activeCourseId = '';
+            ensureValidCourseSelection();
+          }
+          renderLevelSidebar();
+          applyStaticUILocalization();
+          renderCourseBrowserModal();
+        });
+        header.appendChild(delBtn);
+      }
+
+      card.appendChild(header);
+
+      (course.modules || []).forEach((mod, mIdx) => {
+        const modBlock = document.createElement('div');
+        modBlock.className = 'catalog-module-block';
+
+        const modTitleEl = document.createElement('div');
+        modTitleEl.className = 'catalog-module-title';
+        modTitleEl.textContent = getLocalizedField(mod, 'titles');
+        modBlock.appendChild(modTitleEl);
+
+        const lessonsRow = document.createElement('div');
+        lessonsRow.className = 'catalog-lessons-row';
+
+        (mod.lessons || []).forEach((ls, lIdx) => {
+          const isDone = state.completedLessonIds.has(ls.id);
+          const lBtn = document.createElement('button');
+          lBtn.type = 'button';
+          lBtn.className = 'catalog-lesson-btn' +
+            (ls.isBoss ? ' boss' : '') +
+            (isDone ? ' completed' : '');
+
+          const lTitle = getLocalizedField(ls, 'titles');
+          const metaStr = ls.isBoss
+            ? tr.bossMetaLabel
+            : tr.wordsCount((ls.words || []).length);
+
+          lBtn.innerHTML = `
+            <span class="catalog-lesson-top">${isDone ? '✓ ' : ''}${escapeHtml(ls.isBoss ? lTitle : `${lIdx + 1}. ${lTitle}`)}</span>
+            <span class="catalog-lesson-meta">${escapeHtml(metaStr)}</span>
+          `;
+
+          lBtn.addEventListener('click', () => {
+            courseBrowserDialog.close();
+            selectCourseLesson(course.id, mIdx, lIdx, false);
+            if (state.screenMode === 'title') {
+              launchFromTitleScreen();
+            }
+          });
+
+          lessonsRow.appendChild(lBtn);
+        });
+
+        modBlock.appendChild(lessonsRow);
+        card.appendChild(modBlock);
+      });
+
+      catalogCoursesContainer.appendChild(card);
+    });
+  }
+
+  function openCourseCatalogModal(initialFilter = 'all') {
+    if (state.running && !state.paused) state.paused = true;
+    state.catalogSourceFilter = initialFilter;
+    renderCourseBrowserModal();
+    courseBrowserDialog.showModal();
+  }
+
+  // ==========================================================================
+  // РЕНДЕР ОВЕРЛЕЯ, СПИСКА СЛОВ И ПРАВОЙ КОЛОНКИ СО ЗВЁЗДОЧКОЙ ⭐
+  // ==========================================================================
+  function refreshOverlayContent() {
+    const { course, mod, lesson } = getActiveSelection();
+    if (!course || !mod || !lesson) return;
+    const tr = t();
+
+    updateOriginBadgeElement(overlayOriginBadge, course);
+    const lTitle = state.activeCustomRoundTitle || getLocalizedField(lesson, 'titles');
+    const lDesc = getLocalizedField(lesson, 'descriptions');
+    const previewWords = state.currentRoundPool.length > 0 && state.overlayMode !== 'intro'
+      ? state.currentRoundPool
+      : resolveLessonBaseWords(course, mod, lesson, state.activeLessonIndex);
+
+    btnPracticeMistakes.textContent = tr.mistakesBtn(state.mistakeWordsMap.size);
+    btnPracticeMistakes.style.display = state.mistakeWordsMap.size > 0 ? 'inline-flex' : 'none';
+    updatePinnedCountUI();
+
+    if (state.overlayMode === 'intro') {
+      overlayBadge.textContent = tr.introBadge(
+        getLocalizedField(mod, 'titles'),
+        state.activeLessonIndex + 1,
+        mod.lessons.length
+      );
+      overlayTitle.textContent = lTitle;
+      overlayDesc.innerHTML = escapeHtml(lDesc);
+      overlayWordsHeader.textContent = tr.wordsInLevelHeader(previewWords.length);
+      btnStartLevel.textContent = tr.startLevelBtn;
+      btnStartLevel.style.display = 'inline-flex';
+      btnNextLevel.style.display = 'none';
+    } else if (state.overlayMode === 'complete') {
+      overlayBadge.textContent = tr.completeBadge(state.maxCombo);
+      overlayTitle.textContent = tr.completeTitle(lTitle);
+      overlayDesc.innerHTML = tr.completeDesc;
+      overlayWordsHeader.textContent = tr.learnedWordsHeader(previewWords.length);
+      btnStartLevel.textContent = tr.retryBtn;
+      btnStartLevel.style.display = 'inline-flex';
+
+      const nextPtr = getNextLessonPointer();
+      if (nextPtr) {
+        btnNextLevel.style.display = 'inline-flex';
+        btnNextLevel.textContent = tr.nextLevelBtn(getLocalizedField(nextPtr.lesson, 'titles'));
+      } else {
+        btnNextLevel.style.display = 'none';
+      }
+    } else if (state.overlayMode === 'gameover') {
+      overlayBadge.textContent = tr.gameOverBadge;
+      overlayTitle.textContent = tr.gameOverTitle(lTitle);
+      overlayDesc.innerHTML = tr.gameOverDesc(state.wordsDestroyedInLevel, state.totalWordsInLevel);
+      overlayWordsHeader.textContent = tr.wordsInLevelHeader(previewWords.length);
+      btnStartLevel.textContent = tr.tryAgainBtn;
+      btnStartLevel.style.display = 'inline-flex';
+      btnNextLevel.style.display = 'none';
+    } else if (state.overlayMode === 'pause') {
+      overlayBadge.textContent = tr.pauseBadge;
+      overlayTitle.textContent = lTitle;
+      overlayDesc.innerHTML = tr.pauseDesc(state.wordsDestroyedInLevel, state.totalWordsInLevel);
+      overlayWordsHeader.textContent = tr.wordsInLevelHeader(previewWords.length);
+      btnStartLevel.textContent = tr.resumeBtn;
+      btnStartLevel.style.display = 'inline-flex';
+      btnNextLevel.style.display = 'none';
+    }
+
+    renderWordsPreviewList(previewWords, overlayWordsPreview);
+  }
+
   function renderWordsPreviewList(wordsArray, container) {
     if (!container) return;
     container.innerHTML = '';
+    const tr = t();
+
     wordsArray.forEach(item => {
       const div = document.createElement('div');
       div.className = 'preview-word-item';
       div.dataset.art = item.article || '';
       const transText = getWordTranslation(item);
       const dirAttr = isRtlTranslation(item) ? ' dir="rtl"' : ' dir="ltr"';
+      const pinned = isEntryPinned(item);
+
       div.innerHTML = `
-        <span class="preview-word-de" dir="ltr">${escapeHtml(item.raw)}</span>
+        <div class="preview-word-top" dir="ltr">
+          <span class="preview-word-de">${escapeHtml(item.raw)}</span>
+          <button type="button" class="pin-star-btn${pinned ? ' pinned' : ''}" title="${escapeHtml(tr.pinTooltip)}">${pinned ? '⭐' : '☆'}</button>
+        </div>
         <span class="preview-word-ru"${dirAttr}>${escapeHtml(transText)}</span>
       `;
-      div.title = '🔊 Прослушать произношение (Gemini 3.8 TTS)';
       div.style.cursor = 'pointer';
+
+      const starBtn = div.querySelector('.pin-star-btn');
+      if (starBtn) {
+        starBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          togglePinWord(item, state.targetLang);
+        });
+      }
+
       div.addEventListener('click', () => {
-        ttsManager.speakGerman(item.withArticle || item.word, true);
+        ttsManager.speak(item.withArticle || item.word, state.targetLang, true);
       });
       container.appendChild(div);
     });
@@ -2451,9 +3734,34 @@
     centerOverlay.classList.remove('hidden');
   }
 
-  function startLevelNow(customWordPool = null) {
-    const lvl = levels[state.currentLevelIndex];
-    const pool = customWordPool || lvl.words;
+  // Подмешивание отмеченных ⭐ слов в следующие раунды, чтобы незнакомые слова чаще закреплялись!
+  function buildRoundWordPool(basePool, isCustomPool = false) {
+    const cleanBase = basePool.slice();
+    if (isCustomPool) return shuffleArray(cleanBase);
+
+    const pinnedForLang = shuffleArray(getPinnedEntriesForTargetLang(state.targetLang));
+    if (pinnedForLang.length === 0) return shuffleArray(cleanBase);
+
+    const existingKeys = new Set(cleanBase.map(w => (w.word || '').toLowerCase()));
+    const extraPinned = [];
+    for (const pw of pinnedForLang) {
+      if (extraPinned.length >= 3) break;
+      if (!existingKeys.has((pw.word || '').toLowerCase())) {
+        extraPinned.push(pw);
+      }
+    }
+    return shuffleArray([...cleanBase, ...extraPinned]);
+  }
+
+  function startLevelNow(customWordPool = null, customTitle = '') {
+    const { course, mod, lesson } = getActiveSelection();
+    if (!course || !mod || !lesson) return;
+
+    state.activeCustomRoundTitle = customTitle || '';
+    const basePool = customWordPool
+      ? customWordPool
+      : resolveLessonBaseWords(course, mod, lesson, state.activeLessonIndex);
+    const finalPool = buildRoundWordPool(basePool, Boolean(customWordPool) || Boolean(lesson.isBoss));
 
     state.screenMode = 'play';
     if (arcadeTitleScreen) arcadeTitleScreen.hidden = true;
@@ -2462,7 +3770,9 @@
 
     resizeCanvas();
     requestAnimationFrame(() => resizeCanvas());
-    state.wordQueue = shuffleArray(pool);
+
+    state.currentRoundPool = finalPool.slice();
+    state.wordQueue = finalPool.slice();
     state.totalWordsInLevel = state.wordQueue.length;
     state.wordsDestroyedInLevel = 0;
     state.activeWords = [];
@@ -2482,15 +3792,15 @@
     state.gameOver = false;
     state.activeQuiz = null;
 
-    // Если игрок уже выбрал «Грави-волну» перед стартом — открываем уровень эффектным веерным разлётом сразу 4 слов к началу!
     if (state.weaponId === 'gravity' && state.wordQueue.length > 0) {
       const bounds = getPlayBounds();
       const waveCount = Math.min(4, state.wordQueue.length);
       for (let k = 0; k < waveCount; k++) {
-        spawnNextWord();
-        const spawned = state.activeWords[state.activeWords.length - 1];
-        if (spawned) {
-          spawned.y = bounds.top + Math.min(170, (bounds.bottom - bounds.top) * (0.34 + k * 0.06));
+        if (spawnNextWord(true)) {
+          const spawned = state.activeWords[state.activeWords.length - 1];
+          if (spawned) {
+            spawned.y = bounds.top + Math.min(170, (bounds.bottom - bounds.top) * (0.32 + k * 0.07));
+          }
         }
       }
       scatterWordsToTop(state.activeWords, bounds, 1.0, 34);
@@ -2498,14 +3808,14 @@
     }
 
     centerOverlay.classList.add('hidden');
+    applyStaticUILocalization();
     updateHudStats();
     updateBottomTargetUI();
     renderLevelSidebar();
 
-    // Предзагружаем первые 3 слова уровня в кэш Gemini 3.8 TTS заранее!
     const previewSlice = state.wordQueue.slice(-3);
     previewSlice.forEach(entry => {
-      ttsManager.prefetch(entry.withArticle || entry.word);
+      ttsManager.prefetch(entry.withArticle || entry.word, state.targetLang);
     });
 
     if (document.activeElement && document.activeElement !== document.body) {
@@ -2513,78 +3823,62 @@
     }
   }
 
-  function getWordFontPx(textLength) {
-    const isMobile = canvas.width < 520;
-    if (!isMobile) {
-      return textLength >= 20 ? 17.5 : 20;
-    }
-    if (textLength >= 22) return 14;
-    if (textLength >= 17) return 15.5;
-    if (textLength >= 13) return 17;
-    return 18.5;
-  }
+  // --- Спавн нового слова с проверкой свободной дорожки по X и Y + авто-замедлением длинных слов ---
+  function spawnNextWord(forceSpawn = false) {
+    if (state.wordQueue.length === 0) return false;
 
-  // --- Спавн нового слова сверху ---
-  function spawnNextWord() {
-    if (state.wordQueue.length === 0) return;
+    const candidateEntry = state.wordQueue[state.wordQueue.length - 1];
+    const targetText = getTargetString(candidateEntry);
+    const bounds = getPlayBounds();
+    const spawnY = bounds.top + 22;
+    const meas = measureWordCapsule(targetText, candidateEntry);
+
+    const slot = findSafeSpawnX(meas.boxW, meas.boxH, spawnY, state.activeWords, bounds);
+    // Если верхняя полоса космоса сейчас плотно занята, откладываем спавн на 0.45 сек вместо наложения плашек!
+    if (!slot.clear && !forceSpawn && state.activeWords.length > 0) {
+      return false;
+    }
 
     const entry = state.wordQueue.pop();
-    const targetText = getTargetString(entry);
-    const bounds = getPlayBounds();
 
-    // Заранее запрашиваем аудио Gemini 3.8 TTS, пока слово только летит сверху!
-    ttsManager.prefetch(entry.withArticle || entry.word);
+    ttsManager.prefetch(entry.withArticle || entry.word, state.targetLang);
     if (state.wordQueue.length > 0) {
       const nextUp = state.wordQueue[state.wordQueue.length - 1];
-      ttsManager.prefetch(nextUp.withArticle || nextUp.word);
+      ttsManager.prefetch(nextUp.withArticle || nextUp.word, state.targetLang);
     }
 
-    const fontPx = getWordFontPx(targetText.length);
-    ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
-    const textWidth = ctx.measureText(targetText).width;
-    const halfW = Math.min((bounds.right - bounds.left) / 2 - 6, Math.max(48, textWidth / 2 + 16));
-
-    const minX = bounds.left + halfW;
-    const maxX = Math.max(minX + 4, bounds.right - halfW);
-
-    let bestX = minX + Math.random() * (maxX - minX);
-    for (let attempt = 0; attempt < 6; attempt++) {
-      const candidateX = minX + Math.random() * (maxX - minX);
-      const tooClose = state.activeWords.some(w => w.y < bounds.top + 110 && Math.abs(w.x - candidateX) < 110);
-      if (!tooClose) {
-        bestX = candidateX;
-        break;
-      }
-    }
-
-    const lvl = levels[state.currentLevelIndex];
+    const { lesson } = getActiveSelection();
     const speedPreset = state.speedPresets[state.speedPresetIndex].mult;
-    const lengthFactor = Math.max(0.58, Math.min(1.12, 11 / Math.max(6, targetText.length)));
+    const lengthFactor = computeWordLengthSpeedFactor(targetText.length);
     const playHeight = bounds.bottom - bounds.top;
     const heightScale = Math.max(0.68, Math.min(1.05, playHeight / 560));
-    const baseSpeedUnscaled = (33 + Math.random() * 9) * (lvl.speedMultiplier || 1) * lengthFactor * heightScale;
+    const lessonMult = (lesson && lesson.speedMultiplier) || 0.94;
+    const baseSpeedUnscaled = (33 + Math.random() * 8) * lessonMult * lengthFactor * heightScale;
 
     state.activeWords.push({
       id: nextEntityId++,
       entry,
       text: targetText,
       typedCount: 0,
-      x: bestX,
-      y: bounds.top + 18,
+      boxW: meas.boxW,
+      boxH: meas.boxH,
+      x: slot.x,
+      y: spawnY,
       vx: 0,
       pushVx: 0,
       pushVy: 0,
       baseSpeedUnscaled,
       vy: baseSpeedUnscaled * speedPreset,
+      frameVy: baseSpeedUnscaled * speedPreset,
       recoilY: 0,
       hitFlash: 0,
       spawnTime: performance.now()
     });
 
     updateKeyboardNextHint();
+    return true;
   }
 
-  // --- Выстрел по букве выбранным оружием ---
   function hitWordLetter(wordObj) {
     const weapon = getCurrentWeapon();
     wordObj.typedCount++;
@@ -2599,14 +3893,13 @@
       saveSettingsPatch({ highScore: state.highScore });
     }
 
-    const style = getArticleStyle(wordObj.entry.article);
+    const style = getArticleStyle(wordObj.entry.article, state.targetLang);
     const isFinalLetter = wordObj.typedCount >= wordObj.text.length;
     const pan = getHorizontalPan(wordObj.x);
 
     spawnWeaponVisualEffect(weapon.id, wordObj.x, wordObj.y, style.main);
     sound.playWeaponShot(weapon.id, wordObj.typedCount, state.combo, pan, isFinalLetter);
 
-    // При стрельбе из «Грави-волны» каждая буква подбрасывает сразу все слова на экране обратно вверх!
     if (weapon.id === 'gravity' && !isFinalLetter) {
       const bounds = getPlayBounds();
       scatterWordsToTop(state.activeWords, bounds, 0.58, 34);
@@ -2622,7 +3915,6 @@
     updateHudStats();
   }
 
-  // --- ВЗРЫВ СЛОВА + ПЕРЕВОД + ОЗВУЧКА GEMINI 3.8 TTS ---
   function explodeWord(wordObj, byPlayer = true) {
     const idx = state.activeWords.findIndex(w => w.id === wordObj.id);
     if (idx !== -1) {
@@ -2633,7 +3925,7 @@
       state.lockedWordId = null;
     }
 
-    const style = getArticleStyle(wordObj.entry.article);
+    const style = getArticleStyle(wordObj.entry.article, state.targetLang);
     const weapon = getCurrentWeapon();
 
     state.shockwaves.push({
@@ -2662,9 +3954,13 @@
       life: 0,
       maxLife: 4.0
     });
+    separateFloatingTranslations(bounds);
 
+    // Сохраняем в правую колонку «Взорванные слова» без дублей подряд
+    const existingHistIdx = state.killHistory.findIndex(e => e.raw === wordObj.entry.raw);
+    if (existingHistIdx !== -1) state.killHistory.splice(existingHistIdx, 1);
     state.killHistory.unshift(wordObj.entry);
-    if (state.killHistory.length > 40) state.killHistory.pop();
+    if (state.killHistory.length > 45) state.killHistory.pop();
     rerenderKillFeed();
 
     if (byPlayer) {
@@ -2677,11 +3973,13 @@
         saveSettingsPatch({ highScore: state.highScore });
       }
 
+      // Засчитываем выученное слово для прокачки оружия!
+      recordWordLearned(wordObj.entry, state.targetLang);
+
       const pan = getHorizontalPan(wordObj.x);
       sound.playExplosion(state.combo, pan);
-      ttsManager.speakGerman(wordObj.entry.withArticle || wordObj.entry.word);
+      ttsManager.speak(wordObj.entry.withArticle || wordObj.entry.word, state.targetLang);
 
-      // При взрыве слова из «Грави-волны» все остальные слова мощной волной разлетаются к самому началу!
       if (weapon.id === 'gravity' && state.activeWords.length > 0) {
         scatterWordsToTop(state.activeWords, bounds, 1.0, 34);
         sound.playGravityWave(0.85);
@@ -2718,13 +4016,13 @@
     }
   }
 
-  // --- Отрисовка журнала сбитых слов ---
+  // --- Правая колонка «Взорванные слова» + кнопка ⭐ «Повторить ещё раз» ---
   function rerenderKillFeed() {
     if (!killFeedContainer) return;
+    const tr = t();
+
     if (state.killHistory.length === 0) {
-      killFeedContainer.innerHTML = `
-        <div class="kill-feed-empty">${t().killFeedEmpty}</div>
-      `;
+      killFeedContainer.innerHTML = `<div class="kill-feed-empty">${tr.killFeedEmpty}</div>`;
       return;
     }
 
@@ -2733,28 +4031,38 @@
       const card = document.createElement('div');
       card.className = 'kill-card';
       card.dataset.art = entry.article || '';
-      card.title = '🔊 Gemini 3.8 TTS';
 
       const transText = getWordTranslation(entry);
       const dirAttr = isRtlTranslation(entry) ? ' dir="rtl"' : ' dir="ltr"';
+      const pinned = isEntryPinned(entry);
 
       card.innerHTML = `
         <div class="kill-card-top" dir="ltr">
           <span class="kill-de">${escapeHtml(entry.raw)}</span>
-          <button type="button" class="kill-speak-btn" aria-label="🔊">🔊</button>
+          <div class="kill-card-actions">
+            <button type="button" class="pin-star-btn${pinned ? ' pinned' : ''}" title="${escapeHtml(tr.pinTooltip)}" aria-label="${escapeHtml(tr.pinTooltip)}">${pinned ? '⭐' : '☆'}</button>
+            <button type="button" class="kill-speak-btn" title="🔊 Gemini 3.8 TTS" aria-label="🔊">🔊</button>
+          </div>
         </div>
         <div class="kill-ru"${dirAttr}>${escapeHtml(transText)}</div>
       `;
 
+      const starBtn = card.querySelector('.pin-star-btn');
+      if (starBtn) {
+        starBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          togglePinWord(entry, state.targetLang);
+        });
+      }
+
       card.addEventListener('click', () => {
-        ttsManager.speakGerman(entry.withArticle || entry.word, true);
+        ttsManager.speak(entry.withArticle || entry.word, state.targetLang, true);
       });
 
       killFeedContainer.appendChild(card);
     });
   }
 
-  // --- Подсветка следующей нужной клавиши на экранной клавиатуре ---
   function updateKeyboardNextHint() {
     document.querySelectorAll('.zkey.next-key-hint').forEach(el => {
       el.classList.remove('next-key-hint');
@@ -2765,28 +4073,32 @@
     const locked = state.activeWords.find(w => w.id === state.lockedWordId);
     if (locked) {
       let nextChar = locked.text[locked.typedCount];
-      if (nextChar === '-' || nextChar === ' ') {
+      while (nextChar === '-' || nextChar === ' ' || nextChar === "'" || nextChar === '/') {
         nextChar = locked.text[locked.typedCount + 1];
+        break;
       }
-      const baseKey = mapGermanCharToBaseKey(nextChar);
+      const baseKey = mapTargetCharToBaseKey(nextChar);
       if (baseKey) {
-        const keyBtn = document.querySelector(`.zkey[data-key="${baseKey}"]`);
+        let keyBtn = document.querySelector(`.zkey[data-key="${CSS.escape(baseKey)}"]`);
+        if (!keyBtn && baseKey === 'ñ') {
+          keyBtn = document.querySelector('.zkey[data-key="n"]');
+        }
         if (keyBtn) keyBtn.classList.add('next-key-hint');
       }
     }
   }
 
-  // --- Обработка ввода с физической клавиатуры ---
+  // --- Обработка ввода с физической и экранной клавиатуры ---
   window.addEventListener('keydown', (e) => {
     if (
       (dictDialog && dictDialog.open) ||
       (customWordsDialog && customWordsDialog.open) ||
-      (ttsSettingsDialog && ttsSettingsDialog.open)
+      (ttsSettingsDialog && ttsSettingsDialog.open) ||
+      (courseBrowserDialog && courseBrowserDialog.open)
     ) {
       return;
     }
 
-    // Горячие клавиши 1–6 для мгновенной смены оружия
     if (!e.ctrlKey && !e.altKey && !e.metaKey && /^[1-6]$/.test(e.key)) {
       const idx = Number(e.key) - 1;
       if (WEAPONS[idx]) {
@@ -2796,7 +4108,6 @@
       }
     }
 
-    // Запуск с титульного экрана по Enter / Space
     if (state.screenMode === 'title') {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -2838,7 +4149,6 @@
     if (e.ctrlKey || e.altKey || e.metaKey || e.key.length !== 1) return;
 
     const char = e.key;
-
     if (/[а-яёА-ЯЁ\u0590-\u05FF]/.test(char)) {
       e.preventDefault();
       state.layoutWarningTimer = 2.6;
@@ -2847,19 +4157,18 @@
     }
 
     e.preventDefault();
-    flashVirtualKey(mapGermanCharToBaseKey(char));
+    flashVirtualKey(mapTargetCharToBaseKey(char));
     processTypedChar(char);
   });
 
   function flashVirtualKey(baseKey) {
     if (!baseKey) return;
-    const btn = document.querySelector(`.zkey[data-key="${baseKey}"]`);
+    const btn = document.querySelector(`.zkey[data-key="${CSS.escape(baseKey)}"]`);
     if (!btn) return;
     btn.classList.add('pressed');
     setTimeout(() => btn.classList.remove('pressed'), 110);
   }
 
-  // --- Обработка нажатий по экранной клавиатуре ZType (мгновенный тач без пробивания подложек) ---
   function handleVirtualKeyPress(btn, e) {
     if (e) {
       if (e.cancelable) e.preventDefault();
@@ -2894,30 +4203,9 @@
     }
   }
 
-  document.querySelectorAll('.zkey').forEach(btn => {
-    let lastTriggerTs = 0;
-    const triggerOnce = (e) => {
-      const now = performance.now();
-      if (now - lastTriggerTs < 35) {
-        if (e && e.cancelable) e.preventDefault();
-        return;
-      }
-      lastTriggerTs = now;
-      handleVirtualKeyPress(btn, e);
-    };
-
-    if (window.PointerEvent) {
-      btn.addEventListener('pointerdown', triggerOnce);
-    } else {
-      btn.addEventListener('touchstart', triggerOnce, { passive: false });
-      btn.addEventListener('mousedown', triggerOnce);
-    }
-
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    });
-  });
+  function isBridgeSeparator(ch) {
+    return ch === '-' || ch === ' ' || ch === "'" || ch === '/';
+  }
 
   function processTypedChar(char) {
     if (state.lastAbsorbedUmlautE && char.toLowerCase() === 'e') {
@@ -2943,10 +4231,10 @@
     if (lockedWord) {
       let expectedChar = lockedWord.text[lockedWord.typedCount];
 
-      if ((expectedChar === '-' || expectedChar === ' ') && char !== '-' && char !== ' ') {
+      if (isBridgeSeparator(expectedChar) && !isBridgeSeparator(char)) {
         const afterSeparator = lockedWord.text[lockedWord.typedCount + 1];
         if (afterSeparator) {
-          const checkAfter = charsMatchGerman(char, afterSeparator);
+          const checkAfter = charsMatchTargetLang(char, afterSeparator);
           if (checkAfter.matched) {
             lockedWord.typedCount++;
             state.lastAbsorbedUmlautE = checkAfter.umlautSub;
@@ -2957,7 +4245,7 @@
         }
       }
 
-      const matchRes = charsMatchGerman(char, expectedChar);
+      const matchRes = charsMatchTargetLang(char, expectedChar);
       if (matchRes.matched) {
         state.lastAbsorbedUmlautE = matchRes.umlautSub;
         state.lastAbsorbedEszettS = matchRes.eszettSub;
@@ -2974,7 +4262,7 @@
 
     const candidates = state.activeWords.filter(w => {
       const firstChar = w.text[w.typedCount];
-      return firstChar && charsMatchGerman(char, firstChar).matched;
+      return firstChar && charsMatchTargetLang(char, firstChar).matched;
     });
 
     if (candidates.length > 0) {
@@ -2982,10 +4270,9 @@
       const chosen = candidates[0];
       state.lockedWordId = chosen.id;
 
-      // Моментально повышаем приоритет предзагрузки озвучки захваченного слова
-      ttsManager.prefetch(chosen.entry.withArticle || chosen.entry.word);
+      ttsManager.prefetch(chosen.entry.withArticle || chosen.entry.word, state.targetLang);
 
-      const matchRes = charsMatchGerman(char, chosen.text[chosen.typedCount]);
+      const matchRes = charsMatchTargetLang(char, chosen.text[chosen.typedCount]);
       state.lastAbsorbedUmlautE = matchRes.umlautSub;
       state.lastAbsorbedEszettS = matchRes.eszettSub;
 
@@ -2998,15 +4285,11 @@
     }
   }
 
-  // --- EMP-Волна ---
   function triggerEmpWave() {
     if (!state.running || state.paused || state.empCharges <= 0 || state.activeWords.length === 0) return;
 
     state.empCharges--;
-    empCountEl.textContent = String(state.empCharges);
-    if (kbdEmpCount) kbdEmpCount.textContent = String(state.empCharges);
-    btnEmp.disabled = state.empCharges <= 0;
-    if (btnKbdEmp) btnKbdEmp.style.opacity = state.empCharges <= 0 ? '0.42' : '1';
+    updateHudStats();
 
     state.shockwaves.push({
       x: state.ship.x,
@@ -3022,7 +4305,6 @@
     toDestroy.forEach(w => explodeWord(w, true));
   }
 
-  // --- Обновление строки прицела над клавиатурой ---
   function updateBottomTargetUI() {
     const locked = state.activeWords.find(w => w.id === state.lockedWordId);
     if (!locked) {
@@ -3042,23 +4324,20 @@
     `;
   }
 
-  // --- Обновление верхнего HUD ---
   function updateHudStats() {
-    hudScore.textContent = state.score.toLocaleString('ru-RU');
+    hudScore.textContent = state.score.toLocaleString();
     if (hudCombo) hudCombo.textContent = `x${state.combo}`;
-
-    const acc = state.shotsFired > 0
-      ? Math.round((state.shotsHit / state.shotsFired) * 100)
-      : 100;
-    if (hudAccuracy) hudAccuracy.textContent = `${acc}%`;
+    if (hudLearnedCount) hudLearnedCount.textContent = String(learnedWordsSet.size);
 
     hudShields.textContent = '❤️'.repeat(Math.max(0, state.shields)) +
       '🖤'.repeat(Math.max(0, state.maxShields - state.shields));
 
     empCountEl.textContent = String(state.empCharges);
-    if (kbdEmpCount) kbdEmpCount.textContent = String(state.empCharges);
+    const kbdEmpBadge = document.getElementById('kbdEmpCount');
+    const kbdEmpBtn = document.getElementById('btnKbdEmp');
+    if (kbdEmpBadge) kbdEmpBadge.textContent = String(state.empCharges);
     btnEmp.disabled = state.empCharges <= 0;
-    if (btnKbdEmp) btnKbdEmp.style.opacity = state.empCharges <= 0 ? '0.42' : '1';
+    if (kbdEmpBtn) kbdEmpBtn.style.opacity = state.empCharges <= 0 ? '0.42' : '1';
 
     const pct = state.totalWordsInLevel > 0
       ? Math.min(100, Math.round((state.wordsDestroyedInLevel / state.totalWordsInLevel) * 100))
@@ -3068,29 +4347,29 @@
     hudProgressText.textContent = `${state.wordsDestroyedInLevel} / ${state.totalWordsInLevel}`;
   }
 
-  // --- Завершение уровня + Мини-блиц ---
   function completeLevel() {
     state.running = false;
     state.overlayMode = 'complete';
-    const lvl = levels[state.currentLevelIndex];
-    lvl.completed = true;
-
-    const completedIds = levels.filter(l => l.completed).map(l => l.id);
-    saveSettingsPatch({
-      completedLevelIds: completedIds,
-      highScore: Math.max(state.highScore, state.score)
-    });
+    const { lesson } = getActiveSelection();
+    if (lesson && !state.activeCustomRoundTitle) {
+      state.completedLessonIds.add(lesson.id);
+      saveSettingsPatch({
+        completedLessonIds: Array.from(state.completedLessonIds),
+        highScore: Math.max(state.highScore, state.score)
+      });
+    }
 
     updatePilotRankUI();
     renderLevelSidebar();
     refreshOverlayContent();
-    startPostLevelQuiz(lvl.words);
+    startPostLevelQuiz(state.currentRoundPool);
     centerOverlay.classList.remove('hidden');
   }
 
-  // --- Мини-блиц из 3 слов после уровня ---
+  // --- Мини-блиц из 3 слов после завершения урока ---
   function startPostLevelQuiz(levelWords) {
-    if (!levelWords || levelWords.length < 4) {
+    const langWords = getAllWordsInTargetLang(state.targetLang);
+    if (!levelWords || levelWords.length < 3 || langWords.length < 4) {
       state.activeQuiz = null;
       levelQuizBox.style.display = 'none';
       return;
@@ -3098,7 +4377,7 @@
 
     levelQuizBox.style.display = 'flex';
     const questions = shuffleArray(levelWords).slice(0, 3).map(currentQ => {
-      const wrongPool = allAutoWords.filter(w => w.raw !== currentQ.raw);
+      const wrongPool = langWords.filter(w => w.raw !== currentQ.raw && getWordTranslation(w) !== getWordTranslation(currentQ));
       const wrongChoices = shuffleArray(wrongPool).slice(0, 3);
       const options = shuffleArray([currentQ, ...wrongChoices]);
       return { currentQ, options };
@@ -3136,7 +4415,7 @@
     quizQuestionWord.textContent = currentQ.raw;
 
     if (speakNow) {
-      ttsManager.speakGerman(currentQ.withArticle || currentQ.word);
+      ttsManager.speak(currentQ.withArticle || currentQ.word, state.targetLang);
     }
 
     quizOptionsGrid.innerHTML = '';
@@ -3144,8 +4423,7 @@
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'quiz-opt-btn';
-      const optText = getWordTranslation(opt);
-      btn.textContent = optText;
+      btn.textContent = getWordTranslation(opt);
       if (isRtlTranslation(opt)) {
         btn.dir = 'rtl';
         btn.style.textAlign = 'right';
@@ -3194,7 +4472,6 @@
     });
   }
 
-  // --- Поражение ---
   function triggerGameOver() {
     state.running = false;
     state.gameOver = true;
@@ -3227,7 +4504,9 @@
     centerOverlay.classList.remove('hidden');
   }
 
-  // --- Главный игровой цикл ---
+  // ==========================================================================
+  // ГЛАВНЫЙ ИГРОВОЙ ЦИКЛ И ОТРИСОВКА ХОЛСТА CANVAS
+  // ==========================================================================
   let lastFrameTime = performance.now();
 
   function gameLoop(now) {
@@ -3248,22 +4527,13 @@
       state.ship.targetY = bounds.bottom - 24;
     }
 
-    // Плавный перелёт корабля по вертикали (при старте с титульного экрана в бой)
     state.ship.y += (state.ship.targetY - state.ship.y) * Math.min(1, dt * 8.5);
 
-    if (state.warpTimer > 0) {
-      state.warpTimer = Math.max(0, state.warpTimer - dt);
-    }
+    if (state.warpTimer > 0) state.warpTimer = Math.max(0, state.warpTimer - dt);
+    if (state.weaponBannerTimer > 0) state.weaponBannerTimer = Math.max(0, state.weaponBannerTimer - dt);
+    if (state.gravityEquipCooldown > 0) state.gravityEquipCooldown = Math.max(0, state.gravityEquipCooldown - dt);
+    if (state.layoutWarningTimer > 0) state.layoutWarningTimer = Math.max(0, state.layoutWarningTimer - dt);
 
-    if (state.weaponBannerTimer > 0) {
-      state.weaponBannerTimer = Math.max(0, state.weaponBannerTimer - dt);
-    }
-
-    if (state.gravityEquipCooldown > 0) {
-      state.gravityEquipCooldown = Math.max(0, state.gravityEquipCooldown - dt);
-    }
-
-    // Движение туманностей
     for (const neb of state.nebulae) {
       neb.x += neb.vx * dt;
       neb.y += neb.vy * dt;
@@ -3271,7 +4541,6 @@
       if (neb.y < -neb.radius * 0.4 || neb.y > canvas.height + neb.radius * 0.4) neb.vy *= -1;
     }
 
-    // Звёздное поле + ускорение во время гиперпрыжка
     const warpMult = state.warpTimer > 0 ? 14.0 : (state.running && !state.paused ? 1.45 : 0.75);
     const starMaxY = state.screenMode === 'title' ? canvas.height : bounds.bottom;
     for (const s of state.stars) {
@@ -3282,18 +4551,12 @@
       }
     }
 
-    if (state.layoutWarningTimer > 0) {
-      state.layoutWarningTimer = Math.max(0, state.layoutWarningTimer - dt);
-    }
-
-    // Обновление лучей и молний
     for (let i = state.lasers.length - 1; i >= 0; i--) {
       const l = state.lasers[i];
       l.alpha -= dt * (l.decay || 7.5);
       if (l.alpha <= 0) state.lasers.splice(i, 1);
     }
 
-    // Обновление самонаводящихся микро-ракет
     for (let i = state.missiles.length - 1; i >= 0; i--) {
       const m = state.missiles[i];
       m.progress += m.speed * dt;
@@ -3302,7 +4565,6 @@
       m.x = inv * inv * m.x0 + 2 * inv * tProg * m.cx + tProg * tProg * m.x2;
       m.y = inv * inv * m.y0 + 2 * inv * tProg * m.cy + tProg * tProg * m.y2;
 
-      // Дымный огненный шлейф ракеты
       state.particles.push({
         x: m.x + (Math.random() * 4 - 2),
         y: m.y + (Math.random() * 4 - 2),
@@ -3373,22 +4635,33 @@
 
     if (!state.running || state.paused) return;
 
-    const lvl = levels[state.currentLevelIndex];
+    const { lesson } = getActiveSelection();
     const speedPreset = state.speedPresets[state.speedPresetIndex].mult;
     state.spawnTimer -= dt;
 
     const maxActiveOnScreen = state.weaponId === 'gravity'
-      ? (canvas.width < 520 ? 6 : 8)
-      : (canvas.width < 520 ? 5 : 7);
+      ? (canvas.width < 520 ? 5 : 7)
+      : (canvas.width < 520 ? 4 : 6);
 
     if (state.spawnTimer <= 0 && state.wordQueue.length > 0 && state.activeWords.length < maxActiveOnScreen) {
-      spawnNextWord();
-      const baseInterval = (lvl.spawnIntervalMs || 2600) / 1000;
-      state.spawnTimer = baseInterval / Math.pow(speedPreset, 0.72);
+      const didSpawn = spawnNextWord(false);
+      if (didSpawn) {
+        const lastSpawned = state.activeWords[state.activeWords.length - 1];
+        const longWordBonus = lastSpawned && lastSpawned.text.length > 15 ? 0.55 : 0;
+        const baseInterval = ((lesson && lesson.spawnIntervalMs) || 2650) / 1000 + longWordBonus;
+        state.spawnTimer = baseInterval / Math.pow(speedPreset, 0.72);
+      } else {
+        // Если все верхние дорожки заняты, ждём 0.45 сек, чтобы плашки не наслаивались!
+        state.spawnTimer = 0.45;
+      }
     } else if (state.activeWords.length === 0 && state.wordQueue.length > 0) {
-      spawnNextWord();
-      state.spawnTimer = 1.8;
+      spawnNextWord(true);
+      state.spawnTimer = 1.85;
     }
+
+    const minStartY = bounds.top + 32;
+    // Выравнивание скоростей и мягкое разведение плашек слов в полёте
+    resolveWordCollisions(state.activeWords, bounds, dt, minStartY);
 
     for (let i = state.activeWords.length - 1; i >= 0; i--) {
       const w = state.activeWords[i];
@@ -3421,17 +4694,16 @@
       }
 
       const dxToShip = state.ship.x - w.x;
-      const pullFactor = w.y > bounds.bottom * 0.55 ? 0.12 : 0.03;
+      const pullFactor = w.y > bounds.bottom * 0.65 ? 0.08 : 0.015;
       w.x += dxToShip * pullFactor * dt;
 
       if (w.recoilY > 0) {
         w.y -= w.recoilY * 9 * dt;
         w.recoilY = Math.max(0, w.recoilY - 28 * dt);
       } else {
-        w.y += w.vy * dt;
+        w.y += (w.frameVy ?? w.vy) * dt;
       }
 
-      const minStartY = bounds.top + 34;
       if (w.y < minStartY) {
         w.y = minStartY;
         if (w.pushVy < 0) w.pushVy = 0;
@@ -3456,14 +4728,12 @@
     }
   }
 
-  // --- Отрисовка игрового мира на Canvas ---
   function render(now = 0) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const bounds = getPlayBounds();
     const starClipBottom = state.screenMode === 'title' ? canvas.height : bounds.bottom;
 
-    // 1. Глубокие живые космические туманности
     for (const neb of state.nebulae) {
       const grad = ctx.createRadialGradient(neb.x, neb.y, 10, neb.x, neb.y, neb.radius);
       grad.addColorStop(0, neb.color);
@@ -3474,7 +4744,6 @@
       ctx.fill();
     }
 
-    // 2. Тактическая сетка ZType в боевом режиме
     if (state.screenMode === 'play') {
       ctx.save();
       ctx.strokeStyle = 'rgba(45, 212, 191, 0.045)';
@@ -3495,7 +4764,6 @@
       ctx.restore();
     }
 
-    // 3. Звёзды (или гиперпространственные росчерки при варп-прыжке!)
     for (const s of state.stars) {
       if (s.y > starClipBottom) continue;
       const twinkle = 0.78 + 0.22 * Math.sin(now * 0.003 + s.twinklePhase);
@@ -3516,7 +4784,6 @@
       }
     }
 
-    // 4. Линия захвата цели
     const lockedWord = state.activeWords.find(w => w.id === state.lockedWordId);
     if (lockedWord && state.running) {
       const w = getCurrentWeapon();
@@ -3532,7 +4799,6 @@
       ctx.restore();
     }
 
-    // 5. Отрисовка всех видов оружейных залпов (Плазма, Рельсотрон, Молния Тесла, Синтвейв)
     for (const l of state.lasers) {
       ctx.save();
       ctx.globalAlpha = Math.max(0, l.alpha);
@@ -3549,7 +4815,6 @@
         });
         ctx.stroke();
 
-        // Яркое белое ядро молнии
         ctx.strokeStyle = l.coreColor || '#ffffff';
         ctx.lineWidth = 1.1;
         ctx.stroke();
@@ -3587,7 +4852,6 @@
       ctx.restore();
     }
 
-    // 6. Отрисовка летящих микро-ракет
     for (const m of state.missiles) {
       ctx.save();
       ctx.fillStyle = '#ffffff';
@@ -3599,7 +4863,6 @@
       ctx.restore();
     }
 
-    // 7. Ударные волны + Широкие антигравитационные волны подъёма
     for (const sw of state.shockwaves) {
       ctx.save();
       ctx.strokeStyle = sw.color;
@@ -3631,7 +4894,6 @@
       ctx.restore();
     }
 
-    // 8. Частицы
     for (const p of state.particles) {
       ctx.save();
       ctx.fillStyle = p.color;
@@ -3644,10 +4906,8 @@
       ctx.restore();
     }
 
-    // 9. Корабль игрока (меняет обшивку и пушки в зависимости от выбранного оружия!)
     drawPlayerShip(now);
 
-    // 10. Слова (в режиме титульного экрана — демо-слова автопилота; в бою — боевые слова)
     if (state.screenMode === 'title') {
       const demoTarget = state.demoWords.find(w => w.id === state.demoTargetId);
       for (const dw of state.demoWords) {
@@ -3669,12 +4929,10 @@
       }
     }
 
-    // 11. Всплывающие карточки переводов
     for (const ft of state.floatingTranslations) {
       drawFloatingTranslation(ft, bounds);
     }
 
-    // 12. Уведомления над кораблём (смена оружия / раскладка)
     if (state.weaponBannerTimer > 0 && state.weaponBannerText) {
       drawWeaponBanner(bounds);
     }
@@ -3693,7 +4951,6 @@
     ctx.translate(x - Math.cos(angle) * recoil, y - Math.sin(angle) * recoil);
     ctx.rotate(angle + Math.PI / 2);
 
-    // Длинный реактивный шлейф двигателя (особенно эффектный на титульном экране в стиле ZType!)
     const isTitle = state.screenMode === 'title';
     const flameLen = (isTitle ? 48 : 23) + Math.sin(now * 0.03) * 4 + Math.random() * 4;
     const grad = ctx.createLinearGradient(0, 11, 0, 11 + flameLen);
@@ -3716,7 +4973,6 @@
     ctx.lineWidth = 2;
 
     if (weapon.id === 'railgun') {
-      // Двойной магнитный рельсовый ствол
       ctx.beginPath();
       ctx.moveTo(-4, -23);
       ctx.lineTo(-4, -6);
@@ -3735,7 +4991,6 @@
       ctx.fill();
       ctx.stroke();
     } else if (weapon.id === 'tesla') {
-      // Корпус с энергетической сферой Теслы на носу
       ctx.beginPath();
       ctx.moveTo(0, -17);
       ctx.lineTo(14, 12);
@@ -3750,7 +5005,6 @@
       ctx.arc(0, -19, 3.8, 0, Math.PI * 2);
       ctx.fill();
     } else if (weapon.id === 'missiles') {
-      // Ударный перехватчик с боковыми ракетными пилонами
       ctx.beginPath();
       ctx.moveTo(0, -17);
       ctx.lineTo(17, 10);
@@ -3764,7 +5018,6 @@
       ctx.fill();
       ctx.stroke();
     } else if (weapon.id === 'gravity') {
-      // Футуристичный корабль с дуговым антигравитационным излучателем спереди
       ctx.beginPath();
       ctx.moveTo(0, -14);
       ctx.lineTo(17, 9);
@@ -3787,7 +5040,6 @@
       ctx.arc(0, -17, 3.4, 0, Math.PI * 2);
       ctx.fill();
     } else {
-      // Классический скоростной перехватчик (Plasma / Synthwave)
       ctx.beginPath();
       ctx.moveTo(0, -19);
       ctx.lineTo(15, 12);
@@ -3808,7 +5060,6 @@
       }
     }
 
-    // Светящаяся кабина пилота
     ctx.fillStyle = '#ffffff';
     ctx.globalAlpha = 0.9;
     ctx.beginPath();
@@ -3822,9 +5073,10 @@
   }
 
   function drawWordNode(w, isLocked, bounds) {
-    const style = getArticleStyle(w.entry.article);
+    const style = getArticleStyle(w.entry.article, state.targetLang);
     const remainText = w.text.slice(w.typedCount);
     const typedText = w.text.slice(0, w.typedCount);
+    const pinned = isEntryPinned(w.entry);
 
     const fontPx = getWordFontPx(w.text.length);
     ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
@@ -3833,8 +5085,13 @@
     const totalW = typedW + remainW;
 
     const padX = canvas.width < 520 ? 10 : 13;
-    const boxW = totalW + padX * 2;
-    const boxH = fontPx + 14;
+    const starPrefixW = pinned ? 18 : 0;
+    const innerContentW = totalW + starPrefixW;
+    const boxW = innerContentW + padX * 2;
+    const capsuleH = fontPx + 14;
+    const hasTopBadge = !state.typeWithArticle && Boolean(w.entry.article);
+    w.boxW = boxW + 16;
+    w.boxH = capsuleH + (hasTopBadge ? 20 : 0);
 
     const clampedDrawX = Math.max(bounds.left + boxW / 2 + 4, Math.min(bounds.right - boxW / 2 - 4, w.x));
     w.x = clampedDrawX;
@@ -3847,22 +5104,22 @@
     ctx.shadowBlur = isLocked ? 12 : 6;
 
     ctx.beginPath();
-    ctx.arc(boxW / 2 + 7, -boxH / 2 + 5, isLocked ? 4.5 : 3.5, 0, Math.PI * 2);
+    ctx.arc(boxW / 2 + 7, -capsuleH / 2 + 5, isLocked ? 4.5 : 3.5, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.strokeStyle = isLocked ? 'rgba(251, 146, 60, 0.9)' : style.glow;
     ctx.lineWidth = 1.4;
     ctx.beginPath();
-    ctx.arc(boxW / 2 + 7, -boxH / 2 + 5, isLocked ? 9.5 : 7, 0, Math.PI * 2);
+    ctx.arc(boxW / 2 + 7, -capsuleH / 2 + 5, isLocked ? 9.5 : 7, 0, Math.PI * 2);
     ctx.stroke();
 
     const boxX = -boxW / 2;
-    const boxY = -boxH / 2;
+    const boxY = -capsuleH / 2;
 
-    if (!state.typeWithArticle && w.entry.article) {
+    if (hasTopBadge) {
       const badgeStr = w.entry.article;
       ctx.shadowBlur = 0;
-      ctx.font = '800 12.5px Inter, sans-serif';
+      ctx.font = '800 12px Inter, sans-serif';
       const bw = ctx.measureText(badgeStr).width + 14;
       ctx.fillStyle = 'rgba(7, 13, 26, 0.96)';
       ctx.strokeStyle = style.main;
@@ -3884,19 +5141,29 @@
       : 'rgba(6, 11, 23, 0.96)';
     ctx.strokeStyle = isLocked
       ? '#fb923c'
-      : (w.hitFlash > 0 ? '#ffffff' : style.main);
+      : (w.hitFlash > 0 ? '#ffffff' : (pinned ? '#fde047' : style.main));
     ctx.lineWidth = isLocked ? 2.2 : 1.5;
 
-    roundRect(ctx, boxX, boxY, boxW, boxH, 8);
+    roundRect(ctx, boxX, boxY, boxW, capsuleH, 8);
     ctx.fill();
     ctx.stroke();
 
     ctx.shadowBlur = 0;
     ctx.direction = 'ltr';
+    const contentLeftX = -innerContentW / 2;
+
+    if (pinned) {
+      ctx.font = '700 13px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#fde047';
+      ctx.fillText('⭐', contentLeftX, 0.5);
+    }
+
     ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    const startTextX = -totalW / 2;
+    const startTextX = contentLeftX + starPrefixW;
 
     if (typedText.length > 0) {
       ctx.fillStyle = '#34d399';
@@ -3931,12 +5198,12 @@
     ctx.globalAlpha = alpha;
 
     const isMobile = canvas.width < 520;
-    const cleanDe = (ft.entry && (ft.entry.withArticle || ft.entry.word)) || ft.rawDe;
+    const cleanWord = (ft.entry && (ft.entry.withArticle || ft.entry.word)) || ft.rawDe;
     let deFontPx = isMobile ? 14.5 : 16.5;
     let ruFontPx = isMobile ? 16.5 : 19;
 
     ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
-    let deW = ctx.measureText(cleanDe).width;
+    let deW = ctx.measureText(cleanWord).width;
 
     const translatedStr = getWordTranslation(ft.entry);
     const transText = `💥 ${translatedStr}`;
@@ -3947,7 +5214,7 @@
     if (deW + 28 > maxAllowedW && deFontPx > 12) {
       deFontPx = Math.max(12, Math.floor(deFontPx * (maxAllowedW - 28) / deW));
       ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
-      deW = ctx.measureText(cleanDe).width;
+      deW = ctx.measureText(cleanWord).width;
     }
     if (transW + 28 > maxAllowedW && ruFontPx > 12.5) {
       ruFontPx = Math.max(12.5, Math.floor(ruFontPx * (maxAllowedW - 28) / transW));
@@ -3980,7 +5247,7 @@
     ctx.direction = 'ltr';
     ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
     ctx.fillStyle = '#f8fafc';
-    ctx.fillText(cleanDe, 0, -11.5);
+    ctx.fillText(cleanWord, 0, -11.5);
 
     ctx.direction = isRtlTranslation(ft.entry) ? 'rtl' : 'ltr';
     ctx.font = `800 ${ruFontPx}px Inter, sans-serif`;
@@ -3992,22 +5259,24 @@
 
   function drawWeaponBanner(bounds) {
     const w = getCurrentWeapon();
+    const borderCol = state.weaponBannerColor || w.color;
     ctx.save();
     ctx.globalAlpha = Math.min(1, state.weaponBannerTimer * 1.4);
-    ctx.font = '800 14px Inter, sans-serif';
-    const textW = ctx.measureText(state.weaponBannerText).width + 30;
+    ctx.font = '800 13.5px Inter, sans-serif';
+    const maxW = Math.max(200, (bounds.right - bounds.left) - 20);
+    const textW = Math.min(maxW, ctx.measureText(state.weaponBannerText).width + 30);
     ctx.translate(bounds.centerX, state.ship.y - 56);
-    ctx.fillStyle = 'rgba(7, 13, 26, 0.96)';
-    ctx.strokeStyle = w.color;
-    ctx.lineWidth = 1.8;
-    roundRect(ctx, -textW / 2, -16, textW, 32, 999);
+    ctx.fillStyle = 'rgba(7, 13, 26, 0.97)';
+    ctx.strokeStyle = borderCol;
+    ctx.lineWidth = 1.9;
+    roundRect(ctx, -textW / 2, -17, textW, 34, 999);
     ctx.fill();
     ctx.stroke();
 
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(state.weaponBannerText, 0, 0);
+    ctx.fillText(state.weaponBannerText, 0, 0, textW - 18);
     ctx.restore();
   }
 
@@ -4056,72 +5325,129 @@
       .replace(/"/g, '&quot;');
   }
 
-  function parseGermanEntryLine(line) {
-    const trimmed = line.trim();
-    if (!trimmed || !trimmed.includes(';')) return null;
+  // ==========================================================================
+  // 7) МОДАЛЬНОЕ ОКНО ИМПОРТА ANKI (.APKG) И СОБЫТИЯ ИНТЕРФЕЙСА
+  // ==========================================================================
+  function switchImportTab(tabId) {
+    const isAnki = tabId === 'anki';
+    if (tabImportAnki) tabImportAnki.classList.toggle('active', isAnki);
+    if (tabImportManual) tabImportManual.classList.toggle('active', !isAnki);
+    if (ankiImportPane) ankiImportPane.classList.toggle('hidden', !isAnki);
+    if (manualImportPane) manualImportPane.classList.toggle('hidden', isAnki);
+  }
 
-    const parts = trimmed.split(';').map(s => s.trim());
-    const raw = parts[0];
-    const second = parts[1] || '';
-    const third = parts[2] || '';
-    if (!raw || !second) return null;
+  function setImportTargetLang(langCode) {
+    if (!TARGET_LANG_META[langCode]) return;
+    state.importTargetLang = langCode;
+    document.querySelectorAll('.import-tlang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.importLang === langCode);
+    });
+    if (state.parsedAnkiData) {
+      renderAnkiPreviewCards();
+    }
+  }
 
-    const hasHebrewInSecond = /[\u0590-\u05FF]/.test(second);
-    const ru = second;
-    const he = third || (hasHebrewInSecond ? second : second);
+  function renderAnkiPreviewCards() {
+    const data = state.parsedAnkiData;
+    if (!data || !ankiSampleCards) return;
 
-    const beforeComma = raw.split(',')[0].trim();
-    const afterComma = raw.includes(',') ? raw.split(',').slice(1).join(',').trim() : '';
+    const frontIdx = Number(ankiFrontSelect.value) || 0;
+    const backIdx = Number(ankiBackSelect.value) || 1;
 
-    let article = '';
-    let word = beforeComma;
-    let withArticle = beforeComma;
-
-    if (/^(der|die|das)\s+/i.test(beforeComma)) {
-      const wParts = beforeComma.split(/\s+/);
-      article = wParts[0].toLowerCase();
-      word = wParts.slice(1).join(' ');
-      withArticle = `${article} ${word}`;
-    } else if (afterComma.includes('Pl.')) {
-      article = 'Pl.';
-    } else if (/^[a-zäöüß]/.test(beforeComma)) {
-      article = 'Verb';
+    const previewItems = [];
+    let validCount = 0;
+    for (const row of data.rows) {
+      const entry = window.AnkiImporter.normalizeCardToWordEntry(
+        row[frontIdx],
+        row[backIdx],
+        state.importTargetLang,
+        row[2] || ''
+      );
+      if (entry) {
+        validCount++;
+        if (previewItems.length < 5) previewItems.push(entry);
+      }
     }
 
-    return {
-      raw,
-      word,
-      withArticle,
-      article: article || 'DE',
-      plural: afterComma,
-      ru,
-      he
-    };
+    ankiSampleCards.innerHTML = '';
+    previewItems.forEach(item => {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'anki-preview-item';
+      rowEl.innerHTML = `
+        <strong style="color:#fff; font-family: var(--font-mono);" dir="ltr">${escapeHtml(item.raw)}</strong>
+        <span style="color: var(--accent-amber);">${escapeHtml(getWordTranslation(item))}</span>
+      `;
+      ankiSampleCards.appendChild(rowEl);
+    });
+
+    if (btnConfirmAnkiImport) {
+      btnConfirmAnkiImport.textContent = t().ankiConfirmBtn(validCount);
+      btnConfirmAnkiImport.disabled = validCount === 0;
+    }
   }
 
-  // --- События кнопок Титульного Экрана и Боевого Интерфейса ---
+  async function handleAnkiFileSelected(file) {
+    if (!file) return;
+    ankiParseStatus.classList.remove('error');
+    ankiParseStatus.textContent = '⏳ ...';
+    ankiPreviewBox.classList.add('hidden');
+
+    try {
+      const parsed = await window.AnkiImporter.parseUploadedDeckFile(file);
+      state.parsedAnkiData = parsed;
+
+      ankiDeckTitleInput.value = parsed.deckName;
+      ankiFrontSelect.innerHTML = '';
+      ankiBackSelect.innerHTML = '';
+
+      parsed.fieldNames.forEach((fName, idx) => {
+        const opt1 = document.createElement('option');
+        opt1.value = String(idx);
+        opt1.textContent = `${idx + 1}. ${fName}`;
+        ankiFrontSelect.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = String(idx);
+        opt2.textContent = `${idx + 1}. ${fName}`;
+        ankiBackSelect.appendChild(opt2);
+      });
+
+      ankiFrontSelect.value = '0';
+      ankiBackSelect.value = parsed.fieldNames.length > 1 ? '1' : '0';
+
+      ankiParseStatus.textContent = t().ankiParsedOk(parsed.rows.length);
+      ankiPreviewBox.classList.remove('hidden');
+      renderAnkiPreviewCards();
+    } catch (err) {
+      ankiParseStatus.classList.add('error');
+      ankiParseStatus.textContent = `⚠️ ${err && err.message ? err.message : 'Ошибка чтения файла'}`;
+    }
+  }
+
+  function openCustomWordsModal(defaultTab = 'anki') {
+    if (state.running && !state.paused) state.paused = true;
+    setImportTargetLang(state.targetLang);
+    switchImportTab(defaultTab);
+    customWordsDialog.showModal();
+  }
+
+  // --- Кнопки и обработчики событий ---
   if (btnArcadeLaunch) {
-    btnArcadeLaunch.addEventListener('click', () => {
-      launchFromTitleScreen();
-    });
+    btnArcadeLaunch.addEventListener('click', launchFromTitleScreen);
   }
-
   if (btnBackToTitle) {
-    btnBackToTitle.addEventListener('click', () => {
-      returnToTitleScreen();
-    });
+    btnBackToTitle.addEventListener('click', returnToTitleScreen);
   }
-
   if (btnHudHome) {
-    btnHudHome.addEventListener('click', () => {
-      returnToTitleScreen();
-    });
+    btnHudHome.addEventListener('click', returnToTitleScreen);
   }
 
   if (btnWeaponMode) {
     btnWeaponMode.addEventListener('click', () => {
-      const idx = WEAPONS.findIndex(w => w.id === state.weaponId);
-      const nextW = WEAPONS[(idx + 1) % WEAPONS.length];
+      const unlockedList = WEAPONS.filter(isWeaponUnlocked);
+      if (unlockedList.length === 0) return;
+      const curIdx = unlockedList.findIndex(w => w.id === state.weaponId);
+      const nextW = unlockedList[(curIdx + 1) % unlockedList.length];
       equipWeapon(nextW.id, true);
       btnWeaponMode.blur();
     });
@@ -4141,8 +5467,9 @@
 
   btnNextLevel.addEventListener('click', () => {
     sound.init();
-    if (state.currentLevelIndex < levels.length - 1) {
-      selectLevel(state.currentLevelIndex + 1, false);
+    const nextPtr = getNextLessonPointer();
+    if (nextPtr) {
+      selectCourseLesson(nextPtr.courseId, nextPtr.moduleIndex, nextPtr.lessonIndex, false);
     }
   });
 
@@ -4150,28 +5477,66 @@
     sound.init();
     const mistakes = Array.from(state.mistakeWordsMap.values());
     if (mistakes.length > 0) {
-      startLevelNow(mistakes);
+      startLevelNow(mistakes, t().mistakesBtn(mistakes.length));
     }
   });
+
+  function launchPinnedWordsDrill() {
+    sound.init();
+    const pinned = getPinnedEntriesForTargetLang(state.targetLang);
+    if (pinned.length === 0) return;
+    startLevelNow(pinned, t().pinnedRoundTitle);
+  }
+
+  if (btnDrillPinned) {
+    btnDrillPinned.addEventListener('click', () => {
+      launchPinnedWordsDrill();
+      btnDrillPinned.blur();
+    });
+  }
+  if (btnPracticePinned) {
+    btnPracticePinned.addEventListener('click', launchPinnedWordsDrill);
+  }
 
   btnEmp.addEventListener('click', () => {
     triggerEmpWave();
     btnEmp.blur();
   });
 
+  // Переключение Фильтра 2 (Перевод / Интерфейс)
   btnLangMode.addEventListener('click', () => {
-    const idx = state.langModes.findIndex(m => m.id === state.translationLang);
-    const nextMode = state.langModes[(idx + 1) % state.langModes.length];
-    setTranslationLanguage(nextMode.id);
+    const idx = state.nativeLangModes.findIndex(m => m.id === state.nativeLang);
+    const nextMode = state.nativeLangModes[(idx + 1) % state.nativeLangModes.length];
+    setNativeLanguage(nextMode.id);
     btnLangMode.blur();
   });
 
-  document.querySelectorAll('.lang-quick-btn').forEach(btn => {
+  document.querySelectorAll('.native-lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      setTranslationLanguage(btn.dataset.lang);
+      setNativeLanguage(btn.dataset.nativeLang);
       btn.blur();
     });
   });
+
+  // Переключение Фильтра 1 (Я учу)
+  document.querySelectorAll('.target-lang-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTargetLanguage(btn.dataset.targetLang);
+      btn.blur();
+    });
+  });
+
+  if (btnTargetLangHud) {
+    btnTargetLangHud.addEventListener('click', () => {
+      const order = ['de', 'en', 'es'];
+      const next = order[(order.indexOf(state.targetLang) + 1) % order.length];
+      setTargetLanguage(next);
+      if (state.screenMode === 'play') {
+        showLevelIntroOverlay();
+      }
+      btnTargetLangHud.blur();
+    });
+  }
 
   if (btnArticleMode) {
     btnArticleMode.addEventListener('click', () => {
@@ -4184,6 +5549,9 @@
       state.activeWords.forEach(w => {
         if (w.typedCount === 0) {
           w.text = getTargetString(w.entry);
+          const m = measureWordCapsule(w.text, w.entry);
+          w.boxW = m.boxW;
+          w.boxH = m.boxH;
         }
       });
       btnArticleMode.blur();
@@ -4208,6 +5576,7 @@
 
     if (state.screenMode === 'play') {
       state.weaponBannerText = t().speedBanner(preset.label);
+      state.weaponBannerColor = '#38bdf8';
       state.weaponBannerTimer = 1.45;
     }
   }
@@ -4224,7 +5593,190 @@
     });
   }
 
-  // --- Открытие и управление студией Gemini 3.8 TTS ---
+  // Открытие 3-ступенчатого каталога курсов
+  [btnOpenCatalogTitle, btnOpenCatalogHud, btnSidebarCatalog, btnOverlayCatalog].forEach(el => {
+    if (!el) return;
+    el.addEventListener('click', () => {
+      openCourseCatalogModal('all');
+      el.blur();
+    });
+  });
+
+  document.querySelectorAll('.source-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.catalogSourceFilter = btn.dataset.sourceFilter || 'all';
+      renderCourseBrowserModal();
+    });
+  });
+
+  if (btnCloseCatalog) {
+    btnCloseCatalog.addEventListener('click', () => {
+      courseBrowserDialog.close();
+      if (state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
+        state.paused = false;
+      }
+    });
+  }
+
+  if (btnOpenAnkiFromCatalog) {
+    btnOpenAnkiFromCatalog.addEventListener('click', () => {
+      courseBrowserDialog.close();
+      openCustomWordsModal('anki');
+    });
+  }
+
+  // Открытие окна импорта Anki .apkg / Своих слов
+  [btnOpenAnkiTitle, btnSidebarAnki, btnOpenCustom, btnTitleCustom].forEach(el => {
+    if (!el) return;
+    el.addEventListener('click', () => {
+      openCustomWordsModal('anki');
+      el.blur();
+    });
+  });
+
+  if (tabImportAnki) tabImportAnki.addEventListener('click', () => switchImportTab('anki'));
+  if (tabImportManual) tabImportManual.addEventListener('click', () => switchImportTab('manual'));
+
+  document.querySelectorAll('.import-tlang-btn').forEach(btn => {
+    btn.addEventListener('click', () => setImportTargetLang(btn.dataset.importLang));
+  });
+
+  if (ankiFileInput) {
+    ankiFileInput.addEventListener('change', () => {
+      if (ankiFileInput.files && ankiFileInput.files[0]) {
+        handleAnkiFileSelected(ankiFileInput.files[0]);
+      }
+    });
+  }
+
+  if (ankiDropzone) {
+    ['dragenter', 'dragover'].forEach(evName => {
+      ankiDropzone.addEventListener(evName, (e) => {
+        e.preventDefault();
+        ankiDropzone.classList.add('dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(evName => {
+      ankiDropzone.addEventListener(evName, (e) => {
+        e.preventDefault();
+        ankiDropzone.classList.remove('dragover');
+      });
+    });
+    ankiDropzone.addEventListener('drop', (e) => {
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) handleAnkiFileSelected(f);
+    });
+  }
+
+  if (btnDownloadSampleApkg) {
+    btnDownloadSampleApkg.addEventListener('click', () => {
+      const blob = window.AnkiImporter.generateSampleApkgBlob(state.importTargetLang);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `zlingo-sample-${state.importTargetLang}.apkg`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    });
+  }
+
+  if (ankiFrontSelect) ankiFrontSelect.addEventListener('change', renderAnkiPreviewCards);
+  if (ankiBackSelect) ankiBackSelect.addEventListener('change', renderAnkiPreviewCards);
+  if (btnSwapAnkiCols) {
+    btnSwapAnkiCols.addEventListener('click', () => {
+      const tmp = ankiFrontSelect.value;
+      ankiFrontSelect.value = ankiBackSelect.value;
+      ankiBackSelect.value = tmp;
+      renderAnkiPreviewCards();
+    });
+  }
+
+  async function finalizeAndLaunchUserCourse(userCourse) {
+    await window.AnkiImporter.saveUserCourse(userCourse);
+    state.userCourses = [userCourse, ...state.userCourses.filter(c => c.id !== userCourse.id)];
+    customWordsDialog.close();
+
+    if (state.targetLang !== userCourse.targetLang) {
+      setTargetLanguage(userCourse.targetLang);
+    }
+
+    selectCourseLesson(userCourse.id, 0, 0, false);
+    if (state.screenMode === 'title') {
+      launchFromTitleScreen();
+    } else {
+      startLevelNow();
+    }
+  }
+
+  if (btnConfirmAnkiImport) {
+    btnConfirmAnkiImport.addEventListener('click', async () => {
+      const data = state.parsedAnkiData;
+      if (!data) return;
+      const frontIdx = Number(ankiFrontSelect.value) || 0;
+      const backIdx = Number(ankiBackSelect.value) || 1;
+      const words = data.rows
+        .map(r => window.AnkiImporter.normalizeCardToWordEntry(r[frontIdx], r[backIdx], state.importTargetLang, r[2] || ''))
+        .filter(Boolean);
+
+      if (words.length === 0) return;
+
+      const userCourse = window.AnkiImporter.buildUserCourse({
+        title: ankiDeckTitleInput.value || data.deckName || 'Anki Deck',
+        targetLang: state.importTargetLang,
+        originType: 'anki',
+        words,
+        lessonSize: 12
+      });
+
+      await finalizeAndLaunchUserCourse(userCourse);
+    });
+  }
+
+  if (btnSaveCustomWords) {
+    btnSaveCustomWords.addEventListener('click', async () => {
+      const rawLines = customWordsInput.value.split(/\r?\n/);
+      const parsedWords = [];
+      for (const line of rawLines) {
+        const trimmed = line.trim();
+        if (!trimmed || (!trimmed.includes(';') && !trimmed.includes('\t'))) continue;
+        const delim = trimmed.includes(';') ? ';' : '\t';
+        const parts = trimmed.split(delim).map(s => s.trim());
+        if (parts.length >= 2 && parts[0] && parts[1]) {
+          const entry = window.AnkiImporter.normalizeCardToWordEntry(
+            parts[0],
+            parts[1],
+            state.importTargetLang,
+            parts[2] || ''
+          );
+          if (entry) parsedWords.push(entry);
+        }
+      }
+      if (parsedWords.length === 0) return;
+
+      const userCourse = window.AnkiImporter.buildUserCourse({
+        title: manualDeckTitleInput.value.trim() || `Мои слова (${parsedWords.length})`,
+        targetLang: state.importTargetLang,
+        originType: 'custom',
+        words: parsedWords,
+        lessonSize: 12
+      });
+
+      await finalizeAndLaunchUserCourse(userCourse);
+    });
+  }
+
+  if (btnCloseCustom) {
+    btnCloseCustom.addEventListener('click', () => {
+      customWordsDialog.close();
+      if (state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
+        state.paused = false;
+      }
+    });
+  }
+
+  // --- Студия Gemini 3.8 TTS ---
   function openTtsStudioDialog() {
     if (state.running && !state.paused) state.paused = true;
     renderTtsSettingsUI();
@@ -4237,14 +5789,12 @@
       btnOpenTtsSettings.blur();
     });
   }
-
   if (btnTitleVoice) {
     btnTitleVoice.addEventListener('click', () => {
       openTtsStudioDialog();
       btnTitleVoice.blur();
     });
   }
-
   if (btnCloseTtsDialog) {
     btnCloseTtsDialog.addEventListener('click', () => {
       ttsSettingsDialog.close();
@@ -4253,7 +5803,6 @@
       }
     });
   }
-
   if (btnToggleTtsMaster) {
     btnToggleTtsMaster.addEventListener('click', () => {
       ttsManager.enabled = !ttsManager.enabled;
@@ -4261,7 +5810,6 @@
       renderTtsSettingsUI();
     });
   }
-
   if (ttsModelGrid) {
     ttsModelGrid.querySelectorAll('.tts-option-card').forEach(card => {
       card.addEventListener('click', () => {
@@ -4274,30 +5822,28 @@
       });
     });
   }
-
   if (btnTestGeminiVoice) {
     btnTestGeminiVoice.addEventListener('click', async () => {
       sound.init();
       const tr = t();
+      const meta = TARGET_LANG_META[state.targetLang] || TARGET_LANG_META.de;
       btnTestGeminiVoice.disabled = true;
       btnTestGeminiVoice.textContent = tr.ttsTestingBtn;
       try {
-        await ttsManager.speakGerman('der Kofferraum', true);
+        await ttsManager.speak(meta.sampleWord, state.targetLang, true);
       } finally {
         btnTestGeminiVoice.disabled = false;
-        btnTestGeminiVoice.textContent = tr.ttsTestBtn;
+        btnTestGeminiVoice.textContent = tr.ttsTestBtn(meta.sampleWord);
         onTtsStatusChanged();
       }
     });
   }
-
   if (btnSaveApiKey) {
     btnSaveApiKey.addEventListener('click', () => {
       ttsManager.setLocalApiKey(geminiApiKeyInput.value);
       renderTtsSettingsUI();
     });
   }
-
   if (btnClearApiKey) {
     btnClearApiKey.addEventListener('click', () => {
       geminiApiKeyInput.value = '';
@@ -4313,7 +5859,7 @@
 
   if (btnQuickLevels) {
     btnQuickLevels.addEventListener('click', () => {
-      togglePause();
+      openCourseCatalogModal('all');
     });
   }
 
@@ -4324,27 +5870,41 @@
     });
   }
 
+  // --- Словарь курса + фильтр слов со звёздочкой ⭐ ---
   function renderFullDictionary(filterQuery = '') {
+    const { course } = getActiveSelection();
+    const allWords = course ? getAllWordsInCourse(course) : getAllWordsInTargetLang(state.targetLang);
     const q = filterQuery.trim().toLowerCase();
-    const filtered = allAutoWords.filter(item =>
-      !q ||
-      item.raw.toLowerCase().includes(q) ||
-      (item.ru && item.ru.toLowerCase().includes(q)) ||
-      (item.he && item.he.toLowerCase().includes(q))
-    );
+
+    const filtered = allWords.filter(item => {
+      if (state.dictOnlyPinned && !isEntryPinned(item)) return false;
+      if (!q) return true;
+      const trObj = item.translations || {};
+      return (
+        item.raw.toLowerCase().includes(q) ||
+        (trObj.ru && trObj.ru.toLowerCase().includes(q)) ||
+        (trObj.en && trObj.en.toLowerCase().includes(q)) ||
+        (trObj.he && trObj.he.toLowerCase().includes(q))
+      );
+    });
     renderWordsPreviewList(filtered, dictFullList);
   }
 
   function openDictionaryModal() {
-    if (state.running && !state.paused) {
-      state.paused = true;
-    }
+    if (state.running && !state.paused) state.paused = true;
     renderFullDictionary(dictSearchInput.value);
     dictDialog.showModal();
   }
 
-  btnOpenDict.addEventListener('click', openDictionaryModal);
   if (btnTitleDict) btnTitleDict.addEventListener('click', openDictionaryModal);
+
+  if (btnDictOnlyPinned) {
+    btnDictOnlyPinned.addEventListener('click', () => {
+      state.dictOnlyPinned = !state.dictOnlyPinned;
+      btnDictOnlyPinned.classList.toggle('active', state.dictOnlyPinned);
+      renderFullDictionary(dictSearchInput.value);
+    });
+  }
 
   btnCloseDict.addEventListener('click', () => {
     dictDialog.close();
@@ -4357,54 +5917,20 @@
     renderFullDictionary(dictSearchInput.value);
   });
 
-  function openCustomWordsModal() {
-    if (state.running && !state.paused) state.paused = true;
-    customWordsDialog.showModal();
+  // --- Инициализация приложения ---
+  async function initGame() {
+    if (window.AnkiImporter) {
+      state.userCourses = await window.AnkiImporter.loadUserCourses();
+    }
+    ensureValidCourseSelection();
+    renderZtypeKeyboard();
+    setTargetLanguage(state.targetLang);
+    setNativeLanguage(state.nativeLang);
+    updatePilotRankUI();
+    resizeCanvas();
+    requestAnimationFrame(() => resizeCanvas());
+    requestAnimationFrame(gameLoop);
   }
 
-  if (btnOpenCustom) btnOpenCustom.addEventListener('click', openCustomWordsModal);
-  if (btnTitleCustom) btnTitleCustom.addEventListener('click', openCustomWordsModal);
-
-  btnCloseCustom.addEventListener('click', () => {
-    customWordsDialog.close();
-    if (state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
-      state.paused = false;
-    }
-  });
-
-  btnSaveCustomWords.addEventListener('click', () => {
-    const rawLines = customWordsInput.value.split(/\r?\n/);
-    const parsedWords = rawLines.map(parseGermanEntryLine).filter(Boolean);
-    if (parsedWords.length === 0) return;
-
-    const customLevelNum = levels.length + 1;
-    levels.push({
-      id: `custom-${Date.now()}`,
-      number: customLevelNum,
-      name: `Свой список #${customLevelNum - 7}`,
-      heName: `רשימה משלי #${customLevelNum - 7}`,
-      deName: `Eigene Wörter (${parsedWords.length})`,
-      description: 'Пользовательский набор немецких слов для тренировки.',
-      heDescription: 'מאגר מילים מותאם אישית בגרמנית לתרגול.',
-      speedMultiplier: 0.95,
-      spawnIntervalMs: 2700,
-      words: parsedWords
-    });
-
-    allAutoWords.push(...parsedWords);
-    customWordsDialog.close();
-    state.currentLevelIndex = levels.length - 1;
-    if (state.screenMode === 'title') {
-      launchFromTitleScreen();
-    } else {
-      startLevelNow();
-    }
-  });
-
-  // --- Инициализация на живом аркадном титульном экране ---
-  setTranslationLanguage(state.translationLang);
-  updatePilotRankUI();
-  resizeCanvas();
-  requestAnimationFrame(() => resizeCanvas());
-  requestAnimationFrame(gameLoop);
+  initGame();
 })();
