@@ -245,8 +245,9 @@
       mobStep3: 'Копи прогресс и открывай оружие',
       mobNavHome: 'Главная',
       mobNavPlay: 'Играть',
+      mobNavCourses: 'Курсы',
       mobNavDecks: 'Колоды',
-      mobNavStats: 'Стат.',
+      mobNavStats: 'Статистика',
       mobNavProfile: 'Профиль',
       chooseLangTitle: 'Выбери язык',
       quickStartTitle: 'Быстрый старт',
@@ -397,7 +398,23 @@
       decksHeroTitleMy: 'Мои колоды',
       decksHeroTitleCourses: 'Курсы и колоды',
       decksHeroSub: 'Ваши личные курсы и импортированные Anki-колоды',
+      decksHeroSubMobile: 'Ваши курсы и Anki-колоды',
       decksSearchPlaceholder: 'Поиск по названию, описанию или словам...',
+      decksSearchPlaceholderMobile: 'Поиск по названию или словам...',
+      mobFilterAll: (n) => `Все (${n})`,
+      mobFilterCourses: (n) => `Курсы (${n})`,
+      mobFilterMy: (n) => `Мои (${n})`,
+      mobFilterFav: (n) => n > 0 ? `Избранные (${n})` : 'Избранные',
+      deckMetaCourseLabel: 'Курс',
+      deckMetaAnkiLabel: 'Импорт Anki',
+      deckMetaCustomLabel: 'Личная',
+      decksStartLabel: 'Начать',
+      decksContinueLabel: 'Продолжить',
+      deckMenuOpen: '📖 Открыть уроки и слова',
+      deckMenuFavAdd: '⭐ В избранное',
+      deckMenuFavRemove: '★ Убрать из избранного',
+      deckMenuEdit: '✏️ Редактировать колоду',
+      deckMenuAdmin: '👑 Управление в Супер-Админе',
       decksImportAnkiBtn: 'Импорт Anki (.apkg)',
       decksCreateBtn: 'Создать колоду',
       decksStatTotal: 'Всего колод',
@@ -531,6 +548,7 @@
       mobStep3: 'Earn progress & unlock new gear',
       mobNavHome: 'Home',
       mobNavPlay: 'Play',
+      mobNavCourses: 'Courses',
       mobNavDecks: 'Decks',
       mobNavStats: 'Stats',
       mobNavProfile: 'Profile',
@@ -681,7 +699,23 @@
       decksHeroTitleMy: 'My Decks',
       decksHeroTitleCourses: 'Courses & Decks',
       decksHeroSub: 'Your personal courses, official packs & imported Anki decks',
+      decksHeroSubMobile: 'Your courses & Anki decks',
       decksSearchPlaceholder: 'Search by title, description or words...',
+      decksSearchPlaceholderMobile: 'Search by title or words...',
+      mobFilterAll: (n) => `All (${n})`,
+      mobFilterCourses: (n) => `Courses (${n})`,
+      mobFilterMy: (n) => `My (${n})`,
+      mobFilterFav: (n) => n > 0 ? `Favorites (${n})` : 'Favorites',
+      deckMetaCourseLabel: 'Course',
+      deckMetaAnkiLabel: 'Anki Import',
+      deckMetaCustomLabel: 'Custom',
+      decksStartLabel: 'Start',
+      decksContinueLabel: 'Continue',
+      deckMenuOpen: '📖 Open lessons & words',
+      deckMenuFavAdd: '⭐ Add to Favorites',
+      deckMenuFavRemove: '★ Remove from Favorites',
+      deckMenuEdit: '✏️ Edit deck',
+      deckMenuAdmin: '👑 Super Admin Studio',
       decksImportAnkiBtn: 'Import Anki (.apkg)',
       decksCreateBtn: 'Create Deck',
       decksStatTotal: 'Total decks',
@@ -814,6 +848,7 @@
       mobStep3: 'צברו התקדמות ופתחו נשקים',
       mobNavHome: 'ראשי',
       mobNavPlay: 'שחק',
+      mobNavCourses: 'קורסים',
       mobNavDecks: 'חפיסות',
       mobNavStats: 'סטט׳',
       mobNavProfile: 'פרופיל',
@@ -964,7 +999,23 @@
       decksHeroTitleMy: 'החפיסות שלי',
       decksHeroTitleCourses: 'קורסים וחפיסות',
       decksHeroSub: 'הקורסים האישיים שלך וחפיסות Anki שיובאו',
+      decksHeroSubMobile: 'הקורסים וחפיסות ה-Anki שלך',
       decksSearchPlaceholder: 'חיפוש לפי שם, תיאור או מילים...',
+      decksSearchPlaceholderMobile: 'חיפוש לפי שם או מילים...',
+      mobFilterAll: (n) => `הכל (${n})`,
+      mobFilterCourses: (n) => `קורסים (${n})`,
+      mobFilterMy: (n) => `שלי (${n})`,
+      mobFilterFav: (n) => n > 0 ? `מועדפים (${n})` : 'מועדפים',
+      deckMetaCourseLabel: 'קורס',
+      deckMetaAnkiLabel: 'ייבוא Anki',
+      deckMetaCustomLabel: 'אישית',
+      decksStartLabel: 'התחל',
+      decksContinueLabel: 'המשך',
+      deckMenuOpen: '📖 פתח שלבים ומילים',
+      deckMenuFavAdd: '⭐ הוסף למועדפים',
+      deckMenuFavRemove: '★ הסר ממועדפים',
+      deckMenuEdit: '✏️ ערוך חפיסה',
+      deckMenuAdmin: '👑 ניהול קורס (אדמין)',
       decksImportAnkiBtn: 'ייבוא Anki (.apkg)',
       decksCreateBtn: 'צור חפיסה',
       decksStatTotal: 'סה״כ חפיסות',
@@ -1026,6 +1077,7 @@
   // --- Сохранение прогресса, выученных слов и слов со звёздочкой (localStorage) ---
   const STORAGE_KEY = 'zdeutsch_save_v2';
   const PINNED_STORAGE_KEY = 'zlingo_pinned_words_v1';
+  const FAV_DECKS_KEY = 'zlingo_fav_decks_v1';
   const LEARNED_STORAGE_KEY = 'zlingo_learned_words_v1';
   const DAILY_PROGRESS_KEY = 'zlingo_daily_progress_v1';
   const KEY_STORAGE_NAME = 'zdeutsch_gemini_api_key';
@@ -1943,9 +1995,11 @@
     }
   }
 
-  // Восстановление слов со звёздочкой ⭐ («Повторить ещё раз»)
+  // Восстановление слов со звёздочкой ⭐ («Повторить ещё раз») и избранных колод
   const savedPinnedObj = loadJsonStorage(PINNED_STORAGE_KEY, {});
   const pinnedWordsMap = new Map(Object.entries(savedPinnedObj || {}));
+  const savedFavDecksArr = loadJsonStorage(FAV_DECKS_KEY, []);
+  const favoriteDeckIds = new Set(Array.isArray(savedFavDecksArr) ? savedFavDecksArr : []);
 
   // Ударная серия дней подряд (🔥 Streak) и счётчик выученных за сегодня слов
   const dailyProgress = (() => {
@@ -2081,6 +2135,7 @@
     adminAiPreviewResult: null,
     adminTitleManuallyEdited: false,
     catalogSourceFilter: 'all', // 'all' | 'official' | 'user'
+    decksOnlyFavorites: false,
     homeSubView: 'home', // 'home' | 'decks' | 'admin'
     decksNavMode: 'decks', // 'decks' | 'courses'
     decksViewMode: 'grid', // 'grid' | 'list'
@@ -2774,11 +2829,22 @@
   const decksSidebarProgPct = document.getElementById('decksSidebarProgPct');
   const decksHeroTitle = document.getElementById('decksHeroTitle');
   const decksHeroSubtitle = document.getElementById('decksHeroSubtitle');
+  const decksHeroSubtitleMobile = document.getElementById('decksHeroSubtitleMobile');
   const decksSearchInput = document.getElementById('decksSearchInput');
   const btnDecksImportAnki = document.getElementById('btnDecksImportAnki');
   const labelDecksImportAnkiBtn = document.getElementById('labelDecksImportAnkiBtn');
   const btnDecksCreateDeck = document.getElementById('btnDecksCreateDeck');
   const labelDecksCreateBtn = document.getElementById('labelDecksCreateBtn');
+  const decksMobileFilterBar = document.getElementById('decksMobileFilterBar');
+  const btnMobFilterAll = document.getElementById('btnMobFilterAll');
+  const labelMobFilterAll = document.getElementById('labelMobFilterAll');
+  const btnMobFilterCourses = document.getElementById('btnMobFilterCourses');
+  const labelMobFilterCourses = document.getElementById('labelMobFilterCourses');
+  const btnMobFilterUser = document.getElementById('btnMobFilterUser');
+  const labelMobFilterUser = document.getElementById('labelMobFilterUser');
+  const btnMobFilterFav = document.getElementById('btnMobFilterFav');
+  const labelMobFilterFav = document.getElementById('labelMobFilterFav');
+  const deckContextMenu = document.getElementById('deckContextMenu');
   const labelDecksStatTotal = document.getElementById('labelDecksStatTotal');
   const decksHeroTotalCount = document.getElementById('decksHeroTotalCount');
   const labelDecksStatLearned = document.getElementById('labelDecksStatLearned');
@@ -2896,14 +2962,14 @@
   const mobileBottomNav = document.getElementById('mobileBottomNav');
   const btnMobNavHome = document.getElementById('btnMobNavHome');
   const btnMobNavPlay = document.getElementById('btnMobNavPlay');
+  const btnMobNavCourses = document.getElementById('btnMobNavCourses');
   const btnMobNavDecks = document.getElementById('btnMobNavDecks');
   const btnMobNavStats = document.getElementById('btnMobNavStats');
-  const btnMobNavProfile = document.getElementById('btnMobNavProfile');
   const labelMobNavHome = document.getElementById('labelMobNavHome');
   const labelMobNavPlay = document.getElementById('labelMobNavPlay');
+  const labelMobNavCourses = document.getElementById('labelMobNavCourses');
   const labelMobNavDecks = document.getElementById('labelMobNavDecks');
   const labelMobNavStats = document.getElementById('labelMobNavStats');
-  const labelMobNavProfile = document.getElementById('labelMobNavProfile');
 
   const labelQuickStartTitle = document.getElementById('labelQuickStartTitle');
   const btnQuickStartAnki = document.getElementById('btnQuickStartAnki');
@@ -4724,9 +4790,9 @@
 
     if (labelMobNavHome && tr.mobNavHome) labelMobNavHome.textContent = tr.mobNavHome;
     if (labelMobNavPlay && tr.mobNavPlay) labelMobNavPlay.textContent = tr.mobNavPlay;
+    if (labelMobNavCourses && tr.mobNavCourses) labelMobNavCourses.textContent = tr.mobNavCourses;
     if (labelMobNavDecks && tr.mobNavDecks) labelMobNavDecks.textContent = tr.mobNavDecks;
     if (labelMobNavStats && tr.mobNavStats) labelMobNavStats.textContent = tr.mobNavStats;
-    if (labelMobNavProfile && tr.mobNavProfile) labelMobNavProfile.textContent = tr.mobNavProfile;
 
     if (labelQuickStartTitle) labelQuickStartTitle.textContent = tr.quickStartTitle;
     if (labelQuickAnkiBtn) labelQuickAnkiBtn.textContent = tr.quickAnkiBtn;
@@ -4843,7 +4909,14 @@
       decksHeroTitle.textContent = state.decksNavMode === 'courses' ? tr.decksHeroTitleCourses : tr.decksHeroTitleMy;
     }
     if (decksHeroSubtitle) decksHeroSubtitle.textContent = tr.decksHeroSub;
-    if (decksSearchInput) decksSearchInput.placeholder = tr.decksSearchPlaceholder;
+    if (decksHeroSubtitleMobile && tr.decksHeroSubMobile) {
+      decksHeroSubtitleMobile.textContent = tr.decksHeroSubMobile;
+    }
+    if (decksSearchInput) {
+      decksSearchInput.placeholder = (window.innerWidth <= 768 && tr.decksSearchPlaceholderMobile)
+        ? tr.decksSearchPlaceholderMobile
+        : tr.decksSearchPlaceholder;
+    }
     if (labelDecksImportAnkiBtn) labelDecksImportAnkiBtn.textContent = tr.decksImportAnkiBtn;
     if (labelDecksCreateBtn) labelDecksCreateBtn.textContent = tr.decksCreateBtn;
     if (labelDecksStatTotal) labelDecksStatTotal.textContent = tr.decksStatTotal;
@@ -5155,15 +5228,159 @@
   function getDeckArtClass(course) {
     if (!course) return '';
     if (course.source === 'user') return course.originType === 'anki' ? 'art-anki' : 'art-it';
+    const id = String(course.id || '').toLowerCase();
+    const icon = course.icon || '';
+    if (id.includes('food') || icon.includes('🥐') || icon.includes('🍽')) return 'art-food';
     const cat = inferCourseCategory(course);
     if (cat === 'auto') return 'art-auto';
     if (cat === 'business') return 'art-business';
     if (cat === 'travel') return 'art-travel';
     if (cat === 'it') return 'art-it';
-    const id = String(course.id || '').toLowerCase();
-    const icon = course.icon || '';
-    if (id.includes('food') || icon.includes('🥐') || icon.includes('🍽')) return 'art-food';
+    if (cat === 'base') return 'art-base';
     return '';
+  }
+
+  function formatDeckWordsCountFull(n) {
+    const count = Math.max(0, Number(n) || 0);
+    if (state.nativeLang === 'ru') {
+      const numStr = count.toLocaleString('ru-RU');
+      const mod100 = count % 100;
+      const mod10 = count % 10;
+      let noun = 'слов';
+      if (mod100 >= 11 && mod100 <= 14) {
+        noun = 'слов';
+      } else if (mod10 === 1) {
+        noun = 'слово';
+      } else if (mod10 >= 2 && mod10 <= 4) {
+        noun = 'слова';
+      }
+      return `${numStr} ${noun}`;
+    }
+    if (state.nativeLang === 'he') {
+      return `${count.toLocaleString('he-IL')} מילים`;
+    }
+    return `${count.toLocaleString('en-US')} ${count === 1 ? 'word' : 'words'}`;
+  }
+
+  function courseHasPinnedWords(course) {
+    if (!course) return false;
+    const words = getAllWordsInCourse(course);
+    for (const w of words) {
+      if (isEntryPinned(w, course.targetLang)) return true;
+    }
+    return false;
+  }
+
+  function isDeckFavorite(course) {
+    if (!course) return false;
+    return favoriteDeckIds.has(course.id) || courseHasPinnedWords(course);
+  }
+
+  function toggleDeckFavorite(courseId) {
+    if (!courseId) return false;
+    const nowFav = !favoriteDeckIds.has(courseId);
+    if (nowFav) {
+      favoriteDeckIds.add(courseId);
+    } else {
+      favoriteDeckIds.delete(courseId);
+    }
+    saveJsonStorage(FAV_DECKS_KEY, Array.from(favoriteDeckIds));
+    sound.init();
+    sound.playStarChime(nowFav);
+    if (state.homeSubView === 'decks') {
+      renderDecksPage();
+    }
+    return nowFav;
+  }
+
+  function closeDeckContextMenu() {
+    if (!deckContextMenu || deckContextMenu.classList.contains('hidden')) return;
+    deckContextMenu.classList.add('hidden');
+    deckContextMenu.innerHTML = '';
+    deckContextMenu.dataset.courseId = '';
+  }
+
+  function openDeckContextMenu(anchorEl, course) {
+    if (!deckContextMenu || !anchorEl || !course) return;
+    if (!deckContextMenu.classList.contains('hidden') && deckContextMenu.dataset.courseId === course.id) {
+      closeDeckContextMenu();
+      return;
+    }
+
+    const tr = t();
+    const isUser = course.source === 'user';
+    const isFavExplicit = favoriteDeckIds.has(course.id);
+
+    deckContextMenu.innerHTML = '';
+    deckContextMenu.dataset.courseId = course.id;
+
+    const addMenuAction = (label, onSelect, extraClass = '') => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'deck-action-item' + (extraClass ? ` ${extraClass}` : '');
+      item.setAttribute('role', 'menuitem');
+      item.textContent = label;
+      item.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        closeDeckContextMenu();
+        onSelect();
+      });
+      deckContextMenu.appendChild(item);
+    };
+
+    addMenuAction(tr.deckMenuOpen, () => {
+      state.openedDeckId = course.id;
+      state.openedDeckEditMode = false;
+      state.openedDeckSubdeckFilter = 'all';
+      state.openedDeckWordQuery = '';
+      state.openedDeckWordsLimit = 120;
+      renderDecksPage();
+      if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    addMenuAction(isFavExplicit ? tr.deckMenuFavRemove : tr.deckMenuFavAdd, () => {
+      toggleDeckFavorite(course.id);
+    });
+
+    if (isUser) {
+      addMenuAction(tr.deckMenuEdit, () => {
+        state.openedDeckId = course.id;
+        state.openedDeckEditMode = true;
+        state.openedDeckSubdeckFilter = 'all';
+        state.openedDeckWordQuery = '';
+        state.openedDeckWordsLimit = 120;
+        renderDecksPage();
+        if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      addMenuAction(tr.deleteDeckBtn, () => {
+        removeUserDeckById(course.id);
+      }, 'danger');
+    } else {
+      addMenuAction(tr.deckMenuAdmin, () => {
+        openAdminStudio(course.targetLang || state.targetLang);
+      });
+    }
+
+    deckContextMenu.style.left = '12px';
+    deckContextMenu.style.top = '12px';
+    deckContextMenu.classList.remove('hidden');
+
+    const btnRect = anchorEl.getBoundingClientRect();
+    const menuRect = deckContextMenu.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const isRtl = document.documentElement.dir === 'rtl';
+
+    let left = isRtl ? btnRect.left : (btnRect.right - menuRect.width);
+    left = Math.max(12, Math.min(vw - menuRect.width - 12, left));
+
+    let top = btnRect.bottom + 6;
+    if (top + menuRect.height > vh - 86) {
+      top = Math.max(12, btnRect.top - menuRect.height - 6);
+    }
+
+    deckContextMenu.style.left = `${Math.round(left)}px`;
+    deckContextMenu.style.top = `${Math.round(top)}px`;
   }
 
   function getCourseCategoryBadgeText(course) {
@@ -5255,10 +5472,8 @@
     if (!activeTab) {
       if ((statsDialog && statsDialog.open) || (leaderboardDialog && leaderboardDialog.open)) {
         activeTab = 'stats';
-      } else if (gameSettingsDialog && gameSettingsDialog.open) {
-        activeTab = 'profile';
       } else if (state.homeSubView === 'decks') {
-        activeTab = 'decks';
+        activeTab = state.decksNavMode === 'courses' ? 'courses' : 'decks';
       } else if (state.homeSubView === 'admin') {
         activeTab = 'profile';
       } else {
@@ -5267,9 +5482,9 @@
     }
     if (btnMobNavHome) btnMobNavHome.classList.toggle('active', activeTab === 'home');
     if (btnMobNavPlay) btnMobNavPlay.classList.toggle('active', activeTab === 'play');
+    if (btnMobNavCourses) btnMobNavCourses.classList.toggle('active', activeTab === 'courses');
     if (btnMobNavDecks) btnMobNavDecks.classList.toggle('active', activeTab === 'decks');
     if (btnMobNavStats) btnMobNavStats.classList.toggle('active', activeTab === 'stats');
-    if (btnMobNavProfile) btnMobNavProfile.classList.toggle('active', activeTab === 'profile');
   }
 
   function switchHomeSubView(subView) {
@@ -5335,6 +5550,7 @@
   }
 
   function openDecksPage(opts = {}) {
+    closeDeckContextMenu();
     if (courseBrowserDialog && courseBrowserDialog.open) {
       courseBrowserDialog.close();
     }
@@ -5352,6 +5568,7 @@
     if (opts.sourceFilter) {
       state.catalogSourceFilter = opts.sourceFilter;
     }
+    state.decksOnlyFavorites = Boolean(opts.onlyFavorites);
     if (opts.navMode) {
       state.decksNavMode = opts.navMode;
     }
@@ -5411,6 +5628,9 @@
     if (!window.AnkiImporter) return;
     await window.AnkiImporter.deleteUserCourse(courseId);
     state.userCourses = state.userCourses.filter(x => x.id !== courseId);
+    if (favoriteDeckIds.delete(courseId)) {
+      saveJsonStorage(FAV_DECKS_KEY, Array.from(favoriteDeckIds));
+    }
     if (state.activeCourseId === courseId) {
       state.activeCourseId = '';
       ensureValidCourseSelection();
@@ -5468,6 +5688,15 @@
       launchDeckLessonFromPage(course.id, stats.nextModIdx, stats.nextLessonIdx);
     });
     actionsWrap.appendChild(playBtn);
+
+    const favToggleBtn = document.createElement('button');
+    favToggleBtn.type = 'button';
+    favToggleBtn.className = 'deck-btn-secondary';
+    favToggleBtn.textContent = favoriteDeckIds.has(course.id) ? tr.deckMenuFavRemove : tr.deckMenuFavAdd;
+    favToggleBtn.addEventListener('click', () => {
+      toggleDeckFavorite(course.id);
+    });
+    actionsWrap.appendChild(favToggleBtn);
 
     if (isUser) {
       const editToggleBtn = document.createElement('button');
@@ -5856,7 +6085,9 @@
 
   function renderDecksPage() {
     if (!decksPageView) return;
+    closeDeckContextMenu();
     const tr = t();
+    const isMobileViewport = window.innerWidth <= 768;
     const allForLang = getCoursesForTargetLang(state.targetLang);
     const statsById = new Map();
     let startedCount = 0;
@@ -5867,9 +6098,17 @@
       if (st.isStarted) startedCount++;
     });
 
-    // 1. Синхронизация шапки, подвкладок и боковых фильтров
+    // 1. Синхронизация шапки, подвкладок, мобильных чипов и боковых фильтров
     if (decksHeroTitle) {
       decksHeroTitle.textContent = state.decksNavMode === 'courses' ? tr.decksHeroTitleCourses : tr.decksHeroTitleMy;
+    }
+    if (decksHeroSubtitleMobile && tr.decksHeroSubMobile) {
+      decksHeroSubtitleMobile.textContent = tr.decksHeroSubMobile;
+    }
+    if (decksSearchInput) {
+      decksSearchInput.placeholder = (isMobileViewport && tr.decksSearchPlaceholderMobile)
+        ? tr.decksSearchPlaceholderMobile
+        : tr.decksSearchPlaceholder;
     }
     if (btnNavCourses && state.homeSubView === 'decks') {
       btnNavCourses.classList.toggle('active', state.decksNavMode === 'courses');
@@ -5885,6 +6124,10 @@
     }
     if (btnDecksReturnBattle) {
       btnDecksReturnBattle.classList.toggle('hidden', !state.decksOpenedFromPlay);
+      const subbarRow = btnDecksReturnBattle.closest('.decks-subbar-row');
+      if (subbarRow) {
+        subbarRow.classList.toggle('has-return-battle', Boolean(state.decksOpenedFromPlay));
+      }
     }
     if (btnDecksViewGrid) {
       btnDecksViewGrid.classList.toggle('active', state.decksViewMode !== 'list');
@@ -5896,9 +6139,33 @@
       decksAllGrid.classList.toggle('list-mode', state.decksViewMode === 'list');
     }
 
+    // Мобильная полоса из 4 чипов фильтрации с живыми счётчиками: Все (N) · Курсы (N) · Мои (N) · Избранные
+    const allCount = allForLang.length;
+    const officialCount = allForLang.filter(c => c.source !== 'user').length;
+    const userCount = allForLang.filter(c => c.source === 'user').length;
+    const favCount = allForLang.filter(c => isDeckFavorite(c)).length;
+
+    if (labelMobFilterAll && tr.mobFilterAll) labelMobFilterAll.textContent = tr.mobFilterAll(allCount);
+    if (labelMobFilterCourses && tr.mobFilterCourses) labelMobFilterCourses.textContent = tr.mobFilterCourses(officialCount);
+    if (labelMobFilterUser && tr.mobFilterMy) labelMobFilterUser.textContent = tr.mobFilterMy(userCount);
+    if (labelMobFilterFav && tr.mobFilterFav) labelMobFilterFav.textContent = tr.mobFilterFav(favCount);
+
+    if (btnMobFilterAll) {
+      btnMobFilterAll.classList.toggle('active', !state.decksOnlyFavorites && state.catalogSourceFilter === 'all');
+    }
+    if (btnMobFilterCourses) {
+      btnMobFilterCourses.classList.toggle('active', !state.decksOnlyFavorites && state.catalogSourceFilter === 'official');
+    }
+    if (btnMobFilterUser) {
+      btnMobFilterUser.classList.toggle('active', !state.decksOnlyFavorites && state.catalogSourceFilter === 'user');
+    }
+    if (btnMobFilterFav) {
+      btnMobFilterFav.classList.toggle('active', Boolean(state.decksOnlyFavorites));
+    }
+
     if (decksSourceFilterGroup) {
       decksSourceFilterGroup.querySelectorAll('.decks-source-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.sourceFilter === state.catalogSourceFilter);
+        btn.classList.toggle('active', !state.decksOnlyFavorites && btn.dataset.sourceFilter === state.catalogSourceFilter);
       });
     }
     if (decksCategoryFilterGroup) {
@@ -5952,6 +6219,7 @@
     if (state.openedDeckId) {
       const openedCourse = allForLang.find(c => c.id === state.openedDeckId);
       if (openedCourse) {
+        decksPageView.classList.add('detail-open');
         if (decksOverviewPane) decksOverviewPane.classList.add('hidden');
         if (deckDetailPane) deckDetailPane.classList.remove('hidden');
         renderDeckDetailPane(openedCourse, statsById.get(openedCourse.id) || computeDeckStats(openedCourse));
@@ -5961,6 +6229,7 @@
       state.openedDeckEditMode = false;
     }
 
+    decksPageView.classList.remove('detail-open');
     if (decksOverviewPane) decksOverviewPane.classList.remove('hidden');
     if (deckDetailPane) deckDetailPane.classList.add('hidden');
 
@@ -6034,16 +6303,22 @@
       });
     }
 
-    // 5. Сетка «📚 Все колоды (N)» с учётом фильтров источника, категории, уровня CEFR и строки поиска
+    // 5. Сетка «📚 Все колоды (N)» с учётом фильтров источника, избранных, категории, уровня CEFR и поиска
     const searchQ = (state.decksSearchQuery || '').trim().toLowerCase();
     const filteredDecks = allForLang.filter(course => {
-      if (state.catalogSourceFilter === 'official' && course.source === 'user') return false;
-      if (state.catalogSourceFilter === 'user' && course.source !== 'user') return false;
-      if (state.decksCategoryFilter && state.decksCategoryFilter !== 'all') {
-        if (course.source === 'user') return false;
-        if (inferCourseCategory(course) !== state.decksCategoryFilter) return false;
+      if (state.decksOnlyFavorites) {
+        if (!isDeckFavorite(course)) return false;
+      } else {
+        if (state.catalogSourceFilter === 'official' && course.source === 'user') return false;
+        if (state.catalogSourceFilter === 'user' && course.source !== 'user') return false;
       }
-      if (!courseMatchesLevelFilter(course, state.decksLevelFilter)) return false;
+      if (!isMobileViewport) {
+        if (state.decksCategoryFilter && state.decksCategoryFilter !== 'all') {
+          if (course.source === 'user') return false;
+          if (inferCourseCategory(course) !== state.decksCategoryFilter) return false;
+        }
+        if (!courseMatchesLevelFilter(course, state.decksLevelFilter)) return false;
+      }
 
       if (!searchQ) return true;
       const tStr = getLocalizedField(course, 'titles').toLowerCase();
@@ -6063,8 +6338,13 @@
       return false;
     });
 
-    // Сортируем так, чтобы личные/Anki и активная колода были сразу на виду в первом ряду (как на макете!)
+    // На мобильном: активная колода первой, далее курсы и личные колоды в естественном порядке; на ПК — личные/Anki тоже в 1-м ряду
     const orderedDecks = filteredDecks.slice().sort((a, b) => {
+      if (isMobileViewport) {
+        const aAct = a.id === state.activeCourseId ? 1 : 0;
+        const bAct = b.id === state.activeCourseId ? 1 : 0;
+        return bAct - aAct;
+      }
       const aFirst = a.id === state.activeCourseId ? 2 : (a.source === 'user' ? 1 : 0);
       const bFirst = b.id === state.activeCourseId ? 2 : (b.source === 'user' ? 1 : 0);
       if (aFirst !== bFirst) return bFirst - aFirst;
@@ -6082,12 +6362,22 @@
       emptyBox.className = 'kill-feed-empty';
       emptyBox.style.gridColumn = '1 / -1';
       emptyBox.style.padding = '28px';
-      emptyBox.textContent = state.catalogSourceFilter === 'user' && !searchQ && state.decksLevelFilter === 'all'
+      emptyBox.textContent = state.catalogSourceFilter === 'user' && !state.decksOnlyFavorites && !searchQ && state.decksLevelFilter === 'all'
         ? tr.emptyUserCourses
         : tr.decksEmptyFiltered;
       decksAllGrid.appendChild(emptyBox);
       return;
     }
+
+    const openCourseDetails = (courseId, editMode = false) => {
+      state.openedDeckId = courseId;
+      state.openedDeckEditMode = Boolean(editMode);
+      state.openedDeckSubdeckFilter = 'all';
+      state.openedDeckWordQuery = '';
+      state.openedDeckWordsLimit = 120;
+      renderDecksPage();
+      if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     orderedDecks.forEach(course => {
       const st = statsById.get(course.id) || computeDeckStats(course);
@@ -6108,6 +6398,10 @@
       const card = document.createElement('article');
       card.className = 'deck-full-card' + (course.id === state.activeCourseId ? ' is-active' : '');
 
+      // --- А) ДЕСКТОПНОЕ СОДЕРЖИМОЕ КАРТОЧКИ (> 768px — 100% без изменений!) ---
+      const desktopInner = document.createElement('div');
+      desktopInner.className = 'deck-desktop-card-inner';
+
       const topDiv = document.createElement('div');
       topDiv.className = 'deck-card-top';
       topDiv.innerHTML = `
@@ -6127,16 +6421,12 @@
       `;
       const moreBtn = topDiv.querySelector('.deck-more-btn');
       if (moreBtn) {
-        moreBtn.addEventListener('click', () => {
-          state.openedDeckId = course.id;
-          state.openedDeckEditMode = isUser;
-          state.openedDeckSubdeckFilter = 'all';
-          state.openedDeckWordQuery = '';
-          state.openedDeckWordsLimit = 120;
-          renderDecksPage();
+        moreBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openDeckContextMenu(moreBtn, course);
         });
       }
-      card.appendChild(topDiv);
+      desktopInner.appendChild(topDiv);
 
       if (health && health.brokenRu && state.nativeLang === 'ru') {
         const warnRow = document.createElement('div');
@@ -6145,9 +6435,12 @@
         const quickDel = document.createElement('button');
         quickDel.type = 'button';
         quickDel.textContent = tr.decksBrokenRuDeleteBtn;
-        quickDel.addEventListener('click', () => removeUserDeckById(course.id));
+        quickDel.addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeUserDeckById(course.id);
+        });
         warnRow.appendChild(quickDel);
-        card.appendChild(warnRow);
+        desktopInner.appendChild(warnRow);
       }
 
       // 3 мини-плитки первых уроков колоды
@@ -6171,7 +6464,7 @@
           });
           previewRow.appendChild(miniBtn);
         });
-        card.appendChild(previewRow);
+        desktopInner.appendChild(previewRow);
       }
 
       // Полоса прогресса + счётчик уроков
@@ -6186,7 +6479,7 @@
         </div>
         <div class="deck-lessons-count-sub">${escapeHtml(tr.decksLessonsProgress(st.doneLessons, st.totalLessons))}</div>
       `;
-      card.appendChild(progBlock);
+      desktopInner.appendChild(progBlock);
 
       // Кнопки карточки: [▶ Продолжить] [📖 Открыть] + [✏️ Редактировать] для личных/Anki
       const actRow = document.createElement('div');
@@ -6206,13 +6499,7 @@
       openBtn.className = 'deck-btn-secondary';
       openBtn.textContent = tr.decksOpenBtn;
       openBtn.addEventListener('click', () => {
-        state.openedDeckId = course.id;
-        state.openedDeckEditMode = false;
-        state.openedDeckSubdeckFilter = 'all';
-        state.openedDeckWordQuery = '';
-        state.openedDeckWordsLimit = 120;
-        renderDecksPage();
-        if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+        openCourseDetails(course.id, false);
       });
       actRow.appendChild(openBtn);
 
@@ -6222,18 +6509,119 @@
         editBtn.className = 'deck-btn-secondary';
         editBtn.textContent = tr.decksEditBtn;
         editBtn.addEventListener('click', () => {
-          state.openedDeckId = course.id;
-          state.openedDeckEditMode = true;
-          state.openedDeckSubdeckFilter = 'all';
-          state.openedDeckWordQuery = '';
-          state.openedDeckWordsLimit = 120;
-          renderDecksPage();
-          if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+          openCourseDetails(course.id, true);
         });
         actRow.appendChild(editBtn);
       }
 
-      card.appendChild(actRow);
+      desktopInner.appendChild(actRow);
+      card.appendChild(desktopInner);
+
+      // --- Б) МОБИЛЬНАЯ ГОРИЗОНТАЛЬНАЯ КАРТОЧКА КОЛОДЫ (<= 768px) ---
+      const mobInner = document.createElement('div');
+      mobInner.className = 'deck-mobile-card-inner';
+
+      const isAnkiDeck = isUser && course.originType === 'anki';
+      const mobIconMarkup = isAnkiDeck
+        ? `<svg class="deck-anki-cards-svg" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+             <g transform="rotate(-10 15 18)">
+               <rect x="6.5" y="7" width="17" height="22" rx="3.5" fill="#93c5fd" fill-opacity="0.55" stroke="#dbeafe" stroke-width="1.15"/>
+             </g>
+             <g transform="rotate(6 21 18)">
+               <rect x="12.5" y="6.5" width="17.5" height="22.5" rx="3.6" fill="#f8fafc" stroke="#dbeafe" stroke-width="1.15"/>
+               <path d="M18 22.5L21.25 13L24.5 22.5M19.1 20H23.4" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+             </g>
+           </svg>`
+        : escapeHtml(iconChar);
+
+      const wordsFullText = formatDeckWordsCountFull(st.totalWords);
+      const mobMetaSvg = !isUser
+        ? `<svg class="deck-mob-meta-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3Zm-6.5 9.18V16c0 2.21 2.91 4 6.5 4s6.5-1.79 6.5-4v-3.82L12 15.73l-6.5-3.55Z"/></svg>`
+        : `<svg class="deck-mob-meta-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2.25c-4.2 0-7.75 2.15-7.75 4.95 0 .72.58 1.3 1.3 1.3h12.9c.72 0 1.3-.58 1.3-1.3 0-2.8-3.55-4.95-7.75-4.95Z"/></svg>`;
+
+      const mobMetaText = !isUser
+        ? `${course.levelTag || 'A2–B1'} · ${wordsFullText} · ${tr.deckMetaCourseLabel || 'Курс'}`
+        : `${wordsFullText} · ${isAnkiDeck ? (tr.deckMetaAnkiLabel || 'Импорт Anki') : (tr.deckMetaCustomLabel || 'Личная')}`;
+
+      const ctaStarted = st.pct > 0;
+      const ctaClass = ctaStarted ? 'continue' : 'start';
+      const ctaLabel = ctaStarted ? (tr.decksContinueLabel || 'Продолжить') : (tr.decksStartLabel || 'Начать');
+      const favStarHtml = favoriteDeckIds.has(course.id)
+        ? `<span class="deck-mob-fav-star" aria-hidden="true">★</span>`
+        : '';
+
+      mobInner.innerHTML = `
+        <div class="deck-icon-tile deck-mob-icon-tile ${artCls}">${mobIconMarkup}</div>
+        <div class="deck-mob-body">
+          <div class="deck-mob-top-row">
+            <h3 class="deck-mob-title" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</h3>
+            <button type="button" class="deck-mob-dots-btn" aria-label="More">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <circle cx="12" cy="5" r="2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <circle cx="12" cy="19" r="2"/>
+              </svg>
+            </button>
+          </div>
+          <div class="deck-mob-meta">
+            ${mobMetaSvg}
+            <span>${escapeHtml(mobMetaText)}</span>
+            ${favStarHtml}
+          </div>
+          <div class="deck-mob-bottom-row">
+            <div class="deck-mob-prog-wrap">
+              <div class="deck-mob-prog-track">
+                <div class="deck-mob-prog-fill" style="width: ${st.pct}%;"></div>
+              </div>
+              <span class="deck-mob-prog-pct">${st.pct}%</span>
+            </div>
+            <button type="button" class="deck-mob-cta ${ctaClass}">
+              <span class="deck-mob-play-tri" aria-hidden="true">▶</span>
+              <span>${escapeHtml(ctaLabel)}</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      const mobCtaBtn = mobInner.querySelector('.deck-mob-cta');
+      if (mobCtaBtn) {
+        mobCtaBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeDeckContextMenu();
+          launchDeckLessonFromPage(course.id, st.nextModIdx, st.nextLessonIdx);
+        });
+      }
+
+      const mobDotsBtn = mobInner.querySelector('.deck-mob-dots-btn');
+      if (mobDotsBtn) {
+        mobDotsBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openDeckContextMenu(mobDotsBtn, course);
+        });
+      }
+
+      mobInner.addEventListener('click', () => {
+        closeDeckContextMenu();
+        openCourseDetails(course.id, false);
+      });
+
+      card.appendChild(mobInner);
+
+      if (health && health.brokenRu && state.nativeLang === 'ru' && isMobileViewport) {
+        const mobWarn = document.createElement('div');
+        mobWarn.className = 'deck-broken-ru-alert';
+        mobWarn.innerHTML = `<span>${escapeHtml(tr.decksBrokenRuWarn)}</span>`;
+        const mobQuickDel = document.createElement('button');
+        mobQuickDel.type = 'button';
+        mobQuickDel.textContent = tr.decksBrokenRuDeleteBtn;
+        mobQuickDel.addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeUserDeckById(course.id);
+        });
+        mobWarn.appendChild(mobQuickDel);
+        card.appendChild(mobWarn);
+      }
+
       decksAllGrid.appendChild(card);
     });
   }
@@ -8430,8 +8818,10 @@
     btnDecksSubtabCourses.addEventListener('click', () => {
       state.decksNavMode = 'courses';
       state.catalogSourceFilter = 'official';
+      state.decksOnlyFavorites = false;
       state.openedDeckId = '';
       renderDecksPage();
+      syncMobileBottomNavUI();
     });
   }
 
@@ -8439,8 +8829,10 @@
     btnDecksSubtabMyDecks.addEventListener('click', () => {
       state.decksNavMode = 'decks';
       state.catalogSourceFilter = 'all';
+      state.decksOnlyFavorites = false;
       state.openedDeckId = '';
       renderDecksPage();
+      syncMobileBottomNavUI();
     });
   }
 
@@ -8470,8 +8862,29 @@
       const btn = e.target && e.target.closest && e.target.closest('.decks-source-btn');
       if (!btn || !btn.dataset.sourceFilter) return;
       state.catalogSourceFilter = btn.dataset.sourceFilter;
+      state.decksOnlyFavorites = false;
       state.openedDeckId = '';
       renderDecksPage();
+    });
+  }
+
+  if (decksMobileFilterBar) {
+    decksMobileFilterBar.addEventListener('click', (e) => {
+      const chip = e.target && e.target.closest && e.target.closest('[data-mob-deck-filter]');
+      if (!chip) return;
+      sound.init();
+      const f = chip.dataset.mobDeckFilter;
+      if (f === 'favorites') {
+        state.decksOnlyFavorites = true;
+        state.catalogSourceFilter = 'all';
+      } else {
+        state.decksOnlyFavorites = false;
+        state.catalogSourceFilter = (f === 'official' || f === 'user') ? f : 'all';
+      }
+      state.openedDeckId = '';
+      renderDecksPage();
+      syncMobileBottomNavUI();
+      chip.blur();
     });
   }
 
@@ -9362,11 +9775,21 @@
     });
   }
 
+  if (btnMobNavCourses) {
+    btnMobNavCourses.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      openDecksPage({ sourceFilter: 'official', navMode: 'courses', onlyFavorites: false });
+      syncMobileBottomNavUI('courses');
+      btnMobNavCourses.blur();
+    });
+  }
+
   if (btnMobNavDecks) {
     btnMobNavDecks.addEventListener('click', () => {
       sound.init();
       closeAllTopDialogs();
-      openDecksPage({ sourceFilter: 'all', navMode: 'decks' });
+      openDecksPage({ sourceFilter: 'all', navMode: 'decks', onlyFavorites: false });
       syncMobileBottomNavUI('decks');
       btnMobNavDecks.blur();
     });
@@ -9381,15 +9804,29 @@
     });
   }
 
-  if (btnMobNavProfile) {
-    btnMobNavProfile.addEventListener('click', () => {
-      sound.init();
-      if (statsDialog && statsDialog.open) statsDialog.close();
-      if (leaderboardDialog && leaderboardDialog.open) leaderboardDialog.close();
-      openGameSettingsModal();
-      btnMobNavProfile.blur();
-    });
+  // Авто-закрытие всплывающего меню колоды (⋮) при клике вне его, скролле или Esc
+  document.addEventListener('click', (e) => {
+    if (!deckContextMenu || deckContextMenu.classList.contains('hidden')) return;
+    if (deckContextMenu.contains(e.target)) return;
+    if (e.target && e.target.closest && e.target.closest('.deck-mob-dots-btn, .deck-more-btn')) return;
+    closeDeckContextMenu();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && deckContextMenu && !deckContextMenu.classList.contains('hidden')) {
+      closeDeckContextMenu();
+    }
+  });
+
+  if (arcadeTitleScreen) {
+    arcadeTitleScreen.addEventListener('scroll', closeDeckContextMenu, { passive: true });
   }
+  window.addEventListener('resize', () => {
+    closeDeckContextMenu();
+    if (state.homeSubView === 'decks') {
+      renderDecksPage();
+    }
+  });
 
   // Интерактивные 3 шага «Как это работает»
   function bindInteractiveStep(el, handler) {

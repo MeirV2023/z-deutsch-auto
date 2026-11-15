@@ -483,6 +483,9 @@
           <div class="decks-main-column">
             <!-- Верхний космический баннер с поиском, импортом Anki, статистикой и маскотом -->
             <div class="decks-hero-banner">
+              <!-- Космическое свечение синей планеты справа на мобильных экранах -->
+              <div class="decks-mobile-planet-bg" aria-hidden="true"></div>
+
               <div class="decks-hero-bg-fx" aria-hidden="true">
                 <svg class="decks-bg-shuttle" viewBox="0 0 220 72" fill="none">
                   <defs>
@@ -499,18 +502,40 @@
 
               <div class="decks-hero-left">
                 <div class="decks-hero-title-row">
-                  <span class="decks-folder-hero-icon" aria-hidden="true">📁</span>
-                  <div>
+                  <span class="decks-folder-hero-icon desktop-copy" aria-hidden="true">📁</span>
+                  <span class="decks-folder-svg-mobile mobile-copy" aria-hidden="true">
+                    <svg viewBox="0 0 48 44" fill="none">
+                      <defs>
+                        <linearGradient id="mobFolderBack" x1="6" y1="6" x2="40" y2="34" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stop-color="#f59e0b" />
+                          <stop offset="100%" stop-color="#d97706" />
+                        </linearGradient>
+                        <linearGradient id="mobFolderFront" x1="6" y1="14" x2="44" y2="40" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stop-color="#fde047" />
+                          <stop offset="55%" stop-color="#facc15" />
+                          <stop offset="100%" stop-color="#eab308" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M5 10.5A4.5 4.5 0 0 1 9.5 6h9.4a3.5 3.5 0 0 1 2.7 1.28l2.5 3.02H38.5A4.5 4.5 0 0 1 43 14.8v19.7A4.5 4.5 0 0 1 38.5 39h-29A4.5 4.5 0 0 1 5 34.5v-24z" fill="url(#mobFolderBack)" />
+                      <path d="M7.8 16.5A3.8 3.8 0 0 1 11.6 13h30.2a3.2 3.2 0 0 1 3.13 3.88l-3.45 18.6A4.2 4.2 0 0 1 37.35 39H8.6A3.6 3.6 0 0 1 5.05 34.8l2.75-18.3z" fill="url(#mobFolderFront)" />
+                    </svg>
+                  </span>
+                  <div class="decks-hero-titles-box">
                     <h1 class="decks-hero-title" id="decksHeroTitle">Мои колоды</h1>
-                    <p class="decks-hero-subtitle" id="decksHeroSubtitle">
-                      Ваши личные курсы и импортированные Anki-колоды
+                    <p class="decks-hero-subtitle">
+                      <span class="desktop-copy" id="decksHeroSubtitle">Ваши личные курсы и импортированные Anki-колоды</span>
+                      <span class="mobile-copy" id="decksHeroSubtitleMobile">Ваши курсы и Anki-колоды</span>
                     </p>
                   </div>
                 </div>
 
                 <div class="decks-hero-controls">
                   <label class="decks-search-box" for="decksSearchInput">
-                    <span class="decks-search-icon" aria-hidden="true">🔍</span>
+                    <span class="decks-search-icon desktop-copy" aria-hidden="true">🔍</span>
+                    <svg class="decks-search-svg mobile-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="M20 20l-3.85-3.85" />
+                    </svg>
                     <input
                       type="search"
                       id="decksSearchInput"
@@ -520,11 +545,18 @@
                   </label>
 
                   <button type="button" class="decks-amber-anki-btn" id="btnDecksImportAnki">
-                    📦 <span id="labelDecksImportAnkiBtn">Импорт Anki (.apkg)</span>
+                    <span class="desktop-copy" aria-hidden="true">📦</span>
+                    <svg class="anki-dl-svg-mobile mobile-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 4v11" />
+                      <path d="M7.5 10.5L12 15l4.5-4.5" />
+                      <path d="M4.5 16.5v2a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-2" />
+                    </svg>
+                    <span id="labelDecksImportAnkiBtn">Импорт Anki (.apkg)</span>
                   </button>
 
                   <button type="button" class="decks-emerald-create-btn" id="btnDecksCreateDeck">
-                    ＋ <span id="labelDecksCreateBtn">Создать колоду</span>
+                    <span class="create-plus-glyph" aria-hidden="true">＋</span>
+                    <span id="labelDecksCreateBtn">Создать колоду</span>
                   </button>
                 </div>
               </div>
@@ -608,6 +640,42 @@
                   ☰ <span id="labelDecksViewList">Список</span>
                 </button>
               </div>
+            </div>
+
+            <!-- Мобильная полоса быстрых фильтров: [Все (N)] [Курсы (N)] [Мои (N)] [Избранные] -->
+            <div class="decks-mobile-filter-bar" id="decksMobileFilterBar" role="tablist" aria-label="Фильтр колод">
+              <button type="button" class="mob-deck-filter-chip active" data-mob-deck-filter="all" id="btnMobFilterAll">
+                <svg class="mob-chip-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 3L2.5 8 12 13 21.5 8 12 3z" />
+                  <path d="M2.5 12.5L12 17.5l9.5-5" />
+                  <path d="M2.5 16.8L12 21.8l9.5-5" />
+                </svg>
+                <span id="labelMobFilterAll">Все (0)</span>
+              </button>
+
+              <button type="button" class="mob-deck-filter-chip" data-mob-deck-filter="official" id="btnMobFilterCourses">
+                <svg class="mob-chip-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 10L12 5 2 10l10 5 10-5z" />
+                  <path d="M6 12.2v4.3c0 1.6 2.7 3 6 3s6-1.4 6-3v-4.3" />
+                  <path d="M22 10v5" />
+                </svg>
+                <span id="labelMobFilterCourses">Курсы (0)</span>
+              </button>
+
+              <button type="button" class="mob-deck-filter-chip" data-mob-deck-filter="user" id="btnMobFilterUser">
+                <svg class="mob-chip-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="8" r="3.6" />
+                  <path d="M5 20c1.4-3.3 3.8-5 7-5s5.6 1.7 7 5" />
+                </svg>
+                <span id="labelMobFilterUser">Мои (0)</span>
+              </button>
+
+              <button type="button" class="mob-deck-filter-chip" data-mob-deck-filter="favorites" id="btnMobFilterFav">
+                <svg class="mob-chip-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="12 2.8 14.9 8.7 21.4 9.6 16.7 14.2 17.8 20.7 12 17.6 6.2 20.7 7.3 14.2 2.6 9.6 9.1 8.7 12 2.8" />
+                </svg>
+                <span id="labelMobFilterFav">Избранные</span>
+              </button>
             </div>
 
             <!-- ОБЗОР КОЛОД: Продолжить обучение + Все колоды -->
@@ -841,7 +909,10 @@
       </div><!-- /#adminStudioView -->
     </div>
 
-    <!-- Мобильная нижняя панель навигации (5 вкладок: Home · Play · Decks · Stats · Profile) -->
+    <!-- Всплывающее меню быстрых действий колоды по кнопке ⋮ -->
+    <div class="deck-action-menu hidden" id="deckContextMenu" role="menu" aria-label="Действия с колодой"></div>
+
+    <!-- Мобильная нижняя панель навигации (5 вкладок: Главная · Играть · Курсы · Колоды · Статистика) -->
     <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Мобильная навигация">
       <button type="button" class="mob-nav-item active" id="btnMobNavHome" data-mob-tab="home">
         <span class="mob-nav-icon-wrap">
@@ -865,12 +936,21 @@
         <span class="mob-nav-label" id="labelMobNavPlay">Играть</span>
       </button>
 
+      <button type="button" class="mob-nav-item" id="btnMobNavCourses" data-mob-tab="courses">
+        <span class="mob-nav-icon-wrap">
+          <svg class="mob-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 5.5A2.5 2.5 0 0 1 4.5 3H11a3 3 0 0 1 1 .18A3 3 0 0 1 13 3h6.5A2.5 2.5 0 0 1 22 5.5v12.2a1 1 0 0 1-1.15.99A14.5 14.5 0 0 0 13 19.6a2 2 0 0 1-2 0 14.5 14.5 0 0 0-7.85-.91A1 1 0 0 1 2 17.7V5.5z" />
+            <path d="M12 4.2v15.1" />
+          </svg>
+        </span>
+        <span class="mob-nav-label" id="labelMobNavCourses">Курсы</span>
+      </button>
+
       <button type="button" class="mob-nav-item" id="btnMobNavDecks" data-mob-tab="decks">
         <span class="mob-nav-icon-wrap">
           <svg class="mob-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v10a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-10z" />
-            <path d="M4 9.5h16" />
-            <path d="M9.5 5v4.5" />
+            <path d="M3.5 7.5A2.5 2.5 0 0 1 6 5h4.2a2 2 0 0 1 1.56.75L13.2 7.5H18A2.5 2.5 0 0 1 20.5 10v8A2.5 2.5 0 0 1 18 20.5H6A2.5 2.5 0 0 1 3.5 18V7.5z" />
+            <path d="M3.5 10.5h17" />
           </svg>
         </span>
         <span class="mob-nav-label" id="labelMobNavDecks">Колоды</span>
@@ -884,17 +964,7 @@
             <path d="M18 19v-9" />
           </svg>
         </span>
-        <span class="mob-nav-label" id="labelMobNavStats">Стат.</span>
-      </button>
-
-      <button type="button" class="mob-nav-item" id="btnMobNavProfile" data-mob-tab="profile">
-        <span class="mob-nav-icon-wrap">
-          <svg class="mob-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="8.2" r="3.6" />
-            <path d="M5.2 19.5c1.3-3.2 3.7-4.8 6.8-4.8s5.5 1.6 6.8 4.8" />
-          </svg>
-        </span>
-        <span class="mob-nav-label" id="labelMobNavProfile">Профиль</span>
+        <span class="mob-nav-label" id="labelMobNavStats">Статистика</span>
       </button>
     </nav>
   </section>

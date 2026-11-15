@@ -6382,8 +6382,76 @@ html[lang="he"] .decks-sidebar-heading,
 .mobile-hero-planet-horizon,
 .mobile-how-heading,
 .mobile-bottom-nav,
-.avatar-user-mobile {
+.avatar-user-mobile,
+.decks-mobile-planet-bg,
+.decks-mobile-filter-bar,
+.deck-mobile-card-inner {
   display: none !important;
+}
+
+.deck-desktop-card-inner {
+  display: contents;
+}
+
+.deck-icon-tile.art-base {
+  background: radial-gradient(circle at 30% 25%, rgba(34, 197, 94, 0.4), rgba(12, 34, 24, 0.95));
+  border-color: rgba(74, 222, 128, 0.45);
+}
+
+/* Всплывающее меню быстрых действий колоды (кнопка ⋮) */
+.deck-action-menu {
+  position: fixed;
+  z-index: 95;
+  min-width: 218px;
+  max-width: min(280px, calc(100vw - 24px));
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(10, 18, 36, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(56, 189, 248, 0.42);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.78), 0 0 20px rgba(14, 165, 233, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.deck-action-menu.hidden {
+  display: none !important;
+}
+
+.deck-action-item {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 11px;
+  border: none;
+  background: transparent;
+  color: #e2e8f0;
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: start;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+
+.deck-action-item:hover,
+.deck-action-item:active {
+  background: rgba(56, 189, 248, 0.15);
+  color: #ffffff;
+}
+
+.deck-action-item.danger {
+  color: #fda4af;
+}
+
+.deck-action-item.danger:hover,
+.deck-action-item.danger:active {
+  background: rgba(225, 29, 72, 0.24);
+  color: #ffe4e6;
 }
 
 .promo-topbar-left {
@@ -6926,40 +6994,484 @@ html[lang="he"] .decks-sidebar-heading,
     display: none !important;
   }
 
-  /* 6. Компактные сворачиваемые фильтры на странице «Колоды» для мобильных */
-  .decks-sidebar-progress-card {
+  /* 6. Страница «Мои колоды» на мобильных экранах по макету (чистый космический список карточек) */
+  .decks-filter-sidebar,
+  .decks-hero-right,
+  .decks-hero-bg-fx,
+  #decksContinueSection,
+  #decksOverviewPane > .decks-section-block > .decks-section-heading,
+  .decks-view-toggle,
+  #btnDecksSubtabCourses,
+  #btnDecksSubtabMyDecks,
+  #btnDecksOpenAdmin {
     display: none !important;
   }
 
-  .decks-filter-card {
-    padding: 11px 14px;
+  .decks-subbar-row:not(.has-return-battle) {
+    display: none !important;
   }
 
-  .decks-filter-card .decks-sidebar-heading {
+  .decks-page-view.detail-open .decks-hero-banner,
+  .decks-page-view.detail-open .decks-mobile-filter-bar {
+    display: none !important;
+  }
+
+  .decks-main-column {
+    gap: 12px;
+  }
+
+  .decks-hero-banner {
+    position: relative;
+    overflow: visible;
+    padding: 2px 0 0;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    display: block;
+  }
+
+  .decks-mobile-planet-bg {
+    display: block !important;
+    position: absolute;
+    right: -28px;
+    top: -8px;
+    width: 158px;
+    height: 98px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 28%, rgba(56, 189, 248, 0.82) 0%, rgba(37, 99, 235, 0.48) 44%, rgba(14, 165, 233, 0.08) 74%, transparent 100%);
+    box-shadow: -8px 4px 28px rgba(56, 189, 248, 0.34);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.92;
+  }
+
+  [dir="rtl"] .decks-mobile-planet-bg {
+    right: auto;
+    left: -28px;
+    transform: scaleX(-1);
+  }
+
+  .decks-hero-left {
+    position: relative;
+    z-index: 2;
+    gap: 13px;
+  }
+
+  .decks-hero-title-row {
+    gap: 12px;
+    align-items: center;
+  }
+
+  .decks-folder-svg-mobile {
+    display: inline-flex !important;
+    width: 46px;
+    height: 42px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 4px 12px rgba(250, 204, 21, 0.36));
+  }
+
+  .decks-folder-svg-mobile svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .decks-hero-title {
+    font-size: 1.72rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .decks-hero-subtitle {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  /* 2 кнопки 50/50 сверху + пилюля поиска во всю ширину снизу */
+  .decks-hero-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  #btnDecksCreateDeck {
+    order: 1;
+    justify-content: center;
+    min-height: 46px;
+    padding: 10px 10px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(167, 243, 208, 0.9);
+    background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+    color: #022c22;
+    font-size: 0.9rem;
+    font-weight: 800;
+    gap: 6px;
+    box-shadow: 0 0 24px rgba(16, 185, 129, 0.44), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  }
+
+  #btnDecksCreateDeck .create-plus-glyph {
+    font-size: 1.15rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  #btnDecksImportAnki {
+    order: 2;
+    justify-content: center;
+    min-height: 46px;
+    padding: 10px 10px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(56, 189, 248, 0.68);
+    background: rgba(12, 22, 44, 0.9);
+    color: #f8fafc;
+    font-size: 0.86rem;
+    font-weight: 700;
+    gap: 7px;
+    box-shadow: 0 0 18px rgba(14, 165, 233, 0.2), inset 0 0 10px rgba(56, 189, 248, 0.08);
+  }
+
+  .anki-dl-svg-mobile {
+    display: inline-block !important;
+    width: 18px;
+    height: 18px;
+    color: #38bdf8;
+    flex-shrink: 0;
+  }
+
+  .decks-search-box {
+    order: 3;
+    grid-column: 1 / -1;
+    min-width: 0;
+    min-height: 44px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: rgba(10, 18, 36, 0.88);
+    border: 1px solid rgba(100, 134, 185, 0.3);
+    gap: 10px;
+  }
+
+  .decks-search-svg {
+    display: inline-block !important;
+    width: 18px;
+    height: 18px;
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+
+  .decks-search-box input {
+    font-size: 0.92rem;
+  }
+
+  .decks-search-box input::placeholder {
+    color: #8496b0;
+  }
+
+  /* Горизонтальная полоса 4 чипов фильтра: Все (N) · Курсы (N) · Мои (N) · Избранные */
+  .decks-mobile-filter-bar {
+    display: flex !important;
+    align-items: center;
+    gap: 7px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 1px 1px 2px;
+    margin-top: -1px;
+  }
+
+  .decks-mobile-filter-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mob-deck-filter-chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(100, 134, 185, 0.28);
+    background: rgba(11, 19, 38, 0.88);
+    color: #cbd5e1;
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mob-chip-svg {
+    width: 15px;
+    height: 15px;
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+
+  .mob-deck-filter-chip.active {
+    border-color: #34d399;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.5) 100%);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.28), inset 0 1px 0 rgba(167, 243, 208, 0.22);
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .mob-deck-filter-chip.active .mob-chip-svg {
+    color: #34d399;
+  }
+
+  /* Вертикальный список компактных карточек колод */
+  .decks-overview-pane {
+    gap: 11px;
+  }
+
+  .decks-all-grid,
+  .decks-all-grid.list-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .deck-desktop-card-inner {
+    display: none !important;
+  }
+
+  .deck-mobile-card-inner {
+    display: flex !important;
+    align-items: center;
+    gap: 13px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .deck-full-card,
+  .decks-all-grid.list-mode .deck-full-card {
+    padding: 13px 14px;
+    border-radius: 18px;
+    background: linear-gradient(165deg, rgba(12, 21, 43, 0.94) 0%, rgba(8, 15, 31, 0.96) 100%);
+    border: 1px solid rgba(100, 136, 190, 0.24);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.48);
+    gap: 8px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .deck-full-card:hover {
+    transform: none;
+  }
+
+  .deck-full-card.is-active {
+    border: 1.5px solid rgba(56, 189, 248, 0.9);
+    background: linear-gradient(160deg, rgba(14, 30, 58, 0.96) 0%, rgba(9, 19, 39, 0.97) 100%);
+    box-shadow: 0 0 22px rgba(14, 165, 233, 0.3), inset 0 0 18px rgba(56, 189, 248, 0.08);
+  }
+
+  .deck-mob-icon-tile {
+    width: 56px;
+    height: 56px;
+    border-radius: 15px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.82rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 6px 14px rgba(0, 0, 0, 0.35);
+  }
+
+  .deck-mob-icon-tile.art-auto {
+    background: radial-gradient(circle at 32% 26%, rgba(225, 29, 72, 0.44), rgba(45, 15, 44, 0.96));
+    border-color: rgba(244, 63, 94, 0.45);
+  }
+
+  .deck-mob-icon-tile.art-business {
+    background: radial-gradient(circle at 32% 26%, rgba(217, 119, 6, 0.48), rgba(45, 31, 18, 0.96));
+    border-color: rgba(245, 158, 11, 0.46);
+  }
+
+  .deck-mob-icon-tile.art-base,
+  .deck-mob-icon-tile.art-chat,
+  .deck-mob-icon-tile.art-it {
+    background: radial-gradient(circle at 32% 26%, rgba(34, 197, 94, 0.48), rgba(13, 46, 30, 0.96));
+    border-color: rgba(74, 222, 128, 0.46);
+  }
+
+  .deck-mob-icon-tile.art-anki {
+    background: radial-gradient(circle at 32% 26%, rgba(59, 130, 246, 0.52), rgba(18, 36, 76, 0.96));
+    border-color: rgba(96, 165, 250, 0.5);
+  }
+
+  .deck-anki-cards-svg {
+    width: 34px;
+    height: 34px;
+    filter: drop-shadow(0 3px 6px rgba(2, 6, 23, 0.45));
+  }
+
+  .deck-mob-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .deck-mob-top-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .deck-mob-title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.22;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  html[lang="he"] .deck-mob-title,
+  [dir="rtl"] .deck-mob-title {
+    font-family: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+    font-weight: 700;
+  }
+
+  .deck-mob-dots-btn {
+    width: 28px;
+    height: 26px;
+    margin: -3px -6px 0 0;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .deck-mob-dots-btn:active {
+    background: rgba(56, 189, 248, 0.16);
+    color: #ffffff;
+  }
+
+  .deck-mob-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .deck-mob-meta-svg {
+    width: 14px;
+    height: 14px;
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+
+  .deck-mob-fav-star {
+    color: #fbbf24;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+  }
+
+  .deck-mob-bottom-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 11px;
+    margin-top: 4px;
+  }
+
+  .deck-mob-prog-wrap {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .deck-mob-prog-track {
+    flex: 1 1 auto;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(30, 41, 59, 0.95);
+    overflow: hidden;
+  }
+
+  .deck-mob-prog-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #34d399 0%, #22c55e 100%);
+    box-shadow: 0 0 10px rgba(52, 211, 153, 0.62);
+    transition: width 0.3s ease;
+  }
+
+  .deck-mob-prog-pct {
+    font-size: 0.86rem;
+    font-weight: 800;
+    color: #f8fafc;
+    min-width: 32px;
+    text-align: end;
+  }
+
+  .deck-mob-cta {
+    flex-shrink: 0;
+    min-width: 112px;
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-ui);
+    font-size: 0.84rem;
+    font-weight: 800;
     cursor: pointer;
-    margin-bottom: 0;
-    user-select: none;
+    white-space: nowrap;
+    transition: filter 0.14s ease, transform 0.14s ease;
   }
 
-  .decks-filter-card.is-open .decks-sidebar-heading {
-    margin-bottom: 12px;
+  .deck-mob-cta:active {
+    transform: scale(0.97);
   }
 
-  .decks-filter-card:not(.is-open) .decks-filter-group {
-    display: none !important;
+  .deck-mob-cta.continue {
+    background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+    border: 1px solid rgba(167, 243, 208, 0.88);
+    color: #022c22;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.38);
   }
 
-  .mobile-filter-chevron {
-    font-size: 0.95rem;
-    color: #7dd3fc;
-    transition: transform 0.18s ease;
+  .deck-mob-cta.start {
+    background: rgba(16, 27, 50, 0.92);
+    border: 1.5px solid rgba(100, 146, 214, 0.44);
+    color: #f8fafc;
+    font-weight: 700;
   }
 
-  .decks-filter-card.is-open .mobile-filter-chevron {
-    transform: rotate(180deg);
+  .deck-mob-play-tri {
+    font-size: 0.72rem;
+    line-height: 1;
+  }
+
+  .deck-detail-pane {
+    padding: 15px;
+    border-radius: 18px;
   }
 
   /* 7. Фиксированная нижняя навигация на 5 вкладок (Home · Play · Decks · Stats · Profile) */
