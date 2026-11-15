@@ -68,8 +68,12 @@
             <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
             <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
           </div>
-          <button type="button" class="home-avatar-btn" id="btnHomeSettings" title="Настройки игры и озвучки AI">
-            ⚙️
+          <button type="button" class="home-avatar-btn" id="btnHomeSettings" title="Профиль и настройки игры">
+            <span class="avatar-gear-desktop" aria-hidden="true">⚙️</span>
+            <svg class="avatar-user-mobile" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="8.5" r="3.6" fill="currentColor" />
+              <path d="M5.5 19.2c1.1-3.1 3.5-4.7 6.5-4.7s5.4 1.6 6.5 4.7" fill="currentColor" />
+            </svg>
           </button>
         </div>
       </nav>
@@ -83,9 +87,49 @@
             <span class="hero-line-white" id="homeHeroTitleTop">Изучай иностранные языки</span>
             <span class="hero-line-gold" id="homeHeroTitleAccent">в формате игры!</span>
           </h1>
-          <p class="home-hero-subtitle" id="titleTagline">
-            Стреляй по словам, запоминай перевод при взрыве и расширяй словарный запас.
-          </p>
+
+          <div class="hero-sub-and-art">
+            <p class="home-hero-subtitle">
+              <span class="desktop-copy" id="titleTagline">Стреляй по словам, запоминай перевод при взрыве и расширяй словарный запас.</span>
+              <span class="mobile-copy" id="titleTaglineMobile">Стреляй по словам, учи перевод и прокачивай арсенал!</span>
+            </p>
+
+            <!-- Декоративная космическая сцена только для мобильного Hero (планета + истребитель + мишень) -->
+            <div class="mobile-hero-space-art" aria-hidden="true">
+              <div class="mhero-planet-orb"></div>
+              <div class="mhero-target-pill">
+                <span class="mhero-target-art" id="mobileHeroArtArticle">die</span>
+                <span class="mhero-target-word" id="mobileHeroArtWord">Kreuzfahrt</span>
+              </div>
+              <svg class="mhero-fighter-svg" viewBox="0 0 130 105" fill="none">
+                <defs>
+                  <linearGradient id="mheroLaserGrad" x1="48" y1="54" x2="106" y2="12" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.95" />
+                    <stop offset="70%" stop-color="#67e8f9" stop-opacity="1" />
+                    <stop offset="100%" stop-color="#f472b6" stop-opacity="0.95" />
+                  </linearGradient>
+                  <linearGradient id="mheroFlameGrad" x1="28" y1="68" x2="4" y2="94" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#fef08a" />
+                    <stop offset="50%" stop-color="#fb923c" />
+                    <stop offset="100%" stop-color="#ea580c" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <!-- Лазерный луч и вспышка попадания -->
+                <line x1="56" y1="48" x2="102" y2="14" stroke="url(#mheroLaserGrad)" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="18 5 30 0" />
+                <circle cx="103" cy="13" r="4.5" fill="#fdf2f8" />
+                <!-- Пламя двигателей -->
+                <polygon points="27,67 7,89 19,61" fill="url(#mheroFlameGrad)" />
+                <polygon points="34,73 15,95 28,67" fill="url(#mheroFlameGrad)" />
+                <!-- Силуэт неонового истребителя -->
+                <g transform="translate(42 58) rotate(-37)">
+                  <path d="M0 -24 L17 14 L6 10 L0 16 L-6 10 L-17 14 Z" fill="#08172e" stroke="#38bdf8" stroke-width="2.3" stroke-linejoin="round" />
+                  <path d="M0 -13 L5 4 L-5 4 Z" fill="#67e8f9" fill-opacity="0.88" />
+                  <line x1="-11" y1="6" x2="-4" y2="-4" stroke="#22d3ee" stroke-width="1.5" />
+                  <line x1="11" y1="6" x2="4" y2="-4" stroke="#22d3ee" stroke-width="1.5" />
+                </g>
+              </svg>
+            </div>
+          </div>
 
           <div class="home-hero-perks">
             <div class="hero-perk-item">
@@ -102,6 +146,8 @@
             </div>
           </div>
 
+          <div class="mobile-hero-planet-horizon" aria-hidden="true"></div>
+
           <div class="home-hero-cta-row">
             <button type="button" class="hero-green-cta" id="btnArcadeLaunch">
               <span class="launch-glow"></span>
@@ -110,7 +156,7 @@
               <span class="hero-cta-arrow">›</span>
             </button>
             <button type="button" class="arcade-logo-sub" id="arcadeLogoSub" title="Выбрать курс или урок">
-              🚗 AUTO ▾
+              🚗 Авто и дорога (AUTO) ▾
             </button>
           </div>
         </div>
@@ -118,8 +164,12 @@
         <!-- Правая рамка-монитор: здесь прямо на живом холсте #gameCanvas идёт промо-бой корабля! -->
         <div class="home-promo-monitor" id="titleSpaceWindow">
           <div class="promo-monitor-topbar">
-            <span class="promo-hearts" aria-hidden="true">❤️❤️❤️</span>
-            <span class="promo-stage-pill" id="promoMonitorBadge">УРОК 1 · АВТО И ДОРОГА</span>
+            <div class="promo-topbar-left">
+              <span class="promo-hearts" aria-hidden="true">❤️❤️❤️</span>
+              <span class="promo-live-divider mobile-copy" aria-hidden="true">|</span>
+              <span class="promo-live-label mobile-copy" id="promoLiveLabel">ЖИВОЕ ПРЕВЬЮ УРОКА</span>
+            </div>
+            <span class="promo-stage-pill desktop-copy" id="promoMonitorBadge">УРОК 1 · АВТО И ДОРОГА</span>
             <button type="button" class="promo-weapon-cycle" id="btnPromoWeaponCycle" title="Нажмите, чтобы испытать другое оружие в промо-бою!">
               ⚡
             </button>
@@ -128,24 +178,31 @@
         </div>
       </div>
 
-      <!-- 3. Полоса из 3 шагов -->
-      <div class="home-steps-strip">
-        <div class="home-step-item">
-          <span class="step-num step-1">1</span>
-          <span class="step-icon">🌐</span>
-          <span class="step-text" id="labelStep1">Выбери язык и уровень</span>
-        </div>
-        <span class="step-chevron" aria-hidden="true">›</span>
-        <div class="home-step-item">
-          <span class="step-num step-2">2</span>
-          <span class="step-icon">🗂️</span>
-          <span class="step-text" id="labelStep2">Играй с готовыми колодами или загрузи Anki</span>
-        </div>
-        <span class="step-chevron" aria-hidden="true">›</span>
-        <div class="home-step-item">
-          <span class="step-num step-3">3</span>
-          <span class="step-icon">🚀</span>
-          <span class="step-text" id="labelStep3">Стреляй по словам, учись и прокачивай арсенал!</span>
+      <!-- 3. Секция «Как это работает» (горизонтальная полоса на ПК / лаконичный список на мобильном) -->
+      <div class="home-how-section">
+        <h2 class="mobile-how-heading" id="labelHowItWorks">Как это работает</h2>
+        <div class="home-steps-strip">
+          <div class="home-step-item" id="homeStepItem1" role="button" tabindex="0">
+            <span class="step-num step-1">1</span>
+            <span class="step-icon" aria-hidden="true">🌐</span>
+            <span class="step-text desktop-copy" id="labelStep1">Выбери язык и уровень</span>
+            <span class="step-text mobile-copy" id="labelMobStep1">Выбери язык и колоду</span>
+          </div>
+          <span class="step-chevron" aria-hidden="true">›</span>
+          <div class="home-step-item" id="homeStepItem2" role="button" tabindex="0">
+            <span class="step-num step-2">2</span>
+            <span class="step-icon desktop-copy" aria-hidden="true">🗂️</span>
+            <span class="step-icon mobile-copy" aria-hidden="true">🎮</span>
+            <span class="step-text desktop-copy" id="labelStep2">Играй с готовыми колодами или загрузи Anki</span>
+            <span class="step-text mobile-copy" id="labelMobStep2">Проходи уроки и учи слова</span>
+          </div>
+          <span class="step-chevron" aria-hidden="true">›</span>
+          <div class="home-step-item" id="homeStepItem3" role="button" tabindex="0">
+            <span class="step-num step-3">3</span>
+            <span class="step-icon" aria-hidden="true">🚀</span>
+            <span class="step-text desktop-copy" id="labelStep3">Стреляй по словам, учись и прокачивай арсенал!</span>
+            <span class="step-text mobile-copy" id="labelMobStep3">Копи прогресс и открывай оружие</span>
+          </div>
         </div>
       </div>
 
@@ -318,10 +375,13 @@
         <div class="decks-page-layout">
           <!-- Левая колонка фильтров + карточка прогресса -->
           <aside class="decks-filter-sidebar" aria-label="Фильтры колод">
-            <div class="decks-filter-card">
-              <div class="decks-sidebar-heading">
-                <span class="filter-bars-icon" aria-hidden="true">☰</span>
-                <span id="labelDecksFiltersTitle">Фильтры</span>
+            <div class="decks-filter-card" id="decksFilterCard">
+              <div class="decks-sidebar-heading" id="btnDecksMobileFilterToggle" role="button" tabindex="0" aria-expanded="false">
+                <span class="decks-heading-left">
+                  <span class="filter-bars-icon" aria-hidden="true">☰</span>
+                  <span id="labelDecksFiltersTitle">Фильтры</span>
+                </span>
+                <span class="mobile-filter-chevron mobile-copy" aria-hidden="true">▾</span>
               </div>
 
               <!-- Язык обучения -->
@@ -780,6 +840,63 @@
         </div>
       </div><!-- /#adminStudioView -->
     </div>
+
+    <!-- Мобильная нижняя панель навигации (5 вкладок: Home · Play · Decks · Stats · Profile) -->
+    <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Мобильная навигация">
+      <button type="button" class="mob-nav-item active" id="btnMobNavHome" data-mob-tab="home">
+        <span class="mob-nav-icon-wrap">
+          <svg class="mob-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 10.5L12 3l9 7.5" />
+            <path d="M5.5 9.2V20a1 1 0 0 0 1 1h3.8v-5.5a1.7 1.7 0 0 1 3.4 0V21h3.8a1 1 0 0 0 1-1V9.2" />
+          </svg>
+        </span>
+        <span class="mob-nav-label" id="labelMobNavHome">Главная</span>
+      </button>
+
+      <button type="button" class="mob-nav-item" id="btnMobNavPlay" data-mob-tab="play">
+        <span class="mob-nav-icon-wrap">
+          <svg class="mob-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2.5" y="6.5" width="19" height="11.5" rx="5.2" />
+            <path d="M7.8 12.2h3.4M9.5 10.5v3.4" />
+            <circle cx="15.5" cy="11" r="0.95" fill="currentColor" stroke="none" />
+            <circle cx="17.5" cy="13.2" r="0.95" fill="currentColor" stroke="none" />
+          </svg>
+        </span>
+        <span class="mob-nav-label" id="labelMobNavPlay">Играть</span>
+      </button>
+
+      <button type="button" class="mob-nav-item" id="btnMobNavDecks" data-mob-tab="decks">
+        <span class="mob-nav-icon-wrap">
+          <svg class="mob-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v10a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-10z" />
+            <path d="M4 9.5h16" />
+            <path d="M9.5 5v4.5" />
+          </svg>
+        </span>
+        <span class="mob-nav-label" id="labelMobNavDecks">Колоды</span>
+      </button>
+
+      <button type="button" class="mob-nav-item" id="btnMobNavStats" data-mob-tab="stats">
+        <span class="mob-nav-icon-wrap">
+          <svg class="mob-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 19v-5" />
+            <path d="M12 19V8" />
+            <path d="M18 19v-9" />
+          </svg>
+        </span>
+        <span class="mob-nav-label" id="labelMobNavStats">Стат.</span>
+      </button>
+
+      <button type="button" class="mob-nav-item" id="btnMobNavProfile" data-mob-tab="profile">
+        <span class="mob-nav-icon-wrap">
+          <svg class="mob-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8.2" r="3.6" />
+            <path d="M5.2 19.5c1.3-3.2 3.7-4.8 6.8-4.8s5.5 1.6 6.8 4.8" />
+          </svg>
+        </span>
+        <span class="mob-nav-label" id="labelMobNavProfile">Профиль</span>
+      </button>
+    </nav>
   </section>
 
   <!-- ========================================================================
@@ -1241,14 +1358,59 @@
   </dialog>
 
   <!-- ========================================================================
-       МОДАЛЬНОЕ ОКНО: ГИБКИЕ НАСТРОЙКИ ИГРЫ
+       МОДАЛЬНОЕ ОКНО: ПРОФИЛЬ ПИЛОТА И НАСТРОЙКИ ИГРЫ
        ======================================================================== -->
   <dialog class="modern-dialog" id="gameSettingsDialog" closedby="any">
     <div class="dialog-header">
-      <h2 class="dialog-title" id="gameSettingsDialogTitle">⚙️ Настройки игры</h2>
+      <h2 class="dialog-title" id="gameSettingsDialogTitle">👤 Профиль и настройки</h2>
       <button type="button" class="dialog-close" id="btnCloseGameSettings" aria-label="Закрыть">✕</button>
     </div>
     <div class="dialog-body scrollable" id="gameSettingsDialogBody">
+      <!-- Сводка профиля пилота (звание, выучено слов, серия, рекорд) -->
+      <div class="settings-pilot-card" id="settingsPilotSummary">
+        <div class="settings-pilot-top">
+          <div class="settings-pilot-avatar" aria-hidden="true">👨‍🚀</div>
+          <div class="settings-pilot-meta">
+            <div class="settings-pilot-rank" id="settingsPilotRankLabel">КАДЕТ</div>
+            <div class="settings-pilot-sub" id="settingsPilotSubStats">📖 0 сл. · 🔥 1 дн. · 🏆 0</div>
+          </div>
+        </div>
+        <div class="settings-pilot-quick-btns">
+          <button type="button" class="hud-btn" id="btnOpenLeaderboardFromSettings">
+            🏆 <span id="labelSettingsLeaderboardBtn">Рейтинг и достижения</span>
+          </button>
+          <button type="button" class="hud-btn" id="btnOpenStatsFromSettings">
+            📊 <span id="labelSettingsStatsBtn">Статистика</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Выбор изучаемого языка -->
+      <div class="settings-group-card">
+        <div class="tts-field-label" id="labelSettingTargetLang">🎯 Я учу (язык слов):</div>
+        <div class="settings-pills-row">
+          <button type="button" class="hud-btn target-lang-pill active" data-target-lang="de">🇩🇪 <span data-tlang-name="de">Немецкий</span></button>
+          <button type="button" class="hud-btn target-lang-pill" data-target-lang="en">🇬🇧 <span data-tlang-name="en">Английский</span></button>
+          <button type="button" class="hud-btn target-lang-pill" data-target-lang="es">🇪🇸 <span data-tlang-name="es">Испанский</span></button>
+        </div>
+      </div>
+
+      <!-- Выбор языка перевода и интерфейса -->
+      <div class="settings-group-card">
+        <div class="tts-field-label" id="labelSettingNativeLang">🌍 Перевод и интерфейс:</div>
+        <div class="settings-pills-row">
+          <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
+          <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
+          <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
+        </div>
+      </div>
+
+      <!-- Выбор оружия корабля (Арсенал за выученные слова) -->
+      <div class="settings-group-card">
+        <div class="tts-field-label" id="labelSettingWeapon">🚀 Оружие корабля:</div>
+        <div class="weapon-selector-row home-compact-weapons" id="settingsWeaponRow"></div>
+      </div>
+
       <div class="settings-group-card">
         <div class="tts-field-label" id="labelSettingSpeed">Скорость падения слов:</div>
         <div class="settings-pills-row" id="settingsSpeedGroup"></div>
@@ -1261,7 +1423,7 @@
         </div>
       </div>
 
-      <div class="settings-group-card">
+      <div class="settings-group-card desktop-copy-block">
         <div class="tts-row-between">
           <span class="tts-field-label" id="labelSettingDesktopKbd">Экранная клавиатура ZType на ПК:</span>
           <button type="button" class="hud-btn" id="btnSettingsToggleKbd">⌨️ Скрыта</button>
@@ -1281,6 +1443,16 @@
           <button type="button" class="hud-btn" id="btnOpenDictFromSettings">📚 Открыть словарь</button>
         </div>
       </div>
+
+      <!-- Быстрый переход к импорту Anki и Студии Супер-Админа -->
+      <div class="settings-group-card settings-footer-tools">
+        <button type="button" class="hud-btn anki-btn" id="btnOpenAnkiFromSettings">
+          📦 <span id="labelSettingsAnkiBtn">Импорт Anki (.apkg)</span>
+        </button>
+        <button type="button" class="hud-btn admin-accent-btn" id="btnOpenAdminFromSettings">
+          👑 <span id="labelSettingsAdminBtn">Супер-Админ</span>
+        </button>
+      </div>
     </div>
   </dialog>
 
@@ -1294,6 +1466,11 @@
     </div>
     <div class="dialog-body scrollable" id="statsDialogBody">
       <div class="stats-modal-grid" id="statsModalGrid"></div>
+      <div class="stats-modal-footer-row">
+        <button type="button" class="hud-btn active" id="btnOpenLeaderboardFromStats">
+          🏆 <span id="labelOpenLeaderFromStats">Рейтинг недели и достижения</span> →
+        </button>
+      </div>
     </div>
   </dialog>
 

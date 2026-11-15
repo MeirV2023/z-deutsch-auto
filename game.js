@@ -230,13 +230,24 @@
       streakDays: (n) => `${n} дн.`,
       heroTitleTop: 'Изучай иностранные языки',
       heroTitleAccent: 'в формате игры!',
+      mobileHeroTagline: 'Стреляй по словам, учи перевод и прокачивай арсенал!',
       launchFreeBtn: 'Начать игру бесплатно',
       perkPlay: 'Игра и практика',
       perkMemory: 'Эффективное запоминание',
       perkAnki: 'Свои колоды (Anki)',
+      livePreviewBadge: 'ЖИВОЕ ПРЕВЬЮ УРОКА',
+      howItWorksTitle: 'Как это работает',
       step1: 'Выбери язык и уровень',
       step2: 'Играй с готовыми колодами или загрузи Anki',
       step3: 'Стреляй по словам, учись и прокачивай арсенал!',
+      mobStep1: 'Выбери язык и колоду',
+      mobStep2: 'Проходи уроки и учи слова',
+      mobStep3: 'Копи прогресс и открывай оружие',
+      mobNavHome: 'Главная',
+      mobNavPlay: 'Играть',
+      mobNavDecks: 'Колоды',
+      mobNavStats: 'Стат.',
+      mobNavProfile: 'Профиль',
       chooseLangTitle: 'Выбери язык',
       quickStartTitle: 'Быстрый старт',
       quickAnkiBtn: 'Импорт Anki',
@@ -274,7 +285,15 @@
       hitPinnedBtn: 'В повторе ⭐',
       todayCaption: 'СЕГОДНЯ ВЫУЧЕНО',
       todayWordsVal: (n) => `${n} сл.`,
-      gameSettingsTitle: '⚙️ Гибкие настройки игры',
+      gameSettingsTitle: '👤 Профиль и настройки',
+      settingTargetLang: '🎯 Я учу (язык слов):',
+      settingNativeLang: '🌍 Перевод и интерфейс:',
+      settingWeapon: '🚀 Оружие корабля:',
+      settingsLeaderboardBtn: 'Рейтинг и достижения',
+      settingsStatsBtn: 'Статистика',
+      settingsAnkiBtn: 'Импорт Anki (.apkg)',
+      settingsAdminBtn: 'Супер-Админ',
+      openLeaderFromStats: 'Рейтинг недели и достижения',
       settingSpeed: 'Скорость падения слов:',
       settingArticle: 'Ввод артикля вместе со словом:',
       settingDesktopKbd: 'Экранная клавиатура ZType на ПК:',
@@ -497,13 +516,24 @@
       streakDays: (n) => `${n}d`,
       heroTitleTop: 'Learn Foreign Languages',
       heroTitleAccent: 'Through Space Action!',
+      mobileHeroTagline: 'Shoot words, learn translations & upgrade your arsenal!',
       launchFreeBtn: 'Start Playing Free',
       perkPlay: 'Game & Practice',
       perkMemory: 'Active Recall',
       perkAnki: 'Your Anki Decks',
+      livePreviewBadge: 'LIVE LESSON PREVIEW',
+      howItWorksTitle: 'How It Works',
       step1: 'Choose language & level',
       step2: 'Play built-in courses or upload Anki',
       step3: 'Shoot words, learn & upgrade your arsenal!',
+      mobStep1: 'Choose a language & deck',
+      mobStep2: 'Play lessons & learn words',
+      mobStep3: 'Earn progress & unlock new gear',
+      mobNavHome: 'Home',
+      mobNavPlay: 'Play',
+      mobNavDecks: 'Decks',
+      mobNavStats: 'Stats',
+      mobNavProfile: 'Profile',
       chooseLangTitle: 'Choose Language',
       quickStartTitle: 'Quick Start',
       quickAnkiBtn: 'Import Anki',
@@ -541,7 +571,15 @@
       hitPinnedBtn: 'Pinned ⭐',
       todayCaption: 'LEARNED TODAY',
       todayWordsVal: (n) => `${n} words`,
-      gameSettingsTitle: '⚙️ Game Settings',
+      gameSettingsTitle: '👤 Profile & Settings',
+      settingTargetLang: '🎯 I am learning:',
+      settingNativeLang: '🌍 Interface & Translation:',
+      settingWeapon: '🚀 Ship Arsenal:',
+      settingsLeaderboardBtn: 'Leaderboard & Badges',
+      settingsStatsBtn: 'Pilot Stats',
+      settingsAnkiBtn: 'Import Anki (.apkg)',
+      settingsAdminBtn: 'Super Admin',
+      openLeaderFromStats: 'Weekly Leaderboard & Achievements',
       settingSpeed: 'Word Descent Speed:',
       settingArticle: 'Type article with word (der/die/el):',
       settingDesktopKbd: 'On-Screen ZType Keyboard on Desktop:',
@@ -761,13 +799,24 @@
       streakDays: (n) => `${n} ימים`,
       heroTitleTop: 'למדו שפות זרות',
       heroTitleAccent: 'בפורמט של משחק חלל!',
+      mobileHeroTagline: 'ירו במילים, למדו תרגומים ושדרגו את הנשקייה!',
       launchFreeBtn: 'התחל משחק בחינם',
       perkPlay: 'משחק ותרגול',
       perkMemory: 'שינון יעיל ומהיר',
       perkAnki: 'חפיסות משלך (Anki)',
+      livePreviewBadge: 'תצוגה חיה של השלב',
+      howItWorksTitle: 'איך זה עובד',
       step1: 'בחרו שפה ורמה',
       step2: 'שחקו בקורסים מוכנים או העלו Anki',
       step3: 'ירו במילים, למדו ושדרגו את הנשקייה!',
+      mobStep1: 'בחרו שפה וחפיסה',
+      mobStep2: 'שחקו בשלבים ולמדו מילים',
+      mobStep3: 'צברו התקדמות ופתחו נשקים',
+      mobNavHome: 'ראשי',
+      mobNavPlay: 'שחק',
+      mobNavDecks: 'חפיסות',
+      mobNavStats: 'סטט׳',
+      mobNavProfile: 'פרופיל',
       chooseLangTitle: 'בחרו שפה',
       quickStartTitle: 'התחלה מהירה',
       quickAnkiBtn: 'ייבוא Anki',
@@ -805,7 +854,15 @@
       hitPinnedBtn: 'בחזרה ⭐',
       todayCaption: 'נלמדו היום',
       todayWordsVal: (n) => `${n} מילים`,
-      gameSettingsTitle: '⚙️ הגדרות משחק',
+      gameSettingsTitle: '👤 פרופיל והגדרות',
+      settingTargetLang: '🎯 שפת לימוד:',
+      settingNativeLang: '🌍 תרגום וממשק:',
+      settingWeapon: '🚀 נשק החללית:',
+      settingsLeaderboardBtn: 'דירוג והישגים',
+      settingsStatsBtn: 'סטטיסטיקה',
+      settingsAnkiBtn: 'ייבוא Anki (.apkg)',
+      settingsAdminBtn: 'סופר-אדמין',
+      openLeaderFromStats: 'דירוג שבועי והישגים',
       settingSpeed: 'מהירות ירידת המילים:',
       settingArticle: 'הקלדת תווית/יידוע עם המילה:',
       settingDesktopKbd: 'מקלדת מסך ZType במחשב:',
@@ -2814,13 +2871,39 @@
   const labelPerkPlay = document.getElementById('labelPerkPlay');
   const labelPerkMemory = document.getElementById('labelPerkMemory');
   const labelPerkAnki = document.getElementById('labelPerkAnki');
+  const titleTaglineMobile = document.getElementById('titleTaglineMobile');
+  const mobileHeroArtArticle = document.getElementById('mobileHeroArtArticle');
+  const mobileHeroArtWord = document.getElementById('mobileHeroArtWord');
   const titleSpaceWindow = document.getElementById('titleSpaceWindow');
+  const promoLiveLabel = document.getElementById('promoLiveLabel');
   const promoMonitorBadge = document.getElementById('promoMonitorBadge');
   const btnPromoWeaponCycle = document.getElementById('btnPromoWeaponCycle');
 
+  const labelHowItWorks = document.getElementById('labelHowItWorks');
+  const homeStepItem1 = document.getElementById('homeStepItem1');
+  const homeStepItem2 = document.getElementById('homeStepItem2');
+  const homeStepItem3 = document.getElementById('homeStepItem3');
   const labelStep1 = document.getElementById('labelStep1');
   const labelStep2 = document.getElementById('labelStep2');
   const labelStep3 = document.getElementById('labelStep3');
+  const labelMobStep1 = document.getElementById('labelMobStep1');
+  const labelMobStep2 = document.getElementById('labelMobStep2');
+  const labelMobStep3 = document.getElementById('labelMobStep3');
+
+  const decksFilterCard = document.getElementById('decksFilterCard');
+  const btnDecksMobileFilterToggle = document.getElementById('btnDecksMobileFilterToggle');
+
+  const mobileBottomNav = document.getElementById('mobileBottomNav');
+  const btnMobNavHome = document.getElementById('btnMobNavHome');
+  const btnMobNavPlay = document.getElementById('btnMobNavPlay');
+  const btnMobNavDecks = document.getElementById('btnMobNavDecks');
+  const btnMobNavStats = document.getElementById('btnMobNavStats');
+  const btnMobNavProfile = document.getElementById('btnMobNavProfile');
+  const labelMobNavHome = document.getElementById('labelMobNavHome');
+  const labelMobNavPlay = document.getElementById('labelMobNavPlay');
+  const labelMobNavDecks = document.getElementById('labelMobNavDecks');
+  const labelMobNavStats = document.getElementById('labelMobNavStats');
+  const labelMobNavProfile = document.getElementById('labelMobNavProfile');
 
   const labelQuickStartTitle = document.getElementById('labelQuickStartTitle');
   const btnQuickStartAnki = document.getElementById('btnQuickStartAnki');
@@ -2900,11 +2983,21 @@
   const labelTodayCaption = document.getElementById('labelTodayCaption');
   const todayLearnedCount = document.getElementById('todayLearnedCount');
 
-  // Новые диалоги: Настройки игры, Статистика и Рейтинг
+  // Новые диалоги: Профиль / Настройки игры, Статистика и Рейтинг
   const gameSettingsDialog = document.getElementById('gameSettingsDialog');
   const gameSettingsDialogTitle = document.getElementById('gameSettingsDialogTitle');
   const gameSettingsDialogBody = document.getElementById('gameSettingsDialogBody');
   const btnCloseGameSettings = document.getElementById('btnCloseGameSettings');
+  const settingsPilotRankLabel = document.getElementById('settingsPilotRankLabel');
+  const settingsPilotSubStats = document.getElementById('settingsPilotSubStats');
+  const btnOpenLeaderboardFromSettings = document.getElementById('btnOpenLeaderboardFromSettings');
+  const labelSettingsLeaderboardBtn = document.getElementById('labelSettingsLeaderboardBtn');
+  const btnOpenStatsFromSettings = document.getElementById('btnOpenStatsFromSettings');
+  const labelSettingsStatsBtn = document.getElementById('labelSettingsStatsBtn');
+  const labelSettingTargetLang = document.getElementById('labelSettingTargetLang');
+  const labelSettingNativeLang = document.getElementById('labelSettingNativeLang');
+  const labelSettingWeapon = document.getElementById('labelSettingWeapon');
+  const settingsWeaponRow = document.getElementById('settingsWeaponRow');
   const labelSettingSpeed = document.getElementById('labelSettingSpeed');
   const settingsSpeedGroup = document.getElementById('settingsSpeedGroup');
   const labelSettingArticle = document.getElementById('labelSettingArticle');
@@ -2915,12 +3008,18 @@
   const btnOpenVoiceFromSettings = document.getElementById('btnOpenVoiceFromSettings');
   const labelSettingDictBtn = document.getElementById('labelSettingDictBtn');
   const btnOpenDictFromSettings = document.getElementById('btnOpenDictFromSettings');
+  const btnOpenAnkiFromSettings = document.getElementById('btnOpenAnkiFromSettings');
+  const labelSettingsAnkiBtn = document.getElementById('labelSettingsAnkiBtn');
+  const btnOpenAdminFromSettings = document.getElementById('btnOpenAdminFromSettings');
+  const labelSettingsAdminBtn = document.getElementById('labelSettingsAdminBtn');
 
   const statsDialog = document.getElementById('statsDialog');
   const statsDialogTitle = document.getElementById('statsDialogTitle');
   const statsDialogBody = document.getElementById('statsDialogBody');
   const btnCloseStatsDialog = document.getElementById('btnCloseStatsDialog');
   const statsModalGrid = document.getElementById('statsModalGrid');
+  const btnOpenLeaderboardFromStats = document.getElementById('btnOpenLeaderboardFromStats');
+  const labelOpenLeaderFromStats = document.getElementById('labelOpenLeaderFromStats');
 
   const leaderboardDialog = document.getElementById('leaderboardDialog');
   const leaderboardDialogTitle = document.getElementById('leaderboardDialogTitle');
@@ -3277,7 +3376,7 @@
     const isMobile = canvas.width < 600;
     if (state.screenMode === 'title') {
       if (isMobile) {
-        return textLength >= 17 ? 15 : 18;
+        return textLength >= 15 ? 14 : 16;
       }
       if (textLength >= 18) return 17;
       if (textLength >= 13) return 19.5;
@@ -3916,7 +4015,7 @@
   function renderWeaponSelectors() {
     const current = getCurrentWeapon();
     const tr = t();
-    [titleWeaponRow, overlayWeaponRow, sidebarWeaponRow].forEach(container => {
+    [titleWeaponRow, overlayWeaponRow, sidebarWeaponRow, settingsWeaponRow].forEach(container => {
       if (!container) return;
       container.innerHTML = '';
       WEAPONS.forEach(w => {
@@ -4203,9 +4302,10 @@
     state.demoWords = [];
     state.demoTargetId = null;
 
-    const desiredCount = canvas.width > 640 ? 3 : 2;
-    const laneFracs = desiredCount === 3 ? [0.24, 0.74, 0.48] : [0.3, 0.72];
-    const yFracs = desiredCount === 3 ? [0.22, 0.34, 0.14] : [0.24, 0.36];
+    const promoSpan = bounds.right - bounds.left;
+    const desiredCount = promoSpan >= 315 ? 3 : 2;
+    const laneFracs = desiredCount === 3 ? [0.22, 0.78, 0.5] : [0.3, 0.72];
+    const yFracs = desiredCount === 3 ? [0.24, 0.32, 0.16] : [0.24, 0.36];
     const usedRaw = new Set();
 
     for (let i = 0; i < desiredCount; i++) {
@@ -4302,9 +4402,10 @@
     }
 
     const spawnY = bounds.top + 22;
+    const promoSpan = bounds.right - bounds.left;
     const maxDemoWords = state.weaponId === 'gravity'
       ? (canvas.width > 640 ? 5 : 3)
-      : (canvas.width > 640 ? 3 : 2);
+      : (promoSpan >= 315 ? 3 : 2);
     const { course } = getActiveSelection();
     const courseWords = course ? getAllWordsInCourse(course) : [];
     const demoPool = courseWords.length >= 4 ? courseWords : getAllWordsInTargetLang(state.targetLang);
@@ -4582,14 +4683,28 @@
     if (homeHeroTitleTop) homeHeroTitleTop.textContent = tr.heroTitleTop;
     if (homeHeroTitleAccent) homeHeroTitleAccent.textContent = tr.heroTitleAccent;
     if (titleTagline) titleTagline.textContent = tr.titleTagline(targetLangLocalName);
+    if (titleTaglineMobile) titleTaglineMobile.textContent = tr.mobileHeroTagline || tr.titleTagline(targetLangLocalName);
     if (labelPerkPlay) labelPerkPlay.textContent = tr.perkPlay;
     if (labelPerkMemory) labelPerkMemory.textContent = tr.perkMemory;
     if (labelPerkAnki) labelPerkAnki.textContent = tr.perkAnki;
     if (labelArcadeLaunch) labelArcadeLaunch.textContent = tr.launchFreeBtn;
 
+    const heroArtSamples = {
+      de: { art: 'die', word: 'Kreuzfahrt' },
+      en: { art: 'Noun', word: 'Breakthrough' },
+      es: { art: 'la', word: 'Aventura' }
+    };
+    const hSample = heroArtSamples[state.targetLang] || heroArtSamples.de;
+    if (mobileHeroArtArticle) mobileHeroArtArticle.textContent = hSample.art;
+    if (mobileHeroArtWord) mobileHeroArtWord.textContent = hSample.word;
+
     if (arcadeLogoSub && course) {
       const lNum = state.activeLessonIndex + 1;
-      arcadeLogoSub.textContent = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')} · #${lNum} ▾`;
+      const cTitle = getLocalizedField(course, 'titles');
+      arcadeLogoSub.innerHTML = `<span class="course-pill-name">${escapeHtml(course.icon || '🚀')} ${escapeHtml(cTitle)}</span><span class="course-pill-lnum"> · #${lNum}</span> <span class="course-pill-caret">▾</span>`;
+    }
+    if (promoLiveLabel && tr.livePreviewBadge) {
+      promoLiveLabel.textContent = tr.livePreviewBadge;
     }
     if (promoMonitorBadge && course) {
       promoMonitorBadge.textContent = tr.promoMonitorBadge(
@@ -4598,10 +4713,20 @@
       );
     }
 
-    // Полоса 3 шагов и сетка Быстрого старта / Прогресса / Топа
+    // Полоса 3 шагов и мобильная навигация
+    if (labelHowItWorks && tr.howItWorksTitle) labelHowItWorks.textContent = tr.howItWorksTitle;
     if (labelStep1) labelStep1.textContent = tr.step1;
     if (labelStep2) labelStep2.textContent = tr.step2;
     if (labelStep3) labelStep3.textContent = tr.step3;
+    if (labelMobStep1 && tr.mobStep1) labelMobStep1.textContent = tr.mobStep1;
+    if (labelMobStep2 && tr.mobStep2) labelMobStep2.textContent = tr.mobStep2;
+    if (labelMobStep3 && tr.mobStep3) labelMobStep3.textContent = tr.mobStep3;
+
+    if (labelMobNavHome && tr.mobNavHome) labelMobNavHome.textContent = tr.mobNavHome;
+    if (labelMobNavPlay && tr.mobNavPlay) labelMobNavPlay.textContent = tr.mobNavPlay;
+    if (labelMobNavDecks && tr.mobNavDecks) labelMobNavDecks.textContent = tr.mobNavDecks;
+    if (labelMobNavStats && tr.mobNavStats) labelMobNavStats.textContent = tr.mobNavStats;
+    if (labelMobNavProfile && tr.mobNavProfile) labelMobNavProfile.textContent = tr.mobNavProfile;
 
     if (labelQuickStartTitle) labelQuickStartTitle.textContent = tr.quickStartTitle;
     if (labelQuickAnkiBtn) labelQuickAnkiBtn.textContent = tr.quickAnkiBtn;
@@ -5125,6 +5250,28 @@
     };
   }
 
+  function syncMobileBottomNavUI(overrideTab = '') {
+    let activeTab = overrideTab;
+    if (!activeTab) {
+      if ((statsDialog && statsDialog.open) || (leaderboardDialog && leaderboardDialog.open)) {
+        activeTab = 'stats';
+      } else if (gameSettingsDialog && gameSettingsDialog.open) {
+        activeTab = 'profile';
+      } else if (state.homeSubView === 'decks') {
+        activeTab = 'decks';
+      } else if (state.homeSubView === 'admin') {
+        activeTab = 'profile';
+      } else {
+        activeTab = 'home';
+      }
+    }
+    if (btnMobNavHome) btnMobNavHome.classList.toggle('active', activeTab === 'home');
+    if (btnMobNavPlay) btnMobNavPlay.classList.toggle('active', activeTab === 'play');
+    if (btnMobNavDecks) btnMobNavDecks.classList.toggle('active', activeTab === 'decks');
+    if (btnMobNavStats) btnMobNavStats.classList.toggle('active', activeTab === 'stats');
+    if (btnMobNavProfile) btnMobNavProfile.classList.toggle('active', activeTab === 'profile');
+  }
+
   function switchHomeSubView(subView) {
     state.homeSubView = (subView === 'decks' || subView === 'admin') ? subView : 'home';
     const onHome = state.homeSubView === 'home';
@@ -5139,6 +5286,7 @@
     if (btnNavCourses) btnNavCourses.classList.toggle('active', onDecks && state.decksNavMode === 'courses');
     if (btnNavDecks) btnNavDecks.classList.toggle('active', onDecks && state.decksNavMode !== 'courses');
     if (btnNavAdmin) btnNavAdmin.classList.toggle('active', onAdmin);
+    syncMobileBottomNavUI();
 
     if (btnDecksReturnBattle) {
       btnDecksReturnBattle.classList.toggle('hidden', !state.decksOpenedFromPlay);
@@ -7341,7 +7489,25 @@
       ctx.clip();
     }
 
-    if (state.screenMode === 'play') {
+    if (state.screenMode === 'title') {
+      // Концентрические неоновые радарные дуги за кораблём в окне LIVE LESSON PREVIEW
+      const arcCx = bounds.centerX;
+      const arcCy = bounds.bottom + 26;
+      const arcRadii = [58, 104, 152];
+      ctx.save();
+      ctx.lineCap = 'round';
+      arcRadii.forEach((rad, idx) => {
+        const alpha = 0.28 - idx * 0.065;
+        ctx.strokeStyle = `rgba(45, 212, 191, ${Math.max(0.08, alpha)})`;
+        ctx.shadowColor = 'rgba(45, 212, 191, 0.45)';
+        ctx.shadowBlur = idx === 0 ? 10 : 6;
+        ctx.lineWidth = idx === 0 ? 1.5 : 1.15;
+        ctx.beginPath();
+        ctx.arc(arcCx, arcCy, rad, -Math.PI * 0.86, -Math.PI * 0.14);
+        ctx.stroke();
+      });
+      ctx.restore();
+    } else if (state.screenMode === 'play') {
       ctx.save();
       ctx.strokeStyle = 'rgba(45, 212, 191, 0.045)';
       ctx.lineWidth = 1;
@@ -8363,6 +8529,7 @@
       (statsDialog && statsDialog.open) ||
       (leaderboardDialog && leaderboardDialog.open)
     );
+    syncMobileBottomNavUI();
     if (!anyOpen && state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
       state.paused = false;
     }
@@ -8880,11 +9047,33 @@
     });
   }
 
-  // --- Модальное окно 1: Гибкие настройки игры ---
+  // --- Модальное окно 1: Профиль пилота и настройки игры ---
   function renderGameSettingsModal() {
     if (!gameSettingsDialog) return;
     const tr = t();
     if (gameSettingsDialogTitle) gameSettingsDialogTitle.textContent = tr.gameSettingsTitle;
+    if (labelSettingTargetLang && tr.settingTargetLang) labelSettingTargetLang.textContent = tr.settingTargetLang;
+    if (labelSettingNativeLang && tr.settingNativeLang) labelSettingNativeLang.textContent = tr.settingNativeLang;
+    if (labelSettingWeapon && tr.settingWeapon) labelSettingWeapon.textContent = tr.settingWeapon;
+    if (labelSettingsLeaderboardBtn && tr.settingsLeaderboardBtn) labelSettingsLeaderboardBtn.textContent = tr.settingsLeaderboardBtn;
+    if (labelSettingsStatsBtn && tr.settingsStatsBtn) labelSettingsStatsBtn.textContent = tr.settingsStatsBtn;
+    if (labelSettingsAnkiBtn && tr.settingsAnkiBtn) labelSettingsAnkiBtn.textContent = tr.settingsAnkiBtn;
+    if (labelSettingsAdminBtn && tr.settingsAdminBtn) labelSettingsAdminBtn.textContent = tr.settingsAdminBtn;
+
+    const learnedCount = learnedWordsSet.size;
+    const ranks = tr.ranks || ['КАДЕТ', 'ПИЛОТ', 'ШТУРМАН', 'КОМАНДОР'];
+    const rankIdx = learnedCount >= 65 ? 3 : (learnedCount >= 35 ? 2 : (learnedCount >= 12 ? 1 : 0));
+    const bestPts = Math.max(state.highScore, state.score);
+    const streakStr = tr.streakDays ? tr.streakDays(dailyProgress.streakDays || 1) : `${dailyProgress.streakDays || 1}d`;
+    if (settingsPilotRankLabel) {
+      settingsPilotRankLabel.textContent = ranks[rankIdx] || ranks[0];
+    }
+    if (settingsPilotSubStats) {
+      settingsPilotSubStats.textContent = `📖 ${tr.wordsShort(learnedCount)} · 🔥 ${streakStr} · 🏆 ${bestPts.toLocaleString()}`;
+    }
+
+    renderWeaponSelectors();
+
     if (labelSettingSpeed) labelSettingSpeed.textContent = tr.settingSpeed;
     if (labelSettingArticle) labelSettingArticle.textContent = tr.settingArticle;
     if (labelSettingDesktopKbd) labelSettingDesktopKbd.textContent = tr.settingDesktopKbd;
@@ -8923,6 +9112,7 @@
     if (state.running && !state.paused) state.paused = true;
     renderGameSettingsModal();
     gameSettingsDialog.showModal();
+    syncMobileBottomNavUI('profile');
   }
 
   [btnHomeSettings, btnHudGameSettings, btnSidebarGameSettings].forEach(el => {
@@ -8932,6 +9122,31 @@
       el.blur();
     });
   });
+
+  if (btnOpenLeaderboardFromSettings) {
+    btnOpenLeaderboardFromSettings.addEventListener('click', () => {
+      gameSettingsDialog.close();
+      openLeaderboardModal();
+    });
+  }
+  if (btnOpenStatsFromSettings) {
+    btnOpenStatsFromSettings.addEventListener('click', () => {
+      gameSettingsDialog.close();
+      openStatsModal();
+    });
+  }
+  if (btnOpenAnkiFromSettings) {
+    btnOpenAnkiFromSettings.addEventListener('click', () => {
+      gameSettingsDialog.close();
+      openCustomWordsModal('anki');
+    });
+  }
+  if (btnOpenAdminFromSettings) {
+    btnOpenAdminFromSettings.addEventListener('click', () => {
+      gameSettingsDialog.close();
+      openAdminStudio(state.targetLang);
+    });
+  }
 
   if (btnSettingsToggleArticle) {
     btnSettingsToggleArticle.addEventListener('click', () => {
@@ -8969,6 +9184,9 @@
     if (!statsDialog || !statsModalGrid) return;
     const tr = t();
     if (statsDialogTitle) statsDialogTitle.textContent = tr.statsDialogTitle;
+    if (labelOpenLeaderFromStats && tr.openLeaderFromStats) {
+      labelOpenLeaderFromStats.textContent = tr.openLeaderFromStats;
+    }
 
     const accPct = state.shotsFired > 0
       ? `${Math.round((state.shotsHit / state.shotsFired) * 100)}%`
@@ -9005,6 +9223,7 @@
     if (state.running && !state.paused) state.paused = true;
     renderStatsModal();
     statsDialog.showModal();
+    syncMobileBottomNavUI('stats');
   }
 
   [btnNavStats, btnOpenStatsCard, btnHomeStreakChip].forEach(el => {
@@ -9014,6 +9233,13 @@
       el.blur();
     });
   });
+
+  if (btnOpenLeaderboardFromStats) {
+    btnOpenLeaderboardFromStats.addEventListener('click', () => {
+      statsDialog.close();
+      openLeaderboardModal();
+    });
+  }
 
   if (btnCloseStatsDialog) {
     btnCloseStatsDialog.addEventListener('click', () => {
@@ -9078,6 +9304,7 @@
     if (state.running && !state.paused) state.paused = true;
     renderLeaderboardModal();
     leaderboardDialog.showModal();
+    syncMobileBottomNavUI('stats');
   }
 
   [btnNavLeaderboard, btnOpenLeaderboardCard, pilotRankPill].forEach(el => {
@@ -9092,6 +9319,111 @@
     btnCloseLeaderboardDialog.addEventListener('click', () => {
       leaderboardDialog.close();
       resumePlayIfAllDialogsClosed();
+    });
+  }
+
+  // --- Мобильный нижний док (Home · Play · Decks · Stats · Profile) и интерактивные шаги ---
+  function closeAllTopDialogs() {
+    [
+      courseBrowserDialog,
+      customWordsDialog,
+      ttsSettingsDialog,
+      dictDialog,
+      gameSettingsDialog,
+      statsDialog,
+      leaderboardDialog
+    ].forEach(dlg => {
+      if (dlg && dlg.open) dlg.close();
+    });
+  }
+
+  if (btnMobNavHome) {
+    btnMobNavHome.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      if (state.decksOpenedFromPlay) {
+        returnToTitleScreen();
+      } else if (state.homeSubView !== 'home') {
+        switchHomeSubView('home');
+      } else if (arcadeTitleScreen) {
+        arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      syncMobileBottomNavUI('home');
+      btnMobNavHome.blur();
+    });
+  }
+
+  if (btnMobNavPlay) {
+    btnMobNavPlay.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      launchFromTitleScreen();
+      btnMobNavPlay.blur();
+    });
+  }
+
+  if (btnMobNavDecks) {
+    btnMobNavDecks.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      openDecksPage({ sourceFilter: 'all', navMode: 'decks' });
+      syncMobileBottomNavUI('decks');
+      btnMobNavDecks.blur();
+    });
+  }
+
+  if (btnMobNavStats) {
+    btnMobNavStats.addEventListener('click', () => {
+      sound.init();
+      if (gameSettingsDialog && gameSettingsDialog.open) gameSettingsDialog.close();
+      openStatsModal();
+      btnMobNavStats.blur();
+    });
+  }
+
+  if (btnMobNavProfile) {
+    btnMobNavProfile.addEventListener('click', () => {
+      sound.init();
+      if (statsDialog && statsDialog.open) statsDialog.close();
+      if (leaderboardDialog && leaderboardDialog.open) leaderboardDialog.close();
+      openGameSettingsModal();
+      btnMobNavProfile.blur();
+    });
+  }
+
+  // Интерактивные 3 шага «Как это работает»
+  function bindInteractiveStep(el, handler) {
+    if (!el) return;
+    el.addEventListener('click', () => {
+      sound.init();
+      handler();
+    });
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        sound.init();
+        handler();
+      }
+    });
+  }
+
+  bindInteractiveStep(homeStepItem1, () => openDecksPage({ sourceFilter: 'all', navMode: 'courses' }));
+  bindInteractiveStep(homeStepItem2, () => launchFromTitleScreen());
+  bindInteractiveStep(homeStepItem3, () => openGameSettingsModal());
+
+  // Сворачиваемые фильтры на странице «Колоды» на мобильных экранах
+  if (btnDecksMobileFilterToggle && decksFilterCard) {
+    const toggleMobileFilters = () => {
+      if (window.innerWidth > 768) return;
+      const isOpen = decksFilterCard.classList.toggle('is-open');
+      btnDecksMobileFilterToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    };
+    btnDecksMobileFilterToggle.addEventListener('click', toggleMobileFilters);
+    btnDecksMobileFilterToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleMobileFilters();
+      }
     });
   }
 
