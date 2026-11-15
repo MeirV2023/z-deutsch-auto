@@ -23,8 +23,33 @@
   --art-pl: #fde047;       /* Янтарный — множественное (Pl.) */
   --art-verb: #c084fc;     /* Фиолетовый — глаголы / прочее */
 
-  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  /* Фирменная многоязычная типографика Z-LINGO (RU · EN · DE · FR · ES · HE) */
+  --font-logo: 'Orbitron', 'Exo 2', 'Rubik', sans-serif;
+  --font-heading: 'Exo 2', 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  --font-ui: 'Rubik', 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-words: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  --font-mono: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+}
+
+/* Языковые профили шрифтов по таблице */
+html[lang="ru"],
+html[lang="de"],
+html[lang="fr"],
+html[lang="es"] {
+  --font-ui: 'Rubik', 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Exo 2', 'Rubik', sans-serif;
+}
+
+html[lang="en"] {
+  --font-ui: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Exo 2', 'Orbitron', 'Rubik', sans-serif;
+}
+
+html[lang="he"],
+[dir="rtl"] {
+  --font-ui: 'Rubik', 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  --font-words: 'Rubik', 'Noto Sans Hebrew', sans-serif;
 }
 
 * {
@@ -153,10 +178,10 @@ body.mode-play .arcade-title-screen,
 }
 
 .arcade-logo-main {
-  font-family: var(--font-mono);
-  font-size: clamp(1.65rem, 3.6vw, 2.35rem);
-  font-weight: 900;
-  letter-spacing: 0.04em;
+  font-family: var(--font-logo);
+  font-size: clamp(1.65rem, 3.6vw, 2rem);
+  font-weight: 800;
+  letter-spacing: 2px;
   color: #ffffff;
   text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
   line-height: 1.1;
@@ -167,10 +192,10 @@ body.mode-play .arcade-title-screen,
   align-items: center;
   padding: 4px 12px;
   border-radius: 999px;
-  font-family: var(--font-mono);
+  font-family: var(--font-heading);
   font-size: 0.92rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: #0f172a;
   background: linear-gradient(135deg, #fde047, #fb923c);
   box-shadow: 0 0 16px rgba(251, 191, 36, 0.35);
@@ -733,8 +758,8 @@ body.mode-play .arcade-title-screen,
 }
 
 .kill-de {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-family: var(--font-words);
+  font-size: 0.94rem;
   font-weight: 700;
   color: #ffffff;
 }
@@ -748,7 +773,8 @@ body.mode-play .arcade-title-screen,
 }
 
 .kill-ru {
-  font-size: 0.9rem;
+  font-family: var(--font-words);
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--accent-amber);
   line-height: 1.35;
@@ -873,7 +899,7 @@ body.mode-play .arcade-title-screen,
   background: rgba(15, 23, 42, 0.65);
   border: 1px solid rgba(45, 212, 191, 0.2);
   color: #5eead4;
-  font-family: var(--font-mono);
+  font-family: var(--font-words);
   font-size: 1.38rem;
   font-weight: 700;
   display: flex;
@@ -987,9 +1013,10 @@ body.mode-play .arcade-title-screen,
 }
 
 .overlay-title {
-  font-size: 1.4rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.45rem, 2.2vw, 1.85rem);
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.22;
   color: #ffffff;
 }
 
@@ -1010,7 +1037,8 @@ body.mode-play .arcade-title-screen,
 }
 
 .overlay-arsenal-title {
-  font-size: 0.88rem;
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
   font-weight: 800;
   color: var(--accent-cyan);
 }
@@ -1099,15 +1127,16 @@ body.mode-play .arcade-title-screen,
 }
 
 .preview-word-de {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-family: var(--font-words);
+  font-size: 0.95rem;
   font-weight: 700;
   color: #ffffff;
 }
 
 .preview-word-ru {
+  font-family: var(--font-words);
   color: var(--accent-amber);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
@@ -1126,8 +1155,8 @@ body.mode-play .arcade-title-screen,
   background: linear-gradient(135deg, #0284c7, #10b981);
   color: #ffffff;
   font-family: var(--font-ui);
-  font-size: 0.98rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 700;
   text-align: center;
   cursor: pointer;
   box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
@@ -1140,8 +1169,8 @@ body.mode-play .arcade-title-screen,
   background: rgba(30, 41, 59, 0.85);
   color: #f8fafc;
   font-family: var(--font-ui);
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 0.94rem;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -1160,15 +1189,17 @@ body.mode-play .arcade-title-screen,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.88rem;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
   color: var(--accent-cyan);
   font-weight: 800;
 }
 
 .quiz-question {
-  font-family: var(--font-mono);
-  font-size: 1.12rem;
-  font-weight: 800;
+  font-family: var(--font-words);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
   color: #ffffff;
 }
 
@@ -1233,7 +1264,8 @@ dialog.modern-dialog::backdrop {
 }
 
 .dialog-title {
-  font-size: 1.15rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
   font-weight: 800;
   color: var(--accent-cyan);
 }
@@ -1276,9 +1308,13 @@ dialog.modern-dialog::backdrop {
 }
 
 .custom-words-textarea {
-  font-family: var(--font-mono);
+  font-family: 'Consolas', 'Courier New', monospace;
   min-height: 150px;
   resize: vertical;
+}
+
+code {
+  font-family: 'Consolas', 'Courier New', monospace;
 }
 
 .tts-status-banner {
@@ -2005,7 +2041,8 @@ dialog.modern-dialog.wide-dialog {
 }
 
 .catalog-course-title {
-  font-size: 1.12rem;
+  font-family: var(--font-heading);
+  font-size: 1.18rem;
   font-weight: 800;
   color: #ffffff;
 }
@@ -2037,7 +2074,8 @@ dialog.modern-dialog.wide-dialog {
 }
 
 .catalog-module-title {
-  font-size: 0.86rem;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
   font-weight: 800;
   color: var(--accent-teal);
 }
@@ -2564,17 +2602,19 @@ button.arcade-logo-sub:hover {
 }
 
 .home-brand-title {
-  font-family: var(--font-mono);
-  font-size: 1.25rem;
-  font-weight: 900;
-  letter-spacing: 0.05em;
+  font-family: var(--font-logo);
+  font-size: clamp(1.5rem, 2.2vw, 2rem); /* Orbitron · 800 · 32px · letter-spacing: 2px */
+  font-weight: 800;
+  letter-spacing: 2px;
   color: #ffffff;
   text-shadow: 0 0 16px rgba(56, 189, 248, 0.55);
+  line-height: 1.05;
 }
 
 .home-brand-sub {
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 500;
   color: #94a3b8;
 }
 
@@ -2595,8 +2635,8 @@ button.arcade-logo-sub:hover {
   background: transparent;
   color: #cbd5e1;
   font-family: var(--font-ui);
-  font-size: 0.86rem;
-  font-weight: 700;
+  font-size: 0.92rem; /* ~14.7px Rubik */
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -2700,19 +2740,22 @@ button.arcade-logo-sub:hover {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  line-height: 1.12;
+  font-family: var(--font-heading);
+  line-height: 1.1;
 }
 
 .hero-line-white {
-  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
-  font-weight: 900;
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 2.9vw, 2.75rem); /* Exo 2 · 800 · 36–44px */
+  font-weight: 800;
   color: #ffffff;
   letter-spacing: -0.01em;
 }
 
 .hero-line-gold {
-  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
-  font-weight: 900;
+  font-family: var(--font-heading);
+  font-size: clamp(2.25rem, 2.9vw, 2.75rem); /* Exo 2 · 800 · 36–44px */
+  font-weight: 800;
   background: linear-gradient(90deg, #fde047 0%, #fb923c 65%, #f97316 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -2720,10 +2763,12 @@ button.arcade-logo-sub:hover {
 }
 
 .home-hero-subtitle {
-  font-size: 0.95rem;
+  font-family: var(--font-ui);
+  font-size: 0.96rem;
+  font-weight: 500;
   color: #cbd5e1;
   max-width: 540px;
-  line-height: 1.4;
+  line-height: 1.42;
 }
 
 .home-hero-perks {
@@ -2737,8 +2782,9 @@ button.arcade-logo-sub:hover {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.83rem;
-  font-weight: 700;
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 600;
   color: #e2e8f0;
 }
 
@@ -2774,8 +2820,8 @@ button.arcade-logo-sub:hover {
   background: linear-gradient(180deg, #34d399 0%, #10b981 55%, #059669 100%);
   color: #022c22;
   font-family: var(--font-ui);
-  font-size: 1.04rem;
-  font-weight: 900;
+  font-size: 1.125rem; /* Rubik · 700 · 18px */
+  font-weight: 700;
   cursor: pointer;
   overflow: hidden;
   box-shadow: 0 0 28px rgba(16, 185, 129, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.45);
@@ -2833,7 +2879,8 @@ button.arcade-logo-sub:hover {
   background: rgba(8, 18, 38, 0.86);
   border: 1px solid rgba(56, 189, 248, 0.52);
   color: #e0f2fe;
-  font-size: 0.72rem;
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -2889,8 +2936,9 @@ button.arcade-logo-sub:hover {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-family: var(--font-ui);
+  font-size: 0.9375rem; /* Rubik · 600 · 15px */
+  font-weight: 600;
   color: #e2e8f0;
 }
 
@@ -2952,7 +3000,8 @@ button.arcade-logo-sub:hover {
 }
 
 .bento-card-title {
-  font-size: 0.96rem;
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
   font-weight: 800;
   color: #ffffff;
   display: inline-flex;
@@ -2978,8 +3027,8 @@ button.arcade-logo-sub:hover {
   background: rgba(15, 23, 42, 0.85);
   color: #e2e8f0;
   font-family: var(--font-ui);
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 0.9375rem; /* Rubik · 600 · 15px */
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.14s ease;
 }
@@ -3225,7 +3274,8 @@ button.arcade-logo-sub:hover {
 }
 
 .qs-card-title {
-  font-size: 0.83rem;
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
   font-weight: 800;
   color: #ffffff;
   line-height: 1.25;
@@ -3499,8 +3549,8 @@ button.arcade-logo-sub:hover {
   background: transparent;
   color: #cbd5e1;
   font-family: var(--font-ui);
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.875rem; /* Rubik · 600 · 14px */
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.14s ease;
 }
@@ -3547,10 +3597,10 @@ body.mode-play .hud-top {
 }
 
 .hud-brand-word {
-  font-family: var(--font-mono);
-  font-size: 1.12rem;
-  font-weight: 900;
-  letter-spacing: 0.05em;
+  font-family: var(--font-logo);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 2px;
   color: #ffffff;
 }
 
@@ -3587,8 +3637,8 @@ body.mode-play .hud-top {
   background: rgba(15, 23, 42, 0.88);
   color: #f1f5f9;
   font-family: var(--font-ui);
-  font-size: 0.84rem;
-  font-weight: 700;
+  font-size: 0.88rem; /* Rubik · 600 · 14px */
+  font-weight: 600;
   cursor: pointer;
   max-width: 240px;
   white-space: nowrap;
@@ -3732,7 +3782,8 @@ body.desktop-kbd-open .battle-arena-frame {
   border: 1px solid rgba(56, 189, 248, 0.6);
   box-shadow: 0 0 16px rgba(56, 189, 248, 0.22);
   color: #e0f2fe;
-  font-size: 0.78rem;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -3856,8 +3907,9 @@ body.mode-play .sidebar-left {
 }
 
 .sleft-section-title {
-  font-size: 0.74rem;
-  font-weight: 900;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
   letter-spacing: 0.06em;
   color: #cbd5e1;
   text-transform: uppercase;
@@ -3918,7 +3970,8 @@ body.mode-play .sidebar-left {
 }
 
 .active-deck-title {
-  font-size: 0.86rem;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
   font-weight: 800;
   color: #ffffff;
   white-space: nowrap;
@@ -4134,8 +4187,9 @@ body.mode-play .sidebar-right {
 }
 
 .hit-header-text {
-  font-size: 0.96rem;
-  font-weight: 900;
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 800;
   font-style: italic;
   letter-spacing: 0.05em;
   color: #86efac;
@@ -4168,21 +4222,24 @@ body.mode-play .sidebar-right {
 .hit-word-text-wrap {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 7px;
   min-width: 0;
   flex-wrap: wrap;
 }
 
 .hit-word-article {
-  font-size: 1.05rem;
-  font-weight: 900;
+  font-family: var(--font-words);
+  font-size: clamp(1.5rem, 1.8vw, 1.85rem); /* Rubik · 700 · слова в игре */
+  font-weight: 700;
+  line-height: 1.15;
   color: #4ade80;
 }
 
 .hit-word-main {
-  font-family: var(--font-ui);
-  font-size: 1.22rem;
-  font-weight: 900;
+  font-family: var(--font-words);
+  font-size: clamp(1.75rem, 2.15vw, 2.2rem); /* Rubik · 700 · 28–35px (der Motor) */
+  font-weight: 700;
+  line-height: 1.15;
   color: #ffffff;
   word-break: break-word;
 }
@@ -4227,17 +4284,18 @@ body.mode-play .sidebar-right {
 .hit-visual-tag {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.06em;
   color: #bae6fd;
 }
 
 .hit-translation-text {
+  font-family: var(--font-words);
   text-align: center;
-  font-size: 1.02rem;
-  font-weight: 800;
+  font-size: 1.25rem; /* Rubik · 700 · перевод (двигатель) */
+  font-weight: 700;
   color: #f8fafc;
-  line-height: 1.3;
+  line-height: 1.28;
   min-height: 1.35em;
 }
 
@@ -4254,8 +4312,8 @@ body.mode-play .sidebar-right {
   background: linear-gradient(180deg, #84cc16 0%, #22c55e 100%);
   color: #052e16;
   font-family: var(--font-ui);
-  font-size: 0.82rem;
-  font-weight: 900;
+  font-size: 0.875rem; /* Rubik · 700 · 14px */
+  font-weight: 700;
   cursor: pointer;
   transition: filter 0.14s ease, transform 0.14s ease;
 }
@@ -4271,8 +4329,8 @@ body.mode-play .sidebar-right {
   background: rgba(15, 23, 42, 0.9);
   color: #e0f2fe;
   font-family: var(--font-ui);
-  font-size: 0.82rem;
-  font-weight: 800;
+  font-size: 0.875rem; /* Rubik · 600 · 14px */
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.14s ease;
 }
@@ -4419,7 +4477,8 @@ body.mode-play .sidebar-right {
 }
 
 .achievements-heading {
-  font-size: 0.95rem;
+  font-family: var(--font-heading);
+  font-size: 1rem;
   font-weight: 800;
   color: #fde047;
   margin-top: 6px;
@@ -4453,7 +4512,8 @@ body.mode-play .sidebar-right {
 }
 
 .ach-title {
-  font-size: 0.82rem;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
   font-weight: 800;
   color: #ffffff;
 }
@@ -4461,6 +4521,53 @@ body.mode-play .sidebar-right {
 .ach-desc {
   font-size: 0.72rem;
   color: #94a3b8;
+}
+
+/* Табличные цифры для счётчиков очков и прогресса в Rubik */
+.stat-value,
+.hud-metric-pill,
+.hud-ring-pill,
+.donut-percent-text,
+.prog-metric-val,
+.leader-score,
+.stat-tile-val,
+.qs-prog-text,
+.active-deck-prog-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Языковые акценты заголовков:
+   🇬🇧 EN -> Exo 2 / Orbitron
+   🇮🇱 HE -> Rubik / Noto Sans Hebrew + Rubik Bold (700) */
+html[lang="en"] .promo-stage-pill,
+html[lang="en"] .arena-wave-pill,
+html[lang="en"] .sleft-section-title,
+html[lang="en"] .hit-header-text,
+html[lang="en"] .hud-brand-tag {
+  font-family: 'Orbitron', 'Exo 2', sans-serif;
+}
+
+html[lang="he"] .hero-line-white,
+html[lang="he"] .hero-line-gold,
+html[lang="he"] .bento-card-title,
+html[lang="he"] .qs-card-title,
+html[lang="he"] .overlay-title,
+html[lang="he"] .dialog-title,
+html[lang="he"] .catalog-course-title,
+html[lang="he"] .sleft-section-title,
+html[lang="he"] .hit-header-text,
+[dir="rtl"] .hero-line-white,
+[dir="rtl"] .hero-line-gold,
+[dir="rtl"] .bento-card-title,
+[dir="rtl"] .qs-card-title,
+[dir="rtl"] .overlay-title,
+[dir="rtl"] .dialog-title,
+[dir="rtl"] .catalog-course-title,
+[dir="rtl"] .sleft-section-title,
+[dir="rtl"] .hit-header-text {
+  font-family: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  font-weight: 700;
+  font-style: normal;
 }
 
 /* Адаптивность для ноутбуков и мобильных устройств */
@@ -4500,6 +4607,11 @@ body.mode-play .sidebar-right {
 
   .home-hero-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-line-white,
+  .hero-line-gold {
+    font-size: clamp(1.65rem, 6vw, 2.25rem);
   }
 
   .home-promo-monitor {

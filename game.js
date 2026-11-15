@@ -2853,16 +2853,29 @@
     return Math.max(0.27, 0.74 * Math.pow(14 / len, 1.38));
   }
 
+  const CANVAS_WORD_FONT = '"Rubik", "Noto Sans Hebrew", sans-serif';
+  const CANVAS_HEADING_FONT = '"Exo 2", "Rubik", "Noto Sans Hebrew", sans-serif';
+
   function getWordFontPx(textLength) {
-    const isMobile = canvas.width < 520;
-    if (!isMobile) {
-      if (textLength >= 24) return 16;
-      return textLength >= 19 ? 17.5 : 20;
+    const isMobile = canvas.width < 600;
+    if (state.screenMode === 'title') {
+      if (isMobile) {
+        return textLength >= 17 ? 15 : 18;
+      }
+      if (textLength >= 18) return 17;
+      if (textLength >= 13) return 19.5;
+      return 22;
     }
-    if (textLength >= 22) return 13.5;
-    if (textLength >= 17) return 15.2;
-    if (textLength >= 13) return 16.8;
-    return 18.5;
+    if (!isMobile) {
+      if (textLength >= 23) return 18.5;
+      if (textLength >= 18) return 21.5;
+      if (textLength >= 13) return 25;
+      return 29; // Rubik · 700 · 28–36px для слов в игре (der Motor)
+    }
+    if (textLength >= 22) return 14.5;
+    if (textLength >= 17) return 16.5;
+    if (textLength >= 12) return 19;
+    return 22;
   }
 
   function getTopBadgeTextForWord(entry) {
@@ -2880,18 +2893,18 @@
 
   function measureWordCapsule(text, entry) {
     const fontPx = getWordFontPx(text.length);
-    ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
+    ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
     const textW = ctx.measureText(text).width;
-    const padX = canvas.width < 520 ? 10 : 13;
+    const padX = canvas.width < 520 ? 11 : 15;
     const starExtra = entry && isEntryPinned(entry) ? 16 : 0;
     let boxW = textW + padX * 2 + starExtra + 16; // +16 под правый индикатор цели
     const badgeStr = getTopBadgeTextForWord(entry);
     if (badgeStr) {
-      ctx.font = '800 12px Inter, sans-serif';
+      ctx.font = `700 12.5px ${CANVAS_WORD_FONT}`;
       const badgeW = ctx.measureText(badgeStr).width + 20;
       boxW = Math.max(boxW, badgeW);
     }
-    const boxH = fontPx + 14 + (badgeStr ? 20 : 0);
+    const boxH = fontPx + 16 + (badgeStr ? 20 : 0);
     return { boxW, boxH, fontPx };
   }
 
@@ -6180,23 +6193,23 @@
     const pinned = isEntryPinned(w.entry);
 
     const fontPx = getWordFontPx(w.text.length);
-    ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
+    ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
     const typedW = ctx.measureText(typedText).width;
     const remainW = ctx.measureText(remainText).width;
     const totalW = typedW + remainW;
 
-    const padX = canvas.width < 520 ? 10 : 13;
+    const padX = canvas.width < 520 ? 11 : 15;
     const starPrefixW = pinned ? 18 : 0;
     const innerContentW = totalW + starPrefixW;
     const boxW = innerContentW + padX * 2;
-    const capsuleH = fontPx + 14;
+    const capsuleH = fontPx + 16;
     const badgeStr = getTopBadgeTextForWord(w.entry);
     const hasTopBadge = Boolean(badgeStr);
     let badgeBoxW = 0;
     if (hasTopBadge) {
-      ctx.font = '800 12px Inter, sans-serif';
+      ctx.font = `700 12.5px ${CANVAS_WORD_FONT}`;
       const maxBadgeW = Math.max(96, (bounds.right - bounds.left) - 24);
-      badgeBoxW = Math.min(maxBadgeW, ctx.measureText(badgeStr).width + 16);
+      badgeBoxW = Math.min(maxBadgeW, ctx.measureText(badgeStr).width + 18);
     }
     const effectiveHalfW = Math.max(boxW + 16, badgeBoxW + 8) / 2;
     w.boxW = effectiveHalfW * 2;
@@ -6227,7 +6240,7 @@
 
     if (hasTopBadge) {
       ctx.shadowBlur = 0;
-      ctx.font = '800 12px Inter, sans-serif';
+      ctx.font = `700 12.5px ${CANVAS_WORD_FONT}`;
       ctx.fillStyle = 'rgba(7, 13, 26, 0.96)';
       ctx.strokeStyle = style.main;
       ctx.lineWidth = 1.3;
@@ -6253,7 +6266,7 @@
       : (w.hitFlash > 0 ? '#ffffff' : (pinned ? '#fde047' : style.main));
     ctx.lineWidth = isLocked ? 2.2 : 1.5;
 
-    roundRect(ctx, boxX, boxY, boxW, capsuleH, 8);
+    roundRect(ctx, boxX, boxY, boxW, capsuleH, 9);
     ctx.fill();
     ctx.stroke();
 
@@ -6262,14 +6275,14 @@
     const contentLeftX = -innerContentW / 2;
 
     if (pinned) {
-      ctx.font = '700 13px Inter, sans-serif';
+      ctx.font = `700 13.5px ${CANVAS_WORD_FONT}`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'middle';
       ctx.fillStyle = '#fde047';
       ctx.fillText('⭐', contentLeftX, 0.5);
     }
 
-    ctx.font = `700 ${fontPx}px "JetBrains Mono", Consolas, monospace`;
+    ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     const startTextX = contentLeftX + starPrefixW;
@@ -6306,33 +6319,36 @@
 
     ctx.globalAlpha = alpha;
 
-    const isMobile = canvas.width < 520;
+    const isMobile = canvas.width < 600;
+    const isPromoBox = state.screenMode === 'title';
     const cleanWord = (ft.entry && (ft.entry.withArticle || ft.entry.word)) || ft.rawDe;
-    let deFontPx = isMobile ? 14.5 : 16.5;
-    let ruFontPx = isMobile ? 16.5 : 19;
+    let deFontPx = (isMobile || isPromoBox) ? (isMobile ? 16 : 17.5) : 22;
+    let ruFontPx = (isMobile || isPromoBox) ? (isMobile ? 18.5 : 20) : 25;
 
-    ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
+    ctx.font = `700 ${deFontPx}px ${CANVAS_WORD_FONT}`;
     let deW = ctx.measureText(cleanWord).width;
 
     const translatedStr = getWordTranslation(ft.entry);
     const transText = `💥 ${translatedStr}`;
-    ctx.font = `800 ${ruFontPx}px Inter, sans-serif`;
+    ctx.font = `700 ${ruFontPx}px ${CANVAS_WORD_FONT}`;
     let transW = ctx.measureText(transText).width;
 
     const maxAllowedW = (bounds.right - bounds.left) - 16;
     if (deW + 28 > maxAllowedW && deFontPx > 12) {
       deFontPx = Math.max(12, Math.floor(deFontPx * (maxAllowedW - 28) / deW));
-      ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
+      ctx.font = `700 ${deFontPx}px ${CANVAS_WORD_FONT}`;
       deW = ctx.measureText(cleanWord).width;
     }
     if (transW + 28 > maxAllowedW && ruFontPx > 12.5) {
       ruFontPx = Math.max(12.5, Math.floor(ruFontPx * (maxAllowedW - 28) / transW));
-      ctx.font = `800 ${ruFontPx}px Inter, sans-serif`;
+      ctx.font = `700 ${ruFontPx}px ${CANVAS_WORD_FONT}`;
       transW = ctx.measureText(transText).width;
     }
 
-    const cardW = Math.min(maxAllowedW, Math.max(deW, transW) + 30);
-    const cardH = isMobile ? 56 : 64;
+    const cardW = Math.min(maxAllowedW, Math.max(deW, transW) + 32);
+    const cardH = (isMobile || isPromoBox) ? (isMobile ? 58 : 64) : 74;
+    const yTopOffset = (isMobile || isPromoBox) ? -12 : -14.5;
+    const yBotOffset = (isMobile || isPromoBox) ? 13 : 15;
 
     const drawX = Math.max(bounds.left + cardW / 2 + 6, Math.min(bounds.right - cardW / 2 - 6, ft.x));
     const drawY = Math.max(bounds.top + cardH / 2 + 6, Math.min(bounds.bottom - cardH / 2 - 6, ft.y));
@@ -6354,14 +6370,14 @@
     ctx.textBaseline = 'middle';
 
     ctx.direction = 'ltr';
-    ctx.font = `700 ${deFontPx}px "JetBrains Mono", Consolas, monospace`;
+    ctx.font = `700 ${deFontPx}px ${CANVAS_WORD_FONT}`;
     ctx.fillStyle = '#f8fafc';
-    ctx.fillText(cleanWord, 0, -11.5);
+    ctx.fillText(cleanWord, 0, yTopOffset);
 
     ctx.direction = isRtlTranslation(ft.entry) ? 'rtl' : 'ltr';
-    ctx.font = `800 ${ruFontPx}px Inter, sans-serif`;
+    ctx.font = `700 ${ruFontPx}px ${CANVAS_WORD_FONT}`;
     ctx.fillStyle = '#fde047';
-    ctx.fillText(transText, 0, 12.5);
+    ctx.fillText(transText, 0, yBotOffset);
 
     ctx.restore();
   }
@@ -6369,9 +6385,12 @@
   function drawWeaponBanner(bounds) {
     const w = getCurrentWeapon();
     const borderCol = state.weaponBannerColor || w.color;
+    const bannerFont = isHebrewUI()
+      ? CANVAS_WORD_FONT
+      : (state.nativeLang === 'en' ? '"Orbitron", "Exo 2", "Rubik", sans-serif' : CANVAS_HEADING_FONT);
     ctx.save();
     ctx.globalAlpha = Math.min(1, state.weaponBannerTimer * 1.4);
-    ctx.font = '800 13.5px Inter, sans-serif';
+    ctx.font = `${isHebrewUI() ? 700 : 800} 14px ${bannerFont}`;
     const maxW = Math.max(200, (bounds.right - bounds.left) - 20);
     const textW = Math.min(maxW, ctx.measureText(state.weaponBannerText).width + 30);
     ctx.translate(bounds.centerX, state.ship.y - 56);
@@ -6400,7 +6419,7 @@
     ctx.fill();
     ctx.stroke();
 
-    ctx.font = '700 14px Inter, sans-serif';
+    ctx.font = `700 14.5px ${CANVAS_WORD_FONT}`;
     ctx.fillStyle = '#ffe4e6';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -7481,6 +7500,17 @@
       resizeCanvas();
       seedTitleDemoWords();
     });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        for (const list of [state.activeWords, state.demoWords]) {
+          for (const w of list) {
+            const dims = measureWordCapsule(w.text, w.entry);
+            w.boxW = dims.boxW;
+            w.boxH = dims.boxH;
+          }
+        }
+      }).catch(() => {});
+    }
     requestAnimationFrame(gameLoop);
   }
 
