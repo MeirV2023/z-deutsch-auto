@@ -1,4 +1,4 @@
-// Единый трёхступенчатый каталог курсов Z-LINGO (Немецкий / Английский / Испанский)
+// Единый трёхступенчатый каталог курсов Z-LINGO (Немецкий / Английский / Испанский) с категориями Супер-Админа
 // Слова привязаны к изучаемому языку (targetLang), а переводы хранятся внутри каждого слова объектом translations: { ru, en, he }.
 // Каждый урок содержит 10–13 слов (~1.5 мин), а каждый 4-й урок — динамический Босс-урок (Повторение)!
 
@@ -1112,6 +1112,1011 @@ window.GAME_CATALOG = {
               }
             ]
           }
+        ],
+        "category": "auto"
+      },
+      {
+        "id": "de-business-existenz",
+        "targetLang": "de",
+        "category": "business",
+        "source": "official",
+        "icon": "💼",
+        "levelTag": "B1",
+        "titles": {
+          "ru": "Existenzgründung: Открытие своего дела",
+          "en": "Existenzgründung: Starting a Business",
+          "he": "Existenzgründung: הקמת עסק עצמאי"
+        },
+        "descriptions": {
+          "ru": "Полный курс B1 по предпринимательству (69 слов и выражений): бизнес-план, кредит, налоговая, WKO, субсидии и управление.",
+          "en": "Complete 69-word B1 entrepreneurship course: business plan, loans, tax office, WKO, grants & management.",
+          "he": "קורס B1 מלא ליזמות והקמת עסק (69 מילים וביטויים): תוכנית עסקית, אשראי, רשויות המס, סובסידיות וניהול."
+        },
+        "modules": [
+          {
+            "id": "de-business-existenz-m1",
+            "titles": {
+              "ru": "Модуль 1: Старт, управление и бизнес-идея",
+              "en": "Module 1: Launch, Leadership & Business Idea",
+              "he": "מודול 1: הקמה, ניהול ורעיון עסקי"
+            },
+            "lessons": [
+              {
+                "id": "de-business-existenz-m1-l1",
+                "speedMultiplier": 0.9,
+                "spawnIntervalMs": 2800,
+                "titles": {
+                  "ru": "Старт и ответственность",
+                  "en": "Launch & Responsibility",
+                  "he": "התחלה ואחריות"
+                },
+                "descriptions": {
+                  "ru": "Открытие дела, владелец, руководство и принятие решений (12 слов).",
+                  "en": "Starting out, ownership, leadership & decision-making (12 words).",
+                  "he": "פתיחת עסק, בעלות, ניהול וקבלת החלטות (12 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "der Start, -s",
+                    "word": "Start",
+                    "withArticle": "der Start",
+                    "article": "der",
+                    "plural": "-s",
+                    "translations": {
+                      "ru": "старт, начало",
+                      "en": "start, launch",
+                      "he": "התחלה, הזנקה"
+                    }
+                  },
+                  {
+                    "raw": "der/die Inhaber/in (-/-nen)",
+                    "word": "Inhaber",
+                    "withArticle": "der Inhaber",
+                    "article": "der/die",
+                    "plural": "-/-nen",
+                    "translations": {
+                      "ru": "владелец / владелица",
+                      "en": "owner, proprietor",
+                      "he": "בעלים (של עסק)"
+                    }
+                  },
+                  {
+                    "raw": "leiten",
+                    "word": "leiten",
+                    "withArticle": "leiten",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "руководить, управлять",
+                      "en": "to lead, manage",
+                      "he": "לנהל, להוביל"
+                    }
+                  },
+                  {
+                    "raw": "reichen",
+                    "word": "reichen",
+                    "withArticle": "reichen",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "хватать, быть достаточным, простираться",
+                      "en": "to be enough, suffice",
+                      "he": "להספיק"
+                    }
+                  },
+                  {
+                    "raw": "hart",
+                    "word": "hart",
+                    "withArticle": "hart",
+                    "article": "Adj.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "жёсткий, трудный, суровый",
+                      "en": "hard, tough",
+                      "he": "קשה, קשוח"
+                    }
+                  },
+                  {
+                    "raw": "weiterempfehlen",
+                    "word": "weiterempfehlen",
+                    "withArticle": "weiterempfehlen",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "рекомендовать дальше, советовать",
+                      "en": "to recommend to others",
+                      "he": "להמליץ הלאה"
+                    }
+                  },
+                  {
+                    "raw": "die Verantwortung (Sg.)",
+                    "word": "Verantwortung",
+                    "withArticle": "die Verantwortung",
+                    "article": "die",
+                    "plural": "Sg.",
+                    "translations": {
+                      "ru": "ответственность",
+                      "en": "responsibility",
+                      "he": "אחריות"
+                    }
+                  },
+                  {
+                    "raw": "Verantwortung tragen",
+                    "word": "Verantwortung tragen",
+                    "withArticle": "Verantwortung tragen",
+                    "article": "Phrase",
+                    "plural": "",
+                    "translations": {
+                      "ru": "нести ответственность",
+                      "en": "to bear responsibility",
+                      "he": "לשאת באחריות"
+                    }
+                  },
+                  {
+                    "raw": "Entscheidungen treffen",
+                    "word": "Entscheidungen treffen",
+                    "withArticle": "Entscheidungen treffen",
+                    "article": "Phrase",
+                    "plural": "",
+                    "translations": {
+                      "ru": "принимать решения",
+                      "en": "to make decisions",
+                      "he": "לקבל החלטות"
+                    }
+                  },
+                  {
+                    "raw": "sich selbstständig machen",
+                    "word": "selbstständig machen",
+                    "withArticle": "sich selbstständig machen",
+                    "article": "sich",
+                    "plural": "",
+                    "translations": {
+                      "ru": "стать самостоятельным / открыть своё дело",
+                      "en": "to become self-employed / start a business",
+                      "he": "להפוך לעצמאי / לפתוח עסק"
+                    }
+                  },
+                  {
+                    "raw": "das Berufsleben (Sg.)",
+                    "word": "Berufsleben",
+                    "withArticle": "das Berufsleben",
+                    "article": "das",
+                    "plural": "Sg.",
+                    "translations": {
+                      "ru": "профессиональная жизнь",
+                      "en": "working life, professional life",
+                      "he": "חיים מקצועיים"
+                    }
+                  },
+                  {
+                    "raw": "der/die Existenzgründer/in (-/-nen)",
+                    "word": "Existenzgründer",
+                    "withArticle": "der Existenzgründer",
+                    "article": "der/die",
+                    "plural": "-/-nen",
+                    "translations": {
+                      "ru": "основатель собственного дела / предприниматель",
+                      "en": "business founder, startup entrepreneur",
+                      "he": "מייסד/ת עסק חדש, יזם"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "de-business-existenz-m1-l2",
+                "speedMultiplier": 0.92,
+                "spawnIntervalMs": 2750,
+                "titles": {
+                  "ru": "Бизнес-план, офис и кредит",
+                  "en": "Business Plan, Office & Loan",
+                  "he": "תוכנית עסקית, משרד ואשראי"
+                },
+                "descriptions": {
+                  "ru": "Помещение, филиал, взятие кредита и трудовое право (12 слов).",
+                  "en": "Premises, branch office, taking a loan & labor law (12 words).",
+                  "he": "משרד, סניף, נטילת הלוואה ודיני עבודה (12 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "die Unternehmensführung (Sg.)",
+                    "word": "Unternehmensführung",
+                    "withArticle": "die Unternehmensführung",
+                    "article": "die",
+                    "plural": "Sg.",
+                    "translations": {
+                      "ru": "управление предприятием",
+                      "en": "corporate management, business leadership",
+                      "he": "ניהול חברה / עסק"
+                    }
+                  },
+                  {
+                    "raw": "Das Geschäft läuft gut.",
+                    "word": "Das Geschäft läuft gut",
+                    "withArticle": "Das Geschäft läuft gut",
+                    "article": "Satz",
+                    "plural": "",
+                    "translations": {
+                      "ru": "Дела идут хорошо. / Бизнес идёт хорошо.",
+                      "en": "Business is going well.",
+                      "he": "העסק מתנהל היטב."
+                    }
+                  },
+                  {
+                    "raw": "die Geschäftsidee, -n",
+                    "word": "Geschäftsidee",
+                    "withArticle": "die Geschäftsidee",
+                    "article": "die",
+                    "plural": "-n",
+                    "translations": {
+                      "ru": "бизнес-идея",
+                      "en": "business idea",
+                      "he": "רעיון עסקי"
+                    }
+                  },
+                  {
+                    "raw": "der Businessplan, -e",
+                    "word": "Businessplan",
+                    "withArticle": "der Businessplan",
+                    "article": "der",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "бизнес-план",
+                      "en": "business plan",
+                      "he": "תוכנית עסקית"
+                    }
+                  },
+                  {
+                    "raw": "der Geschäftsraum, -e",
+                    "word": "Geschäftsraum",
+                    "withArticle": "der Geschäftsraum",
+                    "article": "der",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "торговое / офисное помещение",
+                      "en": "business premises, commercial space",
+                      "he": "חלל עסקי / משרד"
+                    }
+                  },
+                  {
+                    "raw": "die Niederlassung, -en",
+                    "word": "Niederlassung",
+                    "withArticle": "die Niederlassung",
+                    "article": "die",
+                    "plural": "-en",
+                    "translations": {
+                      "ru": "филиал, отделение",
+                      "en": "branch office, subsidiary",
+                      "he": "סניף, שלוחה"
+                    }
+                  },
+                  {
+                    "raw": "die Arbeitsstelle, -n",
+                    "word": "Arbeitsstelle",
+                    "withArticle": "die Arbeitsstelle",
+                    "article": "die",
+                    "plural": "-n",
+                    "translations": {
+                      "ru": "рабочее место",
+                      "en": "job, workplace",
+                      "he": "מקום עבודה, משרה"
+                    }
+                  },
+                  {
+                    "raw": "einen Kredit aufnehmen",
+                    "word": "einen Kredit aufnehmen",
+                    "withArticle": "einen Kredit aufnehmen",
+                    "article": "Phrase",
+                    "plural": "",
+                    "translations": {
+                      "ru": "взять кредит",
+                      "en": "to take out a loan",
+                      "he": "לקחת הלוואה"
+                    }
+                  },
+                  {
+                    "raw": "das Arbeitsrecht (Sg.)",
+                    "word": "Arbeitsrecht",
+                    "withArticle": "das Arbeitsrecht",
+                    "article": "das",
+                    "plural": "Sg.",
+                    "translations": {
+                      "ru": "трудовое право",
+                      "en": "labor law, employment law",
+                      "he": "דיני עבודה"
+                    }
+                  },
+                  {
+                    "raw": "schwerfallen",
+                    "word": "schwerfallen",
+                    "withArticle": "schwerfallen",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "даваться с трудом",
+                      "en": "to be difficult (for someone)",
+                      "he": "להיות קשה לביצוע"
+                    }
+                  },
+                  {
+                    "raw": "schließend",
+                    "word": "schließend",
+                    "withArticle": "schließend",
+                    "article": "Adv.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "в заключение, наконец",
+                      "en": "concluding, finally",
+                      "he": "לסיכום, לבסוף"
+                    }
+                  },
+                  {
+                    "raw": "beschließen",
+                    "word": "beschließen",
+                    "withArticle": "beschließen",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "решать, постановлять",
+                      "en": "to decide, resolve",
+                      "he": "להחליט, לקבוע"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "de-business-existenz-m1-l3",
+                "speedMultiplier": 0.94,
+                "spawnIntervalMs": 2700,
+                "titles": {
+                  "ru": "Развитие и окупаемость",
+                  "en": "Development & Payoff",
+                  "he": "פיתוח וכדאיות"
+                },
+                "descriptions": {
+                  "ru": "Разработка продукта, конгресс, исполнение мечты и окупаемость (12 слов).",
+                  "en": "Developing ideas, congresses, fulfilling goals & paying off (12 words).",
+                  "he": "פיתוח רעיונות, כנסים, הגשמת מטרות וכדאיות (12 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "der Beginn (Sg.)",
+                    "word": "Beginn",
+                    "withArticle": "der Beginn",
+                    "article": "der",
+                    "plural": "Sg.",
+                    "translations": {
+                      "ru": "начало",
+                      "en": "beginning, start",
+                      "he": "התחלה, ראשית"
+                    }
+                  },
+                  {
+                    "raw": "der Kongress, -e",
+                    "word": "Kongress",
+                    "withArticle": "der Kongress",
+                    "article": "der",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "конгресс, съезд",
+                      "en": "congress, convention",
+                      "he": "קונגרס, כנס"
+                    }
+                  },
+                  {
+                    "raw": "stolz",
+                    "word": "stolz",
+                    "withArticle": "stolz",
+                    "article": "Adj.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "гордый",
+                      "en": "proud",
+                      "he": "גאה"
+                    }
+                  },
+                  {
+                    "raw": "einen Wunsch erfüllen",
+                    "word": "einen Wunsch erfüllen",
+                    "withArticle": "einen Wunsch erfüllen",
+                    "article": "Phrase",
+                    "plural": "",
+                    "translations": {
+                      "ru": "исполнить желание",
+                      "en": "to fulfill a wish",
+                      "he": "להגשים משאלה"
+                    }
+                  },
+                  {
+                    "raw": "frisch",
+                    "word": "frisch",
+                    "withArticle": "frisch",
+                    "article": "Adj.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "свежий",
+                      "en": "fresh",
+                      "he": "טרי, רענן"
+                    }
+                  },
+                  {
+                    "raw": "kaum",
+                    "word": "kaum",
+                    "withArticle": "kaum",
+                    "article": "Adv.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "едва, почти не",
+                      "en": "hardly, barely",
+                      "he": "בקושי, כמעט ולא"
+                    }
+                  },
+                  {
+                    "raw": "entwickeln",
+                    "word": "entwickeln",
+                    "withArticle": "entwickeln",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "развивать, разрабатывать",
+                      "en": "to develop, design",
+                      "he": "לפתח"
+                    }
+                  },
+                  {
+                    "raw": "sich lohnen",
+                    "word": "lohnen",
+                    "withArticle": "sich lohnen",
+                    "article": "sich",
+                    "plural": "",
+                    "translations": {
+                      "ru": "окупаться, стоить того",
+                      "en": "to be worth it, pay off",
+                      "he": "להשתלם, להיות כדאי"
+                    }
+                  },
+                  {
+                    "raw": "ziemlich",
+                    "word": "ziemlich",
+                    "withArticle": "ziemlich",
+                    "article": "Adv.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "довольно, достаточно",
+                      "en": "quite, fairly",
+                      "he": "די, למדי"
+                    }
+                  },
+                  {
+                    "raw": "inzwischen",
+                    "word": "inzwischen",
+                    "withArticle": "inzwischen",
+                    "article": "Adv.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "тем временем, между тем",
+                      "en": "meanwhile, in the meantime",
+                      "he": "בינתיים"
+                    }
+                  },
+                  {
+                    "raw": "überraschen",
+                    "word": "überraschen",
+                    "withArticle": "überraschen",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "удивлять, поражать",
+                      "en": "to surprise, amaze",
+                      "he": "להפתיע"
+                    }
+                  },
+                  {
+                    "raw": "der Senf (Sg.)",
+                    "word": "Senf",
+                    "withArticle": "der Senf",
+                    "article": "der",
+                    "plural": "Sg.",
+                    "translations": {
+                      "ru": "горчица",
+                      "en": "mustard",
+                      "he": "חרדל"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "de-business-existenz-m1-boss",
+                "isBoss": true,
+                "speedMultiplier": 1.0,
+                "spawnIntervalMs": 2550,
+                "titles": {
+                  "ru": "👹 Босс-урок: Старт бизнеса",
+                  "en": "👹 Boss Review: Startup Launch",
+                  "he": "👹 שלב בוס: הקמת העסק"
+                },
+                "descriptions": {
+                  "ru": "Проверка первых 36 слов и выражений по открытию своего дела!",
+                  "en": "Boss review of the first 36 startup & leadership expressions!",
+                  "he": "חזרת בוס על 36 המילים הראשונות בנושא הקמת עסק!"
+                },
+                "words": []
+              }
+            ]
+          },
+          {
+            "id": "de-business-existenz-m2",
+            "titles": {
+              "ru": "Модуль 2: Госорганы, консалтинг и капитал",
+              "en": "Module 2: Authorities, Consulting & Capital",
+              "he": "מודול 2: רשויות, ייעוץ והון עצמי"
+            },
+            "lessons": [
+              {
+                "id": "de-business-existenz-m2-l1",
+                "speedMultiplier": 0.92,
+                "spawnIntervalMs": 2750,
+                "titles": {
+                  "ru": "Налоговая, WKO и отрасль",
+                  "en": "Tax Office, WKO & Sector",
+                  "he": "רשות המסים, לשכת המסחר והענף"
+                },
+                "descriptions": {
+                  "ru": "Регистрация промысла, Finanzamt, WKO, инвестиции и планирование (11 слов).",
+                  "en": "Trade registration, tax office, WKO, investment & planning (11 words).",
+                  "he": "רישום עסק, מס הכנסה, לשכת המסחר, השקעות ותכנון (11 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "das Finanzamt, -er",
+                    "word": "Finanzamt",
+                    "withArticle": "das Finanzamt",
+                    "article": "das",
+                    "plural": "-er",
+                    "translations": {
+                      "ru": "налоговая инспекция",
+                      "en": "tax office, revenue authority",
+                      "he": "משרד המס / רשות המסים"
+                    }
+                  },
+                  {
+                    "raw": "das Gewerbe, -",
+                    "word": "Gewerbe",
+                    "withArticle": "das Gewerbe",
+                    "article": "das",
+                    "plural": "-",
+                    "translations": {
+                      "ru": "промысел, ремесло, предпринимательская деятельность",
+                      "en": "trade, registered business",
+                      "he": "עסק רשום, משלח יד"
+                    }
+                  },
+                  {
+                    "raw": "der Existenzgründerkurs, -e",
+                    "word": "Existenzgründerkurs",
+                    "withArticle": "der Existenzgründerkurs",
+                    "article": "der",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "курс для начинающих предпринимателей",
+                      "en": "business founder training course",
+                      "he": "קורס ליזמים מתחילים"
+                    }
+                  },
+                  {
+                    "raw": "WKO (Wirtschaftskammer)",
+                    "word": "WKO",
+                    "withArticle": "die Wirtschaftskammer",
+                    "article": "DE",
+                    "plural": "",
+                    "translations": {
+                      "ru": "Торгово-промышленная палата (Австрия)",
+                      "en": "Austrian Chamber of Commerce (WKO)",
+                      "he": "לשכת המסחר (אוסטריה)"
+                    }
+                  },
+                  {
+                    "raw": "investieren",
+                    "word": "investieren",
+                    "withArticle": "investieren",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "инвестировать",
+                      "en": "to invest",
+                      "he": "להשקיע"
+                    }
+                  },
+                  {
+                    "raw": "einrichten",
+                    "word": "einrichten",
+                    "withArticle": "einrichten",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "оборудовать, обустраивать, открывать (дело)",
+                      "en": "to set up, furnish, establish",
+                      "he": "להקים, לאבזר, לסדר"
+                    }
+                  },
+                  {
+                    "raw": "die Finanzierung, -en",
+                    "word": "Finanzierung",
+                    "withArticle": "die Finanzierung",
+                    "article": "die",
+                    "plural": "-en",
+                    "translations": {
+                      "ru": "финансирование",
+                      "en": "financing, funding",
+                      "he": "מימון"
+                    }
+                  },
+                  {
+                    "raw": "die Planung, -en",
+                    "word": "Planung",
+                    "withArticle": "die Planung",
+                    "article": "die",
+                    "plural": "-en",
+                    "translations": {
+                      "ru": "планирование",
+                      "en": "planning",
+                      "he": "תכנון"
+                    }
+                  },
+                  {
+                    "raw": "fachlich",
+                    "word": "fachlich",
+                    "withArticle": "fachlich",
+                    "article": "Adj.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "профессиональный, по специальности",
+                      "en": "professional, technical, specialist",
+                      "he": "מקצועי, תחומי"
+                    }
+                  },
+                  {
+                    "raw": "die Branche, -n",
+                    "word": "Branche",
+                    "withArticle": "die Branche",
+                    "article": "die",
+                    "plural": "-n",
+                    "translations": {
+                      "ru": "отрасль, сфера деятельности",
+                      "en": "industry, sector",
+                      "he": "ענף, תחום עסקי"
+                    }
+                  },
+                  {
+                    "raw": "das Ziel, -e",
+                    "word": "Ziel",
+                    "withArticle": "das Ziel",
+                    "article": "das",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "цель",
+                      "en": "goal, target",
+                      "he": "מטרה, יעד"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "de-business-existenz-m2-l2",
+                "speedMultiplier": 0.94,
+                "spawnIntervalMs": 2700,
+                "titles": {
+                  "ru": "Эксперты, обучение и финансы",
+                  "en": "Experts, Training & Finances",
+                  "he": "מומחים, הכשרה ופיננסים"
+                },
+                "descriptions": {
+                  "ru": "Достижение целей, советы экспертов и повышение квалификации (11 слов).",
+                  "en": "Reaching goals, expert advice & further training programs (11 words).",
+                  "he": "השגת יעדים, עצות מומחים והשתלמויות מקצועיות (11 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "ein Ziel erreichen",
+                    "word": "ein Ziel erreichen",
+                    "withArticle": "ein Ziel erreichen",
+                    "article": "Phrase",
+                    "plural": "",
+                    "translations": {
+                      "ru": "достичь цели",
+                      "en": "to achieve a goal",
+                      "he": "להשיג מטרה"
+                    }
+                  },
+                  {
+                    "raw": "entscheiden",
+                    "word": "entscheiden",
+                    "withArticle": "entscheiden",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "решать",
+                      "en": "to decide",
+                      "he": "להחליט"
+                    }
+                  },
+                  {
+                    "raw": "der Ratschlag, -e",
+                    "word": "Ratschlag",
+                    "withArticle": "der Ratschlag",
+                    "article": "der",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "совет",
+                      "en": "piece of advice",
+                      "he": "עצה"
+                    }
+                  },
+                  {
+                    "raw": "sich auskennen",
+                    "word": "auskennen",
+                    "withArticle": "sich auskennen",
+                    "article": "sich",
+                    "plural": "",
+                    "translations": {
+                      "ru": "разбираться, хорошо ориентироваться",
+                      "en": "to know one's way around, be well-versed",
+                      "he": "להתמצא היטב, להבין בתחום"
+                    }
+                  },
+                  {
+                    "raw": "versuchen",
+                    "word": "versuchen",
+                    "withArticle": "versuchen",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "пытаться, пробовать",
+                      "en": "to try, attempt",
+                      "he": "לנסות"
+                    }
+                  },
+                  {
+                    "raw": "beantworten",
+                    "word": "beantworten",
+                    "withArticle": "beantworten",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "отвечать (на вопрос)",
+                      "en": "to answer (a question)",
+                      "he": "לענות (על שאלה)"
+                    }
+                  },
+                  {
+                    "raw": "der/die Experte/Expertin (-n/-nen)",
+                    "word": "Experte",
+                    "withArticle": "der Experte",
+                    "article": "der/die",
+                    "plural": "-n/-nen",
+                    "translations": {
+                      "ru": "эксперт / экспертка",
+                      "en": "expert, specialist",
+                      "he": "מומחה / מומחית"
+                    }
+                  },
+                  {
+                    "raw": "das Weiterbildungsangebot, -e",
+                    "word": "Weiterbildungsangebot",
+                    "withArticle": "das Weiterbildungsangebot",
+                    "article": "das",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "предложение по повышению квалификации",
+                      "en": "further training offer / program",
+                      "he": "הצעת הכשרה והשתלמות"
+                    }
+                  },
+                  {
+                    "raw": "die Finanzen (Pl.)",
+                    "word": "Finanzen",
+                    "withArticle": "die Finanzen",
+                    "article": "die",
+                    "plural": "Pl.",
+                    "translations": {
+                      "ru": "финансы",
+                      "en": "finances",
+                      "he": "פיננסים, כספים"
+                    }
+                  },
+                  {
+                    "raw": "die Anregung, -en",
+                    "word": "Anregung",
+                    "withArticle": "die Anregung",
+                    "article": "die",
+                    "plural": "-en",
+                    "translations": {
+                      "ru": "стимул, импульс, предложение",
+                      "en": "suggestion, inspiration, stimulus",
+                      "he": "הצעה, השראה, תמריץ"
+                    }
+                  },
+                  {
+                    "raw": "der Plan, -e",
+                    "word": "Plan",
+                    "withArticle": "der Plan",
+                    "article": "der",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "план",
+                      "en": "plan",
+                      "he": "תוכנית"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "de-business-existenz-m2-l3",
+                "speedMultiplier": 0.95,
+                "spawnIntervalMs": 2650,
+                "titles": {
+                  "ru": "Субсидии, капитал и документы",
+                  "en": "Grants, Equity & Documents",
+                  "he": "מענקים, הון עצמי ומסמכים"
+                },
+                "descriptions": {
+                  "ru": "Услуги, программы поддержки, поставщики, капитал и погашение долгов (11 слов).",
+                  "en": "Services, grant programs, suppliers, equity & repaying debts (11 words).",
+                  "he": "שירותים, תוכניות תמיכה, ספקים, הון עצמי ופירעון חובות (11 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "die Dienstleistung, -en",
+                    "word": "Dienstleistung",
+                    "withArticle": "die Dienstleistung",
+                    "article": "die",
+                    "plural": "-en",
+                    "translations": {
+                      "ru": "услуга",
+                      "en": "service",
+                      "he": "שירות"
+                    }
+                  },
+                  {
+                    "raw": "der Geschäftsplan, -e",
+                    "word": "Geschäftsplan",
+                    "withArticle": "der Geschäftsplan",
+                    "article": "der",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "бизнес-план",
+                      "en": "business plan (operational)",
+                      "he": "תוכנית עסקית"
+                    }
+                  },
+                  {
+                    "raw": "der/die Unternehmer/in (-/-nen)",
+                    "word": "Unternehmer",
+                    "withArticle": "der Unternehmer",
+                    "article": "der/die",
+                    "plural": "-/-nen",
+                    "translations": {
+                      "ru": "предприниматель / предпринимательница",
+                      "en": "entrepreneur, business owner",
+                      "he": "יזם / יזמית, בעל עסק"
+                    }
+                  },
+                  {
+                    "raw": "das Förderprogramm, -e",
+                    "word": "Förderprogramm",
+                    "withArticle": "das Förderprogramm",
+                    "article": "das",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "программа поддержки / субсидирования",
+                      "en": "grant / funding support program",
+                      "he": "תוכנית סיוע ומימון"
+                    }
+                  },
+                  {
+                    "raw": "der/die Finanzberater/in (-/-nen)",
+                    "word": "Finanzberater",
+                    "withArticle": "der Finanzberater",
+                    "article": "der/die",
+                    "plural": "-/-nen",
+                    "translations": {
+                      "ru": "финансовый консультант / консультантка",
+                      "en": "financial advisor",
+                      "he": "יועץ / יועצת פיננסיים"
+                    }
+                  },
+                  {
+                    "raw": "der Standort, -e",
+                    "word": "Standort",
+                    "withArticle": "der Standort",
+                    "article": "der",
+                    "plural": "-e",
+                    "translations": {
+                      "ru": "местоположение, площадка",
+                      "en": "location, business site",
+                      "he": "מיקום, אתר פעילות"
+                    }
+                  },
+                  {
+                    "raw": "der/die Lieferant/in (-en/-nen)",
+                    "word": "Lieferant",
+                    "withArticle": "der Lieferant",
+                    "article": "der/die",
+                    "plural": "-en/-nen",
+                    "translations": {
+                      "ru": "поставщик / поставщица",
+                      "en": "supplier, vendor",
+                      "he": "ספק / ספקית"
+                    }
+                  },
+                  {
+                    "raw": "das Eigenkapital (Sg.)",
+                    "word": "Eigenkapital",
+                    "withArticle": "das Eigenkapital",
+                    "article": "das",
+                    "plural": "Sg.",
+                    "translations": {
+                      "ru": "собственный капитал",
+                      "en": "equity, own capital",
+                      "he": "הון עצמי"
+                    }
+                  },
+                  {
+                    "raw": "die Schulden (Pl.)",
+                    "word": "Schulden",
+                    "withArticle": "die Schulden",
+                    "article": "die",
+                    "plural": "Pl.",
+                    "translations": {
+                      "ru": "долги",
+                      "en": "debts",
+                      "he": "חובות"
+                    }
+                  },
+                  {
+                    "raw": "zurückzahlen",
+                    "word": "zurückzahlen",
+                    "withArticle": "zurückzahlen",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "возвращать (деньги), погашать",
+                      "en": "to pay back, repay",
+                      "he": "להחזיר הלוואה, לפרוע"
+                    }
+                  },
+                  {
+                    "raw": "die Unterlagen (Pl.)",
+                    "word": "Unterlagen",
+                    "withArticle": "die Unterlagen",
+                    "article": "die",
+                    "plural": "Pl.",
+                    "translations": {
+                      "ru": "документы, бумаги",
+                      "en": "documents, paperwork",
+                      "he": "מסמכים, ניירת"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "de-business-existenz-m2-boss",
+                "isBoss": true,
+                "speedMultiplier": 1.02,
+                "spawnIntervalMs": 2500,
+                "titles": {
+                  "ru": "👹 Босс-урок: Экзамен предпринимателя",
+                  "en": "👹 Boss Review: Entrepreneur Exam",
+                  "he": "👹 שלב בוס: מבחן היזם"
+                },
+                "descriptions": {
+                  "ru": "Финальный экзамен по финансам, госорганам и управлению бизнесом!",
+                  "en": "Final boss check on business finance, authorities & operations!",
+                  "he": "מבחן בוס מסכם על פיננסים, רשויות וניהול עסק!"
+                },
+                "words": []
+              }
+            ]
+          }
         ]
       },
       {
@@ -1605,7 +2610,8 @@ window.GAME_CATALOG = {
               }
             ]
           }
-        ]
+        ],
+        "category": "base"
       },
       {
         "id": "de-it",
@@ -2062,7 +3068,8 @@ window.GAME_CATALOG = {
               }
             ]
           }
-        ]
+        ],
+        "category": "it"
       }
     ],
     "en": [
@@ -2593,6 +3600,376 @@ window.GAME_CATALOG = {
               }
             ]
           }
+        ],
+        "category": "base"
+      },
+      {
+        "id": "en-business-existenz",
+        "targetLang": "en",
+        "category": "business",
+        "source": "official",
+        "icon": "💼",
+        "levelTag": "B1",
+        "titles": {
+          "ru": "Starting a Business: Открытие дела",
+          "en": "Starting a Business (Startup B1)",
+          "he": "Starting a Business: הקמת עסק"
+        },
+        "descriptions": {
+          "ru": "Английская бизнес-лексика B1 (24 ключевых термина): предпринимательство, кредиты, налоги, капитал и поставщики.",
+          "en": "B1 Business English startup essentials (24 terms): entrepreneurship, loans, taxes, equity & suppliers.",
+          "he": "אנגלית עסקית ברמת B1 (24 מונחי מפתח): יזמות, הלוואות, מסים, הון עצמי וספקים."
+        },
+        "modules": [
+          {
+            "id": "en-business-existenz-m1",
+            "titles": {
+              "ru": "Модуль 1: Запуск и финансы бизнеса",
+              "en": "Module 1: Business Launch & Finance",
+              "he": "מודול 1: הקמת עסק ופיננסים"
+            },
+            "lessons": [
+              {
+                "id": "en-business-existenz-m1-l1",
+                "speedMultiplier": 0.92,
+                "spawnIntervalMs": 2750,
+                "titles": {
+                  "ru": "Стартап и управление",
+                  "en": "Startup & Management",
+                  "he": "סטארטאפ וניהול"
+                },
+                "descriptions": {
+                  "ru": "Предприниматель, бизнес-план, филиал и инвестиции (12 слов).",
+                  "en": "Entrepreneur, business plan, branch office & investment (12 words).",
+                  "he": "יזם, תוכנית עסקית, סניף והשקעות (12 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "entrepreneur",
+                    "word": "entrepreneur",
+                    "withArticle": "entrepreneur",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "предприниматель / основатель дела",
+                      "en": "entrepreneur",
+                      "he": "יזם, בעל עסק"
+                    }
+                  },
+                  {
+                    "raw": "to launch",
+                    "word": "launch",
+                    "withArticle": "launch",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "запускать (проект / бизнес)",
+                      "en": "to launch",
+                      "he": "להשיק, להקים"
+                    }
+                  },
+                  {
+                    "raw": "responsibility",
+                    "word": "responsibility",
+                    "withArticle": "responsibility",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "ответственность",
+                      "en": "responsibility",
+                      "he": "אחריות"
+                    }
+                  },
+                  {
+                    "raw": "self-employed",
+                    "word": "self-employed",
+                    "withArticle": "self-employed",
+                    "article": "Adj.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "самостоятельный / работающий на себя",
+                      "en": "self-employed",
+                      "he": "עצמאי"
+                    }
+                  },
+                  {
+                    "raw": "business plan",
+                    "word": "business plan",
+                    "withArticle": "business plan",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "бизнес-план",
+                      "en": "business plan",
+                      "he": "תוכנית עסקית"
+                    }
+                  },
+                  {
+                    "raw": "branch office",
+                    "word": "branch office",
+                    "withArticle": "branch office",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "филиал, отделение",
+                      "en": "branch office",
+                      "he": "סניף, שלוחה"
+                    }
+                  },
+                  {
+                    "raw": "employment law",
+                    "word": "employment law",
+                    "withArticle": "employment law",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "трудовое право",
+                      "en": "employment law",
+                      "he": "דיני עבודה"
+                    }
+                  },
+                  {
+                    "raw": "to invest",
+                    "word": "invest",
+                    "withArticle": "invest",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "инвестировать, вкладывать",
+                      "en": "to invest",
+                      "he": "להשקיע"
+                    }
+                  },
+                  {
+                    "raw": "worthwhile",
+                    "word": "worthwhile",
+                    "withArticle": "worthwhile",
+                    "article": "Adj.",
+                    "plural": "",
+                    "translations": {
+                      "ru": "окупающийся, стоящий усилий",
+                      "en": "worthwhile",
+                      "he": "משתלם, כדאי"
+                    }
+                  },
+                  {
+                    "raw": "premises",
+                    "word": "premises",
+                    "withArticle": "premises",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "офисное / торговое помещение",
+                      "en": "premises",
+                      "he": "מתחם עסקי, משרדים"
+                    }
+                  },
+                  {
+                    "raw": "to manage",
+                    "word": "manage",
+                    "withArticle": "manage",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "руководить, управлять",
+                      "en": "to manage",
+                      "he": "לנהל"
+                    }
+                  },
+                  {
+                    "raw": "proprietor",
+                    "word": "proprietor",
+                    "withArticle": "proprietor",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "владелец предприятия",
+                      "en": "proprietor",
+                      "he": "בעל עסק"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "en-business-existenz-m1-l2",
+                "speedMultiplier": 0.94,
+                "spawnIntervalMs": 2700,
+                "titles": {
+                  "ru": "Налоги, гранты и капитал",
+                  "en": "Taxes, Grants & Equity",
+                  "he": "מסים, מענקים והון עצמי"
+                },
+                "descriptions": {
+                  "ru": "Налоговая, финансирование, поставщики и погашение долгов (12 слов).",
+                  "en": "Tax office, funding, suppliers, equity & debt repayment (12 words).",
+                  "he": "רשות המסים, מימון, ספקים ופירעון חובות (12 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "tax office",
+                    "word": "tax office",
+                    "withArticle": "tax office",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "налоговая инспекция",
+                      "en": "tax office",
+                      "he": "רשות המסים"
+                    }
+                  },
+                  {
+                    "raw": "funding",
+                    "word": "funding",
+                    "withArticle": "funding",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "финансирование, субсидирование",
+                      "en": "funding",
+                      "he": "מימון"
+                    }
+                  },
+                  {
+                    "raw": "industry",
+                    "word": "industry",
+                    "withArticle": "industry",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "отрасль, сфера бизнеса",
+                      "en": "industry",
+                      "he": "ענף, תעשייה"
+                    }
+                  },
+                  {
+                    "raw": "financial advisor",
+                    "word": "financial advisor",
+                    "withArticle": "financial advisor",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "финансовый консультант",
+                      "en": "financial advisor",
+                      "he": "יועץ פיננסי"
+                    }
+                  },
+                  {
+                    "raw": "grant program",
+                    "word": "grant program",
+                    "withArticle": "grant program",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "программа поддержки / грантов",
+                      "en": "grant program",
+                      "he": "תוכנית מענקים"
+                    }
+                  },
+                  {
+                    "raw": "supplier",
+                    "word": "supplier",
+                    "withArticle": "supplier",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "поставщик",
+                      "en": "supplier",
+                      "he": "ספק"
+                    }
+                  },
+                  {
+                    "raw": "equity",
+                    "word": "equity",
+                    "withArticle": "equity",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "собственный капитал",
+                      "en": "equity",
+                      "he": "הון עצמי"
+                    }
+                  },
+                  {
+                    "raw": "debts",
+                    "word": "debts",
+                    "withArticle": "debts",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "долги, задолженность",
+                      "en": "debts",
+                      "he": "חובות"
+                    }
+                  },
+                  {
+                    "raw": "to repay",
+                    "word": "repay",
+                    "withArticle": "repay",
+                    "article": "Verb",
+                    "plural": "",
+                    "translations": {
+                      "ru": "возвращать деньги, погашать кредит",
+                      "en": "to repay",
+                      "he": "לפרוע, להחזיר הלוואה"
+                    }
+                  },
+                  {
+                    "raw": "documents",
+                    "word": "documents",
+                    "withArticle": "documents",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "документы, деловые бумаги",
+                      "en": "documents",
+                      "he": "מסמכים, ניירת"
+                    }
+                  },
+                  {
+                    "raw": "service",
+                    "word": "service",
+                    "withArticle": "service",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "услуга",
+                      "en": "service",
+                      "he": "שירות"
+                    }
+                  },
+                  {
+                    "raw": "location",
+                    "word": "location",
+                    "withArticle": "location",
+                    "article": "Noun",
+                    "plural": "",
+                    "translations": {
+                      "ru": "местоположение, локация бизнеса",
+                      "en": "location",
+                      "he": "מיקום עסקי"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "en-business-existenz-m1-boss",
+                "isBoss": true,
+                "speedMultiplier": 1.0,
+                "spawnIntervalMs": 2550,
+                "titles": {
+                  "ru": "👹 Босс-урок: Business Founder",
+                  "en": "👹 Boss Review: Business Founder",
+                  "he": "👹 שלב בוס: Business Founder"
+                },
+                "descriptions": {
+                  "ru": "Проверка всей бизнес-лексики модуля на английском!",
+                  "en": "Boss check on all Business English startup vocabulary!",
+                  "he": "חזרת בוס על כל מונחי העסקים באנגלית!"
+                },
+                "words": []
+              }
+            ]
+          }
         ]
       },
       {
@@ -3086,7 +4463,8 @@ window.GAME_CATALOG = {
               }
             ]
           }
-        ]
+        ],
+        "category": "it"
       },
       {
         "id": "en-auto",
@@ -3579,7 +4957,8 @@ window.GAME_CATALOG = {
               }
             ]
           }
-        ]
+        ],
+        "category": "auto"
       }
     ],
     "es": [
@@ -4074,6 +5453,376 @@ window.GAME_CATALOG = {
               }
             ]
           }
+        ],
+        "category": "base"
+      },
+      {
+        "id": "es-business-existenz",
+        "targetLang": "es",
+        "category": "business",
+        "source": "official",
+        "icon": "💼",
+        "levelTag": "B1",
+        "titles": {
+          "ru": "Emprendimiento: Открытие бизнеса (ES)",
+          "en": "Emprendimiento: Starting a Business (ES)",
+          "he": "Emprendimiento: הקמת עסק בספרדית"
+        },
+        "descriptions": {
+          "ru": "Испанская лексика B1 по открытию своего дела (24 слова): бизнес-план, кредит, субсидии и финансы.",
+          "en": "B1 Spanish entrepreneurship course (24 words): business plan, loans, grants & finance.",
+          "he": "ספרדית עסקית ברמת B1 (24 מילים): תוכנית עסקית, הלוואות, מענקים ופיננסים."
+        },
+        "modules": [
+          {
+            "id": "es-business-existenz-m1",
+            "titles": {
+              "ru": "Модуль 1: Предпринимательство и финансы",
+              "en": "Module 1: Entrepreneurship & Finance",
+              "he": "מודול 1: יזמות ופיננסים"
+            },
+            "lessons": [
+              {
+                "id": "es-business-existenz-m1-l1",
+                "speedMultiplier": 0.92,
+                "spawnIntervalMs": 2750,
+                "titles": {
+                  "ru": "Идея, управление и кредит",
+                  "en": "Idea, Management & Loan",
+                  "he": "רעיון, ניהול והלוואה"
+                },
+                "descriptions": {
+                  "ru": "Предприниматель, филиал, кредит и развитие дела (12 слов).",
+                  "en": "Entrepreneur, branch, loan & business growth (12 words).",
+                  "he": "יזם, סניף, הלוואה ופיתוח העסק (12 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "el emprendedor",
+                    "word": "emprendedor",
+                    "withArticle": "el emprendedor",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "предприниматель",
+                      "en": "founder / entrepreneur",
+                      "he": "יזם"
+                    }
+                  },
+                  {
+                    "raw": "el propietario",
+                    "word": "propietario",
+                    "withArticle": "el propietario",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "владелец",
+                      "en": "owner, proprietor",
+                      "he": "בעלים"
+                    }
+                  },
+                  {
+                    "raw": "dirigir",
+                    "word": "dirigir",
+                    "withArticle": "dirigir",
+                    "article": "Verbo",
+                    "plural": "",
+                    "translations": {
+                      "ru": "руководить, управлять",
+                      "en": "to lead, manage",
+                      "he": "לנהל"
+                    }
+                  },
+                  {
+                    "raw": "la responsabilidad",
+                    "word": "responsabilidad",
+                    "withArticle": "la responsabilidad",
+                    "article": "la",
+                    "plural": "",
+                    "translations": {
+                      "ru": "ответственность",
+                      "en": "responsibility",
+                      "he": "אחריות"
+                    }
+                  },
+                  {
+                    "raw": "el plan de negocios",
+                    "word": "plan de negocios",
+                    "withArticle": "el plan de negocios",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "бизнес-план",
+                      "en": "business plan",
+                      "he": "תוכנית עסקית"
+                    }
+                  },
+                  {
+                    "raw": "la sucursal",
+                    "word": "sucursal",
+                    "withArticle": "la sucursal",
+                    "article": "la",
+                    "plural": "",
+                    "translations": {
+                      "ru": "филиал, отделение",
+                      "en": "branch office",
+                      "he": "סניף"
+                    }
+                  },
+                  {
+                    "raw": "el préstamo",
+                    "word": "préstamo",
+                    "withArticle": "el préstamo",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "кредит, заём",
+                      "en": "loan, credit",
+                      "he": "הלוואה"
+                    }
+                  },
+                  {
+                    "raw": "invertir",
+                    "word": "invertir",
+                    "withArticle": "invertir",
+                    "article": "Verbo",
+                    "plural": "",
+                    "translations": {
+                      "ru": "инвестировать",
+                      "en": "to invest",
+                      "he": "להשקיע"
+                    }
+                  },
+                  {
+                    "raw": "desarrollar",
+                    "word": "desarrollar",
+                    "withArticle": "desarrollar",
+                    "article": "Verbo",
+                    "plural": "",
+                    "translations": {
+                      "ru": "развивать, разрабатывать",
+                      "en": "to develop",
+                      "he": "לפתח"
+                    }
+                  },
+                  {
+                    "raw": "valer la pena",
+                    "word": "valer la pena",
+                    "withArticle": "valer la pena",
+                    "article": "Phrase",
+                    "plural": "",
+                    "translations": {
+                      "ru": "окупаться, стоить того",
+                      "en": "to be worth it",
+                      "he": "להשתלם"
+                    }
+                  },
+                  {
+                    "raw": "el sector",
+                    "word": "sector",
+                    "withArticle": "el sector",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "отрасль, сфера",
+                      "en": "industry, sector",
+                      "he": "ענף עסקי"
+                    }
+                  },
+                  {
+                    "raw": "el objetivo",
+                    "word": "objetivo",
+                    "withArticle": "el objetivo",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "цель",
+                      "en": "goal, target",
+                      "he": "מטרה, יעד"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "es-business-existenz-m1-l2",
+                "speedMultiplier": 0.94,
+                "spawnIntervalMs": 2700,
+                "titles": {
+                  "ru": "Налоги, субсидии и документы",
+                  "en": "Taxes, Subsidies & Paperwork",
+                  "he": "מסים, סובסידיות ומסמכים"
+                },
+                "descriptions": {
+                  "ru": "Налоговая, финансирование, поставщики и капитал (12 слов).",
+                  "en": "Tax office, funding, suppliers & own capital (12 words).",
+                  "he": "רשות המסים, מימון, ספקים והון עצמי (12 מילים)."
+                },
+                "words": [
+                  {
+                    "raw": "la hacienda",
+                    "word": "hacienda",
+                    "withArticle": "la hacienda",
+                    "article": "la",
+                    "plural": "",
+                    "translations": {
+                      "ru": "налоговая служба",
+                      "en": "tax office",
+                      "he": "רשות המסים"
+                    }
+                  },
+                  {
+                    "raw": "la financiación",
+                    "word": "financiación",
+                    "withArticle": "la financiación",
+                    "article": "la",
+                    "plural": "",
+                    "translations": {
+                      "ru": "финансирование",
+                      "en": "financing, funding",
+                      "he": "מימון"
+                    }
+                  },
+                  {
+                    "raw": "el servicio",
+                    "word": "servicio",
+                    "withArticle": "el servicio",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "услуга",
+                      "en": "service",
+                      "he": "שירות"
+                    }
+                  },
+                  {
+                    "raw": "el asesor financiero",
+                    "word": "asesor financiero",
+                    "withArticle": "el asesor financiero",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "финансовый консультант",
+                      "en": "financial advisor",
+                      "he": "יועץ פיננסי"
+                    }
+                  },
+                  {
+                    "raw": "la subvención",
+                    "word": "subvención",
+                    "withArticle": "la subvención",
+                    "article": "la",
+                    "plural": "",
+                    "translations": {
+                      "ru": "субсидия, программа поддержки",
+                      "en": "grant, subsidy",
+                      "he": "סובסידיה, מענק"
+                    }
+                  },
+                  {
+                    "raw": "el proveedor",
+                    "word": "proveedor",
+                    "withArticle": "el proveedor",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "поставщик",
+                      "en": "supplier, vendor",
+                      "he": "ספק"
+                    }
+                  },
+                  {
+                    "raw": "el capital propio",
+                    "word": "capital propio",
+                    "withArticle": "el capital propio",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "собственный капитал",
+                      "en": "equity, own capital",
+                      "he": "הון עצמי"
+                    }
+                  },
+                  {
+                    "raw": "las deudas",
+                    "word": "deudas",
+                    "withArticle": "las deudas",
+                    "article": "las",
+                    "plural": "",
+                    "translations": {
+                      "ru": "долги",
+                      "en": "debts",
+                      "he": "חובות"
+                    }
+                  },
+                  {
+                    "raw": "reembolsar",
+                    "word": "reembolsar",
+                    "withArticle": "reembolsar",
+                    "article": "Verbo",
+                    "plural": "",
+                    "translations": {
+                      "ru": "возвращать (деньги), погашать",
+                      "en": "to repay, pay back",
+                      "he": "לפרוע חוב"
+                    }
+                  },
+                  {
+                    "raw": "los documentos",
+                    "word": "documentos",
+                    "withArticle": "los documentos",
+                    "article": "los",
+                    "plural": "",
+                    "translations": {
+                      "ru": "документы, бумаги",
+                      "en": "documents, paperwork",
+                      "he": "מסמכים"
+                    }
+                  },
+                  {
+                    "raw": "la ubicación",
+                    "word": "ubicación",
+                    "withArticle": "la ubicación",
+                    "article": "la",
+                    "plural": "",
+                    "translations": {
+                      "ru": "местоположение, площадка",
+                      "en": "location, site",
+                      "he": "מיקום"
+                    }
+                  },
+                  {
+                    "raw": "el experto",
+                    "word": "experto",
+                    "withArticle": "el experto",
+                    "article": "el",
+                    "plural": "",
+                    "translations": {
+                      "ru": "эксперт",
+                      "en": "expert, specialist",
+                      "he": "מומחה"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "es-business-existenz-m1-boss",
+                "isBoss": true,
+                "speedMultiplier": 1.0,
+                "spawnIntervalMs": 2550,
+                "titles": {
+                  "ru": "👹 Босс-урок: Emprendedor B1",
+                  "en": "👹 Boss Review: Emprendedor B1",
+                  "he": "👹 שלב בוס: Emprendedor B1"
+                },
+                "descriptions": {
+                  "ru": "Проверка испанской бизнес-лексики!",
+                  "en": "Boss review of Spanish entrepreneurship vocabulary!",
+                  "he": "חזרת בוס על אוצר המילים העסקי בספרדית!"
+                },
+                "words": []
+              }
+            ]
+          }
         ]
       },
       {
@@ -4555,7 +6304,8 @@ window.GAME_CATALOG = {
               }
             ]
           }
-        ]
+        ],
+        "category": "auto"
       },
       {
         "id": "es-it",
@@ -5012,8 +6762,95 @@ window.GAME_CATALOG = {
               }
             ]
           }
-        ]
+        ],
+        "category": "it"
       }
     ]
-  }
+  },
+  "categories": [
+    {
+      "id": "auto",
+      "icon": "🚗",
+      "titles": {
+        "ru": "Auto",
+        "en": "Auto",
+        "he": "Auto (רכב)"
+      },
+      "descriptions": {
+        "ru": "Автомобиль, устройство, автобан, ПДД, поломки и страховка",
+        "en": "Cars, cabin controls, highway rules, breakdowns & insurance",
+        "he": "רכב, תא נוסעים, אוטובאן, תקלות וביטוח"
+      }
+    },
+    {
+      "id": "business",
+      "icon": "💼",
+      "titles": {
+        "ru": "Бизнес и карьера",
+        "en": "Business & Career",
+        "he": "עסקים וקריירה"
+      },
+      "descriptions": {
+        "ru": "Открытие своего дела (Existenzgründung), финансы, управление и работа",
+        "en": "Starting a business, entrepreneurship, finance & management",
+        "he": "הקמת עסק עצמאי, פיננסים, ניהול וקריירה"
+      }
+    },
+    {
+      "id": "base",
+      "icon": "🌱",
+      "titles": {
+        "ru": "Базовый курс",
+        "en": "Core Course",
+        "he": "קורס בסיסי"
+      },
+      "descriptions": {
+        "ru": "Повседневная жизнь, дом, город, покупки и базовое общение",
+        "en": "Everyday life, home, city, shopping & core communication",
+        "he": "חיי יומיום, בית, עיר, קניות ותקשורת בסיסית"
+      }
+    },
+    {
+      "id": "it",
+      "icon": "💻",
+      "titles": {
+        "ru": "IT и разработка",
+        "en": "IT & Tech",
+        "he": "הייטק ופיתוח"
+      },
+      "descriptions": {
+        "ru": "Архитектура ПО, серверы, базы данных, облако и безопасность",
+        "en": "Software engineering, servers, databases, cloud & security",
+        "he": "הנדסת תוכנה, שרתים, מסדי נתונים, ענן ואבטחה"
+      }
+    },
+    {
+      "id": "travel",
+      "icon": "✈️",
+      "titles": {
+        "ru": "Путешествия",
+        "en": "Travel",
+        "he": "נסיעות וטיולים"
+      },
+      "descriptions": {
+        "ru": "Аэропорт, отели, маршруты, отдых и ориентирование в поездке",
+        "en": "Airports, hotels, itineraries, vacation & getting around",
+        "he": "שדות תעופה, מלונות, חופשה והתמצאות בטיול"
+      }
+    },
+    {
+      "id": "medicine",
+      "icon": "🏥",
+      "titles": {
+        "ru": "Медицина",
+        "en": "Medicine",
+        "he": "רפואה"
+      },
+      "descriptions": {
+        "ru": "Здоровье, визит к врачу, симптомы и аптека",
+        "en": "Health, doctor appointments, symptoms & pharmacy",
+        "he": "בריאות, ביקור אצל רופא, תסמינים ובית מרקחת"
+      }
+    }
+  ]
 };

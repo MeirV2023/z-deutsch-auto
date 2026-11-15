@@ -20,7 +20,10 @@
     'Verb': { main: '#a78bfa', glow: 'rgba(167, 139, 250, 0.45)', label: 'Verb' },
     'Adj.': { main: '#34d399', glow: 'rgba(52, 211, 153, 0.45)', label: 'Adj.' },
     'Adv.': { main: '#e879f9', glow: 'rgba(232, 121, 249, 0.45)', label: 'Adv.' },
-    'Pron.': { main: '#f472b6', glow: 'rgba(244, 114, 182, 0.45)', label: 'Pron.' }
+    'Pron.': { main: '#f472b6', glow: 'rgba(244, 114, 182, 0.45)', label: 'Pron.' },
+    'sich': { main: '#c084fc', glow: 'rgba(192, 132, 252, 0.45)', label: 'sich' },
+    'Phrase': { main: '#fbbf24', glow: 'rgba(251, 191, 36, 0.45)', label: 'Phrase' },
+    'Satz': { main: '#2dd4bf', glow: 'rgba(45, 212, 191, 0.45)', label: 'Satz' }
   };
 
   function getArticleStyle(article, fallbackLang = 'de') {
@@ -223,6 +226,7 @@
       navDecks: 'Мои колоды',
       navStats: 'Статистика',
       navLeaderboard: 'Рейтинг',
+      navAdmin: 'Админ',
       streakDays: (n) => `${n} дн.`,
       heroTitleTop: 'Изучай иностранные языки',
       heroTitleAccent: 'в формате игры!',
@@ -364,6 +368,8 @@
       decksSrcAll: 'Все',
       decksSrcOfficial: 'От создателя',
       decksSrcUser: 'Личные / Anki',
+      decksCategoryHeader: 'Категория',
+      decksAdminBtn: 'Супер-Админ',
       decksLevelHeader: 'Уровень',
       decksLevelAll: 'Все',
       decksSidebarProgTitle: 'Ваш прогресс',
@@ -487,6 +493,7 @@
       navDecks: 'My Decks',
       navStats: 'Stats',
       navLeaderboard: 'Leaderboard',
+      navAdmin: 'Admin',
       streakDays: (n) => `${n}d`,
       heroTitleTop: 'Learn Foreign Languages',
       heroTitleAccent: 'Through Space Action!',
@@ -626,6 +633,8 @@
       decksSrcAll: 'All',
       decksSrcOfficial: 'Official',
       decksSrcUser: 'My Decks / Anki',
+      decksCategoryHeader: 'Category',
+      decksAdminBtn: 'Super Admin',
       decksLevelHeader: 'Level',
       decksLevelAll: 'All',
       decksSidebarProgTitle: 'Your Progress',
@@ -748,6 +757,7 @@
       navDecks: 'החפיסות שלי',
       navStats: 'סטטיסטיקה',
       navLeaderboard: 'דירוג',
+      navAdmin: 'אדמין',
       streakDays: (n) => `${n} ימים`,
       heroTitleTop: 'למדו שפות זרות',
       heroTitleAccent: 'בפורמט של משחק חלל!',
@@ -887,6 +897,8 @@
       decksSrcAll: 'הכל',
       decksSrcOfficial: 'מהיוצר',
       decksSrcUser: 'אישי / Anki',
+      decksCategoryHeader: 'קטגוריה',
+      decksAdminBtn: 'סופר-אדמין',
       decksLevelHeader: 'רמה',
       decksLevelAll: 'הכל',
       decksSidebarProgTitle: 'ההתקדמות שלך',
@@ -1976,12 +1988,46 @@
     lastSpotlightIsHit: false,
     lastPromoRect: null,
 
-    // Трёхступенчатый выбор курса -> модуля -> урока + полноэкранная страница «Мои колоды»
+    // Трёхступенчатый выбор курса -> модуля -> урока + полноэкранная страница «Мои колоды» + Студия Супер-Админа
     userCourses: [],
+    adminCatalog: (() => {
+      try {
+        const raw = localStorage.getItem('zlingo_admin_catalog_v1');
+        const parsed = raw ? JSON.parse(raw) : null;
+        if (parsed && typeof parsed === 'object') {
+          return {
+            version: 1,
+            updatedAt: parsed.updatedAt || '',
+            categories: Array.isArray(parsed.categories) ? parsed.categories : [],
+            courses: {
+              de: (parsed.courses && Array.isArray(parsed.courses.de)) ? parsed.courses.de : [],
+              en: (parsed.courses && Array.isArray(parsed.courses.en)) ? parsed.courses.en : [],
+              es: (parsed.courses && Array.isArray(parsed.courses.es)) ? parsed.courses.es : []
+            },
+            courseOverrides: (parsed.courseOverrides && typeof parsed.courseOverrides === 'object')
+              ? parsed.courseOverrides
+              : {},
+            deletedCourseIds: Array.isArray(parsed.deletedCourseIds) ? parsed.deletedCourseIds : []
+          };
+        }
+      } catch (_) {}
+      return {
+        version: 1,
+        updatedAt: '',
+        categories: [],
+        courses: { de: [], en: [], es: [] },
+        courseOverrides: {},
+        deletedCourseIds: []
+      };
+    })(),
+    adminOrgLang: initialTargetLang,
+    adminAiPreviewResult: null,
+    adminTitleManuallyEdited: false,
     catalogSourceFilter: 'all', // 'all' | 'official' | 'user'
-    homeSubView: 'home', // 'home' | 'decks'
+    homeSubView: 'home', // 'home' | 'decks' | 'admin'
     decksNavMode: 'decks', // 'decks' | 'courses'
     decksViewMode: 'grid', // 'grid' | 'list'
+    decksCategoryFilter: 'all',
     decksLevelFilter: 'all',
     decksSearchQuery: '',
     openedDeckId: '',
@@ -2228,8 +2274,101 @@
     return state.nativeLang === 'he' || /[\u0590-\u05FF]/.test(txt);
   }
 
+  function getAllCategories() {
+    const baseCats = (window.GAME_CATALOG && Array.isArray(window.GAME_CATALOG.categories))
+      ? window.GAME_CATALOG.categories
+      : [];
+    const adminCats = (state.adminCatalog && Array.isArray(state.adminCatalog.categories))
+      ? state.adminCatalog.categories
+      : [];
+    const byId = new Map();
+    for (const c of baseCats) {
+      if (c && c.id) byId.set(c.id, c);
+    }
+    for (const c of adminCats) {
+      if (c && c.id) byId.set(c.id, c);
+    }
+    return Array.from(byId.values());
+  }
+
+  function getCategoryById(catId) {
+    if (!catId) return null;
+    return getAllCategories().find(c => c.id === catId) || null;
+  }
+
+  function inferCourseCategory(course) {
+    if (!course) return 'base';
+    if (course.category) return course.category;
+    const cid = String(course.id || '').toLowerCase();
+    if (cid.includes('auto')) return 'auto';
+    if (cid.includes('business') || cid.includes('existenz')) return 'business';
+    if (cid.includes('it')) return 'it';
+    if (cid.includes('travel')) return 'travel';
+    return 'base';
+  }
+
+  function getOfficialCoursesForTargetLang(targetLang = state.targetLang) {
+    const baseList = (window.GAME_CATALOG && window.GAME_CATALOG.courses && window.GAME_CATALOG.courses[targetLang]) || [];
+    const adminList = (state.adminCatalog && state.adminCatalog.courses && state.adminCatalog.courses[targetLang]) || [];
+    const deletedSet = new Set((state.adminCatalog && state.adminCatalog.deletedCourseIds) || []);
+    const overrides = (state.adminCatalog && state.adminCatalog.courseOverrides) || {};
+
+    const mergedById = new Map();
+    baseList.forEach((c, idx) => {
+      if (!c || !c.id || deletedSet.has(c.id)) return;
+      mergedById.set(c.id, { ...c, _baseOrder: idx });
+    });
+    adminList.forEach((c, idx) => {
+      if (!c || !c.id || deletedSet.has(c.id)) return;
+      mergedById.set(c.id, { ...c, isAdminCreated: true, _baseOrder: baseList.length + idx });
+    });
+
+    const resolved = Array.from(mergedById.values()).map(course => {
+      const ov = overrides[course.id];
+      let out = {
+        ...course,
+        category: inferCourseCategory(course)
+      };
+      if (ov && typeof ov === 'object') {
+        if (ov.category) out.category = ov.category;
+        if (ov.levelTag) out.levelTag = ov.levelTag;
+        if (ov.icon) out.icon = ov.icon;
+        if (ov.titles && typeof ov.titles === 'object') {
+          out.titles = { ...(out.titles || {}), ...ov.titles };
+        }
+        if (typeof ov.orderIndex === 'number') {
+          out._orderIndex = ov.orderIndex;
+        }
+        let mods = Array.isArray(out.modules) ? out.modules.slice() : [];
+        if (Array.isArray(ov.removedModuleIds) && ov.removedModuleIds.length > 0) {
+          const remSet = new Set(ov.removedModuleIds);
+          mods = mods.filter(m => !remSet.has(m.id));
+        }
+        if (Array.isArray(ov.appendedModules) && ov.appendedModules.length > 0) {
+          const existingIds = new Set(mods.map(m => m.id));
+          for (const am of ov.appendedModules) {
+            if (am && !existingIds.has(am.id)) {
+              mods.push(am);
+              existingIds.add(am.id);
+            }
+          }
+        }
+        out.modules = mods;
+      }
+      return out;
+    });
+
+    resolved.sort((a, b) => {
+      const ao = typeof a._orderIndex === 'number' ? a._orderIndex : a._baseOrder;
+      const bo = typeof b._orderIndex === 'number' ? b._orderIndex : b._baseOrder;
+      return ao - bo;
+    });
+
+    return resolved;
+  }
+
   function getCoursesForTargetLang(targetLang = state.targetLang) {
-    const official = (window.GAME_CATALOG && window.GAME_CATALOG.courses && window.GAME_CATALOG.courses[targetLang]) || [];
+    const official = getOfficialCoursesForTargetLang(targetLang);
     const personal = state.userCourses.filter(c => c.targetLang === targetLang);
     return [...official, ...personal];
   }
@@ -2565,6 +2704,8 @@
   const labelDecksSrcAll = document.getElementById('labelDecksSrcAll');
   const labelDecksSrcOfficial = document.getElementById('labelDecksSrcOfficial');
   const labelDecksSrcUser = document.getElementById('labelDecksSrcUser');
+  const labelDecksCategoryHeader = document.getElementById('labelDecksCategoryHeader');
+  const decksCategoryFilterGroup = document.getElementById('decksCategoryFilterGroup');
   const labelDecksLevelHeader = document.getElementById('labelDecksLevelHeader');
   const decksLevelFilterGroup = document.getElementById('decksLevelFilterGroup');
   const btnDecksLevelAll = document.getElementById('btnDecksLevelAll');
@@ -2591,6 +2732,8 @@
   const labelDecksSubtabCourses = document.getElementById('labelDecksSubtabCourses');
   const btnDecksSubtabMyDecks = document.getElementById('btnDecksSubtabMyDecks');
   const labelDecksSubtabMyDecks = document.getElementById('labelDecksSubtabMyDecks');
+  const btnDecksOpenAdmin = document.getElementById('btnDecksOpenAdmin');
+  const labelDecksOpenAdmin = document.getElementById('labelDecksOpenAdmin');
   const btnDecksReturnBattle = document.getElementById('btnDecksReturnBattle');
   const labelDecksReturnBattle = document.getElementById('labelDecksReturnBattle');
   const btnDecksViewGrid = document.getElementById('btnDecksViewGrid');
@@ -2606,6 +2749,44 @@
   const decksAllGrid = document.getElementById('decksAllGrid');
   const deckDetailPane = document.getElementById('deckDetailPane');
 
+  // --- DOM-элементы Студии Супер-Админа (#adminStudioView) ---
+  const adminStudioView = document.getElementById('adminStudioView');
+  const btnAdminBackToDecks = document.getElementById('btnAdminBackToDecks');
+  const btnAdminExportJson = document.getElementById('btnAdminExportJson');
+  const btnAdminImportJson = document.getElementById('btnAdminImportJson');
+  const adminImportJsonInput = document.getElementById('adminImportJsonInput');
+  const btnAdminSyncCloud = document.getElementById('btnAdminSyncCloud');
+  const adminGeminiKeyInput = document.getElementById('adminGeminiKeyInput');
+  const adminGithubTokenInput = document.getElementById('adminGithubTokenInput');
+  const adminPasswordInput = document.getElementById('adminPasswordInput');
+  const btnAdminSaveCreds = document.getElementById('btnAdminSaveCreds');
+  const adminStatusBanner = document.getElementById('adminStatusBanner');
+  const adminLiveCountBadge = document.getElementById('adminLiveCountBadge');
+  const adminSourceLangSelect = document.getElementById('adminSourceLangSelect');
+  const adminTransLangSelect = document.getElementById('adminTransLangSelect');
+  const adminLevelSelect = document.getElementById('adminLevelSelect');
+  const adminCategorySelect = document.getElementById('adminCategorySelect');
+  const btnAdminToggleNewCat = document.getElementById('btnAdminToggleNewCat');
+  const adminIconInput = document.getElementById('adminIconInput');
+  const adminNewCategoryBox = document.getElementById('adminNewCategoryBox');
+  const adminNewCatIcon = document.getElementById('adminNewCatIcon');
+  const adminNewCatTitleRu = document.getElementById('adminNewCatTitleRu');
+  const adminNewCatTitleEn = document.getElementById('adminNewCatTitleEn');
+  const btnAdminCreateCategory = document.getElementById('btnAdminCreateCategory');
+  const adminPlacementModeSelect = document.getElementById('adminPlacementModeSelect');
+  const adminAppendTargetWrap = document.getElementById('adminAppendTargetWrap');
+  const adminTargetCourseSelect = document.getElementById('adminTargetCourseSelect');
+  const adminCourseTitleInput = document.getElementById('adminCourseTitleInput');
+  const adminRawWordsTextarea = document.getElementById('adminRawWordsTextarea');
+  const adminAiEnrichUiCheck = document.getElementById('adminAiEnrichUiCheck');
+  const adminAiCloneTargetsCheck = document.getElementById('adminAiCloneTargetsCheck');
+  const adminLiveParseSummary = document.getElementById('adminLiveParseSummary');
+  const adminLivePreviewList = document.getElementById('adminLivePreviewList');
+  const btnAdminAiPreview = document.getElementById('btnAdminAiPreview');
+  const btnAdminCreateAndPublish = document.getElementById('btnAdminCreateAndPublish');
+  const adminOrganizerLangTabs = document.getElementById('adminOrganizerLangTabs');
+  const adminCategoriesTree = document.getElementById('adminCategoriesTree');
+
   const homeBrandLogo = document.getElementById('homeBrandLogo');
   const homeBrandSub = document.getElementById('homeBrandSub');
   const btnNavHome = document.getElementById('btnNavHome');
@@ -2614,12 +2795,14 @@
   const btnNavDecks = document.getElementById('btnNavDecks');
   const btnNavStats = document.getElementById('btnNavStats');
   const btnNavLeaderboard = document.getElementById('btnNavLeaderboard');
+  const btnNavAdmin = document.getElementById('btnNavAdmin');
   const labelNavHome = document.getElementById('labelNavHome');
   const labelNavPlay = document.getElementById('labelNavPlay');
   const labelNavCourses = document.getElementById('labelNavCourses');
   const labelNavDecks = document.getElementById('labelNavDecks');
   const labelNavStats = document.getElementById('labelNavStats');
   const labelNavLeaderboard = document.getElementById('labelNavLeaderboard');
+  const labelNavAdmin = document.getElementById('labelNavAdmin');
   const btnHomeStreakChip = document.getElementById('btnHomeStreakChip');
   const homeStreakBadge = document.getElementById('homeStreakBadge');
   const pilotRankPill = document.getElementById('pilotRankPill');
@@ -3324,9 +3507,12 @@
         tag: course.originType === 'anki' ? 'ANKI' : 'MY DECK'
       };
     }
-    const cid = String(course.id || '').toLowerCase();
-    if (cid.includes('auto')) return { cls: 'art-auto', emoji: '🚘', tag: 'AUTO' };
-    if (cid.includes('it')) return { cls: 'art-it', emoji: '💻', tag: 'IT & AI' };
+    const cat = inferCourseCategory(course);
+    if (cat === 'auto') return { cls: 'art-auto', emoji: '🚘', tag: 'AUTO' };
+    if (cat === 'business') return { cls: 'art-business', emoji: '💼', tag: 'BUSINESS' };
+    if (cat === 'it') return { cls: 'art-it', emoji: '💻', tag: 'IT & AI' };
+    if (cat === 'travel') return { cls: 'art-travel', emoji: '✈️', tag: 'TRAVEL' };
+    if (cat === 'medicine') return { cls: 'art-base', emoji: '🩺', tag: 'MED' };
     return { cls: 'art-base', emoji: '🌍', tag: course.levelTag || 'A1–B2' };
   }
 
@@ -3460,8 +3646,7 @@
     if (homeStatLearned) homeStatLearned.textContent = learnedWordsSet.size.toLocaleString();
     if (homeStatDecks) {
       const officialCount = ['de', 'en', 'es'].reduce((acc, lg) => {
-        const list = (window.GAME_CATALOG && window.GAME_CATALOG.courses && window.GAME_CATALOG.courses[lg]) || [];
-        return acc + list.length;
+        return acc + getOfficialCoursesForTargetLang(lg).length;
       }, 0);
       homeStatDecks.textContent = String(officialCount + state.userCourses.length);
     }
@@ -3951,9 +4136,11 @@
     state.homeSubView = 'home';
     if (homeDashboardView) homeDashboardView.classList.remove('hidden');
     if (decksPageView) decksPageView.classList.add('hidden');
+    if (adminStudioView) adminStudioView.classList.add('hidden');
     if (btnNavHome) btnNavHome.classList.add('active');
     if (btnNavCourses) btnNavCourses.classList.remove('active');
     if (btnNavDecks) btnNavDecks.classList.remove('active');
+    if (btnNavAdmin) btnNavAdmin.classList.remove('active');
 
     state.screenMode = 'play';
     state.warpTimer = 0.65;
@@ -4388,6 +4575,7 @@
     if (labelNavDecks) labelNavDecks.textContent = tr.navDecks;
     if (labelNavStats) labelNavStats.textContent = tr.navStats;
     if (labelNavLeaderboard) labelNavLeaderboard.textContent = tr.navLeaderboard;
+    if (labelNavAdmin) labelNavAdmin.textContent = tr.navAdmin;
 
     // Hero-блок и рамка живого промо-боя
     const { course, mod, lesson } = getActiveSelection();
@@ -4520,8 +4708,10 @@
     if (labelDecksSrcAll) labelDecksSrcAll.textContent = tr.decksSrcAll;
     if (labelDecksSrcOfficial) labelDecksSrcOfficial.textContent = tr.decksSrcOfficial;
     if (labelDecksSrcUser) labelDecksSrcUser.textContent = tr.decksSrcUser;
+    if (labelDecksCategoryHeader) labelDecksCategoryHeader.textContent = tr.decksCategoryHeader;
     if (labelDecksLevelHeader) labelDecksLevelHeader.textContent = tr.decksLevelHeader;
     if (btnDecksLevelAll) btnDecksLevelAll.textContent = tr.decksLevelAll;
+    if (labelDecksOpenAdmin) labelDecksOpenAdmin.textContent = tr.decksAdminBtn;
     if (labelDecksSidebarProgTitle) labelDecksSidebarProgTitle.textContent = tr.decksSidebarProgTitle;
     if (labelDecksInProgressSub) labelDecksInProgressSub.textContent = tr.decksInProgressSub;
     if (decksHeroTitle) {
@@ -4562,6 +4752,8 @@
     renderHomeDashboardWidgets();
     if (state.homeSubView === 'decks') {
       renderDecksPage();
+    } else if (state.homeSubView === 'admin') {
+      renderAdminStudio();
     }
     refreshHitSpotlightPinState();
     onTtsStatusChanged();
@@ -4838,13 +5030,24 @@
   function getDeckArtClass(course) {
     if (!course) return '';
     if (course.source === 'user') return course.originType === 'anki' ? 'art-anki' : 'art-it';
+    const cat = inferCourseCategory(course);
+    if (cat === 'auto') return 'art-auto';
+    if (cat === 'business') return 'art-business';
+    if (cat === 'travel') return 'art-travel';
+    if (cat === 'it') return 'art-it';
     const id = String(course.id || '').toLowerCase();
     const icon = course.icon || '';
-    if (id.includes('auto') || icon.includes('🚗') || icon.includes('🚙')) return 'art-auto';
-    if (id.includes('travel') || icon.includes('✈')) return 'art-travel';
     if (id.includes('food') || icon.includes('🥐') || icon.includes('🍽')) return 'art-food';
-    if (id.includes('it') || id.includes('chat') || icon.includes('💻') || icon.includes('💬')) return 'art-it';
     return '';
+  }
+
+  function getCourseCategoryBadgeText(course) {
+    if (!course || course.source === 'user') return '';
+    const catId = inferCourseCategory(course);
+    const catObj = getCategoryById(catId);
+    if (!catObj) return '';
+    const title = getLocalizedField(catObj, 'titles') || catId;
+    return `${catObj.icon || '🗂️'} ${title}`.trim();
   }
 
   function normalizeCefrBucket(levelTag) {
@@ -4923,15 +5126,19 @@
   }
 
   function switchHomeSubView(subView) {
-    state.homeSubView = subView === 'decks' ? 'decks' : 'home';
+    state.homeSubView = (subView === 'decks' || subView === 'admin') ? subView : 'home';
+    const onHome = state.homeSubView === 'home';
     const onDecks = state.homeSubView === 'decks';
+    const onAdmin = state.homeSubView === 'admin';
 
-    if (homeDashboardView) homeDashboardView.classList.toggle('hidden', onDecks);
+    if (homeDashboardView) homeDashboardView.classList.toggle('hidden', !onHome);
     if (decksPageView) decksPageView.classList.toggle('hidden', !onDecks);
+    if (adminStudioView) adminStudioView.classList.toggle('hidden', !onAdmin);
 
-    if (btnNavHome) btnNavHome.classList.toggle('active', !onDecks);
+    if (btnNavHome) btnNavHome.classList.toggle('active', onHome);
     if (btnNavCourses) btnNavCourses.classList.toggle('active', onDecks && state.decksNavMode === 'courses');
     if (btnNavDecks) btnNavDecks.classList.toggle('active', onDecks && state.decksNavMode !== 'courses');
+    if (btnNavAdmin) btnNavAdmin.classList.toggle('active', onAdmin);
 
     if (btnDecksReturnBattle) {
       btnDecksReturnBattle.classList.toggle('hidden', !state.decksOpenedFromPlay);
@@ -4945,6 +5152,10 @@
       state.demoWords = [];
       state.demoTargetId = null;
       renderDecksPage();
+    } else if (onAdmin) {
+      state.demoWords = [];
+      state.demoTargetId = null;
+      renderAdminStudio();
     } else if (state.screenMode === 'title') {
       resizeCanvas();
       requestAnimationFrame(() => {
@@ -4952,6 +5163,27 @@
         seedTitleDemoWords();
       });
     }
+  }
+
+  function openAdminStudio(focusCourseLang = '') {
+    if (courseBrowserDialog && courseBrowserDialog.open) {
+      courseBrowserDialog.close();
+    }
+    if (state.screenMode === 'play') {
+      state.paused = true;
+      state.decksOpenedFromPlay = true;
+      state.screenMode = 'title';
+      centerOverlay.classList.add('hidden');
+      if (arcadeTitleScreen) arcadeTitleScreen.hidden = false;
+      document.body.classList.remove('mode-play');
+      document.body.classList.add('mode-title');
+    }
+    if (focusCourseLang && TARGET_LANG_META[focusCourseLang]) {
+      state.adminOrgLang = focusCourseLang;
+    } else {
+      state.adminOrgLang = state.targetLang;
+    }
+    switchHomeSubView('admin');
   }
 
   function openDecksPage(opts = {}) {
@@ -4997,9 +5229,11 @@
     state.homeSubView = 'home';
     if (homeDashboardView) homeDashboardView.classList.remove('hidden');
     if (decksPageView) decksPageView.classList.add('hidden');
+    if (adminStudioView) adminStudioView.classList.add('hidden');
     if (btnNavHome) btnNavHome.classList.add('active');
     if (btnNavCourses) btnNavCourses.classList.remove('active');
     if (btnNavDecks) btnNavDecks.classList.remove('active');
+    if (btnNavAdmin) btnNavAdmin.classList.remove('active');
 
     state.screenMode = 'play';
     if (arcadeTitleScreen) arcadeTitleScreen.hidden = true;
@@ -5104,12 +5338,22 @@
       delBtn.textContent = tr.deleteDeckBtn;
       delBtn.addEventListener('click', () => removeUserDeckById(course.id));
       actionsWrap.appendChild(delBtn);
+    } else {
+      const manageAdminBtn = document.createElement('button');
+      manageAdminBtn.type = 'button';
+      manageAdminBtn.className = 'deck-btn-secondary';
+      manageAdminBtn.textContent = `👑 ${tr.decksAdminBtn}`;
+      manageAdminBtn.addEventListener('click', () => {
+        openAdminStudio(course.targetLang || state.targetLang);
+      });
+      actionsWrap.appendChild(manageAdminBtn);
     }
 
     topbar.appendChild(actionsWrap);
     deckDetailPane.appendChild(topbar);
 
     // 2. Шапка колоды и прогресс
+    const catBadgeText = getCourseCategoryBadgeText(course);
     const heroRow = document.createElement('div');
     heroRow.className = 'deck-detail-hero';
     heroRow.innerHTML = `
@@ -5118,6 +5362,7 @@
         <div>
           <div class="deck-badges-inline">
             <span class="deck-tag-badge ${originBadgeCls}">${escapeHtml(originText)}</span>
+            ${catBadgeText ? `<span class="deck-tag-badge category">${escapeHtml(catBadgeText)}</span>` : ''}
             <span class="deck-tag-badge cefr">${escapeHtml(course.levelTag || 'A2–B1')}</span>
             <span class="deck-tag-badge cefr">${escapeHtml(tr.wordsCount(stats.totalWords))}</span>
           </div>
@@ -5198,14 +5443,23 @@
           const existingWords = getAllWordsInCourse(course);
           const addedWords = [];
           if (appendArea && appendArea.value.trim()) {
-            for (const line of appendArea.value.split(/\r?\n/)) {
-              const trimmed = line.trim();
-              if (!trimmed || (!trimmed.includes(';') && !trimmed.includes('\t'))) continue;
-              const delim = trimmed.includes(';') ? ';' : '\t';
-              const parts = trimmed.split(delim).map(s => s.trim());
-              if (parts.length >= 2 && parts[0] && parts[1]) {
-                const wEntry = window.AnkiImporter.normalizeCardToWordEntry(parts[0], parts[1], course.targetLang, parts[2] || '');
-                if (wEntry) addedWords.push(wEntry);
+            if (window.AnkiImporter && window.AnkiImporter.parseAdminTextbookBlock) {
+              const parsedBlock = window.AnkiImporter.parseAdminTextbookBlock(
+                appendArea.value,
+                course.targetLang,
+                state.nativeLang
+              );
+              addedWords.push(...(parsedBlock.words || []));
+            } else {
+              for (const line of appendArea.value.split(/\r?\n/)) {
+                const trimmed = line.trim();
+                if (!trimmed || (!trimmed.includes(';') && !trimmed.includes('\t'))) continue;
+                const delim = trimmed.includes(';') ? ';' : '\t';
+                const parts = trimmed.split(delim).map(s => s.trim());
+                if (parts.length >= 2 && parts[0] && parts[1]) {
+                  const wEntry = window.AnkiImporter.normalizeCardToWordEntry(parts[0], parts[1], course.targetLang, parts[2] || '');
+                  if (wEntry) addedWords.push(wEntry);
+                }
               }
             }
           }
@@ -5499,6 +5753,35 @@
         btn.classList.toggle('active', btn.dataset.sourceFilter === state.catalogSourceFilter);
       });
     }
+    if (decksCategoryFilterGroup) {
+      const usedCatIds = new Set();
+      allForLang.forEach(c => {
+        if (c.source !== 'user') usedCatIds.add(inferCourseCategory(c));
+      });
+      const allCats = getAllCategories().filter(cat =>
+        usedCatIds.has(cat.id) || cat.id === 'auto' || cat.id === 'business'
+      );
+      if (state.decksCategoryFilter !== 'all' && !allCats.some(c => c.id === state.decksCategoryFilter)) {
+        state.decksCategoryFilter = 'all';
+      }
+      decksCategoryFilterGroup.innerHTML = '';
+      const allCatBtn = document.createElement('button');
+      allCatBtn.type = 'button';
+      allCatBtn.className = 'decks-level-pill' + (state.decksCategoryFilter === 'all' ? ' active' : '');
+      allCatBtn.dataset.categoryFilter = 'all';
+      allCatBtn.textContent = tr.decksLevelAll;
+      decksCategoryFilterGroup.appendChild(allCatBtn);
+
+      allCats.forEach(cat => {
+        const cBtn = document.createElement('button');
+        cBtn.type = 'button';
+        cBtn.className = 'decks-level-pill' + (state.decksCategoryFilter === cat.id ? ' active' : '');
+        cBtn.dataset.categoryFilter = cat.id;
+        const cLabel = getLocalizedField(cat, 'titles') || cat.id;
+        cBtn.textContent = `${cat.icon || '🗂️'} ${cLabel}`;
+        decksCategoryFilterGroup.appendChild(cBtn);
+      });
+    }
     if (decksLevelFilterGroup) {
       decksLevelFilterGroup.querySelectorAll('.decks-level-pill').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.levelFilter === state.decksLevelFilter);
@@ -5560,6 +5843,7 @@
           : (course.originType === 'anki' ? tr.decksAnkiBadge : tr.decksCustomBadge);
         const iconChar = course.icon || (isUser ? '📦' : '📚');
         const titleStr = getLocalizedField(course, 'titles');
+        const catBadgeText = getCourseCategoryBadgeText(course);
 
         const contCard = document.createElement('div');
         contCard.className = 'deck-continue-card' + (course.id === state.activeCourseId ? ' is-active' : '');
@@ -5568,6 +5852,7 @@
           <div class="deck-cont-body">
             <div class="deck-badges-inline">
               <span class="deck-tag-badge ${badgeCls}">${escapeHtml(badgeText)}</span>
+              ${catBadgeText ? `<span class="deck-tag-badge category">${escapeHtml(catBadgeText)}</span>` : ''}
               <span class="deck-tag-badge cefr">${escapeHtml(course.levelTag || 'A2–B1')}</span>
             </div>
             <div class="deck-cont-title" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</div>
@@ -5601,11 +5886,15 @@
       });
     }
 
-    // 5. Сетка «📚 Все колоды (N)» с учётом фильтров источника, уровня CEFR и строки поиска
+    // 5. Сетка «📚 Все колоды (N)» с учётом фильтров источника, категории, уровня CEFR и строки поиска
     const searchQ = (state.decksSearchQuery || '').trim().toLowerCase();
     const filteredDecks = allForLang.filter(course => {
       if (state.catalogSourceFilter === 'official' && course.source === 'user') return false;
       if (state.catalogSourceFilter === 'user' && course.source !== 'user') return false;
+      if (state.decksCategoryFilter && state.decksCategoryFilter !== 'all') {
+        if (course.source === 'user') return false;
+        if (inferCourseCategory(course) !== state.decksCategoryFilter) return false;
+      }
       if (!courseMatchesLevelFilter(course, state.decksLevelFilter)) return false;
 
       if (!searchQ) return true;
@@ -5663,6 +5952,7 @@
       const iconChar = course.icon || (isUser ? '📦' : '📚');
       const titleStr = getLocalizedField(course, 'titles');
       const descStr = getLocalizedField(course, 'descriptions');
+      const catBadgeText = getCourseCategoryBadgeText(course);
       const health = isUser && window.AnkiImporter && window.AnkiImporter.inspectDeckTranslationHealth
         ? window.AnkiImporter.inspectDeckTranslationHealth(course)
         : null;
@@ -5678,6 +5968,7 @@
           <div class="deck-card-top-bar">
             <div class="deck-badges-inline">
               <span class="deck-tag-badge ${badgeCls}">${escapeHtml(badgeText)}</span>
+              ${catBadgeText ? `<span class="deck-tag-badge category">${escapeHtml(catBadgeText)}</span>` : ''}
               <span class="deck-tag-badge cefr">${escapeHtml(course.levelTag || 'A2–B1')}</span>
             </div>
             <button type="button" class="deck-more-btn" aria-label="More">•••</button>
@@ -6078,6 +6369,14 @@
   function hitWordLetter(wordObj) {
     const weapon = getCurrentWeapon();
     wordObj.typedCount++;
+    // Авто-завершение хвостовой пунктуации (точка, воскл./вопр. знак в конце фразы)
+    let remIdx = wordObj.typedCount;
+    while (remIdx < wordObj.text.length && isBridgeSeparator(wordObj.text[remIdx])) {
+      remIdx++;
+    }
+    if (remIdx >= wordObj.text.length) {
+      wordObj.typedCount = wordObj.text.length;
+    }
     wordObj.recoilY = Math.min(18, wordObj.recoilY + 4.2 * weapon.recoilBoost);
     wordObj.hitFlash = 1.0;
 
@@ -6270,11 +6569,11 @@
 
     const locked = state.activeWords.find(w => w.id === state.lockedWordId);
     if (locked) {
-      let nextChar = locked.text[locked.typedCount];
-      while (nextChar === '-' || nextChar === ' ' || nextChar === "'" || nextChar === '/') {
-        nextChar = locked.text[locked.typedCount + 1];
-        break;
+      let idx = locked.typedCount;
+      while (idx < locked.text.length && isBridgeSeparator(locked.text[idx])) {
+        idx++;
       }
+      const nextChar = locked.text[idx];
       const baseKey = mapTargetCharToBaseKey(nextChar);
       if (baseKey) {
         let keyBtn = document.querySelector(`.zkey[data-key="${CSS.escape(baseKey)}"]`);
@@ -6310,10 +6609,10 @@
       )
     );
 
-    if (state.screenMode === 'title' && state.homeSubView === 'decks') {
+    if (state.screenMode === 'title' && (state.homeSubView === 'decks' || state.homeSubView === 'admin')) {
       if (e.key === 'Escape' && !isTypingInInput) {
         e.preventDefault();
-        if (state.openedDeckId) {
+        if (state.homeSubView === 'decks' && state.openedDeckId) {
           state.openedDeckId = '';
           state.openedDeckEditMode = false;
           renderDecksPage();
@@ -6435,7 +6734,8 @@
   }
 
   function isBridgeSeparator(ch) {
-    return ch === '-' || ch === ' ' || ch === "'" || ch === '/';
+    return ch === '-' || ch === ' ' || ch === "'" || ch === '/' ||
+      ch === '.' || ch === ',' || ch === '!' || ch === '?' || ch === '(' || ch === ')';
   }
 
   function processTypedChar(char) {
@@ -6463,11 +6763,15 @@
       let expectedChar = lockedWord.text[lockedWord.typedCount];
 
       if (isBridgeSeparator(expectedChar) && !isBridgeSeparator(char)) {
-        const afterSeparator = lockedWord.text[lockedWord.typedCount + 1];
+        let skipIdx = lockedWord.typedCount;
+        while (skipIdx < lockedWord.text.length && isBridgeSeparator(lockedWord.text[skipIdx])) {
+          skipIdx++;
+        }
+        const afterSeparator = lockedWord.text[skipIdx];
         if (afterSeparator) {
           const checkAfter = charsMatchTargetLang(char, afterSeparator);
           if (checkAfter.matched) {
-            lockedWord.typedCount++;
+            lockedWord.typedCount = skipIdx;
             state.lastAbsorbedUmlautE = checkAfter.umlautSub;
             state.lastAbsorbedEszettS = checkAfter.eszettSub;
             hitWordLetter(lockedWord);
@@ -8005,6 +8309,16 @@
     });
   }
 
+  if (decksCategoryFilterGroup) {
+    decksCategoryFilterGroup.addEventListener('click', (e) => {
+      const btn = e.target && e.target.closest && e.target.closest('.decks-level-pill');
+      if (!btn || !btn.dataset.categoryFilter) return;
+      state.decksCategoryFilter = btn.dataset.categoryFilter;
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
   if (decksLevelFilterGroup) {
     decksLevelFilterGroup.addEventListener('click', (e) => {
       const btn = e.target && e.target.closest && e.target.closest('.decks-level-pill');
@@ -8207,27 +8521,38 @@
 
   if (btnSaveCustomWords) {
     btnSaveCustomWords.addEventListener('click', async () => {
-      const rawLines = customWordsInput.value.split(/\r?\n/);
-      const parsedWords = [];
-      for (const line of rawLines) {
-        const trimmed = line.trim();
-        if (!trimmed || (!trimmed.includes(';') && !trimmed.includes('\t'))) continue;
-        const delim = trimmed.includes(';') ? ';' : '\t';
-        const parts = trimmed.split(delim).map(s => s.trim());
-        if (parts.length >= 2 && parts[0] && parts[1]) {
-          const entry = window.AnkiImporter.normalizeCardToWordEntry(
-            parts[0],
-            parts[1],
-            state.importTargetLang,
-            parts[2] || ''
-          );
-          if (entry) parsedWords.push(entry);
+      let parsedWords = [];
+      let autoDetectedTitle = '';
+      if (window.AnkiImporter && window.AnkiImporter.parseAdminTextbookBlock) {
+        const block = window.AnkiImporter.parseAdminTextbookBlock(
+          customWordsInput.value,
+          state.importTargetLang,
+          state.nativeLang
+        );
+        parsedWords = block.words || [];
+        autoDetectedTitle = block.detectedTitle || '';
+      } else {
+        const rawLines = customWordsInput.value.split(/\r?\n/);
+        for (const line of rawLines) {
+          const trimmed = line.trim();
+          if (!trimmed || (!trimmed.includes(';') && !trimmed.includes('\t'))) continue;
+          const delim = trimmed.includes(';') ? ';' : '\t';
+          const parts = trimmed.split(delim).map(s => s.trim());
+          if (parts.length >= 2 && parts[0] && parts[1]) {
+            const entry = window.AnkiImporter.normalizeCardToWordEntry(
+              parts[0],
+              parts[1],
+              state.importTargetLang,
+              parts[2] || ''
+            );
+            if (entry) parsedWords.push(entry);
+          }
         }
       }
       if (parsedWords.length === 0) return;
 
       const userCourse = window.AnkiImporter.buildUserCourse({
-        title: manualDeckTitleInput.value.trim() || `Мои слова (${parsedWords.length})`,
+        title: manualDeckTitleInput.value.trim() || autoDetectedTitle || `Мои слова (${parsedWords.length})`,
         targetLang: state.importTargetLang,
         originType: 'custom',
         words: parsedWords,
@@ -8784,11 +9109,1171 @@
     dlg.addEventListener('close', resumePlayIfAllDialogsClosed);
   });
 
+  // ==========================================================================
+  // 9) СТУДИЯ СУПЕР-АДМИНА (#adminStudioView): СОЗДАНИЕ УРОКОВ, AI-ПЕРЕВОД И КАТЕГОРИИ
+  // ==========================================================================
+  const ADMIN_CATALOG_LS_KEY = 'zlingo_admin_catalog_v1';
+  const ADMIN_GH_TOKEN_LS_KEY = 'zlingo_admin_gh_token';
+  const ADMIN_PASSWORD_LS_KEY = 'zlingo_admin_password';
+
+  function normalizeAdminCatalogObject(rawObj) {
+    const obj = (rawObj && typeof rawObj === 'object') ? rawObj : {};
+    return {
+      version: 1,
+      updatedAt: typeof obj.updatedAt === 'string' ? obj.updatedAt : '',
+      categories: Array.isArray(obj.categories) ? obj.categories : [],
+      courses: {
+        de: (obj.courses && Array.isArray(obj.courses.de)) ? obj.courses.de : [],
+        en: (obj.courses && Array.isArray(obj.courses.en)) ? obj.courses.en : [],
+        es: (obj.courses && Array.isArray(obj.courses.es)) ? obj.courses.es : []
+      },
+      courseOverrides: (obj.courseOverrides && typeof obj.courseOverrides === 'object')
+        ? obj.courseOverrides
+        : {},
+      deletedCourseIds: Array.isArray(obj.deletedCourseIds) ? obj.deletedCourseIds : []
+    };
+  }
+
+  function saveAdminCatalogLocal() {
+    state.adminCatalog.updatedAt = new Date().toISOString();
+    saveJsonStorage(ADMIN_CATALOG_LS_KEY, state.adminCatalog);
+  }
+
+  function getStoredAdminCreds() {
+    let ghToken = '';
+    let adminPass = '';
+    try {
+      ghToken = localStorage.getItem(ADMIN_GH_TOKEN_LS_KEY) || '';
+      adminPass = localStorage.getItem(ADMIN_PASSWORD_LS_KEY) || '';
+    } catch (_) {}
+    const geminiKey = (adminGeminiKeyInput && adminGeminiKeyInput.value.trim()) || ttsManager.localApiKey || '';
+    return {
+      geminiKey,
+      ghToken: (adminGithubTokenInput && adminGithubTokenInput.value.trim()) || ghToken,
+      adminPass: (adminPasswordInput && adminPasswordInput.value.trim()) || adminPass
+    };
+  }
+
+  function showAdminStatus(message, isError = false) {
+    if (!adminStatusBanner) return;
+    adminStatusBanner.textContent = message;
+    adminStatusBanner.classList.remove('hidden');
+    adminStatusBanner.style.borderColor = isError ? 'rgba(248, 113, 113, 0.55)' : 'rgba(52, 211, 153, 0.45)';
+    adminStatusBanner.style.background = isError ? 'rgba(127, 29, 29, 0.32)' : 'rgba(6, 78, 59, 0.32)';
+    adminStatusBanner.style.color = isError ? '#fecaca' : '#a7f3d0';
+  }
+
+  async function fetchAndMergeCloudAdminCatalog() {
+    if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
+    try {
+      const res = await fetch(`./admin-catalog.json?t=${Date.now()}`, { cache: 'no-store' });
+      if (!res.ok) return;
+      const cloudRaw = await res.json();
+      const cloud = normalizeAdminCatalogObject(cloudRaw);
+      const local = normalizeAdminCatalogObject(state.adminCatalog);
+
+      const cloudTime = Date.parse(cloud.updatedAt || '') || 0;
+      const localTime = Date.parse(local.updatedAt || '') || 0;
+      const cloudNewer = cloudTime >= localTime;
+
+      const catMap = new Map();
+      (cloudNewer ? local.categories : cloud.categories).forEach(c => { if (c && c.id) catMap.set(c.id, c); });
+      (cloudNewer ? cloud.categories : local.categories).forEach(c => { if (c && c.id) catMap.set(c.id, c); });
+
+      const mergedCourses = { de: [], en: [], es: [] };
+      const delSet = new Set(cloudNewer ? cloud.deletedCourseIds : local.deletedCourseIds);
+
+      ['de', 'en', 'es'].forEach(lg => {
+        const cMap = new Map();
+        const olderList = cloudNewer ? local.courses[lg] : cloud.courses[lg];
+        const newerList = cloudNewer ? cloud.courses[lg] : local.courses[lg];
+        olderList.forEach(c => { if (c && c.id && !delSet.has(c.id)) cMap.set(c.id, c); });
+        newerList.forEach(c => { if (c && c.id && !delSet.has(c.id)) cMap.set(c.id, c); });
+        mergedCourses[lg] = Array.from(cMap.values());
+      });
+
+      const mergedOverrides = cloudNewer
+        ? { ...local.courseOverrides, ...cloud.courseOverrides }
+        : { ...cloud.courseOverrides, ...local.courseOverrides };
+
+      state.adminCatalog = {
+        version: 1,
+        updatedAt: cloudNewer ? (cloud.updatedAt || local.updatedAt) : (local.updatedAt || cloud.updatedAt),
+        categories: Array.from(catMap.values()),
+        courses: mergedCourses,
+        courseOverrides: mergedOverrides,
+        deletedCourseIds: Array.from(delSet)
+      };
+
+      saveJsonStorage(ADMIN_CATALOG_LS_KEY, state.adminCatalog);
+      ensureValidCourseSelection();
+      renderLevelSidebar();
+      renderHomeDashboardWidgets();
+      if (state.homeSubView === 'decks') renderDecksPage();
+      if (state.homeSubView === 'admin') renderAdminStudio();
+    } catch (_) {
+      // Тихий фоллбэк при локальном запуске без сервера
+    }
+  }
+
+  async function publishAdminCatalogToCloud(commitMessage = 'chore(catalog): update courses via Super Admin Studio') {
+    saveAdminCatalogLocal();
+    const creds = getStoredAdminCreds();
+
+    if (location.protocol !== 'http:' && location.protocol !== 'https:') {
+      showAdminStatus(
+        '💾 Сохранено локально в браузере! (Для авто-публикации на хостинг откройте сайт на Vercel или скачайте admin-catalog.json).',
+        false
+      );
+      return false;
+    }
+
+    try {
+      const headers = { 'Content-Type': 'application/json' };
+      if (creds.ghToken) headers['x-github-token'] = creds.ghToken;
+      if (creds.adminPass) headers['x-admin-password'] = creds.adminPass;
+
+      const res = await fetch('/api/admin-publish', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          catalog: state.adminCatalog,
+          commitMessage
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data && data.ok) {
+        showAdminStatus(
+          `🌍 Опубликовано на хостинг (${data.repo || 'GitHub'} · коммит ${data.commitSha || 'main'})! Vercel автоматически обновляет игру для всех игроков.`,
+          false
+        );
+        return true;
+      }
+
+      if (res.status === 503 && data && data.localSavedOnly) {
+        showAdminStatus(
+          `💾 Изменения уже работают у вас в браузере! Чтобы опубликовать их для всех игроков в 1 клик, откройте «🔑 Настройка глобальной публикации» выше и укажите GitHub Token (или нажмите «📥 Скачать JSON»).`,
+          false
+        );
+        return false;
+      }
+
+      showAdminStatus(
+        `⚠️ Сохранено локально, но публикация на GitHub вернула ответ: ${(data && data.message) || res.statusText || res.status}`,
+        true
+      );
+      return false;
+    } catch (err) {
+      showAdminStatus(
+        `💾 Сохранено локально в браузере! Облачный эндпоинт сейчас недоступен (${err && err.message ? err.message : 'offline'}) — вы также можете нажать «📥 Скачать JSON».`,
+        false
+      );
+      return false;
+    }
+  }
+
+  function ensureCourseOverrideRecord(courseId) {
+    if (!state.adminCatalog.courseOverrides || typeof state.adminCatalog.courseOverrides !== 'object') {
+      state.adminCatalog.courseOverrides = {};
+    }
+    if (!state.adminCatalog.courseOverrides[courseId]) {
+      state.adminCatalog.courseOverrides[courseId] = {};
+    }
+    return state.adminCatalog.courseOverrides[courseId];
+  }
+
+  function findMutableAdminCourse(courseId, langHint = '') {
+    const langs = langHint ? [langHint, 'de', 'en', 'es'] : ['de', 'en', 'es'];
+    for (const lg of langs) {
+      const arr = state.adminCatalog.courses && state.adminCatalog.courses[lg];
+      if (!Array.isArray(arr)) continue;
+      const hit = arr.find(c => c && c.id === courseId);
+      if (hit) return hit;
+    }
+    return null;
+  }
+
+  function populateAdminCategorySelect(preferredCatId = '') {
+    if (!adminCategorySelect) return;
+    const prevVal = preferredCatId || adminCategorySelect.value || 'business';
+    const cats = getAllCategories();
+    adminCategorySelect.innerHTML = '';
+    cats.forEach(cat => {
+      const opt = document.createElement('option');
+      opt.value = cat.id;
+      const title = (cat.titles && (cat.titles.ru || cat.titles.en)) || cat.id;
+      opt.textContent = `${cat.icon || '🗂️'} ${title}`;
+      adminCategorySelect.appendChild(opt);
+    });
+    if (cats.some(c => c.id === prevVal)) {
+      adminCategorySelect.value = prevVal;
+    } else if (cats.some(c => c.id === 'business')) {
+      adminCategorySelect.value = 'business';
+    } else if (cats.length > 0) {
+      adminCategorySelect.value = cats[0].id;
+    }
+  }
+
+  function populateAdminTargetCourseSelect() {
+    if (!adminTargetCourseSelect) return;
+    const srcLang = (adminSourceLangSelect && adminSourceLangSelect.value) || 'de';
+    const prevCourseId = adminTargetCourseSelect.value;
+    const courses = getOfficialCoursesForTargetLang(srcLang);
+    adminTargetCourseSelect.innerHTML = '';
+    courses.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      const catObj = getCategoryById(inferCourseCategory(c));
+      const catTag = catObj ? `[${(catObj.titles && catObj.titles.ru) || catObj.id}] ` : '';
+      opt.textContent = `${c.icon || '📚'} ${catTag}${(c.titles && c.titles.ru) || c.id} (${c.levelTag || 'B1'})`;
+      adminTargetCourseSelect.appendChild(opt);
+    });
+    if (courses.some(c => c.id === prevCourseId)) {
+      adminTargetCourseSelect.value = prevCourseId;
+    }
+  }
+
+  function getAdminParsedDraft() {
+    const rawText = (adminRawWordsTextarea && adminRawWordsTextarea.value) || '';
+    const srcLang = (adminSourceLangSelect && adminSourceLangSelect.value) || 'de';
+    const transLang = (adminTransLangSelect && adminTransLangSelect.value) || 'ru';
+    if (!window.AnkiImporter || !window.AnkiImporter.parseAdminTextbookBlock) {
+      return { detectedTitle: '', words: [], skippedCount: 0, sectionCount: 0 };
+    }
+    const parsed = window.AnkiImporter.parseAdminTextbookBlock(rawText, srcLang, transLang);
+
+    // Если есть кешированный AI-перевод для этих же слов — накладываем { ru, en, he }
+    const aiCache = state.adminAiPreviewResult;
+    if (aiCache && aiCache.targetLang === srcLang && Array.isArray(aiCache.byWordKey)) {
+      const mapByRaw = new Map(aiCache.byWordKey);
+      parsed.words.forEach(w => {
+        const hit = mapByRaw.get(w.raw);
+        if (hit) {
+          w.translations = {
+            ru: hit.ru || (w.translations && w.translations.ru) || '',
+            en: hit.en || (w.translations && w.translations.en) || '',
+            he: hit.he || (w.translations && w.translations.he) || ''
+          };
+        }
+      });
+    }
+    return parsed;
+  }
+
+  function renderAdminLivePreview() {
+    if (!adminLivePreviewList || !adminLiveParseSummary) return;
+    const parsed = getAdminParsedDraft();
+    const count = parsed.words.length;
+
+    if (adminLiveCountBadge) {
+      adminLiveCountBadge.textContent = `${count} сл.`;
+    }
+
+    if (parsed.detectedTitle && adminCourseTitleInput && !state.adminTitleManuallyEdited) {
+      adminCourseTitleInput.value = parsed.detectedTitle;
+    }
+
+    if (count === 0) {
+      adminLiveParseSummary.textContent = 'Вставьте список слов выше — парсер мгновенно покажет разбивку на уроки (по 12 слов + Босс-уроки).';
+      adminLivePreviewList.innerHTML = '';
+      return;
+    }
+
+    const lessonCount = Math.ceil(count / 12);
+    const modCount = Math.ceil(lessonCount / 3);
+    const bossCount = count >= 12 ? modCount : 0;
+    const aiBadge = state.adminAiPreviewResult ? ' · ✨ AI-перевод (RU/EN/HE) готов' : '';
+    const skipNote = parsed.skippedCount > 0 ? ` · пропущено строк: ${parsed.skippedCount}` : '';
+    adminLiveParseSummary.textContent =
+      `✓ Распознано ${count} сл. → ${modCount} мод. (${lessonCount} ур. по ≤12 сл.${bossCount ? ` + ${bossCount} 👹 Босс` : ''})${aiBadge}${skipNote}`;
+
+    adminLivePreviewList.innerHTML = '';
+    parsed.words.slice(0, 80).forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = 'admin-preview-row';
+      const trMap = item.translations || {};
+      const ruTxt = trMap.ru || '—';
+      const enTxt = trMap.en && trMap.en !== trMap.ru ? ` · EN: ${trMap.en}` : '';
+      const heTxt = trMap.he && trMap.he !== trMap.ru ? ` · HE: ${trMap.he}` : '';
+      row.innerHTML = `
+        <div class="admin-prev-left" dir="ltr">
+          <span class="admin-prev-art">${escapeHtml(item.article || 'Wort')}</span>
+          <strong style="color:#f8fafc;">${escapeHtml(item.word)}</strong>
+          ${item.raw !== item.word ? `<span style="color:#64748b; font-size:0.74rem;">(${escapeHtml(item.raw)})</span>` : ''}
+        </div>
+        <div class="admin-prev-trans">${idx + 1}. 🇷🇺 ${escapeHtml(ruTxt)}${escapeHtml(enTxt)}${escapeHtml(heTxt)}</div>
+      `;
+      adminLivePreviewList.appendChild(row);
+    });
+  }
+
+  async function enrichWordsViaGeminiApi(words, targetLang, inputTransLang, courseTitle, levelTag) {
+    const creds = getStoredAdminCreds();
+    const headers = { 'Content-Type': 'application/json' };
+    if (creds.geminiKey) headers['x-gemini-api-key'] = creds.geminiKey;
+
+    const batchSize = 45;
+    let mergedCourseTitles = null;
+    let mergedCourseDescs = null;
+    const byWordKey = [];
+    const enrichedWords = words.map(w => ({
+      ...w,
+      translations: { ...(w.translations || {}) }
+    }));
+
+    for (let offset = 0; offset < enrichedWords.length; offset += batchSize) {
+      const slice = enrichedWords.slice(offset, offset + batchSize);
+      const payloadItems = slice.map((w, localIdx) => ({
+        idx: localIdx,
+        front: w.raw || w.withArticle || w.word,
+        trans: (w.translations && w.translations[inputTransLang]) || (w.translations && w.translations.ru) || ''
+      }));
+
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          mode: 'enrich_ui_langs',
+          targetLang,
+          inputTransLang,
+          courseTitle,
+          levelTag,
+          items: payloadItems
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data || !data.ok || !data.result) {
+        const msg = (data && data.message) || (data && data.error) || `HTTP ${res.status}`;
+        const err = new Error(msg);
+        err.code = (data && data.error) || '';
+        throw err;
+      }
+
+      if (!mergedCourseTitles && data.result.courseTitles) {
+        mergedCourseTitles = data.result.courseTitles;
+      }
+      if (!mergedCourseDescs && data.result.courseDescs) {
+        mergedCourseDescs = data.result.courseDescs;
+      }
+
+      const transArr = Array.isArray(data.result.translations) ? data.result.translations : [];
+      transArr.forEach(tRow => {
+        const targetItem = slice[tRow.idx];
+        if (!targetItem) return;
+        const authorVal = (targetItem.translations && targetItem.translations[inputTransLang]) || '';
+        targetItem.translations = {
+          ru: (inputTransLang === 'ru' && authorVal) ? authorVal : (tRow.ru || authorVal),
+          en: (inputTransLang === 'en' && authorVal) ? authorVal : (tRow.en || authorVal),
+          he: (inputTransLang === 'he' && authorVal) ? authorVal : (tRow.he || authorVal)
+        };
+      });
+    }
+
+    enrichedWords.forEach(w => {
+      byWordKey.push([w.raw, { ...w.translations }]);
+    });
+
+    return {
+      courseTitles: mergedCourseTitles,
+      courseDescs: mergedCourseDescs,
+      words: enrichedWords,
+      byWordKey
+    };
+  }
+
+  async function cloneCourseToTargetLangViaGemini(words, fromLang, toLang, courseTitle, levelTag, category, icon) {
+    const creds = getStoredAdminCreds();
+    const headers = { 'Content-Type': 'application/json' };
+    if (creds.geminiKey) headers['x-gemini-api-key'] = creds.geminiKey;
+
+    const batchSize = 45;
+    let cloneTitles = null;
+    let cloneDescs = null;
+    const clonedEntries = [];
+
+    for (let offset = 0; offset < words.length; offset += batchSize) {
+      const slice = words.slice(offset, offset + batchSize);
+      const payloadItems = slice.map((w, localIdx) => ({
+        idx: localIdx,
+        front: w.raw || w.withArticle || w.word,
+        ru: (w.translations && w.translations.ru) || '',
+        en: (w.translations && w.translations.en) || ''
+      }));
+
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          mode: 'clone_target_course',
+          fromLang,
+          toLang,
+          courseTitle,
+          levelTag,
+          items: payloadItems
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data || !data.ok || !data.result) {
+        throw new Error((data && data.message) || `Clone ${toLang} HTTP ${res.status}`);
+      }
+
+      if (!cloneTitles && data.result.courseTitles) cloneTitles = data.result.courseTitles;
+      if (!cloneDescs && data.result.courseDescs) cloneDescs = data.result.courseDescs;
+
+      const itemsOut = Array.isArray(data.result.items) ? data.result.items : [];
+      itemsOut.forEach(row => {
+        if (!row || !row.front) return;
+        const parsedOne = window.AnkiImporter.parseAdminTextbookBlock(
+          `${row.front};${row.ru || row.en || ''}`,
+          toLang,
+          'ru'
+        );
+        const wObj = parsedOne.words && parsedOne.words[0];
+        if (wObj) {
+          wObj.translations = {
+            ru: row.ru || wObj.translations.ru || '',
+            en: row.en || wObj.translations.en || '',
+            he: row.he || wObj.translations.he || ''
+          };
+          clonedEntries.push(wObj);
+        }
+      });
+    }
+
+    if (clonedEntries.length === 0) return null;
+
+    return window.AnkiImporter.buildOfficialAdminCourse({
+      targetLang: toLang,
+      category,
+      icon,
+      levelTag,
+      titles: cloneTitles,
+      descriptions: cloneDescs,
+      fallbackTitle: courseTitle,
+      words: clonedEntries,
+      lessonSize: 12
+    });
+  }
+
+  function moveModuleBetweenOfficialCourses(langCode, fromCourseId, moduleId, toCourseId) {
+    if (!fromCourseId || !toCourseId || fromCourseId === toCourseId) return;
+    const allCourses = getOfficialCoursesForTargetLang(langCode);
+    const fromCourse = allCourses.find(c => c.id === fromCourseId);
+    const toCourse = allCourses.find(c => c.id === toCourseId);
+    if (!fromCourse || !toCourse) return;
+
+    const modObj = (fromCourse.modules || []).find(m => m.id === moduleId);
+    if (!modObj) return;
+
+    const clonedMod = JSON.parse(JSON.stringify(modObj));
+    const newModId = `${toCourseId}-mv-${Date.now().toString(36).slice(-4)}`;
+    clonedMod.id = newModId;
+    clonedMod.lessons = (clonedMod.lessons || []).map((ls, idx) => ({
+      ...ls,
+      id: ls.isBoss ? `${newModId}-boss` : `${newModId}-l${idx + 1}`
+    }));
+
+    // 1. Убираем модуль из исходного курса
+    const mutableFrom = findMutableAdminCourse(fromCourseId, langCode);
+    if (mutableFrom && Array.isArray(mutableFrom.modules)) {
+      mutableFrom.modules = mutableFrom.modules.filter(m => m.id !== moduleId);
+    } else {
+      const ovFrom = ensureCourseOverrideRecord(fromCourseId);
+      if (Array.isArray(ovFrom.appendedModules)) {
+        ovFrom.appendedModules = ovFrom.appendedModules.filter(m => m.id !== moduleId);
+      }
+      const rem = new Set(Array.isArray(ovFrom.removedModuleIds) ? ovFrom.removedModuleIds : []);
+      rem.add(moduleId);
+      ovFrom.removedModuleIds = Array.from(rem);
+    }
+
+    // 2. Добавляем модуль в целевой курс
+    const mutableTo = findMutableAdminCourse(toCourseId, langCode);
+    if (mutableTo) {
+      mutableTo.modules = [...(mutableTo.modules || []), clonedMod];
+    } else {
+      const ovTo = ensureCourseOverrideRecord(toCourseId);
+      ovTo.appendedModules = [...(Array.isArray(ovTo.appendedModules) ? ovTo.appendedModules : []), clonedMod];
+    }
+
+    saveAdminCatalogLocal();
+    ensureValidCourseSelection();
+    renderLevelSidebar();
+    renderHomeDashboardWidgets();
+    renderAdminStudio();
+    showAdminStatus(
+      `✅ Модуль «${(modObj.titles && modObj.titles.ru) || moduleId}» перенесён в курс «${(toCourse.titles && toCourse.titles.ru) || toCourseId}»! Нажмите «🌍 Опубликовать изменения на хостинг», чтобы обновить у всех игроков.`,
+      false
+    );
+  }
+
+  function renderAdminCategoriesTree() {
+    if (!adminCategoriesTree) return;
+    const orgLang = state.adminOrgLang || state.targetLang || 'de';
+
+    if (adminOrganizerLangTabs) {
+      adminOrganizerLangTabs.querySelectorAll('[data-admin-org-lang]').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-admin-org-lang') === orgLang);
+      });
+    }
+
+    const cats = getAllCategories();
+    const courses = getOfficialCoursesForTargetLang(orgLang);
+    const levelOptions = ['A1', 'A1–A2', 'A2', 'A2–B1', 'B1', 'B1–B2', 'B2', 'C1'];
+
+    adminCategoriesTree.innerHTML = '';
+
+    cats.forEach(cat => {
+      const inCat = courses.filter(c => inferCourseCategory(c) === cat.id);
+      const groupEl = document.createElement('div');
+      groupEl.className = 'admin-cat-group';
+
+      const catTitle = (cat.titles && (cat.titles.ru || cat.titles.en)) || cat.id;
+      const headEl = document.createElement('div');
+      headEl.className = 'admin-cat-group-head';
+      headEl.innerHTML = `
+        <span class="admin-cat-group-title">${escapeHtml(cat.icon || '🗂️')} ${escapeHtml(catTitle)}</span>
+        <span class="deck-tag-badge cefr">${inCat.length} курс.</span>
+      `;
+      groupEl.appendChild(headEl);
+
+      if (inCat.length === 0) {
+        const emptyHint = document.createElement('div');
+        emptyHint.style.fontSize = '0.78rem';
+        emptyHint.style.color = '#64748b';
+        emptyHint.style.padding = '4px 2px';
+        emptyHint.textContent = 'Пока нет курсов в этой категории — перенесите сюда курс ниже или создайте новый слева.';
+        groupEl.appendChild(emptyHint);
+      }
+
+      inCat.forEach((course) => {
+        const globalIdx = courses.findIndex(x => x.id === course.id);
+        const wordsTotal = getAllWordsInCourse(course).length;
+        const modList = course.modules || [];
+        const regularLessonCount = modList.reduce(
+          (acc, m) => acc + (m.lessons || []).filter(ls => !ls.isBoss).length,
+          0
+        );
+
+        const rowCard = document.createElement('div');
+        rowCard.className = 'admin-course-org-row';
+
+        const topRow = document.createElement('div');
+        topRow.className = 'admin-course-org-top';
+        topRow.innerHTML = `
+          <div>
+            <div class="admin-course-org-name">
+              ${escapeHtml(course.icon || '📚')} ${escapeHtml((course.titles && course.titles.ru) || course.id)}
+              ${course.isAdminCreated ? '<span class="deck-tag-badge creator" style="margin-left:6px;">ADMIN</span>' : ''}
+            </div>
+            <div class="admin-course-org-meta">
+              ${wordsTotal} сл. · ${modList.length} мод. · ${regularLessonCount} ур. · ID: <code>${escapeHtml(course.id)}</code>
+            </div>
+          </div>
+          <div style="display:flex; gap:5px; align-items:center;">
+            <button type="button" class="hud-btn btn-org-up" title="Поднять выше" ${globalIdx <= 0 ? 'disabled' : ''}>↑</button>
+            <button type="button" class="hud-btn btn-org-down" title="Опустить ниже" ${globalIdx >= courses.length - 1 ? 'disabled' : ''}>↓</button>
+            <button type="button" class="hud-btn active btn-org-play" title="Запустить курс">▶</button>
+            <button type="button" class="hud-btn btn-org-del" title="Удалить / скрыть курс" style="color:#fca5a5;">🗑️</button>
+          </div>
+        `;
+        rowCard.appendChild(topRow);
+
+        // Контролы смены Категории и Уровня CEFR
+        const controlsRow = document.createElement('div');
+        controlsRow.className = 'admin-course-org-controls';
+
+        const catSelect = document.createElement('select');
+        catSelect.title = 'Категория курса';
+        cats.forEach(cOpt => {
+          const o = document.createElement('option');
+          o.value = cOpt.id;
+          o.textContent = `🗂️ ${(cOpt.titles && cOpt.titles.ru) || cOpt.id}`;
+          if (cOpt.id === inferCourseCategory(course)) o.selected = true;
+          catSelect.appendChild(o);
+        });
+        catSelect.addEventListener('change', () => {
+          const newCat = catSelect.value;
+          const mutable = findMutableAdminCourse(course.id, orgLang);
+          if (mutable) mutable.category = newCat;
+          const ov = ensureCourseOverrideRecord(course.id);
+          ov.category = newCat;
+          saveAdminCatalogLocal();
+          renderHomeDashboardWidgets();
+          renderAdminStudio();
+          showAdminStatus(`✅ Курс «${(course.titles && course.titles.ru) || course.id}» перемещён в категорию «${newCat}».`, false);
+        });
+        controlsRow.appendChild(catSelect);
+
+        const lvlSelect = document.createElement('select');
+        lvlSelect.title = 'Уровень CEFR';
+        const curLvl = course.levelTag || 'B1';
+        const allLvls = levelOptions.includes(curLvl) ? levelOptions : [curLvl, ...levelOptions];
+        allLvls.forEach(lv => {
+          const o = document.createElement('option');
+          o.value = lv;
+          o.textContent = `📊 ${lv}`;
+          if (lv === curLvl) o.selected = true;
+          lvlSelect.appendChild(o);
+        });
+        lvlSelect.addEventListener('change', () => {
+          const newLvl = lvlSelect.value;
+          const mutable = findMutableAdminCourse(course.id, orgLang);
+          if (mutable) mutable.levelTag = newLvl;
+          const ov = ensureCourseOverrideRecord(course.id);
+          ov.levelTag = newLvl;
+          saveAdminCatalogLocal();
+          renderHomeDashboardWidgets();
+          renderAdminStudio();
+          showAdminStatus(`✅ Уровень курса «${(course.titles && course.titles.ru) || course.id}» изменён на ${newLvl}.`, false);
+        });
+        controlsRow.appendChild(lvlSelect);
+
+        rowCard.appendChild(controlsRow);
+
+        // Раскрывающийся список модулей и уроков с возможностью переноса модуля в другой курс
+        if (modList.length > 0) {
+          const detailsEl = document.createElement('details');
+          detailsEl.style.marginTop = '4px';
+          const summaryEl = document.createElement('summary');
+          summaryEl.style.cursor = 'pointer';
+          summaryEl.style.fontSize = '0.78rem';
+          summaryEl.style.color = '#7dd3fc';
+          summaryEl.style.fontWeight = '600';
+          summaryEl.textContent = `📖 Уроки внутри курса (${modList.length} мод. / ${regularLessonCount} ур.)`;
+          detailsEl.appendChild(summaryEl);
+
+          const modsWrap = document.createElement('div');
+          modsWrap.style.display = 'flex';
+          modsWrap.style.flexDirection = 'column';
+          modsWrap.style.gap = '6px';
+          modsWrap.style.marginTop = '6px';
+
+          modList.forEach((mObj, mIdx) => {
+            const mBox = document.createElement('div');
+            mBox.style.padding = '7px 9px';
+            mBox.style.borderRadius = '8px';
+            mBox.style.background = 'rgba(2, 6, 23, 0.52)';
+            mBox.style.border = '1px solid rgba(148, 163, 184, 0.14)';
+
+            const lessonNames = (mObj.lessons || [])
+              .map((ls, lIdx) => ls.isBoss ? '👹 Босс' : `${lIdx + 1}. ${(ls.titles && ls.titles.ru) || ls.id} (${(ls.words || []).length})`)
+              .join(' · ');
+
+            mBox.innerHTML = `
+              <div style="font-size:0.8rem; font-weight:700; color:#e2e8f0;">
+                ${escapeHtml((mObj.titles && mObj.titles.ru) || `Модуль ${mIdx + 1}`)}
+              </div>
+              <div style="font-size:0.74rem; color:#94a3b8; margin:3px 0 6px;">
+                ${escapeHtml(lessonNames)}
+              </div>
+            `;
+
+            const otherCourses = courses.filter(c => c.id !== course.id);
+            if (otherCourses.length > 0) {
+              const moveSelect = document.createElement('select');
+              moveSelect.style.width = '100%';
+              moveSelect.style.padding = '4px 8px';
+              moveSelect.style.borderRadius = '7px';
+              moveSelect.style.background = 'rgba(15, 23, 42, 0.9)';
+              moveSelect.style.color = '#cbd5e1';
+              moveSelect.style.border = '1px solid rgba(56, 189, 248, 0.25)';
+              moveSelect.style.fontSize = '0.75rem';
+
+              const placeholderOpt = document.createElement('option');
+              placeholderOpt.value = '';
+              placeholderOpt.textContent = '↪ Перенести эти уроки в другой курс...';
+              moveSelect.appendChild(placeholderOpt);
+
+              otherCourses.forEach(oc => {
+                const opt = document.createElement('option');
+                opt.value = oc.id;
+                opt.textContent = `→ ${oc.icon || '📚'} ${(oc.titles && oc.titles.ru) || oc.id}`;
+                moveSelect.appendChild(opt);
+              });
+
+              moveSelect.addEventListener('change', () => {
+                if (moveSelect.value) {
+                  moveModuleBetweenOfficialCourses(orgLang, course.id, mObj.id, moveSelect.value);
+                }
+              });
+              mBox.appendChild(moveSelect);
+            }
+
+            modsWrap.appendChild(mBox);
+          });
+
+          detailsEl.appendChild(modsWrap);
+          rowCard.appendChild(detailsEl);
+        }
+
+        // Кнопки ↑ / ↓ / ▶ / 🗑️
+        const upBtn = topRow.querySelector('.btn-org-up');
+        if (upBtn) {
+          upBtn.addEventListener('click', () => {
+            if (globalIdx <= 0) return;
+            courses.forEach((cItem, i) => {
+              ensureCourseOverrideRecord(cItem.id).orderIndex = i;
+            });
+            const prevCourse = courses[globalIdx - 1];
+            ensureCourseOverrideRecord(course.id).orderIndex = globalIdx - 1;
+            ensureCourseOverrideRecord(prevCourse.id).orderIndex = globalIdx;
+            saveAdminCatalogLocal();
+            renderHomeDashboardWidgets();
+            renderAdminStudio();
+          });
+        }
+
+        const downBtn = topRow.querySelector('.btn-org-down');
+        if (downBtn) {
+          downBtn.addEventListener('click', () => {
+            if (globalIdx >= courses.length - 1) return;
+            courses.forEach((cItem, i) => {
+              ensureCourseOverrideRecord(cItem.id).orderIndex = i;
+            });
+            const nextCourse = courses[globalIdx + 1];
+            ensureCourseOverrideRecord(course.id).orderIndex = globalIdx + 1;
+            ensureCourseOverrideRecord(nextCourse.id).orderIndex = globalIdx;
+            saveAdminCatalogLocal();
+            renderHomeDashboardWidgets();
+            renderAdminStudio();
+          });
+        }
+
+        const playBtn = topRow.querySelector('.btn-org-play');
+        if (playBtn) {
+          playBtn.addEventListener('click', () => {
+            if (state.targetLang !== orgLang) {
+              setTargetLanguage(orgLang);
+            }
+            launchDeckLessonFromPage(course.id, 0, 0);
+          });
+        }
+
+        const delBtn = topRow.querySelector('.btn-org-del');
+        if (delBtn) {
+          delBtn.addEventListener('click', () => {
+            const titleLabel = (course.titles && course.titles.ru) || course.id;
+            if (!window.confirm(`Удалить / скрыть курс «${titleLabel}» из каталога?`)) return;
+            if (Array.isArray(state.adminCatalog.courses[orgLang])) {
+              state.adminCatalog.courses[orgLang] = state.adminCatalog.courses[orgLang].filter(c => c.id !== course.id);
+            }
+            if (!course.isAdminCreated) {
+              const delSet = new Set(state.adminCatalog.deletedCourseIds || []);
+              delSet.add(course.id);
+              state.adminCatalog.deletedCourseIds = Array.from(delSet);
+            }
+            saveAdminCatalogLocal();
+            ensureValidCourseSelection();
+            renderLevelSidebar();
+            renderHomeDashboardWidgets();
+            renderAdminStudio();
+            showAdminStatus(`🗑️ Курс «${titleLabel}» удалён из активного каталога.`, false);
+          });
+        }
+
+        groupEl.appendChild(rowCard);
+      });
+
+      adminCategoriesTree.appendChild(groupEl);
+    });
+
+    if (Array.isArray(state.adminCatalog.deletedCourseIds) && state.adminCatalog.deletedCourseIds.length > 0) {
+      const restoreBtn = document.createElement('button');
+      restoreBtn.type = 'button';
+      restoreBtn.className = 'deck-btn-secondary';
+      restoreBtn.style.alignSelf = 'flex-start';
+      restoreBtn.textContent = `↺ Восстановить скрытые базовые курсы (${state.adminCatalog.deletedCourseIds.length})`;
+      restoreBtn.addEventListener('click', () => {
+        state.adminCatalog.deletedCourseIds = [];
+        saveAdminCatalogLocal();
+        renderHomeDashboardWidgets();
+        renderAdminStudio();
+        showAdminStatus('✅ Все базовые курсы восстановлены!', false);
+      });
+      adminCategoriesTree.appendChild(restoreBtn);
+    }
+  }
+
+  function renderAdminStudio() {
+    if (!adminStudioView) return;
+
+    // Подгружаем сохранённые ключи в поля (если пользователь сейчас не печатает в них)
+    const creds = getStoredAdminCreds();
+    if (adminGeminiKeyInput && document.activeElement !== adminGeminiKeyInput) {
+      adminGeminiKeyInput.value = ttsManager.localApiKey || '';
+    }
+    if (adminGithubTokenInput && document.activeElement !== adminGithubTokenInput) {
+      adminGithubTokenInput.value = creds.ghToken;
+    }
+    if (adminPasswordInput && document.activeElement !== adminPasswordInput) {
+      adminPasswordInput.value = creds.adminPass;
+    }
+
+    populateAdminCategorySelect();
+    populateAdminTargetCourseSelect();
+
+    const isAppend = adminPlacementModeSelect && adminPlacementModeSelect.value === 'append_course';
+    if (adminAppendTargetWrap) {
+      adminAppendTargetWrap.classList.toggle('hidden', !isAppend);
+    }
+
+    renderAdminLivePreview();
+    renderAdminCategoriesTree();
+  }
+
+  // Обработчики навигации и кнопок Студии Супер-Админа
+  [btnNavAdmin, btnDecksOpenAdmin].forEach(el => {
+    if (!el) return;
+    el.addEventListener('click', () => {
+      openAdminStudio();
+      el.blur();
+    });
+  });
+
+  if (btnAdminBackToDecks) {
+    btnAdminBackToDecks.addEventListener('click', () => {
+      openDecksPage({ sourceFilter: 'official', navMode: 'courses' });
+    });
+  }
+
+  if (btnAdminSaveCreds) {
+    btnAdminSaveCreds.addEventListener('click', () => {
+      const gemKey = (adminGeminiKeyInput && adminGeminiKeyInput.value.trim()) || '';
+      const ghTok = (adminGithubTokenInput && adminGithubTokenInput.value.trim()) || '';
+      const admPass = (adminPasswordInput && adminPasswordInput.value.trim()) || '';
+      ttsManager.setLocalApiKey(gemKey);
+      try {
+        if (ghTok) localStorage.setItem(ADMIN_GH_TOKEN_LS_KEY, ghTok);
+        else localStorage.removeItem(ADMIN_GH_TOKEN_LS_KEY);
+        if (admPass) localStorage.setItem(ADMIN_PASSWORD_LS_KEY, admPass);
+        else localStorage.removeItem(ADMIN_PASSWORD_LS_KEY);
+      } catch (_) {}
+      showAdminStatus('🔑 Ключи сохранены локально в вашем браузере (Gemini 3.8 AI + публикация на GitHub/Vercel).', false);
+    });
+  }
+
+  if (btnAdminToggleNewCat && adminNewCategoryBox) {
+    btnAdminToggleNewCat.addEventListener('click', () => {
+      adminNewCategoryBox.classList.toggle('hidden');
+      if (!adminNewCategoryBox.classList.contains('hidden') && adminNewCatTitleRu) {
+        adminNewCatTitleRu.focus();
+      }
+    });
+  }
+
+  if (btnAdminCreateCategory) {
+    btnAdminCreateCategory.addEventListener('click', () => {
+      const ruTitle = (adminNewCatTitleRu && adminNewCatTitleRu.value.trim()) || '';
+      if (!ruTitle) return;
+      const enTitle = (adminNewCatTitleEn && adminNewCatTitleEn.value.trim()) || ruTitle;
+      const iconChar = (adminNewCatIcon && adminNewCatIcon.value.trim()) || '📁';
+      const catId = ruTitle
+        .toLowerCase()
+        .replace(/[^a-z0-9а-яё]+/gi, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 24) || `cat-${Date.now().toString(36).slice(-4)}`;
+
+      const existing = state.adminCatalog.categories || [];
+      state.adminCatalog.categories = [
+        ...existing.filter(c => c.id !== catId),
+        {
+          id: catId,
+          icon: iconChar,
+          titles: { ru: ruTitle, en: enTitle, he: enTitle }
+        }
+      ];
+      saveAdminCatalogLocal();
+      if (adminNewCatTitleRu) adminNewCatTitleRu.value = '';
+      if (adminNewCatTitleEn) adminNewCatTitleEn.value = '';
+      if (adminNewCategoryBox) adminNewCategoryBox.classList.add('hidden');
+      if (adminIconInput) adminIconInput.value = iconChar;
+      populateAdminCategorySelect(catId);
+      renderAdminCategoriesTree();
+      showAdminStatus(`🗂️ Создана новая категория «${iconChar} ${ruTitle}»!`, false);
+    });
+  }
+
+  if (adminCategorySelect) {
+    adminCategorySelect.addEventListener('change', () => {
+      const catObj = getCategoryById(adminCategorySelect.value);
+      if (catObj && catObj.icon && adminIconInput) {
+        adminIconInput.value = catObj.icon;
+      }
+    });
+  }
+
+  if (adminPlacementModeSelect) {
+    adminPlacementModeSelect.addEventListener('change', () => {
+      const isAppend = adminPlacementModeSelect.value === 'append_course';
+      if (adminAppendTargetWrap) {
+        adminAppendTargetWrap.classList.toggle('hidden', !isAppend);
+      }
+      populateAdminTargetCourseSelect();
+    });
+  }
+
+  if (adminCourseTitleInput) {
+    adminCourseTitleInput.addEventListener('input', () => {
+      state.adminTitleManuallyEdited = Boolean(adminCourseTitleInput.value.trim());
+    });
+  }
+
+  [adminRawWordsTextarea, adminSourceLangSelect, adminTransLangSelect].forEach(el => {
+    if (!el) return;
+    const evName = el.tagName === 'TEXTAREA' ? 'input' : 'change';
+    el.addEventListener(evName, () => {
+      state.adminAiPreviewResult = null;
+      if (el === adminSourceLangSelect) {
+        populateAdminTargetCourseSelect();
+      }
+      renderAdminLivePreview();
+    });
+  });
+
+  if (adminOrganizerLangTabs) {
+    adminOrganizerLangTabs.addEventListener('click', (e) => {
+      const btn = e.target && e.target.closest && e.target.closest('[data-admin-org-lang]');
+      if (!btn) return;
+      const lg = btn.getAttribute('data-admin-org-lang');
+      if (lg && TARGET_LANG_META[lg]) {
+        state.adminOrgLang = lg;
+        renderAdminCategoriesTree();
+      }
+    });
+  }
+
+  if (btnAdminAiPreview) {
+    btnAdminAiPreview.addEventListener('click', async () => {
+      const parsed = getAdminParsedDraft();
+      if (parsed.words.length === 0) {
+        showAdminStatus('⚠️ Сначала вставьте список слов в текстовое поле.', true);
+        return;
+      }
+      const srcLang = (adminSourceLangSelect && adminSourceLangSelect.value) || 'de';
+      const transLang = (adminTransLangSelect && adminTransLangSelect.value) || 'ru';
+      const levelTag = (adminLevelSelect && adminLevelSelect.value) || 'B1';
+      const courseTitle = (adminCourseTitleInput && adminCourseTitleInput.value.trim()) || parsed.detectedTitle || 'Новый курс';
+
+      const prevText = btnAdminAiPreview.textContent;
+      btnAdminAiPreview.disabled = true;
+      btnAdminAiPreview.textContent = '⏳ Gemini 3.8 AI переводит...';
+      showAdminStatus(`🤖 Переводим ${parsed.words.length} сл. на RU / EN / עברית через Gemini 3.8 Flash...`, false);
+
+      try {
+        const aiOut = await enrichWordsViaGeminiApi(parsed.words, srcLang, transLang, courseTitle, levelTag);
+        state.adminAiPreviewResult = {
+          targetLang: srcLang,
+          courseTitles: aiOut.courseTitles,
+          courseDescs: aiOut.courseDescs,
+          byWordKey: aiOut.byWordKey
+        };
+        if (aiOut.courseTitles && aiOut.courseTitles.ru && adminCourseTitleInput && !state.adminTitleManuallyEdited) {
+          adminCourseTitleInput.value = aiOut.courseTitles.ru;
+        }
+        renderAdminLivePreview();
+        showAdminStatus(`✨ Готово! Переведены все ${parsed.words.length} карточек на русский, английский и иврит.`, false);
+      } catch (err) {
+        showAdminStatus(`⚠️ Не удалось выполнить AI-перевод: ${err && err.message ? err.message : 'ошибка'}. Проверьте ключ Gemini в блоке «🔑 Настройка».`, true);
+      } finally {
+        btnAdminAiPreview.disabled = false;
+        btnAdminAiPreview.textContent = prevText;
+      }
+    });
+  }
+
+  if (btnAdminCreateAndPublish) {
+    btnAdminCreateAndPublish.addEventListener('click', async () => {
+      let parsed = getAdminParsedDraft();
+      if (parsed.words.length === 0) {
+        showAdminStatus('⚠️ Вставьте список слов (например, Start, der (-s);старт, начало) перед созданием уроков.', true);
+        return;
+      }
+
+      const srcLang = (adminSourceLangSelect && adminSourceLangSelect.value) || 'de';
+      const transLang = (adminTransLangSelect && adminTransLangSelect.value) || 'ru';
+      const levelTag = (adminLevelSelect && adminLevelSelect.value) || 'B1';
+      const category = (adminCategorySelect && adminCategorySelect.value) || 'business';
+      const icon = (adminIconInput && adminIconInput.value.trim()) || '💼';
+      const placementMode = (adminPlacementModeSelect && adminPlacementModeSelect.value) || 'new_course';
+      const rawTitle = (adminCourseTitleInput && adminCourseTitleInput.value.trim()) || parsed.detectedTitle || 'Новый курс';
+
+      const prevBtnLabel = btnAdminCreateAndPublish.textContent;
+      btnAdminCreateAndPublish.disabled = true;
+      btnAdminCreateAndPublish.textContent = '⏳ Собираем уроки и переводим...';
+
+      let wordsToUse = parsed.words;
+      let aiTitles = state.adminAiPreviewResult ? state.adminAiPreviewResult.courseTitles : null;
+      let aiDescs = state.adminAiPreviewResult ? state.adminAiPreviewResult.courseDescs : null;
+
+      try {
+        if (adminAiEnrichUiCheck && adminAiEnrichUiCheck.checked && !state.adminAiPreviewResult) {
+          try {
+            showAdminStatus(`🤖 Авто-перевод ${wordsToUse.length} сл. (RU / EN / עברית) через Gemini 3.8 AI...`, false);
+            const aiRes = await enrichWordsViaGeminiApi(wordsToUse, srcLang, transLang, rawTitle, levelTag);
+            wordsToUse = aiRes.words;
+            aiTitles = aiRes.courseTitles;
+            aiDescs = aiRes.courseDescs;
+          } catch (_) {
+            // Продолжаем с авторским переводом без блокировки создания курса!
+          }
+        }
+
+        if (placementMode === 'append_course') {
+          const targetCourseId = adminTargetCourseSelect && adminTargetCourseSelect.value;
+          if (!targetCourseId) {
+            showAdminStatus('⚠️ Выберите существующий курс для добавления уроков.', true);
+            return;
+          }
+          const tempCourse = window.AnkiImporter.buildOfficialAdminCourse({
+            id: `${targetCourseId}-add-${Date.now().toString(36).slice(-4)}`,
+            targetLang: srcLang,
+            category,
+            icon,
+            levelTag,
+            titles: aiTitles || { ru: rawTitle, en: rawTitle, he: rawTitle },
+            descriptions: aiDescs,
+            fallbackTitle: rawTitle,
+            words: wordsToUse,
+            lessonSize: 12
+          });
+
+          const mutableTarget = findMutableAdminCourse(targetCourseId, srcLang);
+          if (mutableTarget) {
+            mutableTarget.modules = [...(mutableTarget.modules || []), ...(tempCourse.modules || [])];
+          } else {
+            const ov = ensureCourseOverrideRecord(targetCourseId);
+            ov.appendedModules = [...(Array.isArray(ov.appendedModules) ? ov.appendedModules : []), ...(tempCourse.modules || [])];
+          }
+
+          saveAdminCatalogLocal();
+          await publishAdminCatalogToCloud(`feat(catalog): append ${wordsToUse.length} words (${rawTitle}) to ${targetCourseId}`);
+        } else {
+          const newCourse = window.AnkiImporter.buildOfficialAdminCourse({
+            targetLang: srcLang,
+            category,
+            icon,
+            levelTag,
+            titles: aiTitles ? { ...aiTitles, ru: adminCourseTitleInput.value.trim() || aiTitles.ru } : null,
+            descriptions: aiDescs,
+            fallbackTitle: rawTitle,
+            words: wordsToUse,
+            lessonSize: 12
+          });
+
+          if (!Array.isArray(state.adminCatalog.courses[srcLang])) {
+            state.adminCatalog.courses[srcLang] = [];
+          }
+          state.adminCatalog.courses[srcLang].push(newCourse);
+
+          // Опциональное клонирование курса на другие изучаемые языки (EN / ES / DE)
+          if (adminAiCloneTargetsCheck && adminAiCloneTargetsCheck.checked) {
+            const otherLangs = ['de', 'en', 'es'].filter(lg => lg !== srcLang);
+            for (const toLg of otherLangs) {
+              try {
+                showAdminStatus(`🌐 Генерируем версию курса для языка ${toLg.toUpperCase()} через Gemini 3.8 AI...`, false);
+                const cloned = await cloneCourseToTargetLangViaGemini(
+                  wordsToUse,
+                  srcLang,
+                  toLg,
+                  rawTitle,
+                  levelTag,
+                  category,
+                  icon
+                );
+                if (cloned) {
+                  state.adminCatalog.courses[toLg].push(cloned);
+                }
+              } catch (_) {}
+            }
+          }
+
+          state.adminOrgLang = srcLang;
+          saveAdminCatalogLocal();
+          if (state.targetLang === srcLang) {
+            selectCourseLesson(newCourse.id, 0, 0, false);
+          }
+          await publishAdminCatalogToCloud(`feat(catalog): add ${srcLang.toUpperCase()} ${levelTag} course "${rawTitle}" (${wordsToUse.length} words)`);
+        }
+
+        // Очищаем черновик после успешного создания
+        if (adminRawWordsTextarea) adminRawWordsTextarea.value = '';
+        if (adminCourseTitleInput) adminCourseTitleInput.value = '';
+        state.adminTitleManuallyEdited = false;
+        state.adminAiPreviewResult = null;
+
+        ensureValidCourseSelection();
+        renderLevelSidebar();
+        renderHomeDashboardWidgets();
+        renderAdminStudio();
+      } finally {
+        btnAdminCreateAndPublish.disabled = false;
+        btnAdminCreateAndPublish.textContent = prevBtnLabel;
+      }
+    });
+  }
+
+  if (btnAdminSyncCloud) {
+    btnAdminSyncCloud.addEventListener('click', async () => {
+      btnAdminSyncCloud.disabled = true;
+      try {
+        await publishAdminCatalogToCloud('chore(catalog): sync categories & courses from Super Admin Studio');
+      } finally {
+        btnAdminSyncCloud.disabled = false;
+      }
+    });
+  }
+
+  if (btnAdminExportJson) {
+    btnAdminExportJson.addEventListener('click', () => {
+      saveAdminCatalogLocal();
+      const blob = new Blob([JSON.stringify(state.adminCatalog, null, 2) + '\n'], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'admin-catalog.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      showAdminStatus('📥 Файл admin-catalog.json скачан.', false);
+    });
+  }
+
+  if (btnAdminImportJson && adminImportJsonInput) {
+    btnAdminImportJson.addEventListener('click', () => {
+      adminImportJsonInput.click();
+    });
+    adminImportJsonInput.addEventListener('change', async () => {
+      const f = adminImportJsonInput.files && adminImportJsonInput.files[0];
+      if (!f) return;
+      try {
+        const text = await f.text();
+        const parsed = JSON.parse(text);
+        state.adminCatalog = normalizeAdminCatalogObject(parsed);
+        saveAdminCatalogLocal();
+        ensureValidCourseSelection();
+        renderLevelSidebar();
+        renderHomeDashboardWidgets();
+        renderAdminStudio();
+        showAdminStatus('📤 Файл admin-catalog.json успешно загружен и применён!', false);
+      } catch (err) {
+        showAdminStatus(`⚠️ Ошибка чтения JSON: ${err && err.message ? err.message : 'некорректный файл'}`, true);
+      } finally {
+        adminImportJsonInput.value = '';
+      }
+    });
+  }
+
   // --- Инициализация приложения ---
   async function initGame() {
     if (window.AnkiImporter) {
       state.userCourses = await window.AnkiImporter.loadUserCourses();
     }
+    await fetchAndMergeCloudAdminCatalog();
     ensureValidCourseSelection();
     renderZtypeKeyboard();
     setTargetLanguage(state.targetLang);

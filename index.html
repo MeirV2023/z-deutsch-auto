@@ -50,6 +50,9 @@
           <button type="button" class="home-nav-pill" id="btnNavLeaderboard">
             🏆 <span id="labelNavLeaderboard">Рейтинг</span>
           </button>
+          <button type="button" class="home-nav-pill admin-nav-pill" id="btnNavAdmin" title="Супер-Админ: создание уроков, AI-перевод и распределение категорий">
+            👑 <span id="labelNavAdmin">Админ</span>
+          </button>
         </div>
 
         <div class="home-nav-right">
@@ -377,6 +380,14 @@
                 </div>
               </div>
 
+              <!-- Категория (Auto, Бизнес, Базовый, IT...) -->
+              <div class="decks-filter-group">
+                <div class="decks-filter-label">🗂️ <span id="labelDecksCategoryHeader">Категория</span></div>
+                <div class="decks-level-pills" id="decksCategoryFilterGroup">
+                  <button type="button" class="decks-level-pill active" data-category-filter="all">Все</button>
+                </div>
+              </div>
+
               <!-- Уровень CEFR -->
               <div class="decks-filter-group">
                 <div class="decks-filter-label">📊 <span id="labelDecksLevelHeader">Уровень</span></div>
@@ -521,6 +532,9 @@
                 <button type="button" class="decks-subtab-pill active" id="btnDecksSubtabMyDecks">
                   📁 <span id="labelDecksSubtabMyDecks">Мои колоды</span>
                 </button>
+                <button type="button" class="decks-subtab-pill" id="btnDecksOpenAdmin">
+                  👑 <span id="labelDecksOpenAdmin">Супер-Админ</span>
+                </button>
                 <button type="button" class="decks-subtab-pill return-battle hidden" id="btnDecksReturnBattle">
                   🚀 <span id="labelDecksReturnBattle">Вернуться в бой</span>
                 </button>
@@ -560,6 +574,211 @@
           </div>
         </div>
       </div><!-- /#decksPageView -->
+
+      <!-- ====================================================================
+           ПОДЭКРАН В: СТУДИЯ СУПЕР-АДМИНА (СОЗДАНИЕ УРОКОВ ДЛЯ ВСЕХ + AI + КАТЕГОРИИ)
+           ==================================================================== -->
+      <div class="admin-studio-view hidden" id="adminStudioView">
+        <div class="admin-hero-bar">
+          <div class="admin-hero-left">
+            <span class="admin-crown-badge" aria-hidden="true">👑</span>
+            <div>
+              <h1 class="decks-hero-title" id="adminHeroTitle">Студия Супер-Админа</h1>
+              <p class="decks-hero-subtitle" id="adminHeroSubtitle">
+                Создавайте официальные курсы и уроки для всех игроков, переводите слова через Gemini 3.8 AI и распределяйте по категориям
+              </p>
+            </div>
+          </div>
+
+          <div class="admin-hero-actions">
+            <button type="button" class="deck-btn-secondary" id="btnAdminBackToDecks">
+              ← К курсам и колодам
+            </button>
+            <button type="button" class="deck-btn-secondary" id="btnAdminExportJson" title="Скачать файл admin-catalog.json">
+              📥 Скачать JSON
+            </button>
+            <button type="button" class="deck-btn-secondary" id="btnAdminImportJson" title="Загрузить сохранённый admin-catalog.json">
+              📤 Загрузить JSON
+            </button>
+            <input type="file" id="adminImportJsonInput" accept=".json,application/json" hidden />
+            <button type="button" class="decks-emerald-create-btn" id="btnAdminSyncCloud" title="Отправить текущий каталог в GitHub -> автоматический деплой Vercel для всех игроков">
+              🌍 Опубликовать изменения на хостинг
+            </button>
+          </div>
+        </div>
+
+        <!-- Настройки ключей публикации на хостинг и AI -->
+        <details class="words-accordion admin-creds-accordion" id="adminCredentialsDetails">
+          <summary>🔑 Настройка глобальной публикации на Vercel / GitHub и ключа Gemini 3.8 AI</summary>
+          <div class="admin-creds-grid">
+            <div class="anki-field-col">
+              <label for="adminGeminiKeyInput">🤖 Gemini API Key (для авто-перевода RU / EN / עברית и языковых пар):</label>
+              <input type="password" class="dict-search-input" id="adminGeminiKeyInput" placeholder="AIzaSy... (или задайте GEMINI_API_KEY в Vercel)" autocomplete="off" dir="ltr" />
+            </div>
+            <div class="anki-field-col">
+              <label for="adminGithubTokenInput">🐙 GitHub Token (для 1-клик публикации уроков на хостинг всем игрокам):</label>
+              <input type="password" class="dict-search-input" id="adminGithubTokenInput" placeholder="ghp_... или github_pat_... (Contents: Read & Write)" autocomplete="off" dir="ltr" />
+            </div>
+            <div class="anki-field-col">
+              <label for="adminPasswordInput">🔐 Пароль Супер-Админа (если задан ADMIN_PASSWORD в Vercel):</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="password" class="dict-search-input" id="adminPasswordInput" placeholder="Необязательно, если указан GitHub Token" autocomplete="off" dir="ltr" />
+                <button type="button" class="hud-btn active" id="btnAdminSaveCreds">💾 Сохранить</button>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Статус-баннер операций Супер-Админа -->
+        <div class="anki-auto-map-banner hidden" id="adminStatusBanner"></div>
+
+        <!-- Основная 2-колоночная сетка Студии: Слева создание и AI-перевод, Справа распределение по категориям -->
+        <div class="admin-studio-grid">
+          <!-- ЛЕВАЯ ПАНЕЛЬ: Конструктор курса / уроков из текстового списка -->
+          <section class="bento-card admin-builder-card">
+            <div class="bento-card-header">
+              <span class="bento-card-title">➕ Создать уроки из списка слов</span>
+              <span class="deck-tag-badge creator" id="adminLiveCountBadge">0 слов</span>
+            </div>
+
+            <div class="admin-form-grid-2">
+              <div class="anki-field-col">
+                <label for="adminSourceLangSelect">🎯 Изучаемый язык (слова в космосе):</label>
+                <select class="dict-search-input" id="adminSourceLangSelect">
+                  <option value="de" selected>🇩🇪 Немецкий (DE)</option>
+                  <option value="en">🇬🇧 Английский (EN)</option>
+                  <option value="es">🇪🇸 Испанский (ES)</option>
+                </select>
+              </div>
+
+              <div class="anki-field-col">
+                <label for="adminTransLangSelect">💬 Язык перевода в вашем списке:</label>
+                <select class="dict-search-input" id="adminTransLangSelect">
+                  <option value="ru" selected>🇷🇺 Русский (Немецкий → Русский)</option>
+                  <option value="en">🇬🇧 English (→ English)</option>
+                  <option value="he">🇮🇱 עברית (→ Иврит)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="admin-form-grid-3">
+              <div class="anki-field-col">
+                <label for="adminLevelSelect">📊 Уровень (CEFR):</label>
+                <select class="dict-search-input" id="adminLevelSelect">
+                  <option value="A1">A1</option>
+                  <option value="A1–A2">A1–A2</option>
+                  <option value="A2">A2</option>
+                  <option value="A2–B1">A2–B1</option>
+                  <option value="B1" selected>B1</option>
+                  <option value="B1–B2">B1–B2</option>
+                  <option value="B2">B2</option>
+                  <option value="C1">C1</option>
+                </select>
+              </div>
+
+              <div class="anki-field-col">
+                <label for="adminCategorySelect">🗂️ Категория:</label>
+                <div style="display: flex; gap: 6px;">
+                  <select class="dict-search-input" id="adminCategorySelect"></select>
+                  <button type="button" class="hud-btn" id="btnAdminToggleNewCat" title="Создать новую категорию">＋</button>
+                </div>
+              </div>
+
+              <div class="anki-field-col">
+                <label for="adminIconInput">🎨 Иконка:</label>
+                <input type="text" class="dict-search-input" id="adminIconInput" value="💼" maxlength="4" style="text-align: center; font-size: 1.15rem;" />
+              </div>
+            </div>
+
+            <!-- Мини-форма создания новой категории -->
+            <div class="admin-new-cat-row hidden" id="adminNewCategoryBox">
+              <input type="text" class="dict-search-input" id="adminNewCatIcon" value="📁" maxlength="4" style="max-width: 58px; text-align: center;" aria-label="Иконка категории" />
+              <input type="text" class="dict-search-input" id="adminNewCatTitleRu" placeholder="Название категории (напр. Дом и быт)" />
+              <input type="text" class="dict-search-input" id="adminNewCatTitleEn" placeholder="English (optional)" />
+              <button type="button" class="deck-btn-primary" style="flex: 0 0 auto; padding: 8px 14px;" id="btnAdminCreateCategory">Создать</button>
+            </div>
+
+            <div class="admin-form-grid-2">
+              <div class="anki-field-col">
+                <label for="adminPlacementModeSelect">📍 Куда распределить уроки:</label>
+                <select class="dict-search-input" id="adminPlacementModeSelect">
+                  <option value="new_course" selected>✨ Создать новый курс в категории</option>
+                  <option value="append_course">➕ Добавить уроками внутрь существующего курса</option>
+                </select>
+              </div>
+
+              <div class="anki-field-col hidden" id="adminAppendTargetWrap">
+                <label for="adminTargetCourseSelect">📚 Выберите существующий курс:</label>
+                <select class="dict-search-input" id="adminTargetCourseSelect"></select>
+              </div>
+
+              <div class="anki-field-col" id="adminTitleFieldWrap">
+                <label for="adminCourseTitleInput">🏷️ Название курса / темы (подставится из 1-й строки в скобках):</label>
+                <input type="text" class="dict-search-input" id="adminCourseTitleInput" placeholder="Напр.: Existenzgründung: Открытие своего дела" />
+              </div>
+            </div>
+
+            <div class="anki-field-col">
+              <label for="adminRawWordsTextarea">
+                📝 Список слов (формат <code>Start, der (-s);старт, начало</code>, <code>Inhaber/in, der/die (-/-nen);владелец</code> или <code>(Тема)</code>):
+              </label>
+              <textarea
+                class="custom-words-textarea admin-words-textarea"
+                id="adminRawWordsTextarea"
+                rows="10"
+                placeholder="(Existenzgründung)&#10;Start, der (-s);старт, начало&#10;Inhaber/in, der/die (-/-nen);владелец / владелица&#10;leiten;руководить, управлять&#10;sich selbstständig machen;открыть своё дело"
+              ></textarea>
+            </div>
+
+            <!-- Опции авто-перевода Gemini 3.8 AI -->
+            <div class="admin-ai-options">
+              <label class="admin-check-row">
+                <input type="checkbox" id="adminAiEnrichUiCheck" checked />
+                <span>🤖 <strong>Авто-перевод интерфейса (RU / EN / עברית)</strong> через Gemini 3.8 Flash для каждого слова и заголовка</span>
+              </label>
+              <label class="admin-check-row">
+                <input type="checkbox" id="adminAiCloneTargetsCheck" />
+                <span>🌐 <strong>Мультиязычный клон:</strong> также сгенерировать этот курс для других изучаемых языков (EN / ES / DE)</span>
+              </label>
+            </div>
+
+            <!-- Живой предпросмотр распознанных карточек -->
+            <div class="admin-live-preview-wrap" id="adminLivePreviewWrap">
+              <div class="admin-preview-header" id="adminLiveParseSummary">
+                Вставьте список слов выше — парсер мгновенно покажет разбивку на уроки (по 12 слов + Босс-уроки).
+              </div>
+              <div class="admin-preview-table" id="adminLivePreviewList"></div>
+            </div>
+
+            <div class="admin-submit-row">
+              <button type="button" class="deck-btn-secondary" id="btnAdminAiPreview">
+                ✨ Перевести через AI и проверить
+              </button>
+              <button type="button" class="decks-emerald-create-btn" id="btnAdminCreateAndPublish">
+                🌍 Создать курс и опубликовать для всех
+              </button>
+            </div>
+          </section>
+
+          <!-- ПРАВАЯ ПАНЕЛЬ: Распределение существующих курсов и уроков по категориям -->
+          <section class="bento-card admin-organizer-card">
+            <div class="bento-card-header">
+              <span class="bento-card-title">🗂️ Распределение курсов и уроков</span>
+              <div class="lang-quick-group" id="adminOrganizerLangTabs">
+                <button type="button" class="hud-btn active" data-admin-org-lang="de">🇩🇪 DE</button>
+                <button type="button" class="hud-btn" data-admin-org-lang="en">🇬🇧 EN</button>
+                <button type="button" class="hud-btn" data-admin-org-lang="es">🇪🇸 ES</button>
+              </div>
+            </div>
+
+            <p class="admin-org-hint">
+              Меняйте категорию (например <strong>🚗 Auto</strong> или <strong>💼 Бизнес</strong>), уровень CEFR или переносите модули с уроками между курсами — все изменения сохраняются в общий каталог для игроков.
+            </p>
+
+            <div class="admin-categories-tree" id="adminCategoriesTree"></div>
+          </section>
+        </div>
+      </div><!-- /#adminStudioView -->
     </div>
   </section>
 

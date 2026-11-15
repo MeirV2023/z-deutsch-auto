@@ -1716,9 +1716,313 @@
     return wrapSingleFileZip('collection.anki2', dbBytes);
   }
 
+  // --- Умный парсер учебных списков Супер-Админа (поддерживает (Тема), Start, der (-s);..., Inhaber/in, der/die (-/-nen);...) ---
+  function parseSingleAdminVocabLine(frontInput, backInput, targetLang = 'de', inputTransLang = 'ru', sectionTag = '') {
+    const rawFront = String(frontInput || '').replace(/\s+/g, ' ').trim();
+    const rawBack = String(backInput || '').replace(/\s+/g, ' ').trim();
+    if (!rawFront || !rawBack) return null;
+
+    // Разбор переводов: можно передать один язык (напр. RU) или сразу 3 через "|" (RU | EN | HE)
+    const backCols = rawBack.split(/\s*\|\s*/).map(s => s.trim()).filter(Boolean);
+    const primaryTrans = backCols[0] || rawBack;
+    const translations = {
+      ru: inputTransLang === 'ru' ? primaryTrans : (backCols[1] && /[а-яёА-ЯЁ]/.test(backCols[1]) ? backCols[1] : primaryTrans),
+      en: inputTransLang === 'en' ? primaryTrans : (backCols.find(c => !/[а-яёА-ЯЁ\u0590-\u05FF]/.test(c)) || primaryTrans),
+      he: inputTransLang === 'he' ? primaryTrans : (backCols.find(c => /[\u0590-\u05FF]/.test(c)) || primaryTrans)
+    };
+
+    // 1. Постфиксный книжный формат существительных:
+    //    "Start, der (-s)" / "Inhaber/in, der/die (-/-nen)" / "Verantwortung, die (Sg.)" / "Finanzen, die (Pl.)" / "Gewerbe, das (-)"
+    const commaIdx = rawFront.indexOf(',');
+    if (commaIdx > 0) {
+      const head = rawFront.slice(0, commaIdx).trim();
+      const tail = rawFront.slice(commaIdx + 1).trim();
+      const postfixMatch = tail.match(/^(der\s*\/\s*die|die\s*\/\s*der|der|die|das|el|la|los|las)\b(?:\s*\(([^)]*)\)|\s*,?\s*(.*))?$/i);
+      if (postfixMatch && head) {
+        let artToken = postfixMatch[1].replace(/\s+/g, '').toLowerCase();
+        if (artToken === 'die/der') artToken = 'der/die';
+        const pluralNote = String(postfixMatch[2] !== undefined ? postfixMatch[2] : (postfixMatch[3] || '')).trim();
+        const primaryArt = artToken.split('/')[0];
+
+        // Для форм с гендерным слэшем ("Inhaber/in", "Experte/Expertin", "Lieferant/in") в полёт даём чистую основу без слэша, а в словаре оставляем полную форму!
+        let cleanTypable = head;
+        if (head.includes('/')) {
+          cleanTypable = head.split('/')[0].replace(/-$/, '').trim();
+        }
+        cleanTypable = cleanTypable.replace(/\s*\(.*?\)\s*/g, ' ').replace(/\s+/g, ' ').trim();
+
+        let displayRaw = `${artToken} ${head}`;
+        if (pluralNote) {
+          if (head.includes('/') || pluralNote === 'Sg.' || pluralNote === 'Pl.' || pluralNote.includes('/')) {
+            displayRaw = `${artToken} ${head} (${pluralNote})`;
+          } else {
+            displayRaw = `${artToken} ${head}, ${pluralNote}`;
+          }
+        }
+
+        const entry = {
+          raw: displayRaw,
+          word: cleanTypable,
+          withArticle: `${primaryArt} ${cleanTypable}`,
+          article: artToken,
+          plural: pluralNote,
+          translations
+        };
+        if (sectionTag) entry.subdeck = sectionTag;
+        return entry;
+      }
+    }
+
+    // 2. Возвратные глаголы и выражения с "sich " (напр. "sich selbstständig machen", "sich lohnen", "sich auskennen")
+    if (targetLang === 'de' && /^sich\s+/i.test(rawFront)) {
+      const withoutSich = rawFront
+        .replace(/^sich\s+/i, '')
+        .replace(/\s*\(.*?\)\s*/g, ' ')
+        .replace(/[.!?]+$/, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (withoutSich) {
+        const entry = {
+          raw: rawFront,
+          word: withoutSich,
+          withArticle: `sich ${withoutSich}`,
+          article: 'sich',
+          plural: '',
+          translations
+        };
+        if (sectionTag) entry.subdeck = sectionTag;
+        return entry;
+      }
+    }
+
+    // 3. Аббревиатура с расшифровкой в скобках без запятой (напр. "WKO (Wirtschaftskammer)")
+    const parenOnlyMatch = rawFront.match(/^([A-Za-zÄÖÜäöüß0-9\-]{2,18})\s*\(([^)]+)\)$/);
+    if (parenOnlyMatch) {
+      const shortWord = parenOnlyMatch[1].trim();
+      const entry = {
+        raw: rawFront,
+        word: shortWord,
+        withArticle: rawFront,
+        article: targetLang.toUpperCase(),
+        plural: '',
+        translations
+      };
+      if (sectionTag) entry.subdeck = sectionTag;
+      return entry;
+    }
+
+    // 4. Целые предложения и устойчивые словосочетания (напр. "Das Geschäft läuft gut.", "Verantwortung tragen", "einen Kredit aufnehmen")
+    const strippedParens = rawFront.replace(/\s*\(.*?\)\s*/g, ' ').replace(/\s+/g, ' ').trim();
+    const isSentence = /[.!?]$/.test(strippedParens) && strippedParens.includes(' ');
+    const hasSpacesNoLeadingArticle = strippedParens.includes(' ') &&
+      !/^(der|die|das|el|la|los|las|the|a|an|to)\s+/i.test(strippedParens);
+
+    if (isSentence || hasSpacesNoLeadingArticle) {
+      const cleanPhrase = strippedParens.replace(/^[¿¡"'«»„“]+|[.!?,"'«»„“]+$/g, '').trim();
+      if (cleanPhrase) {
+        const entry = {
+          raw: rawFront,
+          word: cleanPhrase,
+          withArticle: cleanPhrase,
+          article: isSentence ? (targetLang === 'de' ? 'Satz' : 'Phrase') : 'Phrase',
+          plural: '',
+          translations
+        };
+        if (sectionTag) entry.subdeck = sectionTag;
+        return entry;
+      }
+    }
+
+    // 5. Одиночные немецкие глаголы vs прилагательные/наречия (напр. "leiten" -> Verb, "hart" / "ziemlich" / "schließend" -> Adj./Adv.)
+    if (targetLang === 'de' && !strippedParens.includes(' ') && !strippedParens.includes(',') && /^[a-zäöüß]/.test(strippedParens)) {
+      const cleanSingle = strippedParens.replace(/[.!?]+$/, '').trim();
+      const looksLikeVerb = /(en|ern|eln|tun|sein)$/i.test(cleanSingle) && !/(chen|lein)$/i.test(cleanSingle);
+      const entry = {
+        raw: rawFront,
+        word: cleanSingle,
+        withArticle: cleanSingle,
+        article: looksLikeVerb ? 'Verb' : 'Adj.',
+        plural: '',
+        translations
+      };
+      if (sectionTag) entry.subdeck = sectionTag;
+      return entry;
+    }
+
+    // 6. Универсальный разбор (стандартные "der Motor;двигатель", "to launch;запускать", "el plan;план")
+    const fallback = normalizeCardToWordEntry(rawFront, primaryTrans, targetLang, '', '', '', sectionTag);
+    if (fallback) {
+      fallback.translations = translations;
+    }
+    return fallback;
+  }
+
+  function parseAdminTextbookBlock(rawText, targetLang = 'de', inputTransLang = 'ru') {
+    const lines = String(rawText || '').split(/\r?\n/);
+    let detectedTitle = '';
+    let currentSection = '';
+    const words = [];
+    const skippedLines = [];
+
+    for (const rawLine of lines) {
+      const trimmed = rawLine.trim();
+      if (!trimmed) continue;
+
+      // Заголовок темы в круглых/квадратных скобках или markdown: "(Existenzgründung)" / "[Модуль 1]" / "# Тема"
+      if (!trimmed.includes(';') && !trimmed.includes('\t')) {
+        const headerMatch = trimmed.match(/^\(([^()]{2,90})\)$/) ||
+          trimmed.match(/^\[([^\[\]]{2,90})\]$/) ||
+          trimmed.match(/^#{1,3}\s+(.{2,90})$/);
+        if (headerMatch) {
+          const topic = headerMatch[1].trim();
+          if (!detectedTitle) detectedTitle = topic;
+          currentSection = topic;
+          continue;
+        }
+      }
+
+      // Ищем разделитель: сначала ";", затем TAB, затем " — " / " - "
+      let frontPart = '';
+      let backPart = '';
+      const semiIdx = trimmed.indexOf(';');
+      const tabIdx = trimmed.indexOf('\t');
+
+      if (semiIdx > 0) {
+        frontPart = trimmed.slice(0, semiIdx).trim();
+        backPart = trimmed.slice(semiIdx + 1).trim();
+      } else if (tabIdx > 0) {
+        frontPart = trimmed.slice(0, tabIdx).trim();
+        backPart = trimmed.slice(tabIdx + 1).trim();
+      } else {
+        const dashMatch = trimmed.match(/^(.+?)\s+[—–]\s+(.+)$/);
+        if (dashMatch) {
+          frontPart = dashMatch[1].trim();
+          backPart = dashMatch[2].trim();
+        }
+      }
+
+      if (!frontPart || !backPart) {
+        skippedLines.push(trimmed);
+        continue;
+      }
+
+      const entry = parseSingleAdminVocabLine(frontPart, backPart, targetLang, inputTransLang, currentSection);
+      if (entry) {
+        words.push(entry);
+      } else {
+        skippedLines.push(trimmed);
+      }
+    }
+
+    // Если в списке был всего один общий заголовок (например "(Existenzgründung)" в первой строке),
+    // очищаем subdeck, чтобы курс аккуратно разбился на стандартные модули по 3 урока + Босс
+    const distinctSections = new Set(words.map(w => w.subdeck).filter(Boolean));
+    if (distinctSections.size <= 1) {
+      words.forEach(w => { delete w.subdeck; });
+    }
+
+    return {
+      detectedTitle,
+      words,
+      skippedCount: skippedLines.length,
+      sectionCount: distinctSections.size
+    };
+  }
+
+  // --- Сборка официального курса от Супер-Админа (для публикации всем игрокам) ---
+  function buildOfficialAdminCourse({
+    id = '',
+    targetLang = 'de',
+    category = 'business',
+    icon = '💼',
+    levelTag = 'B1',
+    titles = null,
+    descriptions = null,
+    fallbackTitle = 'Новый курс',
+    words = [],
+    lessonSize = 12
+  }) {
+    const cleanWords = words.filter(w => w && w.word);
+    const slugBase = String(fallbackTitle || 'course')
+      .toLowerCase()
+      .replace(/[^a-z0-9а-яё]+/gi, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 24) || 'pack';
+    const courseId = id || `${targetLang}-${category}-${slugBase}-${Date.now().toString(36).slice(-4)}`;
+
+    const builtLikeUser = buildUserCourse({
+      id: courseId,
+      title: (titles && titles.ru) || fallbackTitle,
+      description: (descriptions && descriptions.ru) || '',
+      targetLang,
+      originType: 'custom',
+      levelTag,
+      words: cleanWords,
+      lessonSize
+    });
+
+    const resolvedTitles = {
+      ru: (titles && titles.ru) || fallbackTitle,
+      en: (titles && titles.en) || fallbackTitle,
+      he: (titles && titles.he) || fallbackTitle
+    };
+
+    const resolvedDescs = {
+      ru: (descriptions && descriptions.ru) || `Официальный курс (${cleanWords.length} сл. · уровень ${levelTag}).`,
+      en: (descriptions && descriptions.en) || `Official course (${cleanWords.length} words · level ${levelTag}).`,
+      he: (descriptions && descriptions.he) || `קורס רשמי (${cleanWords.length} מילים · רמה ${levelTag}).`
+    };
+
+    // Обновляем описания уроков со «Личный набор» на «Официальный урок»
+    const officialModules = (builtLikeUser.modules || []).map((m, mIdx) => {
+      const modTitleBase = m.subdeckTag || resolvedTitles.ru;
+      return {
+        ...m,
+        titles: m.subdeckTag ? m.titles : {
+          ru: `Модуль ${mIdx + 1}: ${resolvedTitles.ru}`,
+          en: `Module ${mIdx + 1}: ${resolvedTitles.en}`,
+          he: `מודול ${mIdx + 1}: ${resolvedTitles.he}`
+        },
+        lessons: (m.lessons || []).map((ls, lIdx) => {
+          if (ls.isBoss) return ls;
+          const cnt = (ls.words || []).length;
+          return {
+            ...ls,
+            titles: m.subdeckTag ? ls.titles : {
+              ru: `${resolvedTitles.ru} · Часть ${mIdx * 3 + lIdx + 1}`,
+              en: `${resolvedTitles.en} · Part ${mIdx * 3 + lIdx + 1}`,
+              he: `${resolvedTitles.he} · חלק ${mIdx * 3 + lIdx + 1}`
+            },
+            descriptions: {
+              ru: `Тема «${modTitleBase}» (${cnt} сл. · уровень ${levelTag}).`,
+              en: `Topic "${resolvedTitles.en}" (${cnt} words · level ${levelTag}).`,
+              he: `נושא «${resolvedTitles.he}» (${cnt} מילים · רמה ${levelTag}).`
+            }
+          };
+        })
+      };
+    });
+
+    return {
+      id: courseId,
+      targetLang,
+      category,
+      source: 'official',
+      isAdminCreated: true,
+      createdAt: Date.now(),
+      icon: icon || '📚',
+      levelTag: levelTag || 'B1',
+      titles: resolvedTitles,
+      descriptions: resolvedDescs,
+      modules: officialModules
+    };
+  }
+
   window.AnkiImporter = {
     parseUploadedDeckFile,
     normalizeCardToWordEntry,
+    parseAdminTextbookBlock,
+    buildOfficialAdminCourse,
     extractNormalizedWordsFromParsedDeck,
     inspectDeckTranslationHealth,
     detectDeckCefrLevel,
