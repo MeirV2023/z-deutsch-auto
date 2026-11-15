@@ -11,7 +11,7 @@
   <canvas id="gameCanvas" aria-label="Игровое поле космического клавиатурного шутера Z-Lingo"></canvas>
 
   <!-- ========================================================================
-       АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН (Чёткие карточки сверху и снизу + арена боя по центру)
+       АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН (Компактные карточки сверху и снизу + большая промо-арена боя по центру)
        ======================================================================== -->
   <section class="arcade-title-screen" id="arcadeTitleScreen" aria-label="Главный экран игры Z-Lingo">
     <!-- Верхняя шапка титульного экрана -->
@@ -24,7 +24,7 @@
 
         <!-- Фильтр 2: Перевод / Интерфейс (авто-определяется через navigator.language при первом входе) -->
         <div class="lang-filter-inline" title="Язык интерфейса и перевода при взрыве">
-          <span class="lang-filter-caption" id="labelNativeFilter">Перевод:</span>
+          <span class="lang-filter-caption hide-mobile" id="labelNativeFilter">Перевод:</span>
           <div class="lang-quick-group">
             <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
             <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
@@ -36,78 +36,71 @@
       <div class="title-hero-center">
         <div class="arcade-logo-row">
           <h1 class="arcade-logo-main" id="arcadeLogoMain">🚀 Z-DEUTSCH</h1>
-          <span class="arcade-logo-sub" id="arcadeLogoSub">🚗 AUTO</span>
+          <button type="button" class="arcade-logo-sub" id="arcadeLogoSub" title="Нажмите, чтобы выбрать курс или колоду Anki">🚗 AUTO ▾</button>
         </div>
         <p class="title-tagline" id="titleTagline">
-          Сбивайте слова по буквам, запоминайте перевод при взрыве и открывайте новое оружие!
+          Сбивайте немецкие слова по буквам и запоминайте перевод при взрыве!
         </p>
       </div>
     </div>
 
-    <!-- Открытое окно космоса посередине: здесь летает корабль и стреляет выбранным оружием -->
+    <!-- Большое открытое окно космоса посередине: промо-бой корабля, сбивающего слова по буквам! -->
     <div class="title-space-window" id="titleSpaceWindow" aria-hidden="true"></div>
 
-    <!-- Нижняя панель управления, прокачки оружия, выбора курса и быстрого старта -->
+    <!-- Компактный нижний док (сохраняет большой промо-космос посередине!) -->
     <div class="title-bottom-dock" id="titleBottomDock">
-      <!-- Арсенал с прокачкой за выученные слова -->
+      <!-- 1. Арсенал корабля -->
       <div class="arsenal-panel">
         <div class="arsenal-header">
           <div class="arsenal-header-left">
-            <span class="arsenal-label" id="titleArsenalLabel">⚔️ Оружие корабля:</span>
+            <span class="arsenal-label" id="titleArsenalLabel">⚔️ Выберите оружие:</span>
             <span class="learned-progress-pill" id="learnedProgressPill">📖 Выучено: 0 сл.</span>
           </div>
           <span class="arsenal-desc" id="titleWeaponDesc">Двойные плазменные импульсы с комбо-гармоникой</span>
         </div>
         <div class="weapon-selector-row" id="titleWeaponRow">
-          <!-- Генерируется из WEAPONS в game.js с индикацией прокачки -->
+          <!-- Генерируется из WEAPONS в game.js -->
         </div>
       </div>
 
-      <!-- Компактная карточка активного курса / модуля / коротких уроков -->
-      <div class="active-course-strip" id="titleCourseStrip">
-        <div class="active-course-top">
-          <div class="active-course-info">
-            <span class="origin-badge official" id="titleCourseOriginBadge">🏛️ ОТ СОЗДАТЕЛЯ</span>
-            <span class="active-course-name" id="titleCourseName">🚗 Авто и дорога · Модуль 1</span>
-          </div>
-          <div class="active-course-actions">
-            <button type="button" class="hud-btn course-catalog-btn" id="btnOpenCatalogTitle">
-              🗂️ <span id="labelOpenCatalogTitle">Все курсы</span>
-            </button>
-            <button type="button" class="hud-btn anki-btn" id="btnOpenAnkiTitle">
-              📦 <span id="labelOpenAnkiTitle">Anki .apkg</span>
-            </button>
-          </div>
-        </div>
+      <!-- 2. Единая компактная лента курса и коротких уроков модуля (1 строка, как в классическом меню) -->
+      <div class="title-mission-strip" id="titleCourseStrip">
+        <button type="button" class="course-strip-pill" id="btnOpenCatalogTitle" title="Открыть каталог всех курсов и модулей">
+          <span class="origin-badge official" id="titleCourseOriginBadge">🏛️</span>
+          <span class="course-strip-title" id="titleCourseName">🚗 Авто · М1</span>
+          <span class="course-strip-caret">▾</span>
+        </button>
         <div class="mobile-level-Chips" id="titleStageChips">
           <!-- Короткие уроки текущего модуля (Ур. 1, Ур. 2, Ур. 3, 👹 Босс) -->
         </div>
       </div>
 
-      <!-- Фильтр 1: «Я учу» в один клик прямо над кнопкой «Начать игру» -->
-      <div class="target-lang-bar" id="titleTargetLangBar">
-        <span class="target-lang-label" id="labelTargetFilter">🎯 Я учу:</span>
-        <div class="target-lang-pills">
-          <button type="button" class="target-lang-pill active" data-target-lang="de">🇩🇪 <span data-tlang-name="de">Немецкий</span></button>
-          <button type="button" class="target-lang-pill" data-target-lang="en">🇬🇧 <span data-tlang-name="en">Английский</span></button>
-          <button type="button" class="target-lang-pill" data-target-lang="es">🇪🇸 <span data-tlang-name="es">Испанский</span></button>
+      <!-- 3. Переключатель изучаемого языка в 1 клик + Главная кнопка запуска в одну компактную линию -->
+      <div class="title-launch-row">
+        <div class="target-lang-bar compact-inline" id="titleTargetLangBar" title="Фильтр 1: Какой язык учим">
+          <span class="target-lang-label sr-only" id="labelTargetFilter">🎯 Я учу:</span>
+          <div class="target-lang-pills">
+            <button type="button" class="target-lang-pill active" data-target-lang="de" title="Немецкий / German">🇩🇪 <span>DE</span><span class="sr-only" data-tlang-name="de">Немецкий</span></button>
+            <button type="button" class="target-lang-pill" data-target-lang="en" title="Английский / English">🇬🇧 <span>EN</span><span class="sr-only" data-tlang-name="en">Английский</span></button>
+            <button type="button" class="target-lang-pill" data-target-lang="es" title="Испанский / Español">🇪🇸 <span>ES</span><span class="sr-only" data-tlang-name="es">Испанский</span></button>
+          </div>
+        </div>
+
+        <div class="title-launch-wrap">
+          <button type="button" class="arcade-launch-btn" id="btnArcadeLaunch">
+            <span class="launch-glow"></span>
+            <span class="launch-text" id="labelArcadeLaunch">🚀 Начать игру · Урок 1</span>
+          </button>
         </div>
       </div>
 
-      <!-- Главная кнопка запуска -->
-      <div class="title-launch-wrap">
-        <button type="button" class="arcade-launch-btn" id="btnArcadeLaunch">
-          <span class="launch-glow"></span>
-          <span class="launch-text" id="labelArcadeLaunch">🚀 Начать игру · Урок 1</span>
-        </button>
-      </div>
-
-      <!-- Нижние кнопки настроек -->
+      <!-- 4. Нижние кнопки быстрых настроек, всех курсов и Anki .apkg -->
       <div class="title-utility-links">
         <button type="button" class="arcade-link-btn" id="btnTitleSpeed">🐌 0.5x</button>
         <button type="button" class="arcade-link-btn highlight-ai" id="btnTitleVoice">🎙️ Озвучка AI</button>
         <button type="button" class="arcade-link-btn" id="btnTitleDict">📚 <span id="labelTitleDict">Словарь</span></button>
-        <button type="button" class="arcade-link-btn" id="btnTitleCustom">➕ <span id="labelTitleCustom">Anki / Свои слова</span></button>
+        <button type="button" class="arcade-link-btn" id="btnTitleAllCourses">🗂️ <span id="labelOpenCatalogTitle">Все курсы</span></button>
+        <button type="button" class="arcade-link-btn anki-accent-btn" id="btnTitleCustom">📦 <span id="labelTitleCustom">Anki / Свои слова</span> <span class="sr-only" id="labelOpenAnkiTitle">Anki .apkg</span></button>
       </div>
     </div>
   </section>

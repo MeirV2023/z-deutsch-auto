@@ -1838,15 +1838,17 @@
     return [...shuffleArray(priority), ...shuffleArray(regular)].slice(0, bossCount);
   }
 
-  function updateOriginBadgeElement(badgeEl, course) {
+  function updateOriginBadgeElement(badgeEl, course, compact = false) {
     if (!badgeEl || !course) return;
     const tr = t();
     const isUser = course.source === 'user';
-    badgeEl.classList.toggle('official', !isUser);
-    badgeEl.classList.toggle('user', isUser);
-    badgeEl.textContent = !isUser
+    const fullLabel = !isUser
       ? tr.originOfficial
       : (course.originType === 'anki' ? tr.originUserAnki : tr.originUserCustom);
+    badgeEl.classList.toggle('official', !isUser);
+    badgeEl.classList.toggle('user', isUser);
+    badgeEl.title = fullLabel;
+    badgeEl.textContent = compact ? (!isUser ? '🏛️' : '👤') : fullLabel;
   }
 
   // --- DOM-элементы ---
@@ -1870,8 +1872,8 @@
   const titleCourseOriginBadge = document.getElementById('titleCourseOriginBadge');
   const titleCourseName = document.getElementById('titleCourseName');
   const btnOpenCatalogTitle = document.getElementById('btnOpenCatalogTitle');
+  const btnTitleAllCourses = document.getElementById('btnTitleAllCourses');
   const labelOpenCatalogTitle = document.getElementById('labelOpenCatalogTitle');
-  const btnOpenAnkiTitle = document.getElementById('btnOpenAnkiTitle');
   const titleStageChips = document.getElementById('titleStageChips');
   const btnArcadeLaunch = document.getElementById('btnArcadeLaunch');
   const labelArcadeLaunch = document.getElementById('labelArcadeLaunch');
@@ -2575,11 +2577,20 @@
     const found = WEAPONS.find(w => w.id === weaponId);
     if (!found) return;
 
-    // Если пушка ещё закрыта — подсказываем игроку, сколько слов осталось выучить!
+    // Если пушка ещё закрыта — подсказываем игроку, сколько слов осталось выучить (а на стартовом экране даём разовый демо-выстрел!)
     if (!isWeaponUnlocked(found)) {
       const needMore = Math.max(1, found.unlockWords - learnedWordsSet.size);
       const msg = t().lockedWeaponHint(found.icon, getWeaponName(found), needMore, found.unlockWords);
-      sound.playMiss();
+      if (state.screenMode === 'title' && withPreviewShot) {
+        sound.playWeaponEquip(found.id);
+        const bounds = getPlayBounds();
+        const target = state.demoWords.find(w => w.id === state.demoTargetId) || state.demoWords[0];
+        const tx = target ? target.x : state.ship.x;
+        const ty = target ? target.y : Math.max(bounds.top + 26, state.ship.y - 90);
+        spawnWeaponVisualEffect(found.id, tx, ty, found.color);
+      } else {
+        sound.playMiss();
+      }
       if (titleWeaponDesc) titleWeaponDesc.textContent = msg;
       state.weaponBannerText = msg;
       state.weaponBannerColor = '#fbbf24';
@@ -2623,7 +2634,7 @@
         const bounds = getPlayBounds();
         const corridorH = bounds.bottom - bounds.top;
         const langPool = getAllWordsInTargetLang(state.targetLang);
-        if (found.id === 'gravity' && corridorH >= 120) {
+        if (found.id === 'gravity' && corridorH >= 70) {
           while (state.demoWords.length < 5 && langPool.length > 0) {
             const sample = langPool[Math.floor(Math.random() * langPool.length)];
             const meas = measureWordCapsule(sample.word, sample);
@@ -2636,7 +2647,7 @@
               boxW: meas.boxW,
               boxH: meas.boxH,
               x: pos.x,
-              y: bounds.top + corridorH * (0.38 + Math.random() * 0.25),
+              y: bounds.top + corridorH * (0.34 + Math.random() * 0.25),
               vy: Math.max(9, Math.min(16, corridorH * 0.065)),
               frameVy: 12,
               pushVx: 0,
@@ -2647,12 +2658,9 @@
           }
           scatterWordsToTop(state.demoWords, bounds, 1.0, 26);
         } else {
-          const targetX = state.demoWords.length > 0
-            ? state.demoWords[0].x
-            : state.ship.x + (Math.random() * 100 - 50);
-          const targetY = state.demoWords.length > 0
-            ? state.demoWords[0].y
-            : Math.max(bounds.top + 28, (bounds.top + state.ship.y) / 2);
+          const target = state.demoWords.find(w => w.id === state.demoTargetId) || state.demoWords[0];
+          const targetX = target ? target.x : state.ship.x;
+          const targetY = target ? target.y : Math.max(bounds.top + 26, state.ship.y - 90);
           spawnWeaponVisualEffect(found.id, targetX, targetY, found.color);
         }
       }
@@ -2924,28 +2932,109 @@
     document.body.classList.add('mode-title');
 
     resizeCanvas();
-    requestAnimationFrame(() => resizeCanvas());
     updatePilotRankUI();
     renderLevelSidebar();
     applyStaticUILocalization();
+    requestAnimationFrame(() => {
+      resizeCanvas();
+      seedTitleDemoWords();
+    });
+  }
+
+  // Мгновенный запуск промо-боя на стартовом экране: сразу спавнит слова в центре космоса, чтобы корабль стрелял с первой секунды!
+  function seedTitleDemoWords() {
+    if (state.screenMode !== 'title') return;
+    const bounds = getPlayBounds();
+    const corridorH = bounds.bottom - bounds.top;
+    if (corridorH < 64) return;
+
+    const { course } = getActiveSelection();
+    const courseWords = course ? getAllWordsInCourse(course) : [];
+    const demoPool = courseWords.length >= 4 ? courseWords : getAllWordsInTargetLang(state.targetLang);
+    if (demoPool.length === 0) return;
+
+    state.demoWords = [];
+    state.demoTargetId = null;
+
+    const desiredCount = canvas.width > 640 ? 3 : 2;
+    const laneFracs = desiredCount === 3 ? [0.24, 0.74, 0.48] : [0.3, 0.72];
+    const yFracs = desiredCount === 3 ? [0.22, 0.34, 0.14] : [0.24, 0.36];
+    const usedRaw = new Set();
+
+    for (let i = 0; i < desiredCount; i++) {
+      let sample = null;
+      for (let tries = 0; tries < 10; tries++) {
+        const cand = demoPool[Math.floor(Math.random() * demoPool.length)];
+        if (cand && !usedRaw.has(cand.raw)) {
+          sample = cand;
+          usedRaw.add(cand.raw);
+          break;
+        }
+      }
+      if (!sample) sample = demoPool[i % demoPool.length];
+      if (!sample) continue;
+
+      const meas = measureWordCapsule(sample.word, sample);
+      const halfW = Math.min((bounds.right - bounds.left) * 0.42, meas.boxW * 0.5);
+      const rawX = bounds.left + (bounds.right - bounds.left) * laneFracs[i];
+      const clampedX = Math.max(bounds.left + halfW + 12, Math.min(bounds.right - halfW - 12, rawX));
+      const spawnY = Math.min(
+        Math.max(bounds.top + 22, bounds.top + corridorH * yFracs[i]),
+        Math.max(bounds.top + 26, bounds.bottom - 62)
+      );
+
+      state.demoWords.push({
+        id: nextEntityId++,
+        entry: sample,
+        text: sample.word,
+        typedCount: i === 1 && sample.word.length > 4 ? 2 : 0,
+        boxW: meas.boxW,
+        boxH: meas.boxH,
+        x: clampedX,
+        y: spawnY,
+        vy: Math.max(8.5, Math.min(15, corridorH * 0.058)) * computeWordLengthSpeedFactor(sample.word.length),
+        frameVy: 11,
+        pushVx: 0,
+        pushVy: 0,
+        recoilY: 0,
+        hitFlash: 0
+      });
+    }
+
+    if (state.demoWords.length > 0) {
+      const firstTarget = state.demoWords[Math.min(1, state.demoWords.length - 1)];
+      state.demoTargetId = firstTarget.id;
+      state.ship.y = Math.max(bounds.top + 42, bounds.bottom - 22);
+      state.ship.targetY = state.ship.y;
+      const aimAngle = Math.atan2(firstTarget.y - state.ship.y, firstTarget.x - state.ship.x);
+      state.ship.targetAngle = aimAngle;
+      state.ship.angle = aimAngle;
+      state.demoFireTimer = 0.12;
+      state.demoSpawnTimer = 0.9;
+    }
   }
 
   function updateTitleDemo(dt) {
     const bounds = getPlayBounds();
     const corridorH = bounds.bottom - bounds.top;
 
-    state.ship.targetY = Math.max(bounds.top + 42, bounds.bottom - 24);
-    state.ship.x = canvas.width / 2 + Math.sin(performance.now() * 0.0011) * 24;
+    state.ship.targetY = Math.max(bounds.top + 40, bounds.bottom - 22);
+    state.ship.x = canvas.width / 2 + Math.sin(performance.now() * 0.0011) * 26;
 
-    if (corridorH < 110) {
+    if (corridorH < 64) {
       state.demoWords = [];
       state.demoTargetId = null;
+      state.ship.targetAngle = -Math.PI / 2;
       return;
     }
 
-    const spawnY = bounds.top + 24;
-    const maxDemoWords = state.weaponId === 'gravity' ? 4 : 2;
-    const demoPool = getAllWordsInTargetLang(state.targetLang);
+    const spawnY = bounds.top + 22;
+    const maxDemoWords = state.weaponId === 'gravity'
+      ? (canvas.width > 640 ? 5 : 3)
+      : (canvas.width > 640 ? 3 : 2);
+    const { course } = getActiveSelection();
+    const courseWords = course ? getAllWordsInCourse(course) : [];
+    const demoPool = courseWords.length >= 4 ? courseWords : getAllWordsInTargetLang(state.targetLang);
 
     state.demoSpawnTimer -= dt;
     if (state.demoSpawnTimer <= 0 && state.demoWords.length < maxDemoWords && demoPool.length > 0) {
@@ -2953,7 +3042,7 @@
       if (sample) {
         const meas = measureWordCapsule(sample.word, sample);
         const pos = findSafeSpawnX(meas.boxW, meas.boxH, spawnY, state.demoWords, bounds);
-        if (pos.clear) {
+        if (pos.clear || state.demoWords.length === 0) {
           state.demoWords.push({
             id: nextEntityId++,
             entry: sample,
@@ -2963,8 +3052,8 @@
             boxH: meas.boxH,
             x: pos.x,
             y: spawnY,
-            vy: Math.max(9, Math.min(16, corridorH * 0.065)) * computeWordLengthSpeedFactor(sample.word.length),
-            frameVy: 12,
+            vy: Math.max(8.5, Math.min(15, corridorH * 0.058)) * computeWordLengthSpeedFactor(sample.word.length),
+            frameVy: 11,
             pushVx: 0,
             pushVy: 0,
             recoilY: 0,
@@ -2972,10 +3061,10 @@
           });
         }
       }
-      state.demoSpawnTimer = state.weaponId === 'gravity' ? 1.2 : 1.85;
+      state.demoSpawnTimer = state.weaponId === 'gravity' ? 0.75 : 0.95;
     }
 
-    resolveWordCollisions(state.demoWords, bounds, dt, bounds.top + 22);
+    resolveWordCollisions(state.demoWords, bounds, dt, bounds.top + 20);
 
     for (let i = state.demoWords.length - 1; i >= 0; i--) {
       const dw = state.demoWords[i];
@@ -2991,36 +3080,44 @@
       }
 
       if (dw.recoilY > 0) {
-        dw.y = Math.max(bounds.top + 22, dw.y - dw.recoilY * 6 * dt);
+        dw.y = Math.max(bounds.top + 20, dw.y - dw.recoilY * 5.5 * dt);
         dw.recoilY = Math.max(0, dw.recoilY - 24 * dt);
       } else {
         dw.y += (dw.frameVy ?? dw.vy) * dt;
       }
 
-      if (dw.y < bounds.top + 22) {
-        dw.y = bounds.top + 22;
+      if (dw.y < bounds.top + 20) {
+        dw.y = bounds.top + 20;
         if (dw.pushVy < 0) dw.pushVy = 0;
       }
       if (dw.hitFlash > 0) dw.hitFlash = Math.max(0, dw.hitFlash - dt * 5);
 
-      if (dw.y > state.ship.y - 36) {
+      if (dw.y > state.ship.y - 32) {
         state.demoWords.splice(i, 1);
         if (state.demoTargetId === dw.id) state.demoTargetId = null;
       }
     }
 
-    state.demoFireTimer -= dt;
-    if (state.demoFireTimer <= 0 && state.demoWords.length > 0) {
-      let target = state.demoWords.find(w => w.id === state.demoTargetId);
-      if (!target) {
-        target = state.demoWords[0];
-        state.demoTargetId = target.id;
-      }
+    let activeDemoTarget = state.demoWords.find(w => w.id === state.demoTargetId);
+    if (!activeDemoTarget && state.demoWords.length > 0) {
+      // Наводимся на нижнее (ближайшее к кораблю) слово — выглядит как живой автопилот!
+      activeDemoTarget = state.demoWords.reduce((best, cur) => (cur.y > best.y ? cur : best), state.demoWords[0]);
+      state.demoTargetId = activeDemoTarget.id;
+    }
 
-      if (target && target.y >= spawnY + 4) {
+    if (activeDemoTarget) {
+      state.ship.targetAngle = Math.atan2(activeDemoTarget.y - state.ship.y, activeDemoTarget.x - state.ship.x);
+    } else {
+      state.ship.targetAngle = -Math.PI / 2;
+    }
+
+    state.demoFireTimer -= dt;
+    if (state.demoFireTimer <= 0 && activeDemoTarget) {
+      const target = activeDemoTarget;
+      if (target.y >= bounds.top + 16) {
         target.typedCount++;
         target.hitFlash = 1.0;
-        target.recoilY = 2.6;
+        target.recoilY = 2.2;
         const style = getArticleStyle(target.entry.article, state.targetLang);
         spawnWeaponVisualEffect(state.weaponId, target.x, target.y, style.main);
 
@@ -3037,28 +3134,28 @@
             x: target.x,
             y: target.y,
             radius: 6,
-            maxRadius: 52,
+            maxRadius: 54,
             color: style.main,
-            alpha: 0.9
+            alpha: 0.92
           });
-          spawnParticles(target.x, target.y, style.main, 16, 140);
+          spawnParticles(target.x, target.y, style.main, 18, 145);
           state.floatingTranslations.push({
             x: target.x,
-            y: Math.min(bounds.bottom - 36, Math.max(bounds.top + 36, target.y)),
+            y: Math.min(bounds.bottom - 34, Math.max(bounds.top + 34, target.y)),
             vy: -10,
             entry: target.entry,
             rawDe: target.entry.raw,
             color: style.main,
             life: 0,
-            maxLife: 2.5
+            maxLife: 2.7
           });
           separateFloatingTranslations(bounds);
-          state.demoFireTimer = 0.65;
+          state.demoFireTimer = 0.5;
         } else {
-          state.demoFireTimer = 0.14;
+          state.demoFireTimer = 0.13;
         }
       } else {
-        state.demoFireTimer = 0.18;
+        state.demoFireTimer = 0.14;
       }
     }
   }
@@ -3134,6 +3231,10 @@
     rerenderKillFeed();
     updateBottomTargetUI();
 
+    if (changed && state.screenMode === 'title') {
+      requestAnimationFrame(() => seedTitleDemoWords());
+    }
+
     if (courseBrowserDialog && courseBrowserDialog.open) {
       renderCourseBrowserModal();
     }
@@ -3165,7 +3266,7 @@
     const { course, mod, lesson } = getActiveSelection();
     if (arcadeLogoMain) arcadeLogoMain.textContent = targetMeta.heroBrand;
     if (arcadeLogoSub && course) {
-      arcadeLogoSub.textContent = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')}`;
+      arcadeLogoSub.textContent = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')} ▾`;
     }
     if (titleTagline) titleTagline.textContent = tr.titleTagline(targetLangLocalName);
     if (titleArsenalLabel) titleArsenalLabel.textContent = tr.titleArsenalLabel;
@@ -3366,14 +3467,18 @@
     if (!course || !mod) return;
     const tr = t();
 
-    updateOriginBadgeElement(titleCourseOriginBadge, course);
-    updateOriginBadgeElement(sidebarOriginBadge, course);
-    updateOriginBadgeElement(overlayOriginBadge, course);
+    updateOriginBadgeElement(titleCourseOriginBadge, course, true);
+    updateOriginBadgeElement(sidebarOriginBadge, course, false);
+    updateOriginBadgeElement(overlayOriginBadge, course, false);
 
     const courseTitle = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')}`;
     const modTitle = getLocalizedField(mod, 'titles');
     if (titleCourseName) {
-      titleCourseName.textContent = `${courseTitle} · ${modTitle}`;
+      const modPrefix = state.nativeLang === 'ru' ? 'М' : (state.nativeLang === 'he' ? 'מ׳' : 'M');
+      titleCourseName.textContent = `${courseTitle} · ${modPrefix}${state.activeModuleIndex + 1}`;
+      if (btnOpenCatalogTitle) {
+        btnOpenCatalogTitle.title = `${courseTitle} — ${modTitle}`;
+      }
     }
     if (sidebarLevelsTitle) {
       sidebarLevelsTitle.textContent = courseTitle;
@@ -3450,6 +3555,7 @@
   }
 
   function selectCourseLesson(courseId, moduleIndex, lessonIndex, showIntro = true) {
+    const courseChanged = state.activeCourseId !== courseId;
     state.activeCourseId = courseId;
     state.activeModuleIndex = moduleIndex;
     state.activeLessonIndex = lessonIndex;
@@ -3481,6 +3587,9 @@
     updateBottomTargetUI();
 
     if (state.screenMode === 'title') {
+      if (courseChanged) {
+        requestAnimationFrame(() => seedTitleDemoWords());
+      }
       sound.init();
       sound._playTactileClick(sound.ctx ? sound.ctx.currentTime : 0, sound.masterGain, 2200, 0.05);
       return;
@@ -5594,7 +5703,7 @@
   }
 
   // Открытие 3-ступенчатого каталога курсов
-  [btnOpenCatalogTitle, btnOpenCatalogHud, btnSidebarCatalog, btnOverlayCatalog].forEach(el => {
+  [btnOpenCatalogTitle, btnTitleAllCourses, arcadeLogoSub, btnOpenCatalogHud, btnSidebarCatalog, btnOverlayCatalog].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {
       openCourseCatalogModal('all');
@@ -5626,7 +5735,7 @@
   }
 
   // Открытие окна импорта Anki .apkg / Своих слов
-  [btnOpenAnkiTitle, btnSidebarAnki, btnOpenCustom, btnTitleCustom].forEach(el => {
+  [btnSidebarAnki, btnOpenCustom, btnTitleCustom].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {
       openCustomWordsModal('anki');
@@ -5928,7 +6037,10 @@
     setNativeLanguage(state.nativeLang);
     updatePilotRankUI();
     resizeCanvas();
-    requestAnimationFrame(() => resizeCanvas());
+    requestAnimationFrame(() => {
+      resizeCanvas();
+      seedTitleDemoWords();
+    });
     requestAnimationFrame(gameLoop);
   }
 
