@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Z-LINGO — Космический языковой шутер (DE · EN · ES | Gemini 3.8 TTS | Anki .apkg)</title>
+  <title>VOCANOVA — Космический языковой шутер (DE · EN · ES | Gemini 3.8 TTS | Anki .apkg)</title>
+  <link rel="icon" type="image/svg+xml" href="image/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="64x64" href="image/favicon-64.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="image/favicon-32.png" />
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="image/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -58,11 +63,12 @@
       <!-- 1. Верхняя навигационная панель -->
       <nav class="home-navbar" id="titleHeaderCard" aria-label="Основная навигация">
         <div class="home-brand" id="homeBrandLogo">
-          <span class="home-brand-rocket">🚀</span>
-          <div class="home-brand-text">
-            <span class="home-brand-title" id="arcadeLogoMain">Z-LINGO</span>
-            <span class="home-brand-sub" id="homeBrandSub">Играй · Учись · Запоминай</span>
-          </div>
+          <picture class="brand-logo-picture">
+            <source srcset="image/logo-nav.webp" type="image/webp" />
+            <img src="image/logo-nav.png" srcset="image/logo-nav.png 1x, image/polnoe_logo.png 2x" alt="VOCANOVA — Learn Languages. Play the Universe." class="brand-logo-img" />
+          </picture>
+          <span class="sr-only" id="arcadeLogoMain">VOCANOVA</span>
+          <span class="sr-only" id="homeBrandSub">Играй · Учись · Запоминай</span>
         </div>
 
         <div class="home-nav-links">
@@ -1019,11 +1025,47 @@
   <!-- Верхняя панель Академии -->
   <header class="hud-top">
     <div class="hud-left-academy">
-      <button type="button" class="hud-academy-brand" id="btnHudHome" title="Вернуться на главную панель Z-Lingo">
-        <span class="hud-brand-icon">🚀</span>
-        <span class="hud-brand-word">Z-LINGO</span>
+      <button type="button" class="hud-academy-brand" id="btnHudHome" title="Вернуться на главную панель">
+        <picture class="hud-logo-picture">
+          <source srcset="image/logo-nav.webp" type="image/webp" />
+          <img src="image/logo-nav.png" srcset="image/logo-nav.png 1x, image/polnoe_logo.png 2x" alt="VOCANOVA" class="hud-logo-img" />
+        </picture>
         <span class="hud-brand-divider hide-mobile"></span>
         <span class="hud-brand-tag hide-mobile" id="labelAcademySub">SPACE LANGUAGE ACADEMY</span>
+      </button>
+    </div>
+
+    <!-- Мобильная центральная пилюля Урока / Волны и правый блок (Прогресс + Пауза + Настройки) -->
+    <span class="mob-hud-vdiv mobile-copy" aria-hidden="true"></span>
+
+    <button type="button" class="mob-hud-wave-pill mobile-copy" id="btnMobHudWave" title="Выбрать курс или урок">
+      <span id="mobHudWaveText">УРОК 1 · ВОЛНА 01</span>
+    </button>
+
+    <span class="mob-hud-vdiv mobile-copy" aria-hidden="true"></span>
+
+    <div class="mob-hud-right-cluster mobile-copy">
+      <div class="mob-hud-prog-pill" title="Прогресс урока">
+        <svg class="mob-crosshair-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+          <circle cx="10" cy="10" r="6" />
+          <circle cx="10" cy="10" r="1.7" fill="currentColor" stroke="none" />
+          <path d="M10 1.8v2.6M10 15.6v2.6M1.8 10h2.6M15.6 10h2.6" />
+        </svg>
+        <span id="mobHudProgressText">0/12</span>
+      </div>
+
+      <button type="button" class="mob-hud-circle-btn" id="btnMobHudPause" aria-label="Пауза">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <rect x="3" y="2.2" width="3.5" height="11.6" rx="1" />
+          <rect x="9.5" y="2.2" width="3.5" height="11.6" rx="1" />
+        </svg>
+      </button>
+
+      <button type="button" class="mob-hud-circle-btn" id="btnMobHudSettings" aria-label="Настройки игры">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.2" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.08a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
       </button>
     </div>
 
@@ -1079,6 +1121,21 @@
       </button>
     </div>
   </header>
+
+  <!-- Мобильная вторая строка статуса над ареной: [ЖИЗНИ: ❤️❤️❤️🖤] слева и [⚡ EMP 2] справа -->
+  <div class="mobile-battle-subbar" id="mobileBattleSubbar">
+    <div class="mob-lives-pill" title="Щиты корабля">
+      <span class="mob-lives-label" id="labelMobLives">ЖИЗНИ:</span>
+      <span class="mob-lives-hearts" id="mobHudLivesHearts"></span>
+    </div>
+
+    <button type="button" class="mob-emp-pill" id="btnMobHudEmp" title="Импульс EMP">
+      <svg class="mob-emp-bolt-svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M11.4 1.6L3.8 11.2h5.3l-.9 7.2 8-9.6h-5.3l.5-7.2z" />
+      </svg>
+      <span>EMP <span id="mobEmpCount">2</span></span>
+    </button>
+  </div>
 
   <!-- Центральная рамка боевой арены поверх холста (Щиты, Волна/Урок, Пауза и нижняя плашка печати на ПК) -->
   <div class="battle-arena-frame" id="battleArenaFrame">

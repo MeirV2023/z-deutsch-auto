@@ -117,6 +117,8 @@ export const EN_TEXT = {
   nativeLangNames: { ru: 'Russian', en: 'English', he: 'Hebrew' },
   arenaWaveLabel: (lessonNum, waveNum) => `LESSON ${lessonNum} · WAVE ${String(waveNum).padStart(2, '0')}`,
   desktopPromptIdle: '⌨️ Type any word to fire lasers',
+  mobLivesLabel: 'LIVES:',
+  mobTargetPromptIdle: 'Type a word to fire',
   sidebarDecksHeader: 'MY DECKS',
   lessonsDrawerSummary: '📋 Choose Course Lesson ▾',
   studyModeHeader: 'STUDY MODE',

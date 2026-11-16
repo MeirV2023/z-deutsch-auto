@@ -117,6 +117,8 @@ export const HE_TEXT = {
   nativeLangNames: { ru: 'רוסית', en: 'אנגלית', he: 'עברית' },
   arenaWaveLabel: (lessonNum, waveNum) => `שלב ${lessonNum} · גל ${String(waveNum).padStart(2, '0')}`,
   desktopPromptIdle: '⌨️ הקלידו מילה באותיות לטיניות כדי לירות',
+  mobLivesLabel: 'חיים:',
+  mobTargetPromptIdle: 'הקלידו מילה כדי לירות',
   sidebarDecksHeader: 'החפיסות שלי',
   lessonsDrawerSummary: '📋 בחר שלב בקורס ▾',
   studyModeHeader: 'מצב למידה',

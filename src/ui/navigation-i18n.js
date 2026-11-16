@@ -121,6 +121,7 @@ import {
   labelMetricDecks,
   labelMetricLearned,
   labelMetricStreak,
+  labelMobLives,
   labelMobNavDecks,
   labelMobNavHome,
   labelMobNavPlay,
@@ -169,6 +170,7 @@ import {
   levelQuizBox,
   mobileHeroArtArticle,
   mobileHeroArtWord,
+  mobHudWaveText,
   overlayCard,
   overlayWeaponTitle,
   promoLiveLabel,
@@ -347,8 +349,8 @@ export function applyStaticUILocalization() {
     }
   });
 
-  // Z-LINGO 2.0: Навбар Главной страницы
-  if (arcadeLogoMain) arcadeLogoMain.textContent = 'Z-LINGO';
+  // Z-LINGO / VOCANOVA: Навбар Главной страницы
+  if (arcadeLogoMain) arcadeLogoMain.textContent = 'VOCANOVA';
   if (homeBrandSub) homeBrandSub.textContent = tr.homeBrandSub;
   if (labelNavHome) labelNavHome.textContent = tr.navHome;
   if (labelNavPlay) labelNavPlay.textContent = tr.navPlay;
@@ -548,9 +550,14 @@ export function applyStaticUILocalization() {
       ? state.activeCustomRoundTitle
       : `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')}`;
   }
-  if (arenaWavePill) {
+  if (arenaWavePill || mobHudWaveText) {
     const waveNum = Math.max(1, Math.ceil((state.wordsDestroyedInLevel + 1) / 4));
-    arenaWavePill.textContent = tr.arenaWaveLabel(state.activeLessonIndex + 1, waveNum);
+    const wText = tr.arenaWaveLabel(state.activeLessonIndex + 1, waveNum);
+    if (arenaWavePill) arenaWavePill.textContent = wText;
+    if (mobHudWaveText) mobHudWaveText.textContent = wText;
+  }
+  if (labelMobLives && tr.mobLivesLabel) {
+    labelMobLives.textContent = tr.mobLivesLabel;
   }
 
   updatePilotRankUI();

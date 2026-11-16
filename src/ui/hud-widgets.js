@@ -38,6 +38,7 @@ import {
   btnDrillPinned,
   btnEmp,
   btnHitRepeat,
+  btnMobHudEmp,
   btnOpenCatalogTitle,
   btnPracticePinned,
   desktopTypingPreview,
@@ -67,6 +68,11 @@ import {
   kbdProgressFill,
   labelMobChooseLevel,
   labelMobChooseTopic,
+  labelMobLives,
+  mobEmpCount,
+  mobHudLivesHearts,
+  mobHudProgressText,
+  mobHudWaveText,
   mobileLevelCardsList,
   mobileTopicGrid,
   killFeedContainer,
@@ -643,9 +649,24 @@ export function rerenderKillFeed() {
 export function updateBottomTargetUI() {
   const locked = state.activeWords.find(w => w.id === state.lockedWordId);
   if (!locked) {
-    bottomTargetPreview.innerHTML = `<span style="color: var(--text-muted);">${escapeHtml(t().targetIdle)}</span>`;
+    const tr = t();
+    if (window.innerWidth <= 768) {
+      const idleTxt = tr.mobTargetPromptIdle || tr.targetIdle;
+      bottomTargetPreview.innerHTML = `
+        <span class="mob-prompt-idle-wrap">
+          <svg class="mob-prompt-crosshair" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+            <circle cx="10" cy="10" r="6" />
+            <circle cx="10" cy="10" r="1.7" fill="currentColor" stroke="none" />
+            <path d="M10 1.8v2.6M10 15.6v2.6M1.8 10h2.6M15.6 10h2.6" />
+          </svg>
+          <span>${escapeHtml(idleTxt)}</span>
+        </span>
+      `;
+    } else {
+      bottomTargetPreview.innerHTML = `<span style="color: var(--text-muted);">${escapeHtml(tr.targetIdle)}</span>`;
+    }
     if (desktopTypingPreview) {
-      desktopTypingPreview.innerHTML = `<span style="color: #cbd5e1;">${escapeHtml(t().desktopPromptIdle)}</span>`;
+      desktopTypingPreview.innerHTML = `<span style="color: #cbd5e1;">${escapeHtml(tr.desktopPromptIdle)}</span>`;
     }
     return;
   }
@@ -679,11 +700,26 @@ export function updateHudStats() {
   hudShields.textContent = '❤️'.repeat(Math.max(0, state.shields)) +
     '🖤'.repeat(Math.max(0, state.maxShields - state.shields));
 
+  if (labelMobLives && t().mobLivesLabel) {
+    labelMobLives.textContent = t().mobLivesLabel;
+  }
+  if (mobHudLivesHearts) {
+    let heartsHtml = '';
+    const fullCount = Math.max(0, state.shields);
+    const totalCount = Math.max(fullCount, state.maxShields);
+    for (let i = 0; i < totalCount; i++) {
+      heartsHtml += `<span class="mob-heart ${i < fullCount ? 'full' : 'empty'}">❤</span>`;
+    }
+    mobHudLivesHearts.innerHTML = heartsHtml;
+  }
+
   empCountEl.textContent = String(state.empCharges);
+  if (mobEmpCount) mobEmpCount.textContent = String(state.empCharges);
   const kbdEmpBadge = document.getElementById('kbdEmpCount');
   const kbdEmpBtn = document.getElementById('btnKbdEmp');
   if (kbdEmpBadge) kbdEmpBadge.textContent = String(state.empCharges);
   btnEmp.disabled = state.empCharges <= 0;
+  if (btnMobHudEmp) btnMobHudEmp.disabled = state.empCharges <= 0;
   if (kbdEmpBtn) kbdEmpBtn.style.opacity = state.empCharges <= 0 ? '0.42' : '1';
 
   const pct = state.totalWordsInLevel > 0
@@ -692,6 +728,9 @@ export function updateHudStats() {
   hudProgressBar.style.width = `${pct}%`;
   if (kbdProgressFill) kbdProgressFill.style.width = `${pct}%`;
   hudProgressText.textContent = `${state.wordsDestroyedInLevel} / ${state.totalWordsInLevel}`;
+  if (mobHudProgressText) {
+    mobHudProgressText.textContent = `${state.wordsDestroyedInLevel}/${state.totalWordsInLevel}`;
+  }
 
   if (hudRingCircle) {
     const ringCirc = 65.97;
@@ -701,8 +740,12 @@ export function updateHudStats() {
   if (sidebarDeckProgNum) {
     sidebarDeckProgNum.textContent = `${state.wordsDestroyedInLevel} / ${state.totalWordsInLevel}`;
   }
+  const waveNum = Math.max(1, Math.ceil((state.wordsDestroyedInLevel + 1) / 4));
+  const waveLabel = t().arenaWaveLabel(state.activeLessonIndex + 1, waveNum);
   if (arenaWavePill) {
-    const waveNum = Math.max(1, Math.ceil((state.wordsDestroyedInLevel + 1) / 4));
-    arenaWavePill.textContent = t().arenaWaveLabel(state.activeLessonIndex + 1, waveNum);
+    arenaWavePill.textContent = waveLabel;
+  }
+  if (mobHudWaveText) {
+    mobHudWaveText.textContent = waveLabel;
   }
 }

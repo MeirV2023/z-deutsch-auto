@@ -61,7 +61,7 @@ export function getPlayBounds() {
     if (aRect.width > 120 && aRect.height > 120) {
       const left = aRect.left + 12;
       const right = Math.max(left + 180, aRect.right - 12);
-      const top = aRect.top + 46;
+      const top = window.innerWidth <= 768 ? (aRect.top + 20) : (aRect.top + 46);
       const rawBottom = kbdVisible
         ? Math.min(aRect.bottom - 10, kbdRect.top - 8)
         : (aRect.bottom - 54);

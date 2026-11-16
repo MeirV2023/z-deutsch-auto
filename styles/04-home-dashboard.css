@@ -61,6 +61,26 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
+}
+
+.brand-logo-picture {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-logo-img {
+  height: 54px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 12px rgba(56, 189, 248, 0.34));
+  transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.home-brand:hover .brand-logo-img {
+  transform: translateY(-1px) scale(1.02);
+  filter: drop-shadow(0 4px 16px rgba(56, 189, 248, 0.48));
 }
 
 .home-brand-rocket {

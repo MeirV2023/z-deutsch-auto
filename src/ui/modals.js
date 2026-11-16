@@ -53,6 +53,7 @@ import {
   btnHomeSettings,
   btnHomeStreakChip,
   btnHudGameSettings,
+  btnMobHudSettings,
   btnNavLeaderboard,
   btnNavStats,
   btnOpenAdminFromSettings,
@@ -857,7 +858,7 @@ export function bindModalEvents() {
     renderFullDictionary(dictSearchInput.value);
   });
 
-  [btnHomeSettings, btnHudGameSettings, btnSidebarGameSettings].forEach(el => {
+  [btnHomeSettings, btnHudGameSettings, btnMobHudSettings, btnSidebarGameSettings].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {
       openGameSettingsModal();

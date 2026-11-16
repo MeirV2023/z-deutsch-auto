@@ -386,6 +386,16 @@ export const btnHudLangPair = document.getElementById('btnHudLangPair');
 export const hudLangPairText = document.getElementById('hudLangPairText');
 export const hudRingCircle = document.getElementById('hudRingCircle');
 export const btnHudGameSettings = document.getElementById('btnHudGameSettings');
+export const btnMobHudWave = document.getElementById('btnMobHudWave');
+export const mobHudWaveText = document.getElementById('mobHudWaveText');
+export const mobHudProgressText = document.getElementById('mobHudProgressText');
+export const btnMobHudPause = document.getElementById('btnMobHudPause');
+export const btnMobHudSettings = document.getElementById('btnMobHudSettings');
+export const mobileBattleSubbar = document.getElementById('mobileBattleSubbar');
+export const labelMobLives = document.getElementById('labelMobLives');
+export const mobHudLivesHearts = document.getElementById('mobHudLivesHearts');
+export const btnMobHudEmp = document.getElementById('btnMobHudEmp');
+export const mobEmpCount = document.getElementById('mobEmpCount');
 
 export const battleArenaFrame = document.getElementById('battleArenaFrame');
 export const arenaWavePill = document.getElementById('arenaWavePill');
@@ -828,6 +838,16 @@ export const dom = {
   hudLangPairText,
   hudRingCircle,
   btnHudGameSettings,
+  btnMobHudWave,
+  mobHudWaveText,
+  mobHudProgressText,
+  btnMobHudPause,
+  btnMobHudSettings,
+  mobileBattleSubbar,
+  labelMobLives,
+  mobHudLivesHearts,
+  btnMobHudEmp,
+  mobEmpCount,
   battleArenaFrame,
   arenaWavePill,
   desktopTypingPromptBar,

@@ -101,12 +101,17 @@ html, body {
    ЖЕЛЕЗОБЕТОННОЕ ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ (ИСКЛЮЧАЕТ ПЕРЕХВАТ НАЖАТИЙ НА ТЕЛЕФОНЕ)
    ========================================================================== */
 body.mode-title .hud-top,
+body.mode-title .mobile-battle-subbar,
 body.mode-title .battle-arena-frame,
 body.mode-title .sidebar-left,
 body.mode-title .sidebar-right,
 body.mode-title .ztype-keyboard-dock {
   display: none !important;
   pointer-events: none !important;
+}
+
+.mobile-battle-subbar {
+  display: none;
 }
 
 body.mode-play .arcade-title-screen,

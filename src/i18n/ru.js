@@ -125,6 +125,8 @@ export const RU_TEXT = {
   nativeLangNames: { ru: 'Русский', en: 'Английский', he: 'Иврит' },
   arenaWaveLabel: (lessonNum, waveNum) => `УРОК ${lessonNum} · ВОЛНА ${String(waveNum).padStart(2, '0')}`,
   desktopPromptIdle: '⌨️ Печатайте слово, чтобы стрелять',
+  mobLivesLabel: 'ЖИЗНИ:',
+  mobTargetPromptIdle: 'Печатайте слово, чтобы стрелять',
   sidebarDecksHeader: 'МОИ КОЛОДЫ',
   lessonsDrawerSummary: '📋 Выбрать урок курса ▾',
   studyModeHeader: 'РЕЖИМ ОБУЧЕНИЯ',

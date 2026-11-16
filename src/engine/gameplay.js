@@ -38,6 +38,9 @@ import {
   btnHitRepeat,
   btnHitSpeak,
   btnHudHome,
+  btnMobHudEmp,
+  btnMobHudPause,
+  btnMobHudWave,
   btnNextLevel,
   btnPause,
   btnPracticeMistakes,
@@ -61,6 +64,7 @@ import {
   labelFeatSettings,
   leaderboardDialog,
   levelQuizBox,
+  mobHudProgressText,
   overlayBadge,
   overlayDesc,
   overlayOriginBadge,
@@ -208,6 +212,7 @@ export function selectCourseLesson(courseId, moduleIndex, lessonIndex, showIntro
     hudProgressBar.style.width = '0%';
     if (kbdProgressFill) kbdProgressFill.style.width = '0%';
     hudProgressText.textContent = `0 / ${pool.length}`;
+    if (mobHudProgressText) mobHudProgressText.textContent = `0/${pool.length}`;
   }
 
   renderLevelSidebar();
@@ -1477,6 +1482,27 @@ export function bindGameplayEvents() {
     togglePause();
     btnPause.blur();
   });
+
+  if (btnMobHudPause) {
+    btnMobHudPause.addEventListener('click', () => {
+      togglePause();
+      btnMobHudPause.blur();
+    });
+  }
+
+  if (btnMobHudWave) {
+    btnMobHudWave.addEventListener('click', () => {
+      actions.openCourseCatalogModal('all');
+      btnMobHudWave.blur();
+    });
+  }
+
+  if (btnMobHudEmp) {
+    btnMobHudEmp.addEventListener('click', () => {
+      triggerEmpWave();
+      btnMobHudEmp.blur();
+    });
+  }
 
   if (btnQuickLevels) {
     btnQuickLevels.addEventListener('click', () => {
