@@ -13,6 +13,8 @@
 .mobile-hero-space-art,
 .mobile-hero-planet-horizon,
 .mobile-how-heading,
+.mobile-home-discovery,
+.decks-mob-active-filter-row,
 .mobile-bottom-nav,
 .avatar-user-mobile,
 .decks-mobile-planet-bg,
@@ -471,26 +473,10 @@
     display: none !important;
   }
 
+  /* На мобильном главном экране скрываем жёлтую пилюлю «Auto & Road» под кнопкой Начать игру */
   .arcade-title-screen .arcade-logo-sub,
   .home-hero-cta-row .arcade-logo-sub {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    max-width: min(100%, 300px);
-    min-height: 40px;
-    padding: 7px 20px;
-    border-radius: 999px;
-    background: rgba(11, 17, 30, 0.9);
-    border: 1.5px solid rgba(250, 204, 21, 0.82);
-    box-shadow: 0 0 18px rgba(250, 204, 21, 0.2), inset 0 0 10px rgba(250, 204, 21, 0.08);
-    color: #fef08a;
-    font-family: var(--font-ui);
-    font-size: 0.92rem;
-    font-weight: 700;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: none !important;
   }
 
   .course-pill-lnum {
@@ -543,22 +529,328 @@
     font-size: 0.96rem;
   }
 
-  /* 5. Вертикальный блок «Как это работает» (3 строки с тонкими разделителями) */
-  .home-how-section {
-    margin-top: 2px;
+  /* 5. Новые блоки на мобильной Главной: Choose your level + Choose a topic + 3-колоночная карточка How it works */
+  .mobile-home-discovery {
+    display: flex !important;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 4px;
+  }
+
+  .mob-discovery-group {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .mob-section-heading {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--font-heading);
+    font-size: 1.24rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  html[lang="he"] .mob-section-heading,
+  [dir="rtl"] .mob-section-heading {
+    font-family: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+    font-weight: 700;
+  }
+
+  .mob-level-bars-svg {
+    width: 21px;
+    height: 19px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.45));
+  }
+
+  .mob-heading-emoji {
+    font-size: 1.2rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  /* 3 неоновые горизонтальные карточки уровней (A1–A2 / B1 / B2) */
+  .mob-level-list {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .mob-level-card {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    text-align: start;
+    font-family: var(--font-ui);
+    color: #f8fafc;
+    cursor: pointer;
+    transition: transform 0.14s ease, filter 0.14s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mob-level-card:active {
+    transform: scale(0.985);
+    filter: brightness(1.08);
+  }
+
+  .mob-level-card.level-a1 {
+    background: linear-gradient(125deg, rgba(11, 46, 44, 0.92) 0%, rgba(9, 22, 34, 0.96) 62%, rgba(8, 17, 30, 0.98) 100%);
+    border: 1.5px solid rgba(52, 211, 153, 0.65);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42), 0 0 20px rgba(16, 185, 129, 0.16), inset 0 1px 0 rgba(167, 243, 208, 0.16);
+  }
+
+  .mob-level-card.level-b1 {
+    background: linear-gradient(125deg, rgba(12, 34, 68, 0.92) 0%, rgba(9, 21, 42, 0.96) 62%, rgba(8, 16, 32, 0.98) 100%);
+    border: 1.5px solid rgba(56, 189, 248, 0.68);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42), 0 0 20px rgba(14, 165, 233, 0.18), inset 0 1px 0 rgba(186, 230, 253, 0.16);
+  }
+
+  .mob-level-card.level-b2 {
+    background: linear-gradient(125deg, rgba(35, 20, 68, 0.92) 0%, rgba(16, 16, 40, 0.96) 62%, rgba(10, 13, 30, 0.98) 100%);
+    border: 1.5px solid rgba(168, 85, 247, 0.7);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42), 0 0 20px rgba(147, 51, 234, 0.2), inset 0 1px 0 rgba(233, 213, 255, 0.16);
+  }
+
+  .mob-lvl-icon-tile {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  .mob-level-card.level-a1 .mob-lvl-icon-tile {
+    background: radial-gradient(circle at 35% 30%, rgba(34, 197, 94, 0.32), rgba(7, 32, 29, 0.96));
+    border: 1px solid rgba(52, 211, 153, 0.4);
+  }
+
+  .mob-level-card.level-b1 .mob-lvl-icon-tile {
+    background: radial-gradient(circle at 35% 30%, rgba(56, 189, 248, 0.32), rgba(9, 24, 52, 0.96));
+    border: 1px solid rgba(96, 165, 250, 0.42);
+  }
+
+  .mob-level-card.level-b2 .mob-lvl-icon-tile {
+    background: radial-gradient(circle at 35% 30%, rgba(168, 85, 247, 0.34), rgba(26, 14, 52, 0.96));
+    border: 1px solid rgba(192, 132, 252, 0.42);
+  }
+
+  .mob-lvl-emoji {
+    font-size: 1.72rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.45));
+  }
+
+  .mob-lvl-svg {
+    width: 30px;
+    height: 30px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+  }
+
+  .mob-lvl-body {
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
 
-  .mobile-how-heading {
-    display: block !important;
-    margin: 0 0 2px;
+  .mob-lvl-title {
     font-family: var(--font-heading);
-    font-size: 1.32rem;
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.15;
+  }
+
+  .mob-lvl-sub {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #cbd5e1;
+    line-height: 1.28;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mob-lvl-meta {
+    margin-top: 3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #94a3b8;
+  }
+
+  .mob-lvl-book-svg {
+    width: 13px;
+    height: 13px;
+    color: #cbd5e1;
+    opacity: 0.85;
+    flex-shrink: 0;
+  }
+
+  .mob-lvl-chevron {
+    width: 18px;
+    height: 18px;
+    color: #cbd5e1;
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+
+  [dir="rtl"] .mob-lvl-chevron {
+    transform: scaleX(-1);
+  }
+
+  /* Сетка 2×3 карточек тем («Choose a topic») */
+  .mob-topic-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .mob-topic-card {
+    padding: 11px 11px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-align: start;
+    font-family: var(--font-ui);
+    color: #f8fafc;
+    cursor: pointer;
+    min-width: 0;
+    transition: transform 0.14s ease, filter 0.14s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mob-topic-card:active {
+    transform: scale(0.975);
+    filter: brightness(1.1);
+  }
+
+  .mob-topic-card.topic-finance {
+    background: linear-gradient(135deg, rgba(12, 42, 38, 0.92) 0%, rgba(9, 19, 32, 0.96) 100%);
+    border: 1.2px solid rgba(52, 211, 153, 0.58);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 12px rgba(16, 185, 129, 0.08);
+  }
+
+  .mob-topic-card.topic-auto {
+    background: linear-gradient(135deg, rgba(12, 31, 56, 0.92) 0%, rgba(9, 18, 34, 0.96) 100%);
+    border: 1.2px solid rgba(56, 189, 248, 0.58);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 12px rgba(56, 189, 248, 0.08);
+  }
+
+  .mob-topic-card.topic-food {
+    background: linear-gradient(135deg, rgba(32, 20, 60, 0.92) 0%, rgba(12, 15, 34, 0.96) 100%);
+    border: 1.2px solid rgba(168, 85, 247, 0.62);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 12px rgba(168, 85, 247, 0.1);
+  }
+
+  .mob-topic-card.topic-business {
+    background: linear-gradient(135deg, rgba(46, 33, 14, 0.92) 0%, rgba(16, 17, 30, 0.96) 100%);
+    border: 1.2px solid rgba(245, 158, 11, 0.65);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 12px rgba(245, 158, 11, 0.1);
+  }
+
+  .mob-topic-card.topic-travel {
+    background: linear-gradient(135deg, rgba(13, 33, 62, 0.92) 0%, rgba(9, 18, 35, 0.96) 100%);
+    border: 1.2px solid rgba(96, 165, 250, 0.6);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 12px rgba(59, 130, 246, 0.09);
+  }
+
+  .mob-topic-card.topic-daily {
+    background: linear-gradient(135deg, rgba(11, 42, 36, 0.92) 0%, rgba(9, 19, 32, 0.96) 100%);
+    border: 1.2px solid rgba(45, 212, 191, 0.58);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), inset 0 0 12px rgba(20, 184, 166, 0.09);
+  }
+
+  .mob-topic-icon {
+    font-size: 1.55rem;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 30px;
+    text-align: center;
+  }
+
+  .mob-topic-sep {
+    width: 1px;
+    align-self: stretch;
+    background: rgba(148, 163, 184, 0.22);
+    flex-shrink: 0;
+  }
+
+  .mob-topic-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .mob-topic-title {
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.18;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  html[lang="he"] .mob-topic-title,
+  [dir="rtl"] .mob-topic-title {
+    font-family: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+    font-weight: 700;
+  }
+
+  .mob-topic-sub {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #94a3b8;
+    line-height: 1.22;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 3-колоночная карточка «⚡ Как это работает» как на макете */
+  .home-how-section {
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mobile-how-heading {
+    display: flex !important;
+    align-items: center;
+    gap: 7px;
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.24rem;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.01em;
+  }
+
+  .how-bolt-icon {
+    font-size: 1.18rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.45));
   }
 
   html[lang="he"] .mobile-how-heading,
@@ -568,16 +860,16 @@
   }
 
   .home-steps-strip {
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 0;
-    padding: 0;
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 6px;
+    padding: 15px 10px 14px;
+    border-radius: 18px;
+    background: linear-gradient(165deg, rgba(10, 19, 38, 0.92) 0%, rgba(7, 13, 27, 0.96) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.44);
+    position: relative;
   }
 
   .step-chevron {
@@ -585,19 +877,43 @@
   }
 
   .home-step-item {
-    display: flex;
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
     align-items: center;
-    gap: 12px;
+    column-gap: 6px;
+    row-gap: 8px;
     width: 100%;
-    padding: 12px 2px;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
-    font-size: 0.96rem;
+    padding: 2px 3px;
+    border-bottom: none;
+    text-align: center;
+    font-size: 0.76rem;
+    line-height: 1.28;
     font-weight: 500;
-    color: #e2e8f0;
+    color: #cbd5e1;
   }
 
-  .home-step-item:last-child {
-    border-bottom: none;
+  .home-step-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 13px;
+    right: -14%;
+    width: 22%;
+    height: 1px;
+    background: rgba(148, 163, 184, 0.28);
+    pointer-events: none;
+  }
+
+  [dir="rtl"] .home-step-item:not(:last-child)::after {
+    right: auto;
+    left: -14%;
+  }
+
+  .home-step-item .step-text.mobile-copy {
+    grid-column: 1 / -1;
+    display: block !important;
+    text-align: center;
   }
 
   .home-step-item:active {
@@ -606,18 +922,56 @@
   }
 
   .step-num {
-    width: 26px;
-    height: 26px;
-    font-size: 0.82rem;
+    width: 24px;
+    height: 24px;
+    font-size: 0.78rem;
     flex-shrink: 0;
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.22);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.22);
   }
 
   .step-icon {
-    width: 24px;
+    width: auto;
     text-align: center;
-    font-size: 1.14rem;
+    font-size: 1.12rem;
     flex-shrink: 0;
+  }
+
+  /* Чип активного фильтра уровня / темы на странице «Мои колоды» */
+  .decks-mob-active-filter-row:not(.hidden) {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin-top: -2px;
+  }
+
+  .mob-active-subfilter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(56, 189, 248, 0.65);
+    background: rgba(14, 32, 62, 0.92);
+    color: #e0f2fe;
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .mob-subfilter-x {
+    color: #7dd3fc;
+    font-size: 0.78rem;
+  }
+
+  .deck-mob-icon-tile.art-food {
+    background: radial-gradient(circle at 32% 26%, rgba(168, 85, 247, 0.48), rgba(32, 16, 56, 0.96));
+    border-color: rgba(192, 132, 252, 0.48);
+  }
+
+  .deck-mob-icon-tile.art-travel {
+    background: radial-gradient(circle at 32% 26%, rgba(56, 189, 248, 0.48), rgba(14, 34, 66, 0.96));
+    border-color: rgba(96, 165, 250, 0.48);
   }
 
   /* Скрываем тяжёлые десктопные сетки на мобильном главном экране */
@@ -642,7 +996,8 @@
   }
 
   .decks-page-view.detail-open .decks-hero-banner,
-  .decks-page-view.detail-open .decks-mobile-filter-bar {
+  .decks-page-view.detail-open .decks-mobile-filter-bar,
+  .decks-page-view.detail-open .decks-mob-active-filter-row {
     display: none !important;
   }
 

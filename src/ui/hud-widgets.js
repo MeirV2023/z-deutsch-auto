@@ -21,6 +21,7 @@ import {
 } from '../state/store.js';
 import {
   countLearnedWordsInCourse,
+  courseMatchesLevelFilter,
   getActiveSelection,
   getAllWordsInCourse,
   getAllWordsInTargetLang,
@@ -28,6 +29,7 @@ import {
   getCoursesForTargetLang,
   getMergedLeaderboardEntries,
   getOfficialCoursesForTargetLang,
+  inferCourseCategory,
   resolveLessonBaseWords
 } from '../domain/catalog-service.js';
 import {
@@ -63,6 +65,10 @@ import {
   hudScore,
   hudShields,
   kbdProgressFill,
+  labelMobChooseLevel,
+  labelMobChooseTopic,
+  mobileLevelCardsList,
+  mobileTopicGrid,
   killFeedContainer,
   labelHitBanner,
   labelHitRepeat,
@@ -207,9 +213,135 @@ export function renderHomeQuickStartGrid() {
   }
 }
 
+export function renderMobileDiscoveryBlocks() {
+  const tr = t();
+  if (labelMobChooseLevel && tr.mobChooseLevelTitle) {
+    labelMobChooseLevel.textContent = tr.mobChooseLevelTitle;
+  }
+  if (labelMobChooseTopic && tr.mobChooseTopicTitle) {
+    labelMobChooseTopic.textContent = tr.mobChooseTopicTitle;
+  }
+
+  const allCourses = getCoursesForTargetLang(state.targetLang);
+
+  if (mobileLevelCardsList) {
+    const levelSpecs = [
+      {
+        id: 'A1–A2',
+        cls: 'level-a1',
+        title: 'A1–A2',
+        sub: tr.lvlA1Sub,
+        iconHtml: '<span class="mob-lvl-emoji" aria-hidden="true">🌱</span>'
+      },
+      {
+        id: 'B1',
+        cls: 'level-b1',
+        title: 'B1',
+        sub: tr.lvlB1Sub,
+        iconHtml: `<svg class="mob-lvl-svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="4" y="18" width="5.6" height="9" rx="2" fill="#38bdf8"/>
+          <rect x="13.2" y="12.2" width="5.6" height="14.8" rx="2" fill="#60a5fa"/>
+          <rect x="22.4" y="6.2" width="5.6" height="20.8" rx="2" fill="#93c5fd"/>
+        </svg>`
+      },
+      {
+        id: 'B2',
+        cls: 'level-b2',
+        title: 'B2',
+        sub: tr.lvlB2Sub,
+        iconHtml: `<svg class="mob-lvl-svg" viewBox="0 0 36 32" fill="none" aria-hidden="true">
+          <path d="M18 4.5L3 11.8L18 19.1L33 11.8L18 4.5Z" fill="#a855f7" stroke="#d8b4fe" stroke-width="1.1"/>
+          <path d="M9.5 15.2V22.4C9.5 24.8 13.3 26.8 18 26.8C22.7 26.8 26.5 24.8 26.5 22.4V15.2L18 19.4L9.5 15.2Z" fill="#7e22ce"/>
+          <path d="M29.5 13.2V21.5" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="29.5" cy="22.5" r="1.8" fill="#fbbf24"/>
+        </svg>`
+      }
+    ];
+
+    mobileLevelCardsList.innerHTML = '';
+    levelSpecs.forEach(spec => {
+      const matched = allCourses.filter(c => courseMatchesLevelFilter(c, spec.id));
+      const lessonsTotal = matched.reduce((sum, c) => {
+        return sum + (c.modules || []).reduce((mSum, m) => mSum + (m.lessons ? m.lessons.length : 0), 0);
+      }, 0);
+      const metaStr = tr.lvlMetaCounts ? tr.lvlMetaCounts(matched.length, lessonsTotal) : `${matched.length} · ${lessonsTotal}`;
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `mob-level-card ${spec.cls}`;
+      btn.innerHTML = `
+        <div class="mob-lvl-icon-tile">${spec.iconHtml}</div>
+        <div class="mob-lvl-body">
+          <div class="mob-lvl-title">${escapeHtml(spec.title)}</div>
+          <div class="mob-lvl-sub">${escapeHtml(spec.sub || '')}</div>
+          <div class="mob-lvl-meta">
+            <svg class="mob-lvl-book-svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1Z"/>
+            </svg>
+            <span>${escapeHtml(metaStr)}</span>
+          </div>
+        </div>
+        <svg class="mob-lvl-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7.5 4.5L13 10l-5.5 5.5"/>
+        </svg>
+      `;
+      btn.addEventListener('click', () => {
+        if (matched.length > 0 && matched[0].id !== state.activeCourseId) {
+          actions.selectCourseLesson(matched[0].id, 0, 0, false);
+        }
+        actions.openDecksPage({
+          sourceFilter: 'all',
+          levelFilter: spec.id,
+          categoryFilter: 'all'
+        });
+      });
+      mobileLevelCardsList.appendChild(btn);
+    });
+  }
+
+  if (mobileTopicGrid) {
+    const topicSpecs = [
+      { cat: 'finance', cls: 'topic-finance', icon: '🪙', title: tr.topicFinanceTitle, sub: tr.topicFinanceSub },
+      { cat: 'auto', cls: 'topic-auto', icon: '🚗', title: tr.topicAutoTitle, sub: tr.topicAutoSub },
+      { cat: 'food', cls: 'topic-food', icon: '👨‍🍳', title: tr.topicFoodTitle, sub: tr.topicFoodSub },
+      { cat: 'business', cls: 'topic-business', icon: '💼', title: tr.topicBusinessTitle, sub: tr.topicBusinessSub },
+      { cat: 'travel', cls: 'topic-travel', icon: '✈️', title: tr.topicTravelTitle, sub: tr.topicTravelSub },
+      { cat: 'base', cls: 'topic-daily', icon: '🏠', title: tr.topicDailyTitle, sub: tr.topicDailySub }
+    ];
+
+    mobileTopicGrid.innerHTML = '';
+    topicSpecs.forEach(tp => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `mob-topic-card ${tp.cls}`;
+      btn.innerHTML = `
+        <span class="mob-topic-icon" aria-hidden="true">${tp.icon}</span>
+        <span class="mob-topic-sep" aria-hidden="true"></span>
+        <span class="mob-topic-copy">
+          <span class="mob-topic-title">${escapeHtml(tp.title || '')}</span>
+          <span class="mob-topic-sub">${escapeHtml(tp.sub || '')}</span>
+        </span>
+      `;
+      btn.addEventListener('click', () => {
+        const matched = allCourses.filter(c => c.source !== 'user' && inferCourseCategory(c) === tp.cat);
+        if (matched.length > 0 && matched[0].id !== state.activeCourseId) {
+          actions.selectCourseLesson(matched[0].id, 0, 0, false);
+        }
+        actions.openDecksPage({
+          sourceFilter: 'all',
+          categoryFilter: tp.cat,
+          levelFilter: 'all'
+        });
+      });
+      mobileTopicGrid.appendChild(btn);
+    });
+  }
+}
+
 export function renderHomeDashboardWidgets() {
   const tr = t();
   renderHomeQuickStartGrid();
+  renderMobileDiscoveryBlocks();
 
   // Круговая диаграмма «Твой прогресс»
   const langWords = getAllWordsInTargetLang(state.targetLang);

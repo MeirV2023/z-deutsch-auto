@@ -144,5 +144,33 @@ export const BASE_CATEGORIES = [
       "en": "Health, doctor appointments, symptoms & pharmacy",
       "he": "בריאות, ביקור אצל רופא, תסמינים ובית מרקחת"
     }
+  },
+  {
+    "id": "finance",
+    "icon": "🪙",
+    "titles": {
+      "ru": "Финансы",
+      "en": "Finance",
+      "he": "פיננסים"
+    },
+    "descriptions": {
+      "ru": "Деньги, банки, счета, бюджет и покупки",
+      "en": "Money, banking, accounts, budgeting & shopping",
+      "he": "כסף, בנקאות, חשבונות, תקציב וקניות"
+    }
+  },
+  {
+    "id": "food",
+    "icon": "👨‍🍳",
+    "titles": {
+      "ru": "Кухня",
+      "en": "Food & Kitchen",
+      "he": "מטבח ואוכל"
+    },
+    "descriptions": {
+      "ru": "Еда, блюда, рецепты, продукты и заказ в ресторане",
+      "en": "Meals, dishes, recipes, groceries & ordering at a restaurant",
+      "he": "אוכל, מנות, מתכונים, מצרכים והזמנה במסעדה"
+    }
   }
 ];

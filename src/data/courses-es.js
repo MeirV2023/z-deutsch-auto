@@ -1803,5 +1803,974 @@ export const COURSES_ES = [
       }
     ],
     "category": "it"
+  },
+  {
+    "id": "es-finance",
+    "targetLang": "es",
+    "category": "finance",
+    "source": "official",
+    "icon": "🪙",
+    "levelTag": "B1",
+    "titles": {
+      "ru": "Финансы и покупки",
+      "en": "Finance & Banking",
+      "he": "פיננסים וקניות"
+    },
+    "descriptions": {
+      "ru": "Деньги, банки, счета, скидки и покупки на испанском (20 слов).",
+      "en": "Money, banking, bills, discounts & shopping in Spanish (20 words).",
+      "he": "כסף, בנקאות, חשבונות, הנחות וקניות בספרדית (20 מילים)."
+    },
+    "modules": [
+      {
+        "id": "es-finance-m1",
+        "titles": {
+          "ru": "Финансы и покупки",
+          "en": "Finance & Banking",
+          "he": "פיננסים וקניות"
+        },
+        "lessons": [
+          {
+            "id": "es-finance-m1-l1",
+            "isBoss": false,
+            "speedMultiplier": 0.96,
+            "spawnIntervalMs": 2700,
+            "titles": {
+              "ru": "Банк и деньги",
+              "en": "Bank & Money",
+              "he": "בנק וכסף"
+            },
+            "descriptions": {
+              "ru": "Деньги, банки, счета, скидки и покупки на испанском (20 слов).",
+              "en": "Money, banking, bills, discounts & shopping in Spanish (20 words).",
+              "he": "כסף, בנקאות, חשבונות, הנחות וקניות בספרדית (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "la cuenta",
+                "word": "cuenta",
+                "withArticle": "la cuenta",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "счёт",
+                  "en": "account / bill",
+                  "he": "חשבון"
+                }
+              },
+              {
+                "raw": "el efectivo",
+                "word": "efectivo",
+                "withArticle": "el efectivo",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "наличные деньги",
+                  "en": "cash",
+                  "he": "מזומן"
+                }
+              },
+              {
+                "raw": "la tarjeta",
+                "word": "tarjeta",
+                "withArticle": "la tarjeta",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "банковская карта",
+                  "en": "bank card",
+                  "he": "כרטיס אשראי"
+                }
+              },
+              {
+                "raw": "el cajero",
+                "word": "cajero",
+                "withArticle": "el cajero",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "банкомат",
+                  "en": "ATM",
+                  "he": "כספומט"
+                }
+              },
+              {
+                "raw": "ahorrar",
+                "word": "ahorrar",
+                "withArticle": "ahorrar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "копить, экономить",
+                  "en": "to save money",
+                  "he": "לחסוך"
+                }
+              },
+              {
+                "raw": "transferir",
+                "word": "transferir",
+                "withArticle": "transferir",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "переводить (деньги)",
+                  "en": "to transfer",
+                  "he": "להעביר כסף"
+                }
+              },
+              {
+                "raw": "el préstamo",
+                "word": "préstamo",
+                "withArticle": "el préstamo",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "кредит, заём",
+                  "en": "loan",
+                  "he": "הלוואה"
+                }
+              },
+              {
+                "raw": "el impuesto",
+                "word": "impuesto",
+                "withArticle": "el impuesto",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "налог",
+                  "en": "tax",
+                  "he": "מס"
+                }
+              },
+              {
+                "raw": "la moneda",
+                "word": "moneda",
+                "withArticle": "la moneda",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "валюта, монета",
+                  "en": "currency, coin",
+                  "he": "מטבע"
+                }
+              },
+              {
+                "raw": "el sueldo",
+                "word": "sueldo",
+                "withArticle": "el sueldo",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "зарплата",
+                  "en": "salary",
+                  "he": "משכורת"
+                }
+              }
+            ]
+          },
+          {
+            "id": "es-finance-m1-l2",
+            "isBoss": false,
+            "speedMultiplier": 1.0,
+            "spawnIntervalMs": 2600,
+            "titles": {
+              "ru": "Покупки и чек",
+              "en": "Shopping & Receipt",
+              "he": "קניות וקבלה"
+            },
+            "descriptions": {
+              "ru": "Деньги, банки, счета, скидки и покупки на испанском (20 слов).",
+              "en": "Money, banking, bills, discounts & shopping in Spanish (20 words).",
+              "he": "כסף, בנקאות, חשבונות, הנחות וקניות בספרדית (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "el descuento",
+                "word": "descuento",
+                "withArticle": "el descuento",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "скидка",
+                  "en": "discount",
+                  "he": "הנחה"
+                }
+              },
+              {
+                "raw": "el recibo",
+                "word": "recibo",
+                "withArticle": "el recibo",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "квитанция, чек",
+                  "en": "receipt",
+                  "he": "קבלה"
+                }
+              },
+              {
+                "raw": "gastar",
+                "word": "gastar",
+                "withArticle": "gastar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "тратить",
+                  "en": "to spend",
+                  "he": "להוציא כסף"
+                }
+              },
+              {
+                "raw": "pagar",
+                "word": "pagar",
+                "withArticle": "pagar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "платить",
+                  "en": "to pay",
+                  "he": "לשלם"
+                }
+              },
+              {
+                "raw": "barato",
+                "word": "barato",
+                "withArticle": "barato",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "дешёвый, недорогой",
+                  "en": "cheap, affordable",
+                  "he": "זול"
+                }
+              },
+              {
+                "raw": "gratis",
+                "word": "gratis",
+                "withArticle": "gratis",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "бесплатный",
+                  "en": "free",
+                  "he": "חינם"
+                }
+              },
+              {
+                "raw": "el precio",
+                "word": "precio",
+                "withArticle": "el precio",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "цена",
+                  "en": "price",
+                  "he": "מחיר"
+                }
+              },
+              {
+                "raw": "devolver",
+                "word": "devolver",
+                "withArticle": "devolver",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "возвращать (товар)",
+                  "en": "to return",
+                  "he": "להחזיר"
+                }
+              },
+              {
+                "raw": "el presupuesto",
+                "word": "presupuesto",
+                "withArticle": "el presupuesto",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "бюджет",
+                  "en": "budget",
+                  "he": "תקציב"
+                }
+              },
+              {
+                "raw": "la oferta",
+                "word": "oferta",
+                "withArticle": "la oferta",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "спецпредложение, акция",
+                  "en": "special offer",
+                  "he": "מבצע"
+                }
+              }
+            ]
+          },
+          {
+            "id": "es-finance-m1-boss",
+            "isBoss": true,
+            "speedMultiplier": 1.05,
+            "spawnIntervalMs": 2450,
+            "titles": {
+              "ru": "👹 Босс-урок: Финансы",
+              "en": "👹 Boss Review: Smart Finance",
+              "he": "👹 שלב בוס: פיננסים"
+            },
+            "descriptions": {
+              "ru": "Деньги, банки, счета, скидки и покупки на испанском (20 слов).",
+              "en": "Money, banking, bills, discounts & shopping in Spanish (20 words).",
+              "he": "כסף, בנקאות, חשבונות, הנחות וקניות בספרדית (20 מילים)."
+            },
+            "words": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "es-food",
+    "targetLang": "es",
+    "category": "food",
+    "source": "official",
+    "icon": "👨‍🍳",
+    "levelTag": "A1–A2",
+    "titles": {
+      "ru": "Кухня и ресторан",
+      "en": "Food & Kitchen",
+      "he": "מטבח ומסעדות"
+    },
+    "descriptions": {
+      "ru": "Испанская кухня, продукты, рецепты и заказ в кафе (20 слов).",
+      "en": "Spanish food, ingredients, recipes & cafe ordering (20 words).",
+      "he": "מטבח ספרדי, מצרכים, מתכונים והזמנה במסעדה (20 מילים)."
+    },
+    "modules": [
+      {
+        "id": "es-food-m1",
+        "titles": {
+          "ru": "Кухня и ресторан",
+          "en": "Food & Kitchen",
+          "he": "מטבח ומסעדות"
+        },
+        "lessons": [
+          {
+            "id": "es-food-m1-l1",
+            "isBoss": false,
+            "speedMultiplier": 0.96,
+            "spawnIntervalMs": 2700,
+            "titles": {
+              "ru": "Продукты и готовка",
+              "en": "Ingredients & Cooking",
+              "he": "מצרכים ובישול"
+            },
+            "descriptions": {
+              "ru": "Испанская кухня, продукты, рецепты и заказ в кафе (20 слов).",
+              "en": "Spanish food, ingredients, recipes & cafe ordering (20 words).",
+              "he": "מטבח ספרדי, מצרכים, מתכונים והזמנה במסעדה (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "la receta",
+                "word": "receta",
+                "withArticle": "la receta",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "рецепт",
+                  "en": "recipe",
+                  "he": "מתכון"
+                }
+              },
+              {
+                "raw": "la verdura",
+                "word": "verdura",
+                "withArticle": "la verdura",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "овощи",
+                  "en": "vegetable",
+                  "he": "ירקות"
+                }
+              },
+              {
+                "raw": "cocinar",
+                "word": "cocinar",
+                "withArticle": "cocinar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "готовить еду",
+                  "en": "to cook",
+                  "he": "לבשל"
+                }
+              },
+              {
+                "raw": "cortar",
+                "word": "cortar",
+                "withArticle": "cortar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "резать, нарезать",
+                  "en": "to cut",
+                  "he": "לחתוך"
+                }
+              },
+              {
+                "raw": "hornear",
+                "word": "hornear",
+                "withArticle": "hornear",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "печь, запекать",
+                  "en": "to bake",
+                  "he": "לאפות"
+                }
+              },
+              {
+                "raw": "sabroso",
+                "word": "sabroso",
+                "withArticle": "sabroso",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "вкусный",
+                  "en": "tasty, delicious",
+                  "he": "טעים"
+                }
+              },
+              {
+                "raw": "fresco",
+                "word": "fresco",
+                "withArticle": "fresco",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "свежий",
+                  "en": "fresh",
+                  "he": "טרי"
+                }
+              },
+              {
+                "raw": "picante",
+                "word": "picante",
+                "withArticle": "picante",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "острый",
+                  "en": "spicy",
+                  "he": "חריף"
+                }
+              },
+              {
+                "raw": "el ajo",
+                "word": "ajo",
+                "withArticle": "el ajo",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "чеснок",
+                  "en": "garlic",
+                  "he": "שום"
+                }
+              },
+              {
+                "raw": "el aceite",
+                "word": "aceite",
+                "withArticle": "el aceite",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "масло (оливковое)",
+                  "en": "oil",
+                  "he": "שמן"
+                }
+              }
+            ]
+          },
+          {
+            "id": "es-food-m1-l2",
+            "isBoss": false,
+            "speedMultiplier": 1.0,
+            "spawnIntervalMs": 2600,
+            "titles": {
+              "ru": "В ресторане",
+              "en": "At the Restaurant",
+              "he": "במסעדה"
+            },
+            "descriptions": {
+              "ru": "Испанская кухня, продукты, рецепты и заказ в кафе (20 слов).",
+              "en": "Spanish food, ingredients, recipes & cafe ordering (20 words).",
+              "he": "מטבח ספרדי, מצרכים, מתכונים והזמנה במסעדה (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "el desayuno",
+                "word": "desayuno",
+                "withArticle": "el desayuno",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "завтрак",
+                  "en": "breakfast",
+                  "he": "ארוחת בוקר"
+                }
+              },
+              {
+                "raw": "el plato",
+                "word": "plato",
+                "withArticle": "el plato",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "блюдо, тарелка",
+                  "en": "dish, plate",
+                  "he": "מנה / צלחת"
+                }
+              },
+              {
+                "raw": "el postre",
+                "word": "postre",
+                "withArticle": "el postre",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "десерт",
+                  "en": "dessert",
+                  "he": "קינוח"
+                }
+              },
+              {
+                "raw": "la bebida",
+                "word": "bebida",
+                "withArticle": "la bebida",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "напиток",
+                  "en": "drink",
+                  "he": "משקה"
+                }
+              },
+              {
+                "raw": "la propina",
+                "word": "propina",
+                "withArticle": "la propina",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "чаевые",
+                  "en": "tip",
+                  "he": "טיפ"
+                }
+              },
+              {
+                "raw": "el camarero",
+                "word": "camarero",
+                "withArticle": "el camarero",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "официант",
+                  "en": "waiter",
+                  "he": "מלצר"
+                }
+              },
+              {
+                "raw": "pedir",
+                "word": "pedir",
+                "withArticle": "pedir",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "заказывать",
+                  "en": "to order",
+                  "he": "להזמין"
+                }
+              },
+              {
+                "raw": "probar",
+                "word": "probar",
+                "withArticle": "probar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "пробовать",
+                  "en": "to taste, try",
+                  "he": "לטעום"
+                }
+              },
+              {
+                "raw": "recomendar",
+                "word": "recomendar",
+                "withArticle": "recomendar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "рекомендовать",
+                  "en": "to recommend",
+                  "he": "להמליץ"
+                }
+              },
+              {
+                "raw": "el menú",
+                "word": "menú",
+                "withArticle": "el menú",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "меню",
+                  "en": "menu",
+                  "he": "תפריט"
+                }
+              }
+            ]
+          },
+          {
+            "id": "es-food-m1-boss",
+            "isBoss": true,
+            "speedMultiplier": 1.05,
+            "spawnIntervalMs": 2450,
+            "titles": {
+              "ru": "👹 Босс-урок: Шеф-повар",
+              "en": "👹 Boss Review: Master Chef",
+              "he": "👹 שלב בוס: שף הבית"
+            },
+            "descriptions": {
+              "ru": "Испанская кухня, продукты, рецепты и заказ в кафе (20 слов).",
+              "en": "Spanish food, ingredients, recipes & cafe ordering (20 words).",
+              "he": "מטבח ספרדי, מצרכים, מתכונים והזמנה במסעדה (20 מילים)."
+            },
+            "words": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "es-travel",
+    "targetLang": "es",
+    "category": "travel",
+    "source": "official",
+    "icon": "✈️",
+    "levelTag": "B2",
+    "titles": {
+      "ru": "Путешествия и отели",
+      "en": "Travel & Hotels",
+      "he": "נסיעות ומלונות"
+    },
+    "descriptions": {
+      "ru": "Перелёты, бронирование отелей и поездки по миру (20 слов).",
+      "en": "Flights, hotel reservations & world travel (20 words).",
+      "he": "טיסות, הזמנת מלונות וטיולים בעולם (20 מילים)."
+    },
+    "modules": [
+      {
+        "id": "es-travel-m1",
+        "titles": {
+          "ru": "Путешествия и отели",
+          "en": "Travel & Hotels",
+          "he": "נסיעות ומלונות"
+        },
+        "lessons": [
+          {
+            "id": "es-travel-m1-l1",
+            "isBoss": false,
+            "speedMultiplier": 0.96,
+            "spawnIntervalMs": 2700,
+            "titles": {
+              "ru": "Аэропорт и рейс",
+              "en": "Airport & Flight",
+              "he": "שדה תעופה וטיסה"
+            },
+            "descriptions": {
+              "ru": "Перелёты, бронирование отелей и поездки по миру (20 слов).",
+              "en": "Flights, hotel reservations & world travel (20 words).",
+              "he": "טיסות, הזמנת מלונות וטיולים בעולם (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "el vuelo",
+                "word": "vuelo",
+                "withArticle": "el vuelo",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "рейс, полёт",
+                  "en": "flight",
+                  "he": "טיסה"
+                }
+              },
+              {
+                "raw": "el equipaje",
+                "word": "equipaje",
+                "withArticle": "el equipaje",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "багаж",
+                  "en": "luggage",
+                  "he": "מזוודות"
+                }
+              },
+              {
+                "raw": "el pasaporte",
+                "word": "pasaporte",
+                "withArticle": "el pasaporte",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "паспорт",
+                  "en": "passport",
+                  "he": "דרכון"
+                }
+              },
+              {
+                "raw": "la aduana",
+                "word": "aduana",
+                "withArticle": "la aduana",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "таможня",
+                  "en": "customs",
+                  "he": "מכס"
+                }
+              },
+              {
+                "raw": "la salida",
+                "word": "salida",
+                "withArticle": "la salida",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "вылет, выход",
+                  "en": "departure, exit",
+                  "he": "יציאה / המראה"
+                }
+              },
+              {
+                "raw": "la llegada",
+                "word": "llegada",
+                "withArticle": "la llegada",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "прибытие, прилёт",
+                  "en": "arrival",
+                  "he": "נחיתה / הגעה"
+                }
+              },
+              {
+                "raw": "el retraso",
+                "word": "retraso",
+                "withArticle": "el retraso",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "задержка рейса",
+                  "en": "delay",
+                  "he": "עיכוב"
+                }
+              },
+              {
+                "raw": "embarcar",
+                "word": "embarcar",
+                "withArticle": "embarcar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "садиться на рейс",
+                  "en": "to board",
+                  "he": "לעלות למטוס"
+                }
+              },
+              {
+                "raw": "el destino",
+                "word": "destino",
+                "withArticle": "el destino",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "пункт назначения",
+                  "en": "destination",
+                  "he": "יעד"
+                }
+              },
+              {
+                "raw": "el billete",
+                "word": "billete",
+                "withArticle": "el billete",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "билет",
+                  "en": "ticket",
+                  "he": "כרטיס"
+                }
+              }
+            ]
+          },
+          {
+            "id": "es-travel-m1-l2",
+            "isBoss": false,
+            "speedMultiplier": 1.0,
+            "spawnIntervalMs": 2600,
+            "titles": {
+              "ru": "Отель и отдых",
+              "en": "Hotel & Vacation",
+              "he": "מלון וחופשה"
+            },
+            "descriptions": {
+              "ru": "Перелёты, бронирование отелей и поездки по миру (20 слов).",
+              "en": "Flights, hotel reservations & world travel (20 words).",
+              "he": "טיסות, הזמנת מלונות וטיולים בעולם (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "la reserva",
+                "word": "reserva",
+                "withArticle": "la reserva",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "бронирование",
+                  "en": "reservation",
+                  "he": "הזמנה"
+                }
+              },
+              {
+                "raw": "el alojamiento",
+                "word": "alojamiento",
+                "withArticle": "el alojamiento",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "жильё, проживание",
+                  "en": "accommodation",
+                  "he": "לינה"
+                }
+              },
+              {
+                "raw": "la recepción",
+                "word": "recepción",
+                "withArticle": "la recepción",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "ресепшен",
+                  "en": "reception",
+                  "he": "קבלה במלון"
+                }
+              },
+              {
+                "raw": "explorar",
+                "word": "explorar",
+                "withArticle": "explorar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "исследовать",
+                  "en": "to explore",
+                  "he": "לחקור / לטייל"
+                }
+              },
+              {
+                "raw": "cancelar",
+                "word": "cancelar",
+                "withArticle": "cancelar",
+                "article": "Verbo",
+                "plural": "",
+                "translations": {
+                  "ru": "отменять бронь",
+                  "en": "to cancel",
+                  "he": "לבטל"
+                }
+              },
+              {
+                "raw": "la playa",
+                "word": "playa",
+                "withArticle": "la playa",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "пляж",
+                  "en": "beach",
+                  "he": "חוף ים"
+                }
+              },
+              {
+                "raw": "el recuerdo",
+                "word": "recuerdo",
+                "withArticle": "el recuerdo",
+                "article": "el",
+                "plural": "",
+                "translations": {
+                  "ru": "сувенир, воспоминание",
+                  "en": "souvenir",
+                  "he": "מזכרת"
+                }
+              },
+              {
+                "raw": "la excursión",
+                "word": "excursión",
+                "withArticle": "la excursión",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "экскурсия",
+                  "en": "excursion",
+                  "he": "סיור"
+                }
+              },
+              {
+                "raw": "pintoresco",
+                "word": "pintoresco",
+                "withArticle": "pintoresco",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "живописный",
+                  "en": "picturesque",
+                  "he": "ציורי"
+                }
+              },
+              {
+                "raw": "la estancia",
+                "word": "estancia",
+                "withArticle": "la estancia",
+                "article": "la",
+                "plural": "",
+                "translations": {
+                  "ru": "пребывание",
+                  "en": "stay",
+                  "he": "שהות"
+                }
+              }
+            ]
+          },
+          {
+            "id": "es-travel-m1-boss",
+            "isBoss": true,
+            "speedMultiplier": 1.05,
+            "spawnIntervalMs": 2450,
+            "titles": {
+              "ru": "👹 Босс-урок: Путешественник",
+              "en": "👹 Boss Review: World Traveler",
+              "he": "👹 שלב בוס: מטייל בעולם"
+            },
+            "descriptions": {
+              "ru": "Перелёты, бронирование отелей и поездки по миру (20 слов).",
+              "en": "Flights, hotel reservations & world travel (20 words).",
+              "he": "טיסות, הזמנת מלונות וטיולים בעולם (20 מילים)."
+            },
+            "words": []
+          }
+        ]
+      }
+    ]
   }
 ];

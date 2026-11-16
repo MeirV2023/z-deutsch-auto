@@ -3008,5 +3008,974 @@ export const COURSES_DE = [
       }
     ],
     "category": "it"
+  },
+  {
+    "id": "de-finance",
+    "targetLang": "de",
+    "category": "finance",
+    "source": "official",
+    "icon": "🪙",
+    "levelTag": "B1",
+    "titles": {
+      "ru": "Финансы и покупки",
+      "en": "Finance & Banking",
+      "he": "פיננסים וקניות"
+    },
+    "descriptions": {
+      "ru": "Деньги, банковский счёт, карты, скидки и оплата (20 слов).",
+      "en": "Money, bank accounts, cards, discounts & payments (20 words).",
+      "he": "כסף, חשבון בנק, כרטיסים, הנחות ותשלומים (20 מילים)."
+    },
+    "modules": [
+      {
+        "id": "de-finance-m1",
+        "titles": {
+          "ru": "Финансы и покупки",
+          "en": "Finance & Banking",
+          "he": "פיננסים וקניות"
+        },
+        "lessons": [
+          {
+            "id": "de-finance-m1-l1",
+            "isBoss": false,
+            "speedMultiplier": 0.96,
+            "spawnIntervalMs": 2700,
+            "titles": {
+              "ru": "Банк, счёт и перевод",
+              "en": "Bank, Account & Transfer",
+              "he": "בנק, חשבון והעברה"
+            },
+            "descriptions": {
+              "ru": "Деньги, банковский счёт, карты, скидки и оплата (20 слов).",
+              "en": "Money, bank accounts, cards, discounts & payments (20 words).",
+              "he": "כסף, חשבון בנק, כרטיסים, הנחות ותשלומים (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "das Konto, Konten",
+                "word": "Konto",
+                "withArticle": "das Konto",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "банковский счёт",
+                  "en": "bank account",
+                  "he": "חשבון בנק"
+                }
+              },
+              {
+                "raw": "die Überweisung, -en",
+                "word": "Überweisung",
+                "withArticle": "die Überweisung",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "банковский перевод",
+                  "en": "bank transfer",
+                  "he": "העברה בנקאית"
+                }
+              },
+              {
+                "raw": "das Bargeld, Sg.",
+                "word": "Bargeld",
+                "withArticle": "das Bargeld",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "наличные деньги",
+                  "en": "cash",
+                  "he": "מזומן"
+                }
+              },
+              {
+                "raw": "die Gebühr, -en",
+                "word": "Gebühr",
+                "withArticle": "die Gebühr",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "комиссия, сбор",
+                  "en": "fee, charge",
+                  "he": "עמלה"
+                }
+              },
+              {
+                "raw": "abheben",
+                "word": "abheben",
+                "withArticle": "abheben",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "снимать (деньги)",
+                  "en": "to withdraw",
+                  "he": "למשוך כסף"
+                }
+              },
+              {
+                "raw": "überweisen",
+                "word": "überweisen",
+                "withArticle": "überweisen",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "переводить (деньги)",
+                  "en": "to transfer",
+                  "he": "להעביר כסף"
+                }
+              },
+              {
+                "raw": "sparen",
+                "word": "sparen",
+                "withArticle": "sparen",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "копить, экономить",
+                  "en": "to save money",
+                  "he": "לחסוך"
+                }
+              },
+              {
+                "raw": "die Zinsen, Pl.",
+                "word": "Zinsen",
+                "withArticle": "die Zinsen",
+                "article": "Pl.",
+                "plural": "",
+                "translations": {
+                  "ru": "проценты (по вкладу/кредиту)",
+                  "en": "interest",
+                  "he": "ריבית"
+                }
+              },
+              {
+                "raw": "der Geldautomat, -en",
+                "word": "Geldautomat",
+                "withArticle": "der Geldautomat",
+                "article": "der",
+                "plural": "",
+                "translations": {
+                  "ru": "банкомат",
+                  "en": "ATM",
+                  "he": "כספומט"
+                }
+              },
+              {
+                "raw": "die Steuer, -n",
+                "word": "Steuer",
+                "withArticle": "die Steuer",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "налог",
+                  "en": "tax",
+                  "he": "מס"
+                }
+              }
+            ]
+          },
+          {
+            "id": "de-finance-m1-l2",
+            "isBoss": false,
+            "speedMultiplier": 1.0,
+            "spawnIntervalMs": 2600,
+            "titles": {
+              "ru": "Покупки, чек и бюджет",
+              "en": "Shopping, Receipt & Budget",
+              "he": "קניות, קבלה ותקציב"
+            },
+            "descriptions": {
+              "ru": "Деньги, банковский счёт, карты, скидки и оплата (20 слов).",
+              "en": "Money, bank accounts, cards, discounts & payments (20 words).",
+              "he": "כסף, חשבון בנק, כרטיסים, הנחות ותשלומים (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "die Quittung, -en",
+                "word": "Quittung",
+                "withArticle": "die Quittung",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "квитанция, чек",
+                  "en": "receipt",
+                  "he": "קבלה"
+                }
+              },
+              {
+                "raw": "der Rabatt, -e",
+                "word": "Rabatt",
+                "withArticle": "der Rabatt",
+                "article": "der",
+                "plural": "",
+                "translations": {
+                  "ru": "скидка",
+                  "en": "discount",
+                  "he": "הנחה"
+                }
+              },
+              {
+                "raw": "die Rechnung, -en",
+                "word": "Rechnung",
+                "withArticle": "die Rechnung",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "счёт к оплате",
+                  "en": "bill, invoice",
+                  "he": "חשבון / חשבונית"
+                }
+              },
+              {
+                "raw": "ausgeben",
+                "word": "ausgeben",
+                "withArticle": "ausgeben",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "тратить (деньги)",
+                  "en": "to spend",
+                  "he": "להוציא כסף"
+                }
+              },
+              {
+                "raw": "bezahlen",
+                "word": "bezahlen",
+                "withArticle": "bezahlen",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "оплачивать",
+                  "en": "to pay",
+                  "he": "לשלם"
+                }
+              },
+              {
+                "raw": "kostenlos",
+                "word": "kostenlos",
+                "withArticle": "kostenlos",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "бесплатный",
+                  "en": "free of charge",
+                  "he": "חינם"
+                }
+              },
+              {
+                "raw": "günstig",
+                "word": "günstig",
+                "withArticle": "günstig",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "выгодный, недорогой",
+                  "en": "affordable, good-value",
+                  "he": "משתלם / זול"
+                }
+              },
+              {
+                "raw": "das Einkommen, -",
+                "word": "Einkommen",
+                "withArticle": "das Einkommen",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "доход",
+                  "en": "income",
+                  "he": "הכנסה"
+                }
+              },
+              {
+                "raw": "die Schulden, Pl.",
+                "word": "Schulden",
+                "withArticle": "die Schulden",
+                "article": "Pl.",
+                "plural": "",
+                "translations": {
+                  "ru": "долги",
+                  "en": "debts",
+                  "he": "חובות"
+                }
+              },
+              {
+                "raw": "umtauschen",
+                "word": "umtauschen",
+                "withArticle": "umtauschen",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "обменивать (товар/валюту)",
+                  "en": "to exchange",
+                  "he": "להחליף"
+                }
+              }
+            ]
+          },
+          {
+            "id": "de-finance-m1-boss",
+            "isBoss": true,
+            "speedMultiplier": 1.05,
+            "spawnIntervalMs": 2450,
+            "titles": {
+              "ru": "👹 Босс-урок: Финансовый контроль",
+              "en": "👹 Boss Review: Financial Control",
+              "he": "👹 שלב בוס: שליטה פיננסית"
+            },
+            "descriptions": {
+              "ru": "Деньги, банковский счёт, карты, скидки и оплата (20 слов).",
+              "en": "Money, bank accounts, cards, discounts & payments (20 words).",
+              "he": "כסף, חשבון בנק, כרטיסים, הנחות ותשלומים (20 מילים)."
+            },
+            "words": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-food",
+    "targetLang": "de",
+    "category": "food",
+    "source": "official",
+    "icon": "👨‍🍳",
+    "levelTag": "A1–A2",
+    "titles": {
+      "ru": "Кухня и ресторан",
+      "en": "Food & Kitchen",
+      "he": "מטבח ומסעדות"
+    },
+    "descriptions": {
+      "ru": "Еда, любимые блюда, рецепты и заказ в кафе (20 слов).",
+      "en": "Meals, favorite dishes, recipes & ordering at a cafe (20 words).",
+      "he": "אוכל, מנות, מתכונים והזמנה במסעדה (20 מילים)."
+    },
+    "modules": [
+      {
+        "id": "de-food-m1",
+        "titles": {
+          "ru": "Кухня и ресторан",
+          "en": "Food & Kitchen",
+          "he": "מטבח ומסעדות"
+        },
+        "lessons": [
+          {
+            "id": "de-food-m1-l1",
+            "isBoss": false,
+            "speedMultiplier": 0.96,
+            "spawnIntervalMs": 2700,
+            "titles": {
+              "ru": "Продукты и готовка",
+              "en": "Ingredients & Cooking",
+              "he": "מצרכים ובישול"
+            },
+            "descriptions": {
+              "ru": "Еда, любимые блюда, рецепты и заказ в кафе (20 слов).",
+              "en": "Meals, favorite dishes, recipes & ordering at a cafe (20 words).",
+              "he": "אוכל, מנות, מתכונים והזמנה במסעדה (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "das Rezept, -e",
+                "word": "Rezept",
+                "withArticle": "das Rezept",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "рецепт",
+                  "en": "recipe",
+                  "he": "מתכון"
+                }
+              },
+              {
+                "raw": "das Gemüse, Sg.",
+                "word": "Gemüse",
+                "withArticle": "das Gemüse",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "овощи",
+                  "en": "vegetables",
+                  "he": "ירקות"
+                }
+              },
+              {
+                "raw": "das Gewürz, -e",
+                "word": "Gewürz",
+                "withArticle": "das Gewürz",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "специя, приправа",
+                  "en": "spice, seasoning",
+                  "he": "תבלין"
+                }
+              },
+              {
+                "raw": "die Pfanne, -n",
+                "word": "Pfanne",
+                "withArticle": "die Pfanne",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "сковорода",
+                  "en": "frying pan",
+                  "he": "מחבת"
+                }
+              },
+              {
+                "raw": "braten",
+                "word": "braten",
+                "withArticle": "braten",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "жарить",
+                  "en": "to fry, roast",
+                  "he": "לטגן / לצלות"
+                }
+              },
+              {
+                "raw": "backen",
+                "word": "backen",
+                "withArticle": "backen",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "печь, запекать",
+                  "en": "to bake",
+                  "he": "לאפות"
+                }
+              },
+              {
+                "raw": "schneiden",
+                "word": "schneiden",
+                "withArticle": "schneiden",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "резать, нарезать",
+                  "en": "to cut, slice",
+                  "he": "לחתוך"
+                }
+              },
+              {
+                "raw": "lecker",
+                "word": "lecker",
+                "withArticle": "lecker",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "вкусный",
+                  "en": "delicious",
+                  "he": "טעים"
+                }
+              },
+              {
+                "raw": "salzig",
+                "word": "salzig",
+                "withArticle": "salzig",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "солёный",
+                  "en": "salty",
+                  "he": "מלוח"
+                }
+              },
+              {
+                "raw": "die Zutat, -en",
+                "word": "Zutat",
+                "withArticle": "die Zutat",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "ингредиент",
+                  "en": "ingredient",
+                  "he": "מרכיב"
+                }
+              }
+            ]
+          },
+          {
+            "id": "de-food-m1-l2",
+            "isBoss": false,
+            "speedMultiplier": 1.0,
+            "spawnIntervalMs": 2600,
+            "titles": {
+              "ru": "В кафе и ресторане",
+              "en": "At a Cafe & Restaurant",
+              "he": "בבית קפה ובמסעדה"
+            },
+            "descriptions": {
+              "ru": "Еда, любимые блюда, рецепты и заказ в кафе (20 слов).",
+              "en": "Meals, favorite dishes, recipes & ordering at a cafe (20 words).",
+              "he": "אוכל, מנות, מתכונים והזמנה במסעדה (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "die Speisekarte, -n",
+                "word": "Speisekarte",
+                "withArticle": "die Speisekarte",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "меню",
+                  "en": "menu",
+                  "he": "תפריט"
+                }
+              },
+              {
+                "raw": "das Gericht, -e",
+                "word": "Gericht",
+                "withArticle": "das Gericht",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "блюдо",
+                  "en": "dish",
+                  "he": "מנה"
+                }
+              },
+              {
+                "raw": "das Frühstück, -e",
+                "word": "Frühstück",
+                "withArticle": "das Frühstück",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "завтрак",
+                  "en": "breakfast",
+                  "he": "ארוחת בוקר"
+                }
+              },
+              {
+                "raw": "der Nachtisch, -e",
+                "word": "Nachtisch",
+                "withArticle": "der Nachtisch",
+                "article": "der",
+                "plural": "",
+                "translations": {
+                  "ru": "десерт",
+                  "en": "dessert",
+                  "he": "קינוח"
+                }
+              },
+              {
+                "raw": "das Trinkgeld, -er",
+                "word": "Trinkgeld",
+                "withArticle": "das Trinkgeld",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "чаевые",
+                  "en": "tip",
+                  "he": "טיפ"
+                }
+              },
+              {
+                "raw": "bestellen",
+                "word": "bestellen",
+                "withArticle": "bestellen",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "заказывать",
+                  "en": "to order",
+                  "he": "להזמין"
+                }
+              },
+              {
+                "raw": "probieren",
+                "word": "probieren",
+                "withArticle": "probieren",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "пробовать",
+                  "en": "to taste, try",
+                  "he": "לטעום"
+                }
+              },
+              {
+                "raw": "empfehlen",
+                "word": "empfehlen",
+                "withArticle": "empfehlen",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "рекомендовать",
+                  "en": "to recommend",
+                  "he": "להמליץ"
+                }
+              },
+              {
+                "raw": "vegetarisch",
+                "word": "vegetarisch",
+                "withArticle": "vegetarisch",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "вегетарианский",
+                  "en": "vegetarian",
+                  "he": "צמחוני"
+                }
+              },
+              {
+                "raw": "das Getränk, -e",
+                "word": "Getränk",
+                "withArticle": "das Getränk",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "напиток",
+                  "en": "beverage, drink",
+                  "he": "משקה"
+                }
+              }
+            ]
+          },
+          {
+            "id": "de-food-m1-boss",
+            "isBoss": true,
+            "speedMultiplier": 1.05,
+            "spawnIntervalMs": 2450,
+            "titles": {
+              "ru": "👹 Босс-урок: Шеф-повар",
+              "en": "👹 Boss Review: Master Chef",
+              "he": "👹 שלב בוס: שף הבית"
+            },
+            "descriptions": {
+              "ru": "Еда, любимые блюда, рецепты и заказ в кафе (20 слов).",
+              "en": "Meals, favorite dishes, recipes & ordering at a cafe (20 words).",
+              "he": "אוכל, מנות, מתכונים והזמנה במסעדה (20 מילים)."
+            },
+            "words": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-travel",
+    "targetLang": "de",
+    "category": "travel",
+    "source": "official",
+    "icon": "✈️",
+    "levelTag": "B2",
+    "titles": {
+      "ru": "Путешествия и отели",
+      "en": "Travel & Hotels",
+      "he": "נסיעות ומלונות"
+    },
+    "descriptions": {
+      "ru": "Аэропорт, перелёты, бронь отеля и маршруты (20 слов).",
+      "en": "Airports, flights, hotel booking & itineraries (20 words).",
+      "he": "שדה תעופה, טיסות, הזמנת מלון ומסלולים (20 מילים)."
+    },
+    "modules": [
+      {
+        "id": "de-travel-m1",
+        "titles": {
+          "ru": "Путешествия и отели",
+          "en": "Travel & Hotels",
+          "he": "נסיעות ומלונות"
+        },
+        "lessons": [
+          {
+            "id": "de-travel-m1-l1",
+            "isBoss": false,
+            "speedMultiplier": 0.96,
+            "spawnIntervalMs": 2700,
+            "titles": {
+              "ru": "Аэропорт и перелёт",
+              "en": "Airport & Flight",
+              "he": "שדה תעופה וטיסה"
+            },
+            "descriptions": {
+              "ru": "Аэропорт, перелёты, бронь отеля и маршруты (20 слов).",
+              "en": "Airports, flights, hotel booking & itineraries (20 words).",
+              "he": "שדה תעופה, טיסות, הזמנת מלון ומסלולים (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "der Abflug, ¨-e",
+                "word": "Abflug",
+                "withArticle": "der Abflug",
+                "article": "der",
+                "plural": "",
+                "translations": {
+                  "ru": "вылет",
+                  "en": "departure",
+                  "he": "המראה"
+                }
+              },
+              {
+                "raw": "die Landung, -en",
+                "word": "Landung",
+                "withArticle": "die Landung",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "посадка, приземление",
+                  "en": "landing",
+                  "he": "נחיתה"
+                }
+              },
+              {
+                "raw": "das Gepäck, Sg.",
+                "word": "Gepäck",
+                "withArticle": "das Gepäck",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "багаж",
+                  "en": "luggage",
+                  "he": "מזוודות / כבודה"
+                }
+              },
+              {
+                "raw": "die Bordkarte, -n",
+                "word": "Bordkarte",
+                "withArticle": "die Bordkarte",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "посадочный талон",
+                  "en": "boarding pass",
+                  "he": "כרטיס עלייה למטוס"
+                }
+              },
+              {
+                "raw": "die Verspätung, -en",
+                "word": "Verspätung",
+                "withArticle": "die Verspätung",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "опоздание, задержка",
+                  "en": "delay",
+                  "he": "איחור / עיכוב"
+                }
+              },
+              {
+                "raw": "umsteigen",
+                "word": "umsteigen",
+                "withArticle": "umsteigen",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "делать пересадку",
+                  "en": "to transfer, change",
+                  "he": "להחליף רכבת/טיסה"
+                }
+              },
+              {
+                "raw": "der Zoll, ¨-e",
+                "word": "Zoll",
+                "withArticle": "der Zoll",
+                "article": "der",
+                "plural": "",
+                "translations": {
+                  "ru": "таможня",
+                  "en": "customs",
+                  "he": "מכס"
+                }
+              },
+              {
+                "raw": "der Reisepass, ¨-e",
+                "word": "Reisepass",
+                "withArticle": "der Reisepass",
+                "article": "der",
+                "plural": "",
+                "translations": {
+                  "ru": "загранпаспорт",
+                  "en": "passport",
+                  "he": "דרכון"
+                }
+              },
+              {
+                "raw": "einchecken",
+                "word": "einchecken",
+                "withArticle": "einchecken",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "регистрироваться на рейс",
+                  "en": "to check in",
+                  "he": "לעשות צ׳ק-אין"
+                }
+              },
+              {
+                "raw": "das Reiseziel, -e",
+                "word": "Reiseziel",
+                "withArticle": "das Reiseziel",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "пункт назначения",
+                  "en": "destination",
+                  "he": "יעד נסיעה"
+                }
+              }
+            ]
+          },
+          {
+            "id": "de-travel-m1-l2",
+            "isBoss": false,
+            "speedMultiplier": 1.0,
+            "spawnIntervalMs": 2600,
+            "titles": {
+              "ru": "Отель и экскурсии",
+              "en": "Hotel & Sightseeing",
+              "he": "מלון וסיורים"
+            },
+            "descriptions": {
+              "ru": "Аэропорт, перелёты, бронь отеля и маршруты (20 слов).",
+              "en": "Airports, flights, hotel booking & itineraries (20 words).",
+              "he": "שדה תעופה, טיסות, הזמנת מלון ומסלולים (20 מילים)."
+            },
+            "words": [
+              {
+                "raw": "die Unterkunft, ¨-e",
+                "word": "Unterkunft",
+                "withArticle": "die Unterkunft",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "жильё, размещение",
+                  "en": "accommodation",
+                  "he": "לינה / מגורים"
+                }
+              },
+              {
+                "raw": "die Buchung, -en",
+                "word": "Buchung",
+                "withArticle": "die Buchung",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "бронирование",
+                  "en": "booking, reservation",
+                  "he": "הזמנה"
+                }
+              },
+              {
+                "raw": "die Sehenswürdigkeit, -en",
+                "word": "Sehenswürdigkeit",
+                "withArticle": "die Sehenswürdigkeit",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "достопримечательность",
+                  "en": "sight, attraction",
+                  "he": "אטרקציה תיירותית"
+                }
+              },
+              {
+                "raw": "der Aufenthalt, -e",
+                "word": "Aufenthalt",
+                "withArticle": "der Aufenthalt",
+                "article": "der",
+                "plural": "",
+                "translations": {
+                  "ru": "пребывание",
+                  "en": "stay",
+                  "he": "שהות"
+                }
+              },
+              {
+                "raw": "stornieren",
+                "word": "stornieren",
+                "withArticle": "stornieren",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "отменять бронь",
+                  "en": "to cancel a booking",
+                  "he": "לבטל הזמנה"
+                }
+              },
+              {
+                "raw": "übernachten",
+                "word": "übernachten",
+                "withArticle": "übernachten",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "ночевать",
+                  "en": "to stay overnight",
+                  "he": "ללון"
+                }
+              },
+              {
+                "raw": "erkunden",
+                "word": "erkunden",
+                "withArticle": "erkunden",
+                "article": "Verb",
+                "plural": "",
+                "translations": {
+                  "ru": "исследовать (город)",
+                  "en": "to explore",
+                  "he": "לחקור / לטייל"
+                }
+              },
+              {
+                "raw": "die Rezeption, -en",
+                "word": "Rezeption",
+                "withArticle": "die Rezeption",
+                "article": "die",
+                "plural": "",
+                "translations": {
+                  "ru": "стойка регистрации",
+                  "en": "reception desk",
+                  "he": "קבלה במלון"
+                }
+              },
+              {
+                "raw": "malerisch",
+                "word": "malerisch",
+                "withArticle": "malerisch",
+                "article": "Adj.",
+                "plural": "",
+                "translations": {
+                  "ru": "живописный",
+                  "en": "picturesque",
+                  "he": "ציורי"
+                }
+              },
+              {
+                "raw": "das Erlebnis, -se",
+                "word": "Erlebnis",
+                "withArticle": "das Erlebnis",
+                "article": "das",
+                "plural": "",
+                "translations": {
+                  "ru": "впечатление, приключение",
+                  "en": "experience",
+                  "he": "חוויה"
+                }
+              }
+            ]
+          },
+          {
+            "id": "de-travel-m1-boss",
+            "isBoss": true,
+            "speedMultiplier": 1.05,
+            "spawnIntervalMs": 2450,
+            "titles": {
+              "ru": "👹 Босс-урок: Вокруг света",
+              "en": "👹 Boss Review: Around the World",
+              "he": "👹 שלב בוס: מסביב לעולם"
+            },
+            "descriptions": {
+              "ru": "Аэропорт, перелёты, бронь отеля и маршруты (20 слов).",
+              "en": "Airports, flights, hotel booking & itineraries (20 words).",
+              "he": "שדה תעופה, טיסות, הזמנת מלון ומסלולים (20 מילים)."
+            },
+            "words": []
+          }
+        ]
+      }
+    ]
   }
 ];

@@ -228,6 +228,7 @@ export const btnMobFilterUser = document.getElementById('btnMobFilterUser');
 export const labelMobFilterUser = document.getElementById('labelMobFilterUser');
 export const btnMobFilterFav = document.getElementById('btnMobFilterFav');
 export const labelMobFilterFav = document.getElementById('labelMobFilterFav');
+export const decksMobileActiveFilterRow = document.getElementById('decksMobileActiveFilterRow');
 export const deckContextMenu = document.getElementById('deckContextMenu');
 export const labelDecksStatTotal = document.getElementById('labelDecksStatTotal');
 export const decksHeroTotalCount = document.getElementById('decksHeroTotalCount');
@@ -324,6 +325,11 @@ export const promoMonitorBadge = document.getElementById('promoMonitorBadge');
 export const btnPromoWeaponCycle = document.getElementById('btnPromoWeaponCycle');
 
 export const labelHowItWorks = document.getElementById('labelHowItWorks');
+export const mobileDiscoverySection = document.getElementById('mobileDiscoverySection');
+export const labelMobChooseLevel = document.getElementById('labelMobChooseLevel');
+export const mobileLevelCardsList = document.getElementById('mobileLevelCardsList');
+export const labelMobChooseTopic = document.getElementById('labelMobChooseTopic');
+export const mobileTopicGrid = document.getElementById('mobileTopicGrid');
 export const homeStepItem1 = document.getElementById('homeStepItem1');
 export const homeStepItem2 = document.getElementById('homeStepItem2');
 export const homeStepItem3 = document.getElementById('homeStepItem3');
@@ -677,6 +683,7 @@ export const dom = {
   labelMobFilterUser,
   btnMobFilterFav,
   labelMobFilterFav,
+  decksMobileActiveFilterRow,
   deckContextMenu,
   labelDecksStatTotal,
   decksHeroTotalCount,
@@ -768,6 +775,11 @@ export const dom = {
   promoMonitorBadge,
   btnPromoWeaponCycle,
   labelHowItWorks,
+  mobileDiscoverySection,
+  labelMobChooseLevel,
+  mobileLevelCardsList,
+  labelMobChooseTopic,
+  mobileTopicGrid,
   homeStepItem1,
   homeStepItem2,
   homeStepItem3,

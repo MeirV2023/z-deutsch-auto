@@ -183,7 +183,7 @@
             <button type="button" class="hero-green-cta" id="btnArcadeLaunch">
               <span class="launch-glow"></span>
               <span class="hero-cta-play-icon">▶</span>
-              <span class="launch-text" id="labelArcadeLaunch">Начать игру бесплатно</span>
+              <span class="launch-text" id="labelArcadeLaunch">Начать игру</span>
               <span class="hero-cta-arrow">›</span>
             </button>
             <button type="button" class="arcade-logo-sub" id="arcadeLogoSub" title="Выбрать курс или урок">
@@ -209,9 +209,35 @@
         </div>
       </div>
 
-      <!-- 3. Секция «Как это работает» (горизонтальная полоса на ПК / лаконичный список на мобильном) -->
+      <!-- Мобильные блоки выбора уровня (A1–A2 / B1 / B2) и темы (<= 768px) -->
+      <div class="mobile-home-discovery" id="mobileDiscoverySection">
+        <div class="mob-discovery-group">
+          <h2 class="mob-section-heading">
+            <svg class="mob-level-bars-svg" viewBox="0 0 22 20" fill="none" aria-hidden="true">
+              <rect x="2" y="12" width="4.2" height="7" rx="1.5" fill="#38bdf8" />
+              <rect x="8.9" y="7.5" width="4.2" height="11.5" rx="1.5" fill="#38bdf8" />
+              <rect x="15.8" y="2.5" width="4.2" height="16.5" rx="1.5" fill="#60a5fa" />
+            </svg>
+            <span id="labelMobChooseLevel">Выбери уровень</span>
+          </h2>
+          <div class="mob-level-list" id="mobileLevelCardsList"></div>
+        </div>
+
+        <div class="mob-discovery-group">
+          <h2 class="mob-section-heading">
+            <span class="mob-heading-emoji" aria-hidden="true">🎯</span>
+            <span id="labelMobChooseTopic">Выбери тему</span>
+          </h2>
+          <div class="mob-topic-grid" id="mobileTopicGrid"></div>
+        </div>
+      </div>
+
+      <!-- 3. Секция «Как это работает» (горизонтальная полоса на ПК / 3-колоночная карточка на мобильном) -->
       <div class="home-how-section">
-        <h2 class="mobile-how-heading" id="labelHowItWorks">Как это работает</h2>
+        <h2 class="mobile-how-heading">
+          <span class="how-bolt-icon" aria-hidden="true">⚡</span>
+          <span id="labelHowItWorks">Как это работает</span>
+        </h2>
         <div class="home-steps-strip">
           <div class="home-step-item" id="homeStepItem1" role="button" tabindex="0">
             <span class="step-num step-1">1</span>
@@ -702,6 +728,9 @@
                 <span id="labelMobFilterFav">Избранные</span>
               </button>
             </div>
+
+            <!-- Индикатор выбранного на Главной уровня или темы (с 1-клик сбросом) -->
+            <div class="decks-mob-active-filter-row hidden" id="decksMobileActiveFilterRow"></div>
 
             <!-- ОБЗОР КОЛОД: Продолжить обучение + Все колоды -->
             <div id="decksOverviewPane" class="decks-overview-pane">

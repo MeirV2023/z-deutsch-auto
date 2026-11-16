@@ -64,6 +64,8 @@ export function inferCourseCategory(course) {
   const cid = String(course.id || '').toLowerCase();
   if (cid.includes('auto')) return 'auto';
   if (cid.includes('business') || cid.includes('existenz')) return 'business';
+  if (cid.includes('finance') || cid.includes('bank') || cid.includes('money')) return 'finance';
+  if (cid.includes('food') || cid.includes('kitchen')) return 'food';
   if (cid.includes('it')) return 'it';
   if (cid.includes('travel')) return 'travel';
   return 'base';
@@ -264,6 +266,8 @@ export function getCourseVisualTheme(course) {
   const cat = inferCourseCategory(course);
   if (cat === 'auto') return { cls: 'art-auto', emoji: '🚘', tag: 'AUTO' };
   if (cat === 'business') return { cls: 'art-business', emoji: '💼', tag: 'BUSINESS' };
+  if (cat === 'finance') return { cls: 'art-base', emoji: '🪙', tag: 'FINANCE' };
+  if (cat === 'food') return { cls: 'art-food', emoji: '👨‍🍳', tag: 'FOOD' };
   if (cat === 'it') return { cls: 'art-it', emoji: '💻', tag: 'IT & AI' };
   if (cat === 'travel') return { cls: 'art-travel', emoji: '✈️', tag: 'TRAVEL' };
   if (cat === 'medicine') return { cls: 'art-base', emoji: '🩺', tag: 'MED' };
@@ -338,6 +342,8 @@ export function getDeckArtClass(course) {
   const cat = inferCourseCategory(course);
   if (cat === 'auto') return 'art-auto';
   if (cat === 'business') return 'art-business';
+  if (cat === 'finance') return 'art-base';
+  if (cat === 'food') return 'art-food';
   if (cat === 'travel') return 'art-travel';
   if (cat === 'it') return 'art-it';
   if (cat === 'base') return 'art-base';
@@ -385,7 +391,8 @@ export function courseMatchesLevelFilter(course, filterVal) {
   const raw = String(course.levelTag || '').toUpperCase().replace(/-/g, '–');
   const bucket = normalizeCefrBucket(course.levelTag);
   if (bucket === filterVal) return true;
-  if (filterVal === 'B1' && raw.includes('B1')) return true;
+  if (filterVal === 'B1' && (raw === 'B1' || raw === 'A2–B1')) return true;
+  if (filterVal === 'B2' && (raw.includes('B2') || raw.includes('C1'))) return true;
   if (filterVal === 'A1–A2' && (raw.includes('A1') || raw === 'A2')) return true;
   if (filterVal === 'A2–B1' && (raw.includes('A2') || raw === 'A1–B1')) return true;
   if (filterVal === 'B1–B2' && (raw.includes('B2') || raw.includes('C1'))) return true;

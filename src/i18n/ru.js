@@ -60,7 +60,7 @@ export const RU_TEXT = {
   heroTitleTop: 'Изучай иностранные языки',
   heroTitleAccent: 'в формате игры!',
   mobileHeroTagline: 'Стреляй по словам, учи перевод и прокачивай арсенал!',
-  launchFreeBtn: 'Начать игру бесплатно',
+  launchFreeBtn: 'Начать игру',
   perkPlay: 'Игра и практика',
   perkMemory: 'Эффективное запоминание',
   perkAnki: 'Свои колоды (Anki)',
@@ -69,9 +69,36 @@ export const RU_TEXT = {
   step1: 'Выбери язык и уровень',
   step2: 'Играй с готовыми колодами или загрузи Anki',
   step3: 'Стреляй по словам, учись и прокачивай арсенал!',
-  mobStep1: 'Выбери язык и колоду',
+  mobStep1: 'Выбери уровень и тему',
   mobStep2: 'Проходи уроки и учи слова',
   mobStep3: 'Копи прогресс и открывай оружие',
+  mobChooseLevelTitle: 'Выбери уровень',
+  mobChooseTopicTitle: 'Выбери тему',
+  lvlA1Sub: 'Начальный — база для жизни и общения',
+  lvlB1Sub: 'Средний — расширяй словарный запас',
+  lvlB2Sub: 'Продвинутый — говори свободно и уверенно',
+  lvlMetaCounts: (c, l) => {
+    const cMod10 = c % 10;
+    const cMod100 = c % 100;
+    const cWord = (cMod100 >= 11 && cMod100 <= 14) ? 'курсов' : (cMod10 === 1 ? 'курс' : (cMod10 >= 2 && cMod10 <= 4 ? 'курса' : 'курсов'));
+    const lMod10 = l % 10;
+    const lMod100 = l % 100;
+    const lWord = (lMod100 >= 11 && lMod100 <= 14) ? 'уроков' : (lMod10 === 1 ? 'урок' : (lMod10 >= 2 && lMod10 <= 4 ? 'урока' : 'уроков'));
+    return `${c} ${cWord} · ${l} ${lWord}`;
+  },
+  topicFinanceTitle: 'Финансы',
+  topicFinanceSub: 'Деньги, банки, покупки',
+  topicAutoTitle: 'Авто',
+  topicAutoSub: 'Машина, дорога, ПДД',
+  topicFoodTitle: 'Кухня',
+  topicFoodSub: 'Еда, блюда, рецепты',
+  topicBusinessTitle: 'Бизнес',
+  topicBusinessSub: 'Работа, карьера, офис',
+  topicTravelTitle: 'Путешествия',
+  topicTravelSub: 'Поездки, отели, страны',
+  topicDailyTitle: 'Повседневность',
+  topicDailySub: 'Быт, общение, рутина',
+  mobActiveFilterReset: 'Сбросить',
   mobNavHome: 'Главная',
   mobNavPlay: 'Играть',
   mobNavCourses: 'Курсы',

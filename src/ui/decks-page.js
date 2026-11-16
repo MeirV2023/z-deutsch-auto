@@ -25,6 +25,7 @@ import {
   ensureValidCourseSelection,
   getAllCategories,
   getAllWordsInCourse,
+  getCategoryById,
   getCourseCategoryBadgeText,
   getCoursesForTargetLang,
   getDeckArtClass,
@@ -68,6 +69,7 @@ import {
   decksHeroTitle,
   decksHeroTotalCount,
   decksLevelFilterGroup,
+  decksMobileActiveFilterRow,
   decksMobileFilterBar,
   decksOverviewPane,
   decksPageView,
@@ -198,6 +200,8 @@ export function openDecksPage(opts = {}) {
   if (opts.sourceFilter) {
     state.catalogSourceFilter = opts.sourceFilter;
   }
+  state.decksLevelFilter = opts.levelFilter || 'all';
+  state.decksCategoryFilter = opts.categoryFilter || 'all';
   state.decksOnlyFavorites = Boolean(opts.onlyFavorites);
   if (typeof opts.openCourseId === 'string') {
     state.openedDeckId = opts.openCourseId;
@@ -780,6 +784,34 @@ export function renderDecksPage() {
     btnMobFilterFav.classList.toggle('active', Boolean(state.decksOnlyFavorites));
   }
 
+  // Индикатор активного фильтра уровня / темы на мобильном с 1-клик сбросом
+  if (decksMobileActiveFilterRow) {
+    const hasSubFilter = (state.decksLevelFilter && state.decksLevelFilter !== 'all') ||
+      (state.decksCategoryFilter && state.decksCategoryFilter !== 'all');
+    decksMobileActiveFilterRow.classList.toggle('hidden', !hasSubFilter);
+    decksMobileActiveFilterRow.innerHTML = '';
+    if (hasSubFilter) {
+      let badgeLabel = '';
+      if (state.decksLevelFilter && state.decksLevelFilter !== 'all') {
+        badgeLabel = `📊 ${state.decksLevelFilter}`;
+      } else {
+        const catObj = getCategoryById(state.decksCategoryFilter);
+        const catTitle = catObj ? (getLocalizedField(catObj, 'titles') || catObj.id) : state.decksCategoryFilter;
+        badgeLabel = `${(catObj && catObj.icon) || '🎯'} ${catTitle}`;
+      }
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'mob-active-subfilter-pill';
+      pill.innerHTML = `<span>${escapeHtml(badgeLabel)}</span><span class="mob-subfilter-x" aria-hidden="true">✕</span>`;
+      pill.addEventListener('click', () => {
+        state.decksLevelFilter = 'all';
+        state.decksCategoryFilter = 'all';
+        renderDecksPage();
+      });
+      decksMobileActiveFilterRow.appendChild(pill);
+    }
+  }
+
   if (decksSourceFilterGroup) {
     decksSourceFilterGroup.querySelectorAll('.decks-source-btn').forEach(btn => {
       btn.classList.toggle('active', !state.decksOnlyFavorites && btn.dataset.sourceFilter === state.catalogSourceFilter);
@@ -929,13 +961,11 @@ export function renderDecksPage() {
       if (state.catalogSourceFilter === 'official' && course.source === 'user') return false;
       if (state.catalogSourceFilter === 'user' && course.source !== 'user') return false;
     }
-    if (!isMobileViewport) {
-      if (state.decksCategoryFilter && state.decksCategoryFilter !== 'all') {
-        if (course.source === 'user') return false;
-        if (inferCourseCategory(course) !== state.decksCategoryFilter) return false;
-      }
-      if (!courseMatchesLevelFilter(course, state.decksLevelFilter)) return false;
+    if (state.decksCategoryFilter && state.decksCategoryFilter !== 'all') {
+      if (course.source === 'user') return false;
+      if (inferCourseCategory(course) !== state.decksCategoryFilter) return false;
     }
+    if (!courseMatchesLevelFilter(course, state.decksLevelFilter)) return false;
 
     if (!searchQ) return true;
     const tStr = getLocalizedField(course, 'titles').toLowerCase();
@@ -1306,6 +1336,10 @@ export function bindDecksPageEvents() {
       } else {
         state.decksOnlyFavorites = false;
         state.catalogSourceFilter = (f === 'official' || f === 'user') ? f : 'all';
+        if (f === 'all') {
+          state.decksLevelFilter = 'all';
+          state.decksCategoryFilter = 'all';
+        }
       }
       state.openedDeckId = '';
       renderDecksPage();
