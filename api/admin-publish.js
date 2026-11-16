@@ -1,27 +1,24 @@
 /**
  * Vercel Serverless Function: Super-Admin Global Catalog Publisher
- * Commits updated `admin-catalog.json` directly to GitHub (`MeirV2023/z-deutsch-auto`),
- * triggering automatic Vercel deployment so ALL players receive new courses,
- * lessons, and category placements with zero external database required.
- *
- * Environment variables supported on Vercel:
- *  - ADMIN_PASSWORD (protects server-side GITHUB_TOKEN)
- *  - GITHUB_TOKEN (Personal Access Token with Contents: Read & Write on the repo)
- *  - GITHUB_REPO (optional, defaults to "MeirV2023/z-deutsch-auto")
- *  - GITHUB_BRANCH (optional, defaults to "main")
+ * Commits updated `admin-catalog.json` directly to GitHub (`MeirV2023/z-deutsch-auto`).
  */
+
+const {
+  handleOptionsCors,
+  setNoStore,
+  getTrimmedHeader,
+  getJsonBody
+} = require('./_lib/http');
 
 const DEFAULT_REPO = 'MeirV2023/z-deutsch-auto';
 const DEFAULT_BRANCH = 'main';
 const TARGET_FILE_PATH = 'admin-catalog.json';
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Cache-Control', 'no-store');
+  setNoStore(res);
 
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-password, x-github-token');
-    return res.status(204).end();
+  if (handleOptionsCors(req, res, 'POST, OPTIONS', 'Content-Type, x-admin-password, x-github-token')) {
+    return;
   }
 
   if (req.method !== 'POST') {
@@ -31,8 +28,8 @@ module.exports = async function handler(req, res) {
   const serverPass = process.env.ADMIN_PASSWORD ? String(process.env.ADMIN_PASSWORD).trim() : '';
   const serverGhToken = process.env.GITHUB_TOKEN ? String(process.env.GITHUB_TOKEN).trim() : '';
 
-  const headerPass = req.headers['x-admin-password'] ? String(req.headers['x-admin-password']).trim() : '';
-  const headerGhToken = req.headers['x-github-token'] ? String(req.headers['x-github-token']).trim() : '';
+  const headerPass = getTrimmedHeader(req, 'x-admin-password');
+  const headerGhToken = getTrimmedHeader(req, 'x-github-token');
 
   if (serverPass && headerPass !== serverPass) {
     return res.status(401).json({
@@ -41,9 +38,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  // Используем серверный GITHUB_TOKEN только если задан и проверен ADMIN_PASSWORD; иначе — токен из панели админа
   const activeGhToken = headerGhToken || (serverPass ? serverGhToken : '');
-
   if (!activeGhToken) {
     return res.status(503).json({
       error: 'MISSING_PUBLISH_CREDENTIALS',
@@ -54,7 +49,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const body = (req.body && typeof req.body === 'object') ? req.body : {};
+  const body = getJsonBody(req);
   const catalog = body.catalog;
   if (!catalog || typeof catalog !== 'object' || !catalog.courses) {
     return res.status(400).json({ error: 'INVALID_CATALOG_PAYLOAD' });
@@ -89,7 +84,6 @@ module.exports = async function handler(req, res) {
   };
 
   try {
-    // 1. Получаем текущий SHA файла admin-catalog.json (если он уже существует в репозитории)
     let existingSha = '';
     const getRes = await fetch(`${ghApiUrl}?ref=${encodeURIComponent(branch)}`, {
       method: 'GET',
@@ -107,7 +101,6 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // 2. Записываем обновлённый admin-catalog.json в ветку main -> Vercel автоматически деплоит обновление для всех!
     const contentBase64 = Buffer.from(JSON.stringify(normalizedCatalog, null, 2) + '\n', 'utf-8').toString('base64');
     const putBody = {
       message: commitMessage,

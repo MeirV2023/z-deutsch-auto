@@ -1,12 +1,18 @@
 /**
  * Vercel Serverless Function: Super-Admin AI Course & Vocabulary Translator
- * Uses Gemini Interactions API (`gemini-3.8-flash` / `gemini-3.5-flash-lite`)
- * with Structured Output (`response_format` JSON Schema).
- *
- * Modes:
- *  1) `enrich_ui_langs`: Populates { ru, en, he } translations for each word + localized course titles/descriptions.
- *  2) `clone_target_course`: Converts a vocabulary list from `fromLang` into another target language (`de` | `en` | `es`).
+ * Models: gemini-3.8-flash, gemini-3.5-flash-lite (Structured Output JSON Schema)
  */
+
+const {
+  handleOptionsCors,
+  setNoStore,
+  resolveGeminiApiKey,
+  getJsonBody
+} = require('./_lib/http');
+const {
+  extractTextFromInteraction,
+  postGeminiInteraction
+} = require('./_lib/gemini');
 
 const ALLOWED_MODELS = [
   'gemini-3.8-flash',
@@ -21,65 +27,32 @@ const LANG_NAMES = {
   he: 'Hebrew'
 };
 
-function extractTextFromInteraction(data) {
-  if (!data || typeof data !== 'object') return '';
+const LOCALIZED_STRINGS_SCHEMA = {
+  type: 'object',
+  properties: {
+    ru: { type: 'string' },
+    en: { type: 'string' },
+    he: { type: 'string' }
+  },
+  required: ['ru', 'en', 'he']
+};
 
-  if (Array.isArray(data.steps)) {
-    for (let i = data.steps.length - 1; i >= 0; i--) {
-      const step = data.steps[i];
-      if (step && step.type === 'model_output' && Array.isArray(step.content)) {
-        for (let j = step.content.length - 1; j >= 0; j--) {
-          const part = step.content[j];
-          if (part && part.type === 'text' && typeof part.text === 'string' && part.text.trim()) {
-            return part.text.trim();
-          }
-        }
-      }
-    }
-  }
-
-  if (typeof data.output_text === 'string' && data.output_text.trim()) {
-    return data.output_text.trim();
-  }
-
-  if (Array.isArray(data.outputs)) {
-    for (let i = data.outputs.length - 1; i >= 0; i--) {
-      const out = data.outputs[i];
-      if (out && out.type === 'text' && typeof out.text === 'string' && out.text.trim()) {
-        return out.text.trim();
-      }
-    }
-  }
-
-  return '';
-}
-
-async function callGeminiInteractions(apiKey, promptText, jsonSchema) {
+async function callGeminiStructuredJson(apiKey, promptText, jsonSchema) {
   let lastErr = null;
 
   for (const model of ALLOWED_MODELS) {
-    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
-      method: 'POST',
-      headers: {
-        'x-goog-api-key': apiKey,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model,
-        store: false,
-        input: [{
-          type: 'user_input',
-          content: [{
-            type: 'text',
-            text: promptText
-          }]
-        }],
-        response_format: {
-          type: 'text',
-          mime_type: 'application/json',
-          schema: jsonSchema
-        }
-      })
+    const res = await postGeminiInteraction(apiKey, {
+      model,
+      store: false,
+      input: [{
+        type: 'user_input',
+        content: [{ type: 'text', text: promptText }]
+      }],
+      response_format: {
+        type: 'text',
+        mime_type: 'application/json',
+        schema: jsonSchema
+      }
     });
 
     if (res.ok) {
@@ -101,24 +74,17 @@ async function callGeminiInteractions(apiKey, promptText, jsonSchema) {
 }
 
 module.exports = async function handler(req, res) {
-  res.setHeader('Cache-Control', 'no-store');
+  setNoStore(res);
 
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-gemini-api-key');
-    return res.status(204).end();
+  if (handleOptionsCors(req, res, 'POST, OPTIONS', 'Content-Type, x-gemini-api-key')) {
+    return;
   }
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'METHOD_NOT_ALLOWED' });
   }
 
-  const headerKey = req.headers['x-gemini-api-key']
-    ? String(req.headers['x-gemini-api-key']).trim()
-    : '';
-  const serverKey = process.env.GEMINI_API_KEY ? String(process.env.GEMINI_API_KEY).trim() : '';
-  const apiKey = headerKey || serverKey;
-
+  const { apiKey } = resolveGeminiApiKey(req);
   if (!apiKey) {
     return res.status(503).json({
       error: 'MISSING_API_KEY',
@@ -126,7 +92,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const body = (req.body && typeof req.body === 'object') ? req.body : {};
+  const body = getJsonBody(req);
   const mode = String(body.mode || 'enrich_ui_langs');
   const rawItems = Array.isArray(body.items) ? body.items.slice(0, 60) : [];
 
@@ -159,24 +125,8 @@ module.exports = async function handler(req, res) {
       const schema = {
         type: 'object',
         properties: {
-          courseTitles: {
-            type: 'object',
-            properties: {
-              ru: { type: 'string' },
-              en: { type: 'string' },
-              he: { type: 'string' }
-            },
-            required: ['ru', 'en', 'he']
-          },
-          courseDescs: {
-            type: 'object',
-            properties: {
-              ru: { type: 'string' },
-              en: { type: 'string' },
-              he: { type: 'string' }
-            },
-            required: ['ru', 'en', 'he']
-          },
+          courseTitles: LOCALIZED_STRINGS_SCHEMA,
+          courseDescs: LOCALIZED_STRINGS_SCHEMA,
           items: {
             type: 'array',
             items: {
@@ -195,11 +145,10 @@ module.exports = async function handler(req, res) {
         required: ['courseTitles', 'courseDescs', 'items']
       };
 
-      const { parsed, model } = await callGeminiInteractions(apiKey, promptText, schema);
+      const { parsed, model } = await callGeminiStructuredJson(apiKey, promptText, schema);
       return res.status(200).json({ ok: true, model, result: parsed });
     }
 
-    // Default mode: enrich_ui_langs
     const targetLang = String(body.targetLang || 'de').toLowerCase();
     const inputTransLang = String(body.inputTransLang || 'ru').toLowerCase();
     const courseTitle = String(body.courseTitle || 'Новый курс').trim();
@@ -220,24 +169,8 @@ module.exports = async function handler(req, res) {
     const schema = {
       type: 'object',
       properties: {
-        courseTitles: {
-          type: 'object',
-          properties: {
-            ru: { type: 'string' },
-            en: { type: 'string' },
-            he: { type: 'string' }
-          },
-          required: ['ru', 'en', 'he']
-        },
-        courseDescs: {
-          type: 'object',
-          properties: {
-            ru: { type: 'string' },
-            en: { type: 'string' },
-            he: { type: 'string' }
-          },
-          required: ['ru', 'en', 'he']
-        },
+        courseTitles: LOCALIZED_STRINGS_SCHEMA,
+        courseDescs: LOCALIZED_STRINGS_SCHEMA,
         translations: {
           type: 'array',
           items: {
@@ -255,7 +188,7 @@ module.exports = async function handler(req, res) {
       required: ['courseTitles', 'courseDescs', 'translations']
     };
 
-    const { parsed, model } = await callGeminiInteractions(apiKey, promptText, schema);
+    const { parsed, model } = await callGeminiStructuredJson(apiKey, promptText, schema);
     return res.status(200).json({ ok: true, model, result: parsed });
   } catch (err) {
     return res.status(err.status || 500).json({

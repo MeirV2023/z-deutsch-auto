@@ -10,7 +10,41 @@
     href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&family=Noto+Sans+Hebrew:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&family=Rubik:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="styles.css" />
+  <!-- Модульные таблицы стилей Z-LINGO (строгий каскад 01..08, параллельная загрузка по HTTP/2) -->
+  <link rel="stylesheet" href="styles/01-base.css" />
+  <link rel="stylesheet" href="styles/02-hud-gameplay.css" />
+  <link rel="stylesheet" href="styles/03-dialogs-catalog.css" />
+  <link rel="stylesheet" href="styles/04-home-dashboard.css" />
+  <link rel="stylesheet" href="styles/05-battle-academy.css" />
+  <link rel="stylesheet" href="styles/06-decks-page.css" />
+  <link rel="stylesheet" href="styles/07-admin-studio.css" />
+  <link rel="stylesheet" href="styles/08-mobile.css" />
+
+  <!-- Параллельная предзагрузка графа ES-модулей (0 сетевого водопада) -->
+  <link rel="modulepreload" href="src/main.js" />
+  <link rel="modulepreload" href="src/core/events.js" />
+  <link rel="modulepreload" href="src/core/storage.js" />
+  <link rel="modulepreload" href="src/core/utils.js" />
+  <link rel="modulepreload" href="src/config/constants.js" />
+  <link rel="modulepreload" href="src/config/weapons.js" />
+  <link rel="modulepreload" href="src/i18n/index.js" />
+  <link rel="modulepreload" href="src/data/index.js" />
+  <link rel="modulepreload" href="src/anki/index.js" />
+  <link rel="modulepreload" href="src/services/sound-engine.js" />
+  <link rel="modulepreload" href="src/services/tts-service.js" />
+  <link rel="modulepreload" href="src/state/store.js" />
+  <link rel="modulepreload" href="src/domain/catalog-service.js" />
+  <link rel="modulepreload" href="src/ui/dom.js" />
+  <link rel="modulepreload" href="src/ui/hud-widgets.js" />
+  <link rel="modulepreload" href="src/ui/navigation-i18n.js" />
+  <link rel="modulepreload" href="src/ui/decks-page.js" />
+  <link rel="modulepreload" href="src/ui/modals.js" />
+  <link rel="modulepreload" href="src/ui/admin-studio.js" />
+  <link rel="modulepreload" href="src/engine/arena-physics.js" />
+  <link rel="modulepreload" href="src/engine/weapon-vfx.js" />
+  <link rel="modulepreload" href="src/engine/canvas-renderer.js" />
+  <link rel="modulepreload" href="src/engine/promo-autopilot.js" />
+  <link rel="modulepreload" href="src/engine/gameplay.js" />
 </head>
 <body class="mode-title">
   <!-- Живой космический холст (отрисовка звёзд, корабля, выстрелов и слов) -->
@@ -1647,8 +1681,6 @@
     </div>
   </dialog>
 
-  <script src="words.js"></script>
-  <script src="anki-import.js"></script>
-  <script src="game.js"></script>
+  <script type="module" src="src/main.js"></script>
 </body>
 </html>

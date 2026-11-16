@@ -1,0 +1,978 @@
+/* ==========================================================================
+   Z-LINGO STYLES · 05-battle-academy.css
+   Боевая арена Space Language Academy (mode-play) и карточка попадания
+   ========================================================================== */
+
+/* ==========================================================================
+   2. БОЕВОЙ ИНТЕРФЕЙС Z-LINGO SPACE LANGUAGE ACADEMY (МАКЕТ 2, mode-play)
+   ========================================================================== */
+
+/* Верхняя панель Академии */
+body.mode-play .hud-top {
+  top: 8px;
+  left: 12px;
+  right: 12px;
+  height: 50px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  background: rgba(7, 13, 28, 0.92);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+}
+
+.hud-academy-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+
+.hud-brand-icon {
+  font-size: 1.35rem;
+}
+
+.hud-brand-word {
+  font-family: var(--font-logo);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+
+.hud-brand-divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(148, 163, 184, 0.3);
+}
+
+.hud-brand-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  max-width: 115px;
+  text-align: left;
+  line-height: 1.15;
+}
+
+.hud-center-selectors {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.hud-pill-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  background: rgba(15, 23, 42, 0.88);
+  color: #f1f5f9;
+  font-family: var(--font-ui);
+  font-size: 0.88rem; /* Rubik · 600 · 14px */
+  font-weight: 600;
+  cursor: pointer;
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.14s ease;
+}
+
+.hud-pill-selector:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(30, 41, 59, 0.95);
+}
+
+.pill-caret {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.hud-right-metrics {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-metric-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 800;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.26);
+}
+
+.hud-metric-pill.trophy {
+  color: #fef08a;
+  border-color: rgba(253, 224, 71, 0.42);
+}
+
+.hud-metric-pill.combo {
+  color: #fed7aa;
+  border-color: rgba(251, 146, 60, 0.42);
+}
+
+.hud-ring-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(52, 211, 153, 0.38);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+
+.hud-mini-ring {
+  width: 22px;
+  height: 22px;
+  transform: rotate(-90deg);
+}
+
+.hud-ring-bg {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.25);
+  stroke-width: 3.2;
+}
+
+.hud-ring-fg {
+  fill: none;
+  stroke: #34d399;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.hud-gear-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(15, 23, 42, 0.88);
+  color: #f8fafc;
+  font-size: 0.96rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.hud-gear-btn:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(30, 41, 59, 0.95);
+}
+
+/* Центральная рамка арены (поверх #gameCanvas, не блокирует клики) */
+.battle-arena-frame {
+  position: fixed;
+  top: 66px;
+  left: 280px;
+  right: 308px;
+  bottom: 12px;
+  z-index: 8;
+  border-radius: 18px;
+  border: 1.5px solid rgba(56, 189, 248, 0.34);
+  box-shadow: inset 0 0 36px rgba(14, 165, 233, 0.08);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 14px 12px;
+}
+
+body.desktop-kbd-open .battle-arena-frame {
+  bottom: 192px;
+}
+
+.arena-top-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.arena-shields-pill {
+  font-size: 0.98rem;
+  letter-spacing: 2px;
+  filter: drop-shadow(0 0 8px rgba(251, 113, 133, 0.55));
+}
+
+.arena-wave-pill {
+  padding: 5px 18px;
+  border-radius: 999px;
+  background: rgba(8, 20, 42, 0.86);
+  border: 1px solid rgba(56, 189, 248, 0.6);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.22);
+  color: #e0f2fe;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.arena-actions-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+}
+
+.arena-hud-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.36);
+  background: rgba(15, 23, 42, 0.86);
+  color: #f1f5f9;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.arena-hud-btn:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(30, 41, 59, 0.96);
+}
+
+.arena-hud-btn.emp {
+  border-color: rgba(253, 224, 71, 0.5);
+  color: #fef08a;
+}
+
+.arena-hud-btn.emp:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.arena-bottom-prompt {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px 7px 18px;
+  border-radius: 999px;
+  background: rgba(7, 15, 32, 0.86);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(45, 212, 191, 0.45);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.52);
+  pointer-events: auto;
+  max-width: 92%;
+}
+
+.arena-prompt-inner {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arena-kbd-toggle-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(30, 41, 59, 0.88);
+  color: #e2e8f0;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arena-kbd-toggle-btn:hover {
+  border-color: var(--accent-cyan);
+}
+
+/* На ПК экранная клавиатура скрыта по умолчанию (как в макете 2), открывается кнопкой ⌨️ */
+@media (min-width: 961px) and (pointer: fine) {
+  body.mode-play:not(.desktop-kbd-open) .ztype-keyboard-dock {
+    display: none !important;
+  }
+
+  body.mode-play.desktop-kbd-open .arena-bottom-prompt {
+    display: none !important;
+  }
+}
+
+/* Левая панель Академии (МОИ КОЛОДЫ + РЕЖИМ ОБУЧЕНИЯ + ОРУЖИЕ + Настройки) */
+body.mode-play .sidebar-left {
+  top: 66px;
+  left: 12px;
+  bottom: 12px;
+  width: 258px;
+  padding: 12px;
+  gap: 11px;
+  border-radius: 16px;
+  background: rgba(8, 15, 30, 0.92);
+  overflow-y: auto;
+}
+
+.sleft-section {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.sleft-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.sleft-section-title {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #cbd5e1;
+  text-transform: uppercase;
+}
+
+.sleft-mini-link {
+  background: none;
+  border: none;
+  color: var(--accent-cyan);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.active-deck-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 13px;
+  border: 1.5px solid #4ade80;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(15, 23, 42, 0.92));
+  box-shadow: 0 0 18px rgba(74, 222, 128, 0.18);
+  cursor: pointer;
+  transition: transform 0.14s ease;
+}
+
+.active-deck-card:hover {
+  transform: translateY(-1px);
+}
+
+.active-deck-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  flex-shrink: 0;
+}
+
+.active-deck-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.active-deck-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.active-deck-title {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.active-deck-sub {
+  font-size: 0.74rem;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.active-deck-prog-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.active-deck-prog-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.24);
+  overflow: hidden;
+}
+
+.active-deck-prog-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4ade80, #2dd4bf);
+  transition: width 0.25s ease;
+}
+
+.active-deck-prog-num {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+
+.sidebar-lessons-drawer {
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  padding: 5px 8px;
+}
+
+.sidebar-lessons-drawer summary {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  cursor: pointer;
+  list-style: none;
+}
+
+.sidebar-lessons-drawer .level-list {
+  margin-top: 7px;
+  max-height: 165px;
+}
+
+.sidebar-anki-import-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 11px;
+  border-radius: 11px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(15, 23, 42, 0.85);
+  color: #e2e8f0;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.sidebar-anki-import-btn:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(30, 41, 59, 0.95);
+}
+
+/* Режим обучения */
+.study-mode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.study-mode-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 11px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.78);
+  color: #cbd5e1;
+  font-family: var(--font-ui);
+  font-size: 0.83rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.study-mode-btn:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #ffffff;
+}
+
+.study-mode-check {
+  opacity: 0;
+  color: #4ade80;
+  font-weight: 900;
+}
+
+.study-mode-btn.active {
+  border-color: #4ade80;
+  background: linear-gradient(90deg, rgba(22, 163, 74, 0.25), rgba(15, 23, 42, 0.9));
+  color: #ffffff;
+}
+
+.study-mode-btn.active .study-mode-check {
+  opacity: 1;
+}
+
+/* Сетка оружия в левом сайдбаре */
+.sleft-weapon-hint {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.sidebar-weapon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.sidebar-weapon-grid .weapon-pill-btn {
+  padding: 8px 4px;
+  border-radius: 11px;
+  gap: 4px;
+}
+
+.sidebar-weapon-grid .weapon-pill-icon {
+  font-size: 1.15rem;
+}
+
+.sidebar-weapon-grid .weapon-pill-name {
+  font-size: 0.7rem;
+}
+
+.sidebar-bottom-settings-btn {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.82);
+  color: #e2e8f0;
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.sidebar-bottom-settings-btn:hover {
+  border-color: var(--accent-cyan);
+  color: #ffffff;
+}
+
+/* Правая панель Академии: ПОПАДАНИЕ! + СЕГОДНЯ ВЫУЧЕНО */
+body.mode-play .sidebar-right {
+  top: 66px;
+  right: 12px;
+  bottom: 12px;
+  width: 286px;
+  padding: 0;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+}
+
+.sright-hit-panel {
+  border-radius: 16px;
+  padding: 11px 12px 12px;
+  background: rgba(8, 16, 32, 0.94);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(74, 222, 128, 0.42);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.52);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hit-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.hit-header-text {
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  color: #86efac;
+  text-shadow: 0 0 12px rgba(74, 222, 128, 0.45);
+}
+
+.hit-spotlight-card {
+  border-radius: 13px;
+  padding: 10px 11px;
+  background: rgba(13, 23, 44, 0.92);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.hit-spotlight-card.flash-hit {
+  transform: scale(1.02);
+  border-color: #4ade80;
+}
+
+.hit-word-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hit-word-text-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.hit-word-article {
+  font-family: var(--font-words);
+  font-size: clamp(1.5rem, 1.8vw, 1.85rem); /* Rubik · 700 · слова в игре */
+  font-weight: 700;
+  line-height: 1.15;
+  color: #4ade80;
+}
+
+.hit-word-main {
+  font-family: var(--font-words);
+  font-size: clamp(1.75rem, 2.15vw, 2.2rem); /* Rubik · 700 · 28–35px (der Motor) */
+  font-weight: 700;
+  line-height: 1.15;
+  color: #ffffff;
+  word-break: break-word;
+}
+
+.hit-audio-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  background: rgba(14, 165, 233, 0.22);
+  color: #e0f2fe;
+  font-size: 0.92rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hit-audio-btn:hover {
+  background: rgba(14, 165, 233, 0.4);
+}
+
+.hit-visual-banner {
+  height: 58px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background:
+    radial-gradient(circle at 80% 50%, rgba(56, 189, 248, 0.42), transparent 60%),
+    linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #090d1e 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.hit-visual-emoji {
+  font-size: 1.85rem;
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.55));
+}
+
+.hit-visual-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #bae6fd;
+}
+
+.hit-translation-text {
+  font-family: var(--font-words);
+  text-align: center;
+  font-size: 1.25rem; /* Rubik · 700 · перевод (двигатель) */
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.28;
+  min-height: 1.35em;
+}
+
+.hit-action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.hit-know-btn {
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid #86efac;
+  background: linear-gradient(180deg, #84cc16 0%, #22c55e 100%);
+  color: #052e16;
+  font-family: var(--font-ui);
+  font-size: 0.875rem; /* Rubik · 700 · 14px */
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.14s ease, transform 0.14s ease;
+}
+
+.hit-know-btn:hover {
+  filter: brightness(1.08);
+}
+
+.hit-repeat-btn {
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(56, 189, 248, 0.6);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e0f2fe;
+  font-family: var(--font-ui);
+  font-size: 0.875rem; /* Rubik · 600 · 14px */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.hit-repeat-btn.pinned {
+  border-color: #fde047;
+  background: rgba(251, 191, 36, 0.22);
+  color: #fef08a;
+}
+
+/* Нижняя правая панель: СЕГОДНЯ ВЫУЧЕНО + Последние слова */
+.sright-today-panel {
+  flex: 1;
+  min-height: 0;
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(8, 15, 30, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(56, 189, 248, 0.26);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.today-summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.today-summary-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.today-bars-icon {
+  font-size: 1.35rem;
+}
+
+.today-caption {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.today-big-count {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #86efac;
+  line-height: 1.15;
+}
+
+.today-check-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid #4ade80;
+  background: rgba(34, 197, 94, 0.18);
+  color: #4ade80;
+  font-size: 0.85rem;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recent-words-subheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.recent-clear-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.recent-clear-btn:hover {
+  color: #f8fafc;
+}
+
+/* Новые модальные окна: Настройки, Статистика, Рейтинг */
+.settings-group-card {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.settings-pills-row {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.stats-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 10px;
+}
+
+.stat-tile-card {
+  padding: 13px;
+  border-radius: 13px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.26);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stat-tile-val {
+  font-family: var(--font-mono);
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.stat-tile-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.leaderboard-full-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.achievements-heading {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fde047;
+  margin-top: 6px;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 8px;
+}
+
+.ach-card {
+  padding: 10px 12px;
+  border-radius: 11px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.55;
+}
+
+.ach-card.unlocked {
+  opacity: 1;
+  border-color: rgba(253, 224, 71, 0.55);
+  background: rgba(234, 179, 8, 0.12);
+}
+
+.ach-icon {
+  font-size: 1.45rem;
+}
+
+.ach-title {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.ach-desc {
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+/* Табличные цифры для счётчиков очков и прогресса в Rubik */
+.stat-value,
+.hud-metric-pill,
+.hud-ring-pill,
+.donut-percent-text,
+.prog-metric-val,
+.leader-score,
+.stat-tile-val,
+.qs-prog-text,
+.active-deck-prog-num,
+.decks-prog-pct,
+.decks-hero-metric-row strong {
+  font-variant-numeric: tabular-nums;
+}
+

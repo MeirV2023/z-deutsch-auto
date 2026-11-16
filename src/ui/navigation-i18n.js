@@ -1,0 +1,834 @@
+// Навигация экранов, мобильный нижний док и реактивная локализация RU / EN / HE (SRP)
+import { saveSettingsPatch } from '../core/storage.js';
+import { escapeHtml } from '../core/utils.js';
+import { TARGET_LANG_META } from '../config/constants.js';
+import { UI_TEXT } from '../i18n/index.js';
+import { sound } from '../services/sound-engine.js';
+import {
+  getLocalizedField,
+  isHebrewUI,
+  state,
+  t
+} from '../state/store.js';
+import {
+  ensureValidCourseSelection,
+  getActiveSelection,
+  getAllWordsInCourse,
+  resolveLessonBaseWords
+} from '../domain/catalog-service.js';
+import {
+  adminStudioView,
+  ankiDropSub,
+  ankiDropTitle,
+  ankiManualColsSummary,
+  arcadeLogoMain,
+  arcadeLogoSub,
+  arcadeTitleScreen,
+  arenaWavePill,
+  btnArticleMode,
+  btnBackToTitle,
+  btnDecksLevelAll,
+  btnDecksReturnBattle,
+  btnDownloadSampleApkg,
+  btnHudLangPair,
+  btnLangMode,
+  btnMobNavCourses,
+  btnMobNavDecks,
+  btnMobNavHome,
+  btnMobNavPlay,
+  btnMobNavStats,
+  btnNavAdmin,
+  btnNavCourses,
+  btnNavDecks,
+  btnNavHome,
+  btnNavPlay,
+  btnOverlayCatalog,
+  btnSaveAnkiToDecks,
+  btnSaveCustomWords,
+  btnSidebarCatalog,
+  btnSpeedMode,
+  btnTargetLangHud,
+  catalogDialogBody,
+  catalogDialogTitle,
+  centerOverlay,
+  courseBrowserDialog,
+  customDialogBody,
+  customDialogHint,
+  customDialogTitle,
+  customWordsDialog,
+  decksHeroSubtitle,
+  decksHeroSubtitleMobile,
+  decksHeroTitle,
+  decksPageView,
+  decksSearchInput,
+  dictDialog,
+  dictDialogBody,
+  dictDialogTitle,
+  dictSearchInput,
+  gameSettingsDialog,
+  gameSettingsDialogBody,
+  homeBrandLogo,
+  homeBrandSub,
+  homeDashboardView,
+  homeHeroTitleAccent,
+  homeHeroTitleTop,
+  homeStepItem1,
+  homeStepItem2,
+  homeStepItem3,
+  hudLangPairText,
+  hudLevelTitle,
+  importTargetLangLabel,
+  labelAcademySub,
+  labelAnkiBack,
+  labelAnkiDeckName,
+  labelAnkiFront,
+  labelArcadeLaunch,
+  labelCatalogHud,
+  labelCombo,
+  labelCustomBtn,
+  labelDecksAllHeading,
+  labelDecksCategoryHeader,
+  labelDecksContinueHeading,
+  labelDecksCreateBtn,
+  labelDecksFiltersTitle,
+  labelDecksImportAnkiBtn,
+  labelDecksInProgressSub,
+  labelDecksLangHeader,
+  labelDecksLevelHeader,
+  labelDecksOpenAdmin,
+  labelDecksReturnBattle,
+  labelDecksSidebarProgTitle,
+  labelDecksSourceHeader,
+  labelDecksSrcAll,
+  labelDecksSrcOfficial,
+  labelDecksSrcUser,
+  labelDecksStatLearned,
+  labelDecksStatStreak,
+  labelDecksStatTotal,
+  labelDecksSubtabCourses,
+  labelDecksSubtabMyDecks,
+  labelDecksViewGrid,
+  labelDecksViewList,
+  labelDictPinnedFilter,
+  labelFeatAnki,
+  labelFeatCourses,
+  labelFeatSettings,
+  labelFeatVoice,
+  labelHitBanner,
+  labelHitKnow,
+  labelHomeProgressTitle,
+  labelHomeTopTitle,
+  labelHowItWorks,
+  labelImportFromCatalog,
+  labelLearnedHud,
+  labelLessonsDrawerSummary,
+  labelMetricDecks,
+  labelMetricLearned,
+  labelMetricStreak,
+  labelMobNavCourses,
+  labelMobNavDecks,
+  labelMobNavHome,
+  labelMobNavPlay,
+  labelMobNavStats,
+  labelMobStep1,
+  labelMobStep2,
+  labelMobStep3,
+  labelModeListen,
+  labelModeTranslate,
+  labelModeType,
+  labelNativeFilter,
+  labelNavAdmin,
+  labelNavCourses,
+  labelNavDecks,
+  labelNavHome,
+  labelNavLeaderboard,
+  labelNavPlay,
+  labelNavStats,
+  labelOpenCatalogTitle,
+  labelPause,
+  labelPerkAnki,
+  labelPerkMemory,
+  labelPerkPlay,
+  labelQuickAnkiBtn,
+  labelQuickStartTitle,
+  labelScore,
+  labelSeeAllTop,
+  labelShield,
+  labelSidebarAnkiBtn,
+  labelSidebarDecksHeader,
+  labelSidebarGameSettings,
+  labelSidebarWeaponsHeader,
+  labelStep1,
+  labelStep2,
+  labelStep3,
+  labelStudyModeHeader,
+  labelTargetFilter,
+  labelTitleCustom,
+  labelTitleDict,
+  labelTodayCaption,
+  leaderboardDialog,
+  leaderboardDialogBody,
+  legendDas,
+  legendDer,
+  legendDie,
+  legendVerb,
+  levelQuizBox,
+  mobileHeroArtArticle,
+  mobileHeroArtWord,
+  overlayCard,
+  overlayWeaponTitle,
+  promoLiveLabel,
+  promoMonitorBadge,
+  quizHeaderTitle,
+  sidebarKillsTitle,
+  statsDialog,
+  statsDialogBody,
+  tabImportAnki,
+  tabImportManual,
+  tabSourceAll,
+  tabSourceOfficial,
+  tabSourceUser,
+  titleArsenalLabel,
+  titleTagline,
+  titleTaglineMobile,
+  ttsDialogBody,
+  ttsSettingsDialog
+} from './dom.js';
+import { resizeCanvas } from '../engine/arena-physics.js';
+import { renderWeaponSelectors, updateHudWeaponBtn } from '../engine/weapon-vfx.js';
+import {
+  refreshHitSpotlightPinState,
+  renderHomeDashboardWidgets,
+  renderLevelSidebar,
+  rerenderKillFeed,
+  updateBottomTargetUI,
+  updateHitSpotlightCard,
+  updateLearnedProgressUI,
+  updatePilotRankUI,
+  updatePinnedCountUI,
+  updateStudyModeButtonsUI
+} from './hud-widgets.js';
+import { launchFromTitleScreen, returnToTitleScreen, seedTitleDemoWords } from '../engine/promo-autopilot.js';
+import {
+  refreshOverlayContent,
+  renderCurrentQuizQuestion,
+  renderZtypeKeyboard,
+  showLevelIntroOverlay
+} from '../engine/gameplay.js';
+import { openDecksPage, renderCourseBrowserModal, renderDecksPage } from './decks-page.js';
+import {
+  onTtsStatusChanged,
+  openGameSettingsModal,
+  openStatsModal,
+  renderFullDictionary,
+  renderGameSettingsModal,
+  renderLeaderboardModal,
+  renderStatsModal,
+  renderTtsSettingsUI
+} from './modals.js';
+import { renderAdminStudio } from './admin-studio.js';
+
+let _resizeBound = false;
+
+export function setNativeLanguage(langId) {
+  if (!UI_TEXT[langId]) return;
+  state.nativeLang = langId;
+  saveSettingsPatch({ nativeLang: langId });
+  document.documentElement.lang = langId;
+
+  const modeObj = state.nativeLangModes.find(m => m.id === langId) || state.nativeLangModes[0];
+  if (btnLangMode) btnLangMode.textContent = modeObj.short;
+
+  document.querySelectorAll('.native-lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.nativeLang === langId);
+  });
+
+  applyStaticUILocalization();
+  renderWeaponSelectors();
+  updateHudWeaponBtn();
+  renderLevelSidebar();
+  refreshOverlayContent();
+  renderTtsSettingsUI();
+  updatePilotRankUI();
+  updateLearnedProgressUI();
+  updatePinnedCountUI();
+
+  if (state.lastSpotlightEntry) {
+    updateHitSpotlightCard(state.lastSpotlightEntry, false);
+  }
+  if (courseBrowserDialog && courseBrowserDialog.open) {
+    renderCourseBrowserModal();
+  }
+  if (gameSettingsDialog && gameSettingsDialog.open) {
+    renderGameSettingsModal();
+  }
+  if (statsDialog && statsDialog.open) {
+    renderStatsModal();
+  }
+  if (leaderboardDialog && leaderboardDialog.open) {
+    renderLeaderboardModal();
+  }
+  if (state.activeQuiz && levelQuizBox.style.display !== 'none') {
+    renderCurrentQuizQuestion(false);
+  }
+  if (dictDialog && dictDialog.open) {
+    renderFullDictionary(dictSearchInput.value);
+  }
+  rerenderKillFeed();
+  updateBottomTargetUI();
+}
+
+export function setTargetLanguage(targetLangId) {
+  if (!TARGET_LANG_META[targetLangId]) return;
+  const changed = state.targetLang !== targetLangId;
+  state.targetLang = targetLangId;
+  saveSettingsPatch({ targetLang: targetLangId });
+
+  document.querySelectorAll('.target-lang-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.targetLang === targetLangId);
+  });
+
+  const meta = TARGET_LANG_META[targetLangId];
+  if (btnTargetLangHud) {
+    btnTargetLangHud.textContent = `${meta.flag} ${meta.code}`;
+  }
+
+  ensureValidCourseSelection();
+  renderZtypeKeyboard();
+
+  if (changed) {
+    state.demoWords = [];
+    state.demoTargetId = null;
+    state.killHistory = [];
+    const sel = getActiveSelection();
+    if (sel.course && sel.mod && sel.lesson) {
+      const lWords = resolveLessonBaseWords(sel.course, sel.mod, sel.lesson, state.activeLessonIndex);
+      if (lWords.length > 0) {
+        updateHitSpotlightCard(lWords[0], false);
+      }
+    }
+  }
+
+  applyStaticUILocalization();
+  renderLevelSidebar();
+  refreshOverlayContent();
+  renderTtsSettingsUI();
+  updatePinnedCountUI();
+  rerenderKillFeed();
+  updateBottomTargetUI();
+
+  if (changed && state.screenMode === 'title') {
+    requestAnimationFrame(() => seedTitleDemoWords());
+  }
+
+  if (courseBrowserDialog && courseBrowserDialog.open) {
+    renderCourseBrowserModal();
+  }
+}
+
+export function applyStaticUILocalization() {
+  const tr = t();
+  const isHe = isHebrewUI();
+  const targetMeta = TARGET_LANG_META[state.targetLang] || TARGET_LANG_META.de;
+  const targetLangLocalName = targetMeta.names[state.nativeLang] || targetMeta.names.en;
+  const nativeLangLocalName = (tr.nativeLangNames && tr.nativeLangNames[state.nativeLang]) || state.nativeLang.toUpperCase();
+
+  if (arcadeTitleScreen) arcadeTitleScreen.dir = isHe ? 'rtl' : 'ltr';
+  if (overlayCard) overlayCard.dir = isHe ? 'rtl' : 'ltr';
+  if (ttsDialogBody) ttsDialogBody.dir = isHe ? 'rtl' : 'ltr';
+  if (catalogDialogBody) catalogDialogBody.dir = isHe ? 'rtl' : 'ltr';
+  if (customDialogBody) customDialogBody.dir = isHe ? 'rtl' : 'ltr';
+  if (dictDialogBody) dictDialogBody.dir = isHe ? 'rtl' : 'ltr';
+  if (gameSettingsDialogBody) gameSettingsDialogBody.dir = isHe ? 'rtl' : 'ltr';
+  if (statsDialogBody) statsDialogBody.dir = isHe ? 'rtl' : 'ltr';
+  if (leaderboardDialogBody) leaderboardDialogBody.dir = isHe ? 'rtl' : 'ltr';
+
+  if (labelNativeFilter) labelNativeFilter.textContent = tr.nativeFilterLabel;
+  if (labelTargetFilter) labelTargetFilter.textContent = tr.chooseLangTitle;
+
+  document.querySelectorAll('[data-tlang-name]').forEach(span => {
+    const code = span.getAttribute('data-tlang-name');
+    if (TARGET_LANG_META[code]) {
+      span.textContent = TARGET_LANG_META[code].names[state.nativeLang] || TARGET_LANG_META[code].names.en;
+    }
+  });
+
+  // Z-LINGO 2.0: Навбар Главной страницы
+  if (arcadeLogoMain) arcadeLogoMain.textContent = 'Z-LINGO';
+  if (homeBrandSub) homeBrandSub.textContent = tr.homeBrandSub;
+  if (labelNavHome) labelNavHome.textContent = tr.navHome;
+  if (labelNavPlay) labelNavPlay.textContent = tr.navPlay;
+  if (labelNavCourses) labelNavCourses.textContent = tr.navCourses;
+  if (labelNavDecks) labelNavDecks.textContent = tr.navDecks;
+  if (labelNavStats) labelNavStats.textContent = tr.navStats;
+  if (labelNavLeaderboard) labelNavLeaderboard.textContent = tr.navLeaderboard;
+  if (labelNavAdmin) labelNavAdmin.textContent = tr.navAdmin;
+
+  // Hero-блок и рамка живого промо-боя
+  const { course, mod, lesson } = getActiveSelection();
+  if (homeHeroTitleTop) homeHeroTitleTop.textContent = tr.heroTitleTop;
+  if (homeHeroTitleAccent) homeHeroTitleAccent.textContent = tr.heroTitleAccent;
+  if (titleTagline) titleTagline.textContent = tr.titleTagline(targetLangLocalName);
+  if (titleTaglineMobile) titleTaglineMobile.textContent = tr.mobileHeroTagline || tr.titleTagline(targetLangLocalName);
+  if (labelPerkPlay) labelPerkPlay.textContent = tr.perkPlay;
+  if (labelPerkMemory) labelPerkMemory.textContent = tr.perkMemory;
+  if (labelPerkAnki) labelPerkAnki.textContent = tr.perkAnki;
+  if (labelArcadeLaunch) labelArcadeLaunch.textContent = tr.launchFreeBtn;
+
+  const heroArtSamples = {
+    de: { art: 'die', word: 'Kreuzfahrt' },
+    en: { art: 'Noun', word: 'Breakthrough' },
+    es: { art: 'la', word: 'Aventura' }
+  };
+  const hSample = heroArtSamples[state.targetLang] || heroArtSamples.de;
+  if (mobileHeroArtArticle) mobileHeroArtArticle.textContent = hSample.art;
+  if (mobileHeroArtWord) mobileHeroArtWord.textContent = hSample.word;
+
+  if (arcadeLogoSub && course) {
+    const lNum = state.activeLessonIndex + 1;
+    const cTitle = getLocalizedField(course, 'titles');
+    arcadeLogoSub.innerHTML = `<span class="course-pill-name">${escapeHtml(course.icon || '🚀')} ${escapeHtml(cTitle)}</span><span class="course-pill-lnum"> · #${lNum}</span> <span class="course-pill-caret">▾</span>`;
+  }
+  if (promoLiveLabel && tr.livePreviewBadge) {
+    promoLiveLabel.textContent = tr.livePreviewBadge;
+  }
+  if (promoMonitorBadge && course) {
+    promoMonitorBadge.textContent = tr.promoMonitorBadge(
+      state.activeLessonIndex + 1,
+      getLocalizedField(course, 'titles').toUpperCase()
+    );
+  }
+
+  // Полоса 3 шагов и мобильная навигация
+  if (labelHowItWorks && tr.howItWorksTitle) labelHowItWorks.textContent = tr.howItWorksTitle;
+  if (labelStep1) labelStep1.textContent = tr.step1;
+  if (labelStep2) labelStep2.textContent = tr.step2;
+  if (labelStep3) labelStep3.textContent = tr.step3;
+  if (labelMobStep1 && tr.mobStep1) labelMobStep1.textContent = tr.mobStep1;
+  if (labelMobStep2 && tr.mobStep2) labelMobStep2.textContent = tr.mobStep2;
+  if (labelMobStep3 && tr.mobStep3) labelMobStep3.textContent = tr.mobStep3;
+
+  if (labelMobNavHome && tr.mobNavHome) labelMobNavHome.textContent = tr.mobNavHome;
+  if (labelMobNavPlay && tr.mobNavPlay) labelMobNavPlay.textContent = tr.mobNavPlay;
+  if (labelMobNavCourses && tr.mobNavCourses) labelMobNavCourses.textContent = tr.mobNavCourses;
+  if (labelMobNavDecks && tr.mobNavDecks) labelMobNavDecks.textContent = tr.mobNavDecks;
+  if (labelMobNavStats && tr.mobNavStats) labelMobNavStats.textContent = tr.mobNavStats;
+
+  if (labelQuickStartTitle) labelQuickStartTitle.textContent = tr.quickStartTitle;
+  if (labelQuickAnkiBtn) labelQuickAnkiBtn.textContent = tr.quickAnkiBtn;
+  if (labelOpenCatalogTitle) labelOpenCatalogTitle.textContent = tr.allCoursesBtn;
+  if (titleArsenalLabel) titleArsenalLabel.textContent = tr.titleArsenalLabel;
+
+  if (labelHomeProgressTitle) labelHomeProgressTitle.textContent = tr.homeProgressTitle;
+  if (labelMetricLearned) labelMetricLearned.textContent = tr.metricLearned;
+  if (labelMetricDecks) labelMetricDecks.textContent = tr.metricDecks;
+  if (labelMetricStreak) labelMetricStreak.textContent = tr.metricStreak;
+  if (labelHomeTopTitle) labelHomeTopTitle.textContent = tr.homeTopTitle;
+  if (labelSeeAllTop) labelSeeAllTop.textContent = tr.seeAllTop;
+
+  const courseWords = course ? getAllWordsInCourse(course) : [];
+  const preset = state.speedPresets[state.speedPresetIndex] || state.speedPresets[0];
+
+  // Нижняя полоса возможностей (сохраняем дочерние иконки .feat-icon!)
+  if (labelFeatCourses) labelFeatCourses.textContent = tr.featCourses;
+  if (labelFeatAnki) labelFeatAnki.textContent = tr.featAnki;
+  if (labelFeatSettings) labelFeatSettings.textContent = tr.featSpeed(preset.label);
+  if (labelFeatVoice) labelFeatVoice.textContent = tr.featVoice;
+  if (labelTitleDict) labelTitleDict.textContent = tr.titleDictLink(courseWords.length);
+  if (labelTitleCustom) labelTitleCustom.textContent = tr.titleCustomLink;
+
+  // Боевой экран Академии Z-LINGO
+  if (labelAcademySub) labelAcademySub.textContent = tr.academySub;
+  if (hudLangPairText) {
+    hudLangPairText.textContent = `${targetMeta.flag} ${targetLangLocalName} → ${nativeLangLocalName}`;
+  }
+  if (labelCatalogHud) labelCatalogHud.textContent = tr.coursesHudBtn;
+  if (btnSidebarCatalog) btnSidebarCatalog.textContent = `${tr.seeAllTop} ▾`;
+  if (btnOverlayCatalog) btnOverlayCatalog.textContent = `🗂️ ${tr.allCoursesBtn}`;
+  if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.overlayWeaponTitle;
+  if (btnBackToTitle) btnBackToTitle.textContent = tr.backToMenuBtn;
+
+  if (labelSidebarDecksHeader) labelSidebarDecksHeader.textContent = tr.sidebarDecksHeader;
+  if (labelLessonsDrawerSummary) labelLessonsDrawerSummary.textContent = tr.lessonsDrawerSummary;
+  if (labelSidebarAnkiBtn) labelSidebarAnkiBtn.textContent = tr.quickAnkiBtn;
+  if (labelStudyModeHeader) labelStudyModeHeader.textContent = tr.studyModeHeader;
+  if (labelModeType) labelModeType.textContent = tr.modeType;
+  if (labelModeListen) labelModeListen.textContent = tr.modeListen;
+  if (labelModeTranslate) labelModeTranslate.textContent = tr.modeTranslate;
+  if (labelSidebarWeaponsHeader) labelSidebarWeaponsHeader.textContent = tr.sidebarWeaponsHeader;
+  if (labelSidebarGameSettings) labelSidebarGameSettings.textContent = tr.sidebarGameSettings;
+
+  if (labelHitBanner) {
+    labelHitBanner.textContent = state.lastSpotlightIsHit ? tr.hitBanner : tr.hitReadyBanner;
+  }
+  if (labelHitKnow) labelHitKnow.textContent = tr.hitKnowBtn;
+  if (labelTodayCaption) labelTodayCaption.textContent = tr.todayCaption;
+
+  if (labelPause) labelPause.textContent = tr.pause;
+  if (labelScore) labelScore.textContent = tr.score;
+  if (labelCombo) labelCombo.textContent = tr.combo;
+  if (labelLearnedHud) labelLearnedHud.textContent = tr.learnedHud;
+  if (labelShield) labelShield.textContent = tr.shield;
+
+  if (btnArticleMode) {
+    btnArticleMode.textContent = state.typeWithArticle ? tr.articleMode : tr.badgeMode;
+    btnArticleMode.classList.toggle('active', state.typeWithArticle);
+  }
+  if (labelCustomBtn) labelCustomBtn.textContent = tr.customBtn;
+  if (sidebarKillsTitle) sidebarKillsTitle.textContent = tr.sidebarKills;
+
+  const leg = tr.legends[state.targetLang] || tr.legends.de;
+  if (legendDer) legendDer.textContent = leg[0];
+  if (legendDie) legendDie.textContent = leg[1];
+  if (legendDas) legendDas.textContent = leg[2];
+  if (legendVerb) legendVerb.textContent = leg[3];
+
+  if (quizHeaderTitle) quizHeaderTitle.textContent = tr.quizHeader;
+  if (dictDialogTitle && course) {
+    dictDialogTitle.textContent = tr.dictTitle(getLocalizedField(course, 'titles'), courseWords.length);
+  }
+  if (dictSearchInput) dictSearchInput.placeholder = tr.dictSearchPlaceholder;
+  if (labelDictPinnedFilter) labelDictPinnedFilter.textContent = tr.dictPinnedFilter;
+
+  // Каталог и окно Anki
+  if (catalogDialogTitle) catalogDialogTitle.textContent = tr.catalogTitle;
+  if (tabSourceAll) tabSourceAll.textContent = tr.tabAll;
+  if (tabSourceOfficial) tabSourceOfficial.textContent = tr.tabOfficial;
+  if (tabSourceUser) tabSourceUser.textContent = tr.tabUser;
+  if (labelImportFromCatalog) labelImportFromCatalog.textContent = tr.importAnkiBtn;
+
+  if (customDialogTitle) customDialogTitle.textContent = tr.customTitle;
+  if (tabImportAnki) tabImportAnki.textContent = tr.tabImportAnki;
+  if (tabImportManual) tabImportManual.textContent = tr.tabImportManual;
+  if (importTargetLangLabel) importTargetLangLabel.textContent = tr.importLangLabel;
+  if (ankiDropTitle) ankiDropTitle.textContent = tr.ankiDropTitle;
+  if (ankiDropSub) ankiDropSub.textContent = tr.ankiDropSub;
+  if (btnDownloadSampleApkg) btnDownloadSampleApkg.textContent = tr.sampleApkgBtn;
+  if (labelAnkiDeckName) labelAnkiDeckName.textContent = tr.ankiDeckNameLabel;
+  if (ankiManualColsSummary) ankiManualColsSummary.textContent = tr.ankiManualColsSummary;
+  if (labelAnkiFront) labelAnkiFront.textContent = tr.ankiFrontLabel;
+  if (labelAnkiBack) labelAnkiBack.textContent = tr.ankiBackLabel;
+  if (btnSaveAnkiToDecks) btnSaveAnkiToDecks.textContent = tr.ankiSaveToDecksBtn;
+  if (customDialogHint) customDialogHint.innerHTML = tr.customHint;
+  if (btnSaveCustomWords) btnSaveCustomWords.textContent = tr.customSaveBtn;
+
+  // Полноэкранная страница «Мои колоды» / «Курсы»
+  if (labelDecksFiltersTitle) labelDecksFiltersTitle.textContent = tr.decksFiltersTitle;
+  if (labelDecksLangHeader) labelDecksLangHeader.textContent = tr.decksLangHeader;
+  if (labelDecksSourceHeader) labelDecksSourceHeader.textContent = tr.decksSourceHeader;
+  if (labelDecksSrcAll) labelDecksSrcAll.textContent = tr.decksSrcAll;
+  if (labelDecksSrcOfficial) labelDecksSrcOfficial.textContent = tr.decksSrcOfficial;
+  if (labelDecksSrcUser) labelDecksSrcUser.textContent = tr.decksSrcUser;
+  if (labelDecksCategoryHeader) labelDecksCategoryHeader.textContent = tr.decksCategoryHeader;
+  if (labelDecksLevelHeader) labelDecksLevelHeader.textContent = tr.decksLevelHeader;
+  if (btnDecksLevelAll) btnDecksLevelAll.textContent = tr.decksLevelAll;
+  if (labelDecksOpenAdmin) labelDecksOpenAdmin.textContent = tr.decksAdminBtn;
+  if (labelDecksSidebarProgTitle) labelDecksSidebarProgTitle.textContent = tr.decksSidebarProgTitle;
+  if (labelDecksInProgressSub) labelDecksInProgressSub.textContent = tr.decksInProgressSub;
+  if (decksHeroTitle) {
+    decksHeroTitle.textContent = state.decksNavMode === 'courses' ? tr.decksHeroTitleCourses : tr.decksHeroTitleMy;
+  }
+  if (decksHeroSubtitle) decksHeroSubtitle.textContent = tr.decksHeroSub;
+  if (decksHeroSubtitleMobile && tr.decksHeroSubMobile) {
+    decksHeroSubtitleMobile.textContent = tr.decksHeroSubMobile;
+  }
+  if (decksSearchInput) {
+    decksSearchInput.placeholder = (window.innerWidth <= 768 && tr.decksSearchPlaceholderMobile)
+      ? tr.decksSearchPlaceholderMobile
+      : tr.decksSearchPlaceholder;
+  }
+  if (labelDecksImportAnkiBtn) labelDecksImportAnkiBtn.textContent = tr.decksImportAnkiBtn;
+  if (labelDecksCreateBtn) labelDecksCreateBtn.textContent = tr.decksCreateBtn;
+  if (labelDecksStatTotal) labelDecksStatTotal.textContent = tr.decksStatTotal;
+  if (labelDecksStatLearned) labelDecksStatLearned.textContent = tr.decksStatLearned;
+  if (labelDecksStatStreak) labelDecksStatStreak.textContent = tr.decksStatStreak;
+  if (labelDecksSubtabCourses) labelDecksSubtabCourses.textContent = tr.navCourses;
+  if (labelDecksSubtabMyDecks) labelDecksSubtabMyDecks.textContent = tr.navDecks;
+  if (labelDecksReturnBattle) labelDecksReturnBattle.textContent = tr.decksReturnBattle;
+  if (labelDecksViewGrid) labelDecksViewGrid.textContent = tr.decksViewGrid;
+  if (labelDecksViewList) labelDecksViewList.textContent = tr.decksViewList;
+  if (labelDecksContinueHeading) labelDecksContinueHeading.textContent = tr.decksContinueHeading;
+  if (labelDecksAllHeading) labelDecksAllHeading.textContent = tr.decksAllHeading;
+
+  if (btnSpeedMode) btnSpeedMode.textContent = preset.label;
+  if (btnTargetLangHud) btnTargetLangHud.textContent = `${targetMeta.flag} ${targetMeta.code}`;
+
+  if (course && hudLevelTitle) {
+    hudLevelTitle.textContent = state.activeCustomRoundTitle
+      ? state.activeCustomRoundTitle
+      : `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')}`;
+  }
+  if (arenaWavePill) {
+    const waveNum = Math.max(1, Math.ceil((state.wordsDestroyedInLevel + 1) / 4));
+    arenaWavePill.textContent = tr.arenaWaveLabel(state.activeLessonIndex + 1, waveNum);
+  }
+
+  updatePilotRankUI();
+  updateLearnedProgressUI();
+  updatePinnedCountUI();
+  updateStudyModeButtonsUI();
+  renderHomeDashboardWidgets();
+  if (state.homeSubView === 'decks') {
+    renderDecksPage();
+  } else if (state.homeSubView === 'admin') {
+    renderAdminStudio();
+  }
+  refreshHitSpotlightPinState();
+  onTtsStatusChanged();
+}
+
+export function syncMobileBottomNavUI(overrideTab = '') {
+  let activeTab = overrideTab;
+  if (!activeTab) {
+    if ((statsDialog && statsDialog.open) || (leaderboardDialog && leaderboardDialog.open)) {
+      activeTab = 'stats';
+    } else if (state.homeSubView === 'decks') {
+      activeTab = state.decksNavMode === 'courses' ? 'courses' : 'decks';
+    } else if (state.homeSubView === 'admin') {
+      activeTab = 'profile';
+    } else {
+      activeTab = 'home';
+    }
+  }
+  if (btnMobNavHome) btnMobNavHome.classList.toggle('active', activeTab === 'home');
+  if (btnMobNavPlay) btnMobNavPlay.classList.toggle('active', activeTab === 'play');
+  if (btnMobNavCourses) btnMobNavCourses.classList.toggle('active', activeTab === 'courses');
+  if (btnMobNavDecks) btnMobNavDecks.classList.toggle('active', activeTab === 'decks');
+  if (btnMobNavStats) btnMobNavStats.classList.toggle('active', activeTab === 'stats');
+}
+
+export function switchHomeSubView(subView) {
+  state.homeSubView = (subView === 'decks' || subView === 'admin') ? subView : 'home';
+  const onHome = state.homeSubView === 'home';
+  const onDecks = state.homeSubView === 'decks';
+  const onAdmin = state.homeSubView === 'admin';
+
+  if (homeDashboardView) homeDashboardView.classList.toggle('hidden', !onHome);
+  if (decksPageView) decksPageView.classList.toggle('hidden', !onDecks);
+  if (adminStudioView) adminStudioView.classList.toggle('hidden', !onAdmin);
+
+  if (btnNavHome) btnNavHome.classList.toggle('active', onHome);
+  if (btnNavCourses) btnNavCourses.classList.toggle('active', onDecks && state.decksNavMode === 'courses');
+  if (btnNavDecks) btnNavDecks.classList.toggle('active', onDecks && state.decksNavMode !== 'courses');
+  if (btnNavAdmin) btnNavAdmin.classList.toggle('active', onAdmin);
+  syncMobileBottomNavUI();
+
+  if (btnDecksReturnBattle) {
+    btnDecksReturnBattle.classList.toggle('hidden', !state.decksOpenedFromPlay);
+  }
+
+  if (arcadeTitleScreen) {
+    arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (onDecks) {
+    state.demoWords = [];
+    state.demoTargetId = null;
+    renderDecksPage();
+  } else if (onAdmin) {
+    state.demoWords = [];
+    state.demoTargetId = null;
+    renderAdminStudio();
+  } else if (state.screenMode === 'title') {
+    resizeCanvas();
+    requestAnimationFrame(() => {
+      resizeCanvas();
+      seedTitleDemoWords();
+    });
+  }
+}
+
+export function resumePlayIfAllDialogsClosed() {
+  const anyOpen = (
+    (courseBrowserDialog && courseBrowserDialog.open) ||
+    (customWordsDialog && customWordsDialog.open) ||
+    (ttsSettingsDialog && ttsSettingsDialog.open) ||
+    (dictDialog && dictDialog.open) ||
+    (gameSettingsDialog && gameSettingsDialog.open) ||
+    (statsDialog && statsDialog.open) ||
+    (leaderboardDialog && leaderboardDialog.open)
+  );
+  syncMobileBottomNavUI();
+  if (!anyOpen && state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
+    state.paused = false;
+  }
+}
+
+export function closeAllTopDialogs() {
+  [
+    courseBrowserDialog,
+    customWordsDialog,
+    ttsSettingsDialog,
+    dictDialog,
+    gameSettingsDialog,
+    statsDialog,
+    leaderboardDialog
+  ].forEach(dlg => {
+    if (dlg && dlg.open) dlg.close();
+  });
+}
+
+export function bindInteractiveStep(el, handler) {
+  if (!el) return;
+  el.addEventListener('click', () => {
+    sound.init();
+    handler();
+  });
+  el.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      sound.init();
+      handler();
+    }
+  });
+}
+
+export function bindNavigationEvents() {
+  if (!_resizeBound) {
+    window.addEventListener('resize', resizeCanvas);
+    _resizeBound = true;
+  }
+  btnLangMode.addEventListener('click', () => {
+    const idx = state.nativeLangModes.findIndex(m => m.id === state.nativeLang);
+    const nextMode = state.nativeLangModes[(idx + 1) % state.nativeLangModes.length];
+    setNativeLanguage(nextMode.id);
+    btnLangMode.blur();
+  });
+
+  document.querySelectorAll('.native-lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setNativeLanguage(btn.dataset.nativeLang);
+      btn.blur();
+    });
+  });
+
+  // Переключение Фильтра 1 (Я учу)
+  document.querySelectorAll('.target-lang-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTargetLanguage(btn.dataset.targetLang);
+      btn.blur();
+    });
+  });
+
+  if (btnTargetLangHud) {
+    btnTargetLangHud.addEventListener('click', () => {
+      const order = ['de', 'en', 'es'];
+      const next = order[(order.indexOf(state.targetLang) + 1) % order.length];
+      setTargetLanguage(next);
+      if (state.screenMode === 'play') {
+        showLevelIntroOverlay();
+      }
+      btnTargetLangHud.blur();
+    });
+  }
+
+  [homeBrandLogo, btnNavHome].forEach(el => {
+    if (!el) return;
+    el.addEventListener('click', () => {
+      if (state.decksOpenedFromPlay) {
+        returnToTitleScreen();
+      } else if (state.homeSubView !== 'home') {
+        switchHomeSubView('home');
+      } else if (arcadeTitleScreen) {
+        arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      if (el.blur) el.blur();
+    });
+  });
+
+  if (btnNavPlay) {
+    btnNavPlay.addEventListener('click', () => {
+      launchFromTitleScreen();
+      btnNavPlay.blur();
+    });
+  }
+
+  if (btnHudLangPair) {
+    btnHudLangPair.addEventListener('click', (e) => {
+      sound.init();
+      if (e.shiftKey) {
+        const order = ['de', 'en', 'es'];
+        const nextT = order[(order.indexOf(state.targetLang) + 1) % order.length];
+        setTargetLanguage(nextT);
+        showLevelIntroOverlay();
+      } else {
+        const idx = state.nativeLangModes.findIndex(m => m.id === state.nativeLang);
+        const nextMode = state.nativeLangModes[(idx + 1) % state.nativeLangModes.length];
+        setNativeLanguage(nextMode.id);
+      }
+      btnHudLangPair.blur();
+    });
+  }
+
+  if (btnMobNavHome) {
+    btnMobNavHome.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      if (state.decksOpenedFromPlay) {
+        returnToTitleScreen();
+      } else if (state.homeSubView !== 'home') {
+        switchHomeSubView('home');
+      } else if (arcadeTitleScreen) {
+        arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      syncMobileBottomNavUI('home');
+      btnMobNavHome.blur();
+    });
+  }
+
+  if (btnMobNavPlay) {
+    btnMobNavPlay.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      launchFromTitleScreen();
+      btnMobNavPlay.blur();
+    });
+  }
+
+  if (btnMobNavCourses) {
+    btnMobNavCourses.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      openDecksPage({ sourceFilter: 'official', navMode: 'courses', onlyFavorites: false });
+      syncMobileBottomNavUI('courses');
+      btnMobNavCourses.blur();
+    });
+  }
+
+  if (btnMobNavDecks) {
+    btnMobNavDecks.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      openDecksPage({ sourceFilter: 'all', navMode: 'decks', onlyFavorites: false });
+      syncMobileBottomNavUI('decks');
+      btnMobNavDecks.blur();
+    });
+  }
+
+  if (btnMobNavStats) {
+    btnMobNavStats.addEventListener('click', () => {
+      sound.init();
+      if (gameSettingsDialog && gameSettingsDialog.open) gameSettingsDialog.close();
+      openStatsModal();
+      btnMobNavStats.blur();
+    });
+  }
+
+  bindInteractiveStep(homeStepItem1, () => openDecksPage({ sourceFilter: 'all', navMode: 'courses' }));
+  bindInteractiveStep(homeStepItem2, () => launchFromTitleScreen());
+  bindInteractiveStep(homeStepItem3, () => openGameSettingsModal());
+
+
+  [
+    courseBrowserDialog,
+    customWordsDialog,
+    ttsSettingsDialog,
+    dictDialog,
+    gameSettingsDialog,
+    statsDialog,
+    leaderboardDialog
+  ].forEach(dlg => {
+    if (!dlg) return;
+    dlg.addEventListener('close', resumePlayIfAllDialogsClosed);
+  });
+}

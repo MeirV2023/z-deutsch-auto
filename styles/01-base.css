@@ -1,0 +1,423 @@
+/* ==========================================================================
+   Z-LINGO STYLES · 01-base.css
+   Базовые переменные (:root), шрифты, сброс и переключение режимов
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+  --bg-deep: #040711;
+  --bg-panel: rgba(8, 14, 28, 0.92);
+  --bg-panel-strong: rgba(9, 16, 32, 0.97);
+  --border-subtle: rgba(56, 189, 248, 0.28);
+  --border-bright: rgba(56, 189, 248, 0.6);
+  --text-main: #f8fafc;
+  --text-secondary: #dbeafe;
+  --text-muted: #cbd5e1;
+  --accent-cyan: #38bdf8;
+  --accent-teal: #2dd4bf;
+  --accent-orange: #fb923c;
+  --accent-amber: #fde047;
+  --accent-emerald: #34d399;
+  --accent-rose: #fb7185;
+  --accent-violet: #c084fc;
+
+  /* Цвета немецких артиклей для визуального запоминания рода */
+  --art-der: #38bdf8;      /* Синий — мужской род (der) */
+  --art-die: #fb7185;      /* Розовый/красный — женский род (die) */
+  --art-das: #34d399;      /* Изумрудный — средний род (das) */
+  --art-pl: #fde047;       /* Янтарный — множественное (Pl.) */
+  --art-verb: #c084fc;     /* Фиолетовый — глаголы / прочее */
+
+  /* Фирменная многоязычная типографика Z-LINGO (RU · EN · DE · FR · ES · HE) */
+  --font-logo: 'Orbitron', 'Exo 2', 'Rubik', sans-serif;
+  --font-heading: 'Exo 2', 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  --font-ui: 'Rubik', 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-words: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  --font-mono: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+}
+
+/* Языковые профили шрифтов по таблице */
+html[lang="ru"],
+html[lang="de"],
+html[lang="fr"],
+html[lang="es"] {
+  --font-ui: 'Rubik', 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Exo 2', 'Rubik', sans-serif;
+}
+
+html[lang="en"] {
+  --font-ui: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Exo 2', 'Orbitron', 'Rubik', sans-serif;
+}
+
+html[lang="he"],
+[dir="rtl"] {
+  --font-ui: 'Rubik', 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  --font-words: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 52%, #0c1933 0%, #050914 70%, #020409 100%);
+  color: var(--text-main);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.4;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-font-smoothing: antialiased;
+}
+
+.scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.45) rgba(15, 23, 42, 0.5);
+}
+
+/* Основной игровой холст */
+#gameCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   ЖЕЛЕЗОБЕТОННОЕ ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ (ИСКЛЮЧАЕТ ПЕРЕХВАТ НАЖАТИЙ НА ТЕЛЕФОНЕ)
+   ========================================================================== */
+body.mode-title .hud-top,
+body.mode-title .battle-arena-frame,
+body.mode-title .sidebar-left,
+body.mode-title .sidebar-right,
+body.mode-title .ztype-keyboard-dock {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+body.mode-play .arcade-title-screen,
+.arcade-title-screen[hidden] {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* ==========================================================================
+   АРКАДНЫЙ ТИТУЛЬНЫЙ ЭКРАН (ЧИТАБЕЛЬНАЯ ИЕРАРХИЯ БЕЗ НАЛОЖЕНИЯ ТЕКСТА)
+   ========================================================================== */
+.arcade-title-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: max(10px, env(safe-area-inset-top)) 14px max(12px, env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+/* Верхняя карточка-шапка с плотным фоном */
+.title-header-card {
+  pointer-events: auto;
+  width: min(740px, 100%);
+  background: var(--bg-panel);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 12px 18px 14px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pilot-rank-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 10px;
+  background: rgba(251, 191, 36, 0.14);
+  border: 1px solid rgba(253, 224, 71, 0.45);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--accent-amber);
+}
+
+.title-hero-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.arcade-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.arcade-logo-main {
+  font-family: var(--font-logo);
+  font-size: clamp(1.65rem, 3.6vw, 2rem);
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+  line-height: 1.1;
+}
+
+.arcade-logo-sub {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #0f172a;
+  background: linear-gradient(135deg, #fde047, #fb923c);
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.35);
+}
+
+.title-tagline {
+  font-size: 0.96rem;
+  font-weight: 500;
+  line-height: 1.42;
+  color: #e2e8f0;
+  max-width: 600px;
+}
+
+/* Открытая арена посередине для демонстрационного боя корабля */
+.title-space-window {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 90px;
+  pointer-events: none;
+}
+
+/* Нижний интерактивный док */
+.title-bottom-dock {
+  pointer-events: auto;
+  width: min(740px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 11px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.72);
+}
+
+.arsenal-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.arsenal-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.arsenal-label {
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: var(--accent-cyan);
+}
+
+.arsenal-desc {
+  font-size: 0.88rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.weapon-selector-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.weapon-selector-row.compact {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  gap: 8px;
+}
+
+.weapon-pill-btn {
+  --w-color: #38bdf8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 9px 8px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(148, 163, 184, 0.3);
+  background: rgba(15, 23, 42, 0.85);
+  color: #e2e8f0;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.weapon-selector-row.compact .weapon-pill-btn {
+  flex: 1 0 auto;
+  flex-direction: row;
+  gap: 6px;
+  padding: 8px 12px;
+}
+
+.weapon-pill-btn:hover {
+  border-color: var(--w-color);
+  color: #ffffff;
+  background: rgba(30, 41, 59, 0.95);
+}
+
+.weapon-pill-btn.active {
+  border-color: var(--w-color);
+  background: rgba(30, 41, 59, 0.98);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--w-color) 42%, transparent);
+  color: #ffffff;
+}
+
+.weapon-pill-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.weapon-pill-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.title-mission-strip {
+  width: 100%;
+}
+
+.title-launch-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.arcade-launch-btn {
+  position: relative;
+  width: 100%;
+  padding: 13px 22px;
+  border-radius: 14px;
+  border: 1px solid rgba(110, 231, 183, 0.75);
+  background: linear-gradient(135deg, #0284c7 0%, #10b981 55%, #059669 100%);
+  color: #ffffff;
+  font-family: var(--font-ui);
+  font-size: 1.06rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 8px 26px rgba(16, 185, 129, 0.42);
+  transition: transform 0.14s ease, filter 0.14s ease;
+}
+
+.arcade-launch-btn:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+.arcade-launch-btn:active {
+  transform: scale(0.985);
+}
+
+.launch-glow {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 75%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: skewX(-24deg);
+  animation: launchSweep 3.4s infinite;
+  pointer-events: none;
+}
+
+@keyframes launchSweep {
+  0% { left: -120%; }
+  45%, 100% { left: 160%; }
+}
+
+.launch-text {
+  position: relative;
+  z-index: 1;
+}
+
+.title-utility-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.arcade-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(15, 23, 42, 0.85);
+  color: #f1f5f9;
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.arcade-link-btn:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.18);
+}
+
+.arcade-link-btn.highlight-ai {
+  border-color: rgba(192, 132, 252, 0.58);
+  background: rgba(139, 92, 246, 0.22);
+  color: #f3e8ff;
+}
+

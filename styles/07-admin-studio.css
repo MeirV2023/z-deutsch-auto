@@ -1,0 +1,417 @@
+/* ==========================================================================
+   Z-LINGO STYLES · 07-admin-studio.css
+   Студия Супер-Админа (#adminStudioView) и дерево категорий
+   ========================================================================== */
+
+/* ==========================================================================
+   СТУДИЯ СУПЕР-АДМИНА (#adminStudioView) И КАТЕГОРИИ КУРСОВ (Auto / Бизнес)
+   ========================================================================== */
+.home-nav-pill.admin-nav-pill {
+  border-color: rgba(251, 191, 36, 0.42);
+  color: #fde68a;
+}
+
+.home-nav-pill.admin-nav-pill.active {
+  border-color: #fbbf24;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.34), rgba(180, 83, 9, 0.32));
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.3);
+}
+
+.qs-card-art.art-business,
+.deck-icon-tile.art-business {
+  background: radial-gradient(circle at 30% 25%, rgba(251, 191, 36, 0.42), rgba(30, 58, 138, 0.85));
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+.deck-tag-badge.category {
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.42);
+  color: #bae6fd;
+}
+
+.admin-studio-view {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: 26px;
+}
+
+.admin-studio-view.hidden {
+  display: none !important;
+}
+
+.admin-hero-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 20px;
+  border-radius: 18px;
+  background: linear-gradient(125deg, rgba(15, 23, 42, 0.95), rgba(30, 27, 75, 0.88), rgba(69, 26, 3, 0.55));
+  border: 1px solid rgba(251, 191, 36, 0.36);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+}
+
+.admin-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-crown-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.28), rgba(217, 119, 6, 0.25));
+  border: 1px solid rgba(251, 191, 36, 0.55);
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.22);
+  flex-shrink: 0;
+}
+
+.admin-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-creds-accordion {
+  background: rgba(8, 15, 31, 0.9);
+  border: 1px solid rgba(251, 191, 36, 0.28);
+  border-radius: 14px;
+  padding: 10px 15px;
+}
+
+.admin-creds-accordion summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #fde68a;
+  font-size: 0.9rem;
+}
+
+.admin-creds-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.admin-studio-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.admin-builder-card,
+.admin-organizer-card {
+  padding: 16px 18px;
+  gap: 12px;
+}
+
+.admin-form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-form-grid-3 {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.7fr) minmax(0, 1.4fr) 82px;
+  gap: 10px;
+}
+
+.admin-new-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px dashed rgba(56, 189, 248, 0.45);
+  flex-wrap: wrap;
+}
+
+.admin-new-cat-row.hidden {
+  display: none !important;
+}
+
+.admin-words-textarea {
+  min-height: 210px;
+  font-family: "Rubik", monospace;
+  font-size: 0.88rem;
+  line-height: 1.48;
+}
+
+.admin-ai-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+}
+
+.admin-check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  cursor: pointer;
+}
+
+.admin-check-row input[type="checkbox"] {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  accent-color: #34d399;
+  flex-shrink: 0;
+}
+
+.admin-live-preview-wrap {
+  border-radius: 12px;
+  background: rgba(7, 12, 24, 0.86);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-preview-header {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #6ee7b7;
+}
+
+.admin-preview-table {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 215px;
+  overflow-y: auto;
+}
+
+.admin-preview-row {
+  display: grid;
+  grid-template-columns: auto minmax(110px, 1fr) minmax(130px, 1.3fr);
+  gap: 8px;
+  align-items: center;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  font-size: 0.82rem;
+}
+
+.admin-preview-art {
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.36);
+  color: #7dd3fc;
+  font-weight: 700;
+  font-size: 0.74rem;
+  white-space: nowrap;
+}
+
+.admin-preview-word {
+  color: #ffffff;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-preview-word small {
+  color: #94a3b8;
+  font-weight: 500;
+  margin-left: 5px;
+}
+
+.admin-preview-trans {
+  color: #fde047;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-org-hint {
+  margin: 0;
+  font-size: 0.83rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.admin-categories-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 760px;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+
+.admin-cat-group {
+  border-radius: 14px;
+  padding: 11px 12px;
+  background: rgba(12, 20, 38, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.admin-cat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.admin-cat-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.96rem;
+  color: #f8fafc;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.admin-course-card {
+  border-radius: 11px;
+  padding: 10px 11px;
+  background: rgba(20, 31, 56, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-course-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-course-name {
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+.admin-course-sub {
+  font-size: 0.77rem;
+  color: #94a3b8;
+}
+
+.admin-course-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-mini-select {
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(7, 13, 27, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #e2e8f0;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.admin-modules-details summary {
+  cursor: pointer;
+  font-size: 0.79rem;
+  font-weight: 700;
+  color: #7dd3fc;
+}
+
+.admin-module-box {
+  margin-top: 7px;
+  padding: 7px 9px;
+  border-radius: 9px;
+  background: rgba(8, 14, 28, 0.86);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-module-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.admin-lesson-pills {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.admin-lesson-pill {
+  padding: 3px 8px;
+  border-radius: 7px;
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  background: rgba(30, 41, 59, 0.8);
+  color: #cbd5e1;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-lesson-pill:hover {
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+@media (max-width: 1080px) {
+  .admin-studio-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-creds-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .admin-form-grid-2,
+  .admin-form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-preview-row {
+    grid-template-columns: 1fr;
+  }
+}
+
