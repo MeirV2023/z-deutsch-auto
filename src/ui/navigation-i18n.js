@@ -32,13 +32,11 @@ import {
   btnDownloadSampleApkg,
   btnHudLangPair,
   btnLangMode,
-  btnMobNavCourses,
   btnMobNavDecks,
   btnMobNavHome,
   btnMobNavPlay,
   btnMobNavStats,
   btnNavAdmin,
-  btnNavCourses,
   btnNavDecks,
   btnNavHome,
   btnNavPlay,
@@ -105,8 +103,6 @@ import {
   labelDecksStatLearned,
   labelDecksStatStreak,
   labelDecksStatTotal,
-  labelDecksSubtabCourses,
-  labelDecksSubtabMyDecks,
   labelDecksViewGrid,
   labelDecksViewList,
   labelDictPinnedFilter,
@@ -125,7 +121,6 @@ import {
   labelMetricDecks,
   labelMetricLearned,
   labelMetricStreak,
-  labelMobNavCourses,
   labelMobNavDecks,
   labelMobNavHome,
   labelMobNavPlay,
@@ -138,7 +133,6 @@ import {
   labelModeType,
   labelNativeFilter,
   labelNavAdmin,
-  labelNavCourses,
   labelNavDecks,
   labelNavHome,
   labelNavLeaderboard,
@@ -358,7 +352,6 @@ export function applyStaticUILocalization() {
   if (homeBrandSub) homeBrandSub.textContent = tr.homeBrandSub;
   if (labelNavHome) labelNavHome.textContent = tr.navHome;
   if (labelNavPlay) labelNavPlay.textContent = tr.navPlay;
-  if (labelNavCourses) labelNavCourses.textContent = tr.navCourses;
   if (labelNavDecks) labelNavDecks.textContent = tr.navDecks;
   if (labelNavStats) labelNavStats.textContent = tr.navStats;
   if (labelNavLeaderboard) labelNavLeaderboard.textContent = tr.navLeaderboard;
@@ -410,7 +403,6 @@ export function applyStaticUILocalization() {
 
   if (labelMobNavHome && tr.mobNavHome) labelMobNavHome.textContent = tr.mobNavHome;
   if (labelMobNavPlay && tr.mobNavPlay) labelMobNavPlay.textContent = tr.mobNavPlay;
-  if (labelMobNavCourses && tr.mobNavCourses) labelMobNavCourses.textContent = tr.mobNavCourses;
   if (labelMobNavDecks && tr.mobNavDecks) labelMobNavDecks.textContent = tr.mobNavDecks;
   if (labelMobNavStats && tr.mobNavStats) labelMobNavStats.textContent = tr.mobNavStats;
 
@@ -526,7 +518,7 @@ export function applyStaticUILocalization() {
   if (labelDecksSidebarProgTitle) labelDecksSidebarProgTitle.textContent = tr.decksSidebarProgTitle;
   if (labelDecksInProgressSub) labelDecksInProgressSub.textContent = tr.decksInProgressSub;
   if (decksHeroTitle) {
-    decksHeroTitle.textContent = state.decksNavMode === 'courses' ? tr.decksHeroTitleCourses : tr.decksHeroTitleMy;
+    decksHeroTitle.textContent = tr.decksHeroTitleMy;
   }
   if (decksHeroSubtitle) decksHeroSubtitle.textContent = tr.decksHeroSub;
   if (decksHeroSubtitleMobile && tr.decksHeroSubMobile) {
@@ -542,8 +534,6 @@ export function applyStaticUILocalization() {
   if (labelDecksStatTotal) labelDecksStatTotal.textContent = tr.decksStatTotal;
   if (labelDecksStatLearned) labelDecksStatLearned.textContent = tr.decksStatLearned;
   if (labelDecksStatStreak) labelDecksStatStreak.textContent = tr.decksStatStreak;
-  if (labelDecksSubtabCourses) labelDecksSubtabCourses.textContent = tr.navCourses;
-  if (labelDecksSubtabMyDecks) labelDecksSubtabMyDecks.textContent = tr.navDecks;
   if (labelDecksReturnBattle) labelDecksReturnBattle.textContent = tr.decksReturnBattle;
   if (labelDecksViewGrid) labelDecksViewGrid.textContent = tr.decksViewGrid;
   if (labelDecksViewList) labelDecksViewList.textContent = tr.decksViewList;
@@ -583,7 +573,7 @@ export function syncMobileBottomNavUI(overrideTab = '') {
     if ((statsDialog && statsDialog.open) || (leaderboardDialog && leaderboardDialog.open)) {
       activeTab = 'stats';
     } else if (state.homeSubView === 'decks') {
-      activeTab = state.decksNavMode === 'courses' ? 'courses' : 'decks';
+      activeTab = 'decks';
     } else if (state.homeSubView === 'admin') {
       activeTab = 'profile';
     } else {
@@ -592,7 +582,6 @@ export function syncMobileBottomNavUI(overrideTab = '') {
   }
   if (btnMobNavHome) btnMobNavHome.classList.toggle('active', activeTab === 'home');
   if (btnMobNavPlay) btnMobNavPlay.classList.toggle('active', activeTab === 'play');
-  if (btnMobNavCourses) btnMobNavCourses.classList.toggle('active', activeTab === 'courses');
   if (btnMobNavDecks) btnMobNavDecks.classList.toggle('active', activeTab === 'decks');
   if (btnMobNavStats) btnMobNavStats.classList.toggle('active', activeTab === 'stats');
 }
@@ -608,8 +597,7 @@ export function switchHomeSubView(subView) {
   if (adminStudioView) adminStudioView.classList.toggle('hidden', !onAdmin);
 
   if (btnNavHome) btnNavHome.classList.toggle('active', onHome);
-  if (btnNavCourses) btnNavCourses.classList.toggle('active', onDecks && state.decksNavMode === 'courses');
-  if (btnNavDecks) btnNavDecks.classList.toggle('active', onDecks && state.decksNavMode !== 'courses');
+  if (btnNavDecks) btnNavDecks.classList.toggle('active', onDecks);
   if (btnNavAdmin) btnNavAdmin.classList.toggle('active', onAdmin);
   syncMobileBottomNavUI();
 
@@ -785,21 +773,11 @@ export function bindNavigationEvents() {
     });
   }
 
-  if (btnMobNavCourses) {
-    btnMobNavCourses.addEventListener('click', () => {
-      sound.init();
-      closeAllTopDialogs();
-      openDecksPage({ sourceFilter: 'official', navMode: 'courses', onlyFavorites: false });
-      syncMobileBottomNavUI('courses');
-      btnMobNavCourses.blur();
-    });
-  }
-
   if (btnMobNavDecks) {
     btnMobNavDecks.addEventListener('click', () => {
       sound.init();
       closeAllTopDialogs();
-      openDecksPage({ sourceFilter: 'all', navMode: 'decks', onlyFavorites: false });
+      openDecksPage({ sourceFilter: 'all', onlyFavorites: false });
       syncMobileBottomNavUI('decks');
       btnMobNavDecks.blur();
     });
@@ -814,7 +792,7 @@ export function bindNavigationEvents() {
     });
   }
 
-  bindInteractiveStep(homeStepItem1, () => openDecksPage({ sourceFilter: 'all', navMode: 'courses' }));
+  bindInteractiveStep(homeStepItem1, () => openDecksPage({ sourceFilter: 'all' }));
   bindInteractiveStep(homeStepItem2, () => launchFromTitleScreen());
   bindInteractiveStep(homeStepItem3, () => openGameSettingsModal());
 

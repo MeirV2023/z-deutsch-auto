@@ -38,8 +38,6 @@ import {
   btnDecksCreateDeck,
   btnDecksMobileFilterToggle,
   btnDecksReturnBattle,
-  btnDecksSubtabCourses,
-  btnDecksSubtabMyDecks,
   btnDecksViewGrid,
   btnDecksViewList,
   btnMobFilterAll,
@@ -47,7 +45,6 @@ import {
   btnMobFilterFav,
   btnMobFilterUser,
   btnNavAdmin,
-  btnNavCourses,
   btnNavDecks,
   btnNavHome,
   btnOpenCatalogHud,
@@ -202,9 +199,6 @@ export function openDecksPage(opts = {}) {
     state.catalogSourceFilter = opts.sourceFilter;
   }
   state.decksOnlyFavorites = Boolean(opts.onlyFavorites);
-  if (opts.navMode) {
-    state.decksNavMode = opts.navMode;
-  }
   if (typeof opts.openCourseId === 'string') {
     state.openedDeckId = opts.openCourseId;
   } else {
@@ -229,7 +223,6 @@ export function resumeBattleFromDecksPage() {
   if (decksPageView) decksPageView.classList.add('hidden');
   if (adminStudioView) adminStudioView.classList.add('hidden');
   if (btnNavHome) btnNavHome.classList.add('active');
-  if (btnNavCourses) btnNavCourses.classList.remove('active');
   if (btnNavDecks) btnNavDecks.classList.remove('active');
   if (btnNavAdmin) btnNavAdmin.classList.remove('active');
 
@@ -731,9 +724,9 @@ export function renderDecksPage() {
     if (st.isStarted) startedCount++;
   });
 
-  // 1. Синхронизация шапки, подвкладок, мобильных чипов и боковых фильтров
+  // 1. Синхронизация шапки, мобильных чипов и боковых фильтров
   if (decksHeroTitle) {
-    decksHeroTitle.textContent = state.decksNavMode === 'courses' ? tr.decksHeroTitleCourses : tr.decksHeroTitleMy;
+    decksHeroTitle.textContent = tr.decksHeroTitleMy;
   }
   if (decksHeroSubtitleMobile && tr.decksHeroSubMobile) {
     decksHeroSubtitleMobile.textContent = tr.decksHeroSubMobile;
@@ -743,17 +736,8 @@ export function renderDecksPage() {
       ? tr.decksSearchPlaceholderMobile
       : tr.decksSearchPlaceholder;
   }
-  if (btnNavCourses && state.homeSubView === 'decks') {
-    btnNavCourses.classList.toggle('active', state.decksNavMode === 'courses');
-  }
   if (btnNavDecks && state.homeSubView === 'decks') {
-    btnNavDecks.classList.toggle('active', state.decksNavMode !== 'courses');
-  }
-  if (btnDecksSubtabCourses) {
-    btnDecksSubtabCourses.classList.toggle('active', state.decksNavMode === 'courses');
-  }
-  if (btnDecksSubtabMyDecks) {
-    btnDecksSubtabMyDecks.classList.toggle('active', state.decksNavMode !== 'courses');
+    btnNavDecks.classList.add('active');
   }
   if (btnDecksReturnBattle) {
     btnDecksReturnBattle.classList.toggle('hidden', !state.decksOpenedFromPlay);
@@ -1263,50 +1247,20 @@ export function renderCourseBrowserModal() {
   renderDecksPage();
 }
 
-export function openCourseCatalogModal(initialFilter = 'all', navMode = 'decks') {
+export function openCourseCatalogModal(initialFilter = 'all') {
   openDecksPage({
-    sourceFilter: initialFilter,
-    navMode
+    sourceFilter: initialFilter
   });
 }
 
 export function bindDecksPageEvents() {
-  [btnOpenCatalogTitle, btnTitleAllCourses, arcadeLogoSub, btnOpenCatalogHud, btnSidebarCatalog, btnOverlayCatalog, btnNavCourses].forEach(el => {
+  [btnNavDecks, btnOpenCatalogTitle, btnTitleAllCourses, arcadeLogoSub, btnOpenCatalogHud, btnSidebarCatalog, btnOverlayCatalog].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {
-      openDecksPage({ sourceFilter: 'all', navMode: 'courses' });
+      openDecksPage({ sourceFilter: 'all' });
       el.blur();
     });
   });
-
-  if (btnNavDecks) {
-    btnNavDecks.addEventListener('click', () => {
-      openDecksPage({ sourceFilter: 'all', navMode: 'decks' });
-      btnNavDecks.blur();
-    });
-  }
-
-  if (btnDecksSubtabCourses) {
-    btnDecksSubtabCourses.addEventListener('click', () => {
-      state.decksNavMode = 'courses';
-      state.catalogSourceFilter = 'official';
-      state.decksOnlyFavorites = false;
-      state.openedDeckId = '';
-      renderDecksPage();
-      actions.syncMobileBottomNavUI();
-    });
-  }
-
-  if (btnDecksSubtabMyDecks) {
-    btnDecksSubtabMyDecks.addEventListener('click', () => {
-      state.decksNavMode = 'decks';
-      state.catalogSourceFilter = 'all';
-      state.decksOnlyFavorites = false;
-      state.openedDeckId = '';
-      renderDecksPage();
-      actions.syncMobileBottomNavUI();
-    });
-  }
 
   if (btnDecksReturnBattle) {
     btnDecksReturnBattle.addEventListener('click', () => {

@@ -235,10 +235,6 @@ export const labelDecksStatLearned = document.getElementById('labelDecksStatLear
 export const decksHeroLearnedCount = document.getElementById('decksHeroLearnedCount');
 export const labelDecksStatStreak = document.getElementById('labelDecksStatStreak');
 export const decksHeroStreakCount = document.getElementById('decksHeroStreakCount');
-export const btnDecksSubtabCourses = document.getElementById('btnDecksSubtabCourses');
-export const labelDecksSubtabCourses = document.getElementById('labelDecksSubtabCourses');
-export const btnDecksSubtabMyDecks = document.getElementById('btnDecksSubtabMyDecks');
-export const labelDecksSubtabMyDecks = document.getElementById('labelDecksSubtabMyDecks');
 export const btnDecksOpenAdmin = document.getElementById('btnDecksOpenAdmin');
 export const labelDecksOpenAdmin = document.getElementById('labelDecksOpenAdmin');
 export const btnDecksReturnBattle = document.getElementById('btnDecksReturnBattle');
@@ -298,14 +294,12 @@ export const homeBrandLogo = document.getElementById('homeBrandLogo');
 export const homeBrandSub = document.getElementById('homeBrandSub');
 export const btnNavHome = document.getElementById('btnNavHome');
 export const btnNavPlay = document.getElementById('btnNavPlay');
-export const btnNavCourses = document.getElementById('btnNavCourses');
 export const btnNavDecks = document.getElementById('btnNavDecks');
 export const btnNavStats = document.getElementById('btnNavStats');
 export const btnNavLeaderboard = document.getElementById('btnNavLeaderboard');
 export const btnNavAdmin = document.getElementById('btnNavAdmin');
 export const labelNavHome = document.getElementById('labelNavHome');
 export const labelNavPlay = document.getElementById('labelNavPlay');
-export const labelNavCourses = document.getElementById('labelNavCourses');
 export const labelNavDecks = document.getElementById('labelNavDecks');
 export const labelNavStats = document.getElementById('labelNavStats');
 export const labelNavLeaderboard = document.getElementById('labelNavLeaderboard');
@@ -346,12 +340,10 @@ export const btnDecksMobileFilterToggle = document.getElementById('btnDecksMobil
 export const mobileBottomNav = document.getElementById('mobileBottomNav');
 export const btnMobNavHome = document.getElementById('btnMobNavHome');
 export const btnMobNavPlay = document.getElementById('btnMobNavPlay');
-export const btnMobNavCourses = document.getElementById('btnMobNavCourses');
 export const btnMobNavDecks = document.getElementById('btnMobNavDecks');
 export const btnMobNavStats = document.getElementById('btnMobNavStats');
 export const labelMobNavHome = document.getElementById('labelMobNavHome');
 export const labelMobNavPlay = document.getElementById('labelMobNavPlay');
-export const labelMobNavCourses = document.getElementById('labelMobNavCourses');
 export const labelMobNavDecks = document.getElementById('labelMobNavDecks');
 export const labelMobNavStats = document.getElementById('labelMobNavStats');
 
@@ -692,10 +684,6 @@ export const dom = {
   decksHeroLearnedCount,
   labelDecksStatStreak,
   decksHeroStreakCount,
-  btnDecksSubtabCourses,
-  labelDecksSubtabCourses,
-  btnDecksSubtabMyDecks,
-  labelDecksSubtabMyDecks,
   btnDecksOpenAdmin,
   labelDecksOpenAdmin,
   btnDecksReturnBattle,
@@ -752,14 +740,12 @@ export const dom = {
   homeBrandSub,
   btnNavHome,
   btnNavPlay,
-  btnNavCourses,
   btnNavDecks,
   btnNavStats,
   btnNavLeaderboard,
   btnNavAdmin,
   labelNavHome,
   labelNavPlay,
-  labelNavCourses,
   labelNavDecks,
   labelNavStats,
   labelNavLeaderboard,
@@ -796,12 +782,10 @@ export const dom = {
   mobileBottomNav,
   btnMobNavHome,
   btnMobNavPlay,
-  btnMobNavCourses,
   btnMobNavDecks,
   btnMobNavStats,
   labelMobNavHome,
   labelMobNavPlay,
-  labelMobNavCourses,
   labelMobNavDecks,
   labelMobNavStats,
   labelQuickStartTitle,

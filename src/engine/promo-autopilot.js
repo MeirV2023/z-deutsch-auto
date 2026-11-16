@@ -9,7 +9,6 @@ import {
   adminStudioView,
   arcadeTitleScreen,
   btnNavAdmin,
-  btnNavCourses,
   btnNavDecks,
   btnNavHome,
   canvas,
@@ -42,7 +41,6 @@ export function launchFromTitleScreen() {
   if (decksPageView) decksPageView.classList.add('hidden');
   if (adminStudioView) adminStudioView.classList.add('hidden');
   if (btnNavHome) btnNavHome.classList.add('active');
-  if (btnNavCourses) btnNavCourses.classList.remove('active');
   if (btnNavDecks) btnNavDecks.classList.remove('active');
   if (btnNavAdmin) btnNavAdmin.classList.remove('active');
 

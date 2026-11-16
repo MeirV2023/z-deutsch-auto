@@ -72,9 +72,6 @@
           <button type="button" class="home-nav-pill" id="btnNavPlay">
             🎮 <span id="labelNavPlay">Играть</span>
           </button>
-          <button type="button" class="home-nav-pill" id="btnNavCourses">
-            📖 <span id="labelNavCourses">Курсы</span>
-          </button>
           <button type="button" class="home-nav-pill" id="btnNavDecks">
             📁 <span id="labelNavDecks">Мои колоды</span>
           </button>
@@ -649,15 +646,9 @@
               </div>
             </div>
 
-            <!-- Переключатель вкладок [Курсы | Мои колоды] и вида [Карточки | Список] -->
+            <!-- Панель управления колодами: Супер-Админ / возврат в бой и вид [Карточки | Список] -->
             <div class="decks-subbar-row">
               <div class="decks-subtabs-left">
-                <button type="button" class="decks-subtab-pill" id="btnDecksSubtabCourses">
-                  📖 <span id="labelDecksSubtabCourses">Курсы</span>
-                </button>
-                <button type="button" class="decks-subtab-pill active" id="btnDecksSubtabMyDecks">
-                  📁 <span id="labelDecksSubtabMyDecks">Мои колоды</span>
-                </button>
                 <button type="button" class="decks-subtab-pill" id="btnDecksOpenAdmin">
                   👑 <span id="labelDecksOpenAdmin">Супер-Админ</span>
                 </button>
@@ -946,7 +937,7 @@
     <!-- Всплывающее меню быстрых действий колоды по кнопке ⋮ -->
     <div class="deck-action-menu hidden" id="deckContextMenu" role="menu" aria-label="Действия с колодой"></div>
 
-    <!-- Мобильная нижняя панель навигации (5 вкладок: Главная · Играть · Курсы · Колоды · Статистика) -->
+    <!-- Мобильная нижняя панель навигации (4 вкладки: Главная · Играть · Колоды · Статистика) -->
     <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Мобильная навигация">
       <button type="button" class="mob-nav-item active" id="btnMobNavHome" data-mob-tab="home">
         <span class="mob-nav-icon-wrap">
@@ -968,16 +959,6 @@
           </svg>
         </span>
         <span class="mob-nav-label" id="labelMobNavPlay">Играть</span>
-      </button>
-
-      <button type="button" class="mob-nav-item" id="btnMobNavCourses" data-mob-tab="courses">
-        <span class="mob-nav-icon-wrap">
-          <svg class="mob-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M2 5.5A2.5 2.5 0 0 1 4.5 3H11a3 3 0 0 1 1 .18A3 3 0 0 1 13 3h6.5A2.5 2.5 0 0 1 22 5.5v12.2a1 1 0 0 1-1.15.99A14.5 14.5 0 0 0 13 19.6a2 2 0 0 1-2 0 14.5 14.5 0 0 0-7.85-.91A1 1 0 0 1 2 17.7V5.5z" />
-            <path d="M12 4.2v15.1" />
-          </svg>
-        </span>
-        <span class="mob-nav-label" id="labelMobNavCourses">Курсы</span>
       </button>
 
       <button type="button" class="mob-nav-item" id="btnMobNavDecks" data-mob-tab="decks">

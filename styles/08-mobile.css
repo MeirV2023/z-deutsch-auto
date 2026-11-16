@@ -633,8 +633,6 @@
   #decksContinueSection,
   #decksOverviewPane > .decks-section-block > .decks-section-heading,
   .decks-view-toggle,
-  #btnDecksSubtabCourses,
-  #btnDecksSubtabMyDecks,
   #btnDecksOpenAdmin {
     display: none !important;
   }
@@ -1106,10 +1104,10 @@
     border-radius: 18px;
   }
 
-  /* 7. Фиксированная нижняя навигация на 5 вкладок (Home · Play · Decks · Stats · Profile) */
+  /* 7. Фиксированная нижняя навигация на 4 вкладки (Главная · Играть · Колоды · Статистика) */
   body.mode-title .mobile-bottom-nav {
     display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 4px;
     align-items: stretch;
     position: fixed;

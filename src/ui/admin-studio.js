@@ -886,7 +886,7 @@ export function bindAdminStudioEvents() {
 
   if (btnAdminBackToDecks) {
     btnAdminBackToDecks.addEventListener('click', () => {
-      openDecksPage({ sourceFilter: 'official', navMode: 'courses' });
+      openDecksPage({ sourceFilter: 'official' });
     });
   }
 

@@ -187,7 +187,6 @@ export const state = {
   catalogSourceFilter: 'all', // 'all' | 'official' | 'user'
   decksOnlyFavorites: false,
   homeSubView: 'home', // 'home' | 'decks' | 'admin'
-  decksNavMode: 'decks', // 'decks' | 'courses'
   decksViewMode: 'grid', // 'grid' | 'list'
   decksCategoryFilter: 'all',
   decksLevelFilter: 'all',

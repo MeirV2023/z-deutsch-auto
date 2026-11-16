@@ -226,7 +226,7 @@ export const RU_TEXT = {
   decksInProgressSub: 'в процессе обучения',
   decksHeroTitleMy: 'Мои колоды',
   decksHeroTitleCourses: 'Курсы и колоды',
-  decksHeroSub: 'Ваши личные курсы и импортированные Anki-колоды',
+  decksHeroSub: 'Готовые курсы по темам и ваши импортированные Anki-колоды',
   decksHeroSubMobile: 'Ваши курсы и Anki-колоды',
   decksSearchPlaceholder: 'Поиск по названию, описанию или словам...',
   decksSearchPlaceholderMobile: 'Поиск по названию или словам...',

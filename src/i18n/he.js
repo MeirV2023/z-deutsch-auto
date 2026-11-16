@@ -224,7 +224,7 @@ export const HE_TEXT = {
   decksInProgressSub: 'בתהליך למידה',
   decksHeroTitleMy: 'החפיסות שלי',
   decksHeroTitleCourses: 'קורסים וחפיסות',
-  decksHeroSub: 'הקורסים האישיים שלך וחפיסות Anki שיובאו',
+  decksHeroSub: 'קורסים מובנים לפי נושא וחפיסות Anki שיובאו',
   decksHeroSubMobile: 'הקורסים וחפיסות ה-Anki שלך',
   decksSearchPlaceholder: 'חיפוש לפי שם, תיאור או מילים...',
   decksSearchPlaceholderMobile: 'חיפוש לפי שם או מילים...',
