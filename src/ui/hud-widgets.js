@@ -4,6 +4,7 @@ import { escapeHtml } from '../core/utils.js';
 import { getArticleStyle } from '../config/constants.js';
 import { ttsManager } from '../services/tts-service.js';
 import {
+  DAILY_GOAL_WORDS,
   dailyProgress,
   getLocalizedField,
   getNextLockedWeapon,
@@ -13,7 +14,6 @@ import {
   isEntryPinned,
   isRtlTranslation,
   learnedWordsSet,
-  makeWordKey,
   state,
   t,
   todayLearnedSet,
@@ -24,11 +24,9 @@ import {
   courseMatchesLevelFilter,
   getActiveSelection,
   getAllWordsInCourse,
-  getAllWordsInTargetLang,
   getCourseVisualTheme,
   getCoursesForTargetLang,
   getMergedLeaderboardEntries,
-  getOfficialCoursesForTargetLang,
   inferCourseCategory,
   resolveLessonBaseWords
 } from '../domain/catalog-service.js';
@@ -41,6 +39,7 @@ import {
   btnMobHudEmp,
   btnOpenCatalogTitle,
   btnPracticePinned,
+  desktopTopicsChips,
   desktopTypingPreview,
   empCountEl,
   hitSpotlightCard,
@@ -49,7 +48,16 @@ import {
   hitWordArticle,
   hitWordMain,
   hitWordTranslation,
+  homeDailyGoalFill,
+  homeDailyGoalTarget,
+  homeDailyGoalText,
   homeLeaderboardMiniList,
+  homeLevelPills,
+  homeMissionArtwork,
+  homeMissionProgFill,
+  homeMissionProgText,
+  homeMissionSubtitle,
+  homeMissionTitle,
   homeProgressPercent,
   homeProgressRingCircle,
   homeQuickStartGrid,
@@ -66,6 +74,11 @@ import {
   hudScore,
   hudShields,
   kbdProgressFill,
+  labelContinueMission,
+  labelDailyGoalTitle,
+  labelDesktopTopics,
+  labelHomeLevelFilter,
+  labelMissionLaunch,
   labelMobChooseLevel,
   labelMobChooseTopic,
   labelMobLives,
@@ -86,6 +99,9 @@ import {
   pilotRankPill,
   pilotRankText,
   pinnedCountBadge,
+  promoTargetLabel,
+  promoTargetPill,
+  promoTargetWordText,
   sidebarActiveLessonSub,
   sidebarDeckProgFill,
   sidebarDeckProgNum,
@@ -146,35 +162,438 @@ export function updateTodayLearnedUI() {
 }
 
 
+export function getLangFlagSvg(code) {
+  switch (code) {
+    case 'de':
+      return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgDe"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgDe)"><rect width="24" height="5.4" y="0" fill="#111827"/><rect width="24" height="5.4" y="5.3" fill="#dc2626"/><rect width="24" height="5.4" y="10.6" fill="#facc15"/></g></svg>`;
+    case 'en':
+      return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgEn"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgEn)"><rect width="24" height="16" fill="#1e3a8a"/><path d="M0 0l24 16M24 0L0 16" stroke="#ffffff" stroke-width="3.2"/><path d="M0 0l24 16M24 0L0 16" stroke="#dc2626" stroke-width="1.6"/><path d="M12 0v16M0 8h24" stroke="#ffffff" stroke-width="5"/><path d="M12 0v16M0 8h24" stroke="#dc2626" stroke-width="3"/></g></svg>`;
+    case 'es':
+      return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgEs"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgEs)"><rect width="24" height="16" fill="#dc2626"/><rect width="24" height="8" y="4" fill="#facc15"/><circle cx="7.5" cy="8" r="1.9" fill="#b45309"/></g></svg>`;
+    case 'ru':
+      return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgRu"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgRu)"><rect width="24" height="5.4" y="0" fill="#f8fafc"/><rect width="24" height="5.4" y="5.3" fill="#2563eb"/><rect width="24" height="5.4" y="10.6" fill="#dc2626"/></g></svg>`;
+    case 'he':
+      return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgHe"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgHe)"><rect width="24" height="16" fill="#f8fafc"/><rect width="24" height="2.4" y="2" fill="#2563eb"/><rect width="24" height="2.4" y="11.6" fill="#2563eb"/><path d="M12 5.2l2.3 4H9.7l2.3-4Zm0 5.6l-2.3-4h4.6l-2.3 4Z" fill="none" stroke="#1d4ed8" stroke-width="0.9"/></g></svg>`;
+    default:
+      return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" rx="3" fill="#1e293b"/></svg>`;
+  }
+}
+
+function getMissionArtworkSvg(course) {
+  const isUser = course && course.source === 'user';
+  const cat = isUser ? 'anki' : inferCourseCategory(course);
+  if (cat === 'auto') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="mSkyAuto" x1="67" y1="0" x2="67" y2="85" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1d4ed8"/>
+          <stop offset="65%" stop-color="#38bdf8"/>
+          <stop offset="100%" stop-color="#93c5fd"/>
+        </linearGradient>
+        <linearGradient id="mCarAuto" x1="36" y1="62" x2="98" y2="112" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#93c5fd"/>
+          <stop offset="45%" stop-color="#2563eb"/>
+          <stop offset="100%" stop-color="#1e3a8a"/>
+        </linearGradient>
+      </defs>
+      <rect width="134" height="134" fill="url(#mSkyAuto)"/>
+      <circle cx="96" cy="24" r="14" fill="#fef08a" fill-opacity="0.45"/>
+      <ellipse cx="32" cy="28" rx="22" ry="9" fill="#ffffff" fill-opacity="0.72"/>
+      <ellipse cx="96" cy="34" rx="26" ry="8" fill="#ffffff" fill-opacity="0.62"/>
+      <path d="M0 78L28 46l24 22 26-26 30 22 26-16v42H0V78Z" fill="#1e40af" fill-opacity="0.48"/>
+      <path d="M0 84L38 68l36 8 60-14v72H0V84Z" fill="#15803d"/>
+      <path d="M46 74L12 134h110L88 74H46Z" fill="#1e293b"/>
+      <path d="M65 77h4l3 57h-10l3-57Z" fill="#e2e8f0" fill-opacity="0.82"/>
+      <ellipse cx="67" cy="112" rx="34" ry="8" fill="#020617" fill-opacity="0.58"/>
+      <path d="M35 90l9-18c2-4 7-6 13-6h20c6 0 11 2 13 6l9 18c3 2 5 5 5 9v8c0 3-2 5-5 5H35c-3 0-5-2-5-5v-8c0-4 2-7 5-9Z" fill="url(#mCarAuto)" stroke="#bfdbfe" stroke-width="1.4"/>
+      <path d="M46 75h42l6 13H40l6-13Z" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
+      <rect x="35" y="95" width="12" height="5" rx="2.5" fill="#fef08a"/>
+      <rect x="87" y="95" width="12" height="5" rx="2.5" fill="#fef08a"/>
+      <rect x="55" y="97" width="24" height="6" rx="2" fill="#0f172a"/>
+    </svg>`;
+  }
+  if (cat === 'business') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="mSkyBiz" x1="0" y1="0" x2="134" y2="134" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1e1b4b"/><stop offset="60%" stop-color="#312e81"/><stop offset="100%" stop-color="#0f172a"/>
+        </linearGradient>
+        <linearGradient id="mCaseBiz" x1="30" y1="54" x2="104" y2="112" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#b45309"/>
+        </linearGradient>
+      </defs>
+      <rect width="134" height="134" fill="url(#mSkyBiz)"/>
+      <rect x="14" y="34" width="22" height="100" rx="2" fill="#1e293b" fill-opacity="0.72"/>
+      <rect x="44" y="20" width="28" height="114" rx="2" fill="#1e293b" fill-opacity="0.86"/>
+      <rect x="82" y="42" width="26" height="92" rx="2" fill="#1e293b" fill-opacity="0.74"/>
+      <path d="M54 54v-7a5 5 0 0 1 5-5h16a5 5 0 0 1 5 5v7" stroke="#fde68a" stroke-width="4" stroke-linecap="round"/>
+      <rect x="28" y="54" width="78" height="54" rx="10" fill="url(#mCaseBiz)" stroke="#fde68a" stroke-width="1.6"/>
+      <path d="M28 74h78" stroke="#78350f" stroke-width="2.5"/>
+      <rect x="61" y="69" width="12" height="10" rx="3" fill="#fef08a"/>
+    </svg>`;
+  }
+  if (cat === 'it') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="mSkyIt" x1="0" y1="0" x2="134" y2="134" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1e1b4b"/><stop offset="55%" stop-color="#0e7490"/><stop offset="100%" stop-color="#090d1f"/>
+        </linearGradient>
+      </defs>
+      <rect width="134" height="134" fill="url(#mSkyIt)"/>
+      <rect x="24" y="32" width="86" height="58" rx="8" fill="#0f172a" stroke="#67e8f9" stroke-width="2"/>
+      <rect x="30" y="38" width="74" height="46" rx="4" fill="#1e293b"/>
+      <path d="M52 55l-9 7 9 7M82 55l9 7-9 7M70 52l-6 20" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 96h106l-7 12H21l-7-12Z" fill="#64748b" stroke="#cbd5e1" stroke-width="1.2"/>
+    </svg>`;
+  }
+  if (cat === 'travel') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="mSkyTrv" x1="67" y1="0" x2="67" y2="134" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1d4ed8"/><stop offset="65%" stop-color="#0284c7"/><stop offset="100%" stop-color="#0c4a6e"/>
+        </linearGradient>
+      </defs>
+      <rect width="134" height="134" fill="url(#mSkyTrv)"/>
+      <ellipse cx="32" cy="92" rx="28" ry="12" fill="#e0f2fe" fill-opacity="0.35"/>
+      <ellipse cx="98" cy="100" rx="30" ry="13" fill="#e0f2fe" fill-opacity="0.4"/>
+      <path d="M26 78l78-36-22 44-16-8-14 14-2-20-24 6Z" fill="#f8fafc" stroke="#7dd3fc" stroke-width="1.6" stroke-linejoin="round"/>
+    </svg>`;
+  }
+  if (cat === 'food') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <rect width="134" height="134" fill="#1e1b4b"/>
+      <circle cx="67" cy="67" r="44" fill="#f43f5e" fill-opacity="0.18"/>
+      <path d="M40 58c-6 0-11-5-11-12s6-12 13-11c4-8 14-12 25-12s21 4 25 12c7-1 13 4 13 11s-5 12-11 12v14H40V58Z" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+      <rect x="38" y="72" width="58" height="14" rx="4" fill="#cbd5e1"/>
+      <path d="M32 98h70" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+    </svg>`;
+  }
+  if (cat === 'finance') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <rect width="134" height="134" fill="#064e3b"/>
+      <ellipse cx="56" cy="96" rx="22" ry="7" fill="#d97706"/>
+      <ellipse cx="56" cy="86" rx="22" ry="7" fill="#f59e0b"/>
+      <ellipse cx="56" cy="76" rx="22" ry="7" fill="#fbbf24"/>
+      <ellipse cx="82" cy="88" rx="20" ry="6.5" fill="#d97706"/>
+      <ellipse cx="82" cy="78" rx="20" ry="6.5" fill="#fbbf24"/>
+      <ellipse cx="82" cy="68" rx="20" ry="6.5" fill="#fde047"/>
+      <path d="M26 52l26-18 18 10 34-22" stroke="#34d399" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+  }
+  if (cat === 'anki') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <rect width="134" height="134" fill="#31105f"/>
+      <rect x="34" y="34" width="66" height="72" rx="12" transform="rotate(-7 67 70)" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+      <rect x="36" y="32" width="66" height="72" rx="12" fill="#0f172a" stroke="#c084fc" stroke-width="2.2"/>
+      <path d="M69 48l5.5 11.2 12.3 1.8-8.9 8.7 2.1 12.3L69 76.2 58 82l2.1-12.3-8.9-8.7 12.3-1.8L69 48Z" fill="#fde047"/>
+    </svg>`;
+  }
+  return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="mSkyBase" x1="67" y1="0" x2="67" y2="134" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#0c4a6e"/><stop offset="65%" stop-color="#0f766e"/><stop offset="100%" stop-color="#064e3b"/>
+      </linearGradient>
+    </defs>
+    <rect width="134" height="134" fill="url(#mSkyBase)"/>
+    <circle cx="96" cy="30" r="16" fill="#fde047" fill-opacity="0.35"/>
+    <path d="M67 104V58" stroke="#4ade80" stroke-width="5" stroke-linecap="round"/>
+    <path d="M67 66c0-20-16-28-30-26 2 16 14 28 30 26Z" fill="#4ade80"/>
+    <path d="M67 60c0-22 18-30 32-27-2 17-15 29-32 27Z" fill="#22c55e"/>
+    <ellipse cx="67" cy="108" rx="34" ry="8" fill="#022c22" fill-opacity="0.65"/>
+  </svg>`;
+}
+
+function getCourseCardIconSvg(course) {
+  const isUser = course && course.source === 'user';
+  const cat = isUser ? 'anki' : inferCourseCategory(course);
+  switch (cat) {
+    case 'auto':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <ellipse cx="32" cy="44" rx="22" ry="4" fill="#020617" fill-opacity="0.55"/>
+        <path d="M12 27l6-11c1.5-2.5 4.5-4 8-4h12c3.5 0 6.5 1.5 8 4l6 11c2.5 1.2 4 3.5 4 6v6a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3v-6c0-2.5 1.5-4.8 4-6Z" fill="#2563eb" stroke="#93c5fd" stroke-width="1.6"/>
+        <path d="M18 16h28l4 9H14l4-9Z" fill="#0f172a" stroke="#60a5fa" stroke-width="1.2"/>
+        <rect x="12" y="30" width="8" height="4" rx="2" fill="#fef08a"/>
+        <rect x="44" y="30" width="8" height="4" rx="2" fill="#fef08a"/>
+        <circle cx="17" cy="41" r="4" fill="#0f172a" stroke="#94a3b8" stroke-width="1.5"/>
+        <circle cx="47" cy="41" r="4" fill="#0f172a" stroke="#94a3b8" stroke-width="1.5"/>
+      </svg>`;
+    case 'business':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <path d="M23 15v-3.5A3.5 3.5 0 0 1 26.5 8h11A3.5 3.5 0 0 1 41 11.5V15" stroke="#fcd34d" stroke-width="3" stroke-linecap="round"/>
+        <rect x="11" y="15" width="42" height="30" rx="6" fill="#d97706" stroke="#fde68a" stroke-width="1.6"/>
+        <path d="M11 26h42" stroke="#78350f" stroke-width="2"/>
+        <rect x="28" y="23" width="8" height="6" rx="2" fill="#fef08a"/>
+      </svg>`;
+    case 'base':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <path d="M32 44V22" stroke="#4ade80" stroke-width="4" stroke-linecap="round"/>
+        <path d="M32 28c0-13-11-19-20-17 1 11 9 18 20 17Z" fill="#4ade80" stroke="#bbf7d0" stroke-width="1.2"/>
+        <path d="M32 24c0-14 12-20 21-18-1 12-10 19-21 18Z" fill="#22c55e" stroke="#86efac" stroke-width="1.2"/>
+      </svg>`;
+    case 'it':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <rect x="12" y="10" width="40" height="27" rx="4" fill="#1e293b" stroke="#93c5fd" stroke-width="1.8"/>
+        <rect x="16" y="14" width="32" height="19" rx="2" fill="#0f172a"/>
+        <path d="M26 20l-5 3.5 5 3.5M38 20l5 3.5-5 3.5M33.5 18l-3 11" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7 40h50l-3 5H10l-3-5Z" fill="#64748b"/>
+      </svg>`;
+    case 'finance':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <ellipse cx="26" cy="39" rx="12" ry="4" fill="#d97706"/>
+        <ellipse cx="26" cy="33" rx="12" ry="4" fill="#f59e0b"/>
+        <ellipse cx="26" cy="27" rx="12" ry="4" fill="#fbbf24" stroke="#fef08a" stroke-width="1"/>
+        <ellipse cx="39" cy="35" rx="11" ry="3.8" fill="#d97706"/>
+        <ellipse cx="39" cy="29" rx="11" ry="3.8" fill="#f59e0b"/>
+        <ellipse cx="39" cy="23" rx="11" ry="3.8" fill="#fde047" stroke="#fef9c3" stroke-width="1"/>
+      </svg>`;
+    case 'food':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <path d="M18 28c-4 0-7-3-7-7s4-7 8-6.5C21 10 26 8 32 8s11 2 13 6.5c4-.5 8 2.5 8 6.5s-3 7-7 7v9H18v-9Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+        <rect x="17" y="36" width="30" height="7" rx="2.5" fill="#cbd5e1"/>
+      </svg>`;
+    case 'travel':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <path d="M10 30l42-18-13 26-9-4.5-8 8-1-11-11 2.5Z" fill="#e0f2fe" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>`;
+    case 'anki':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <rect x="18" y="8" width="28" height="34" rx="5" transform="rotate(-7 32 25)" fill="#1e293b" stroke="#38bdf8" stroke-width="1.6"/>
+        <rect x="18" y="10" width="28" height="34" rx="5" fill="#0f172a" stroke="#c084fc" stroke-width="1.8"/>
+        <path d="M32 18l2.6 5.4 6 .8-4.4 4.2 1 6L32 31.6 26.8 34.4l1-6-4.4-4.2 6-.8L32 18Z" fill="#fde047"/>
+      </svg>`;
+    default:
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <circle cx="32" cy="26" r="16" fill="#0ea5e9" fill-opacity="0.22" stroke="#38bdf8" stroke-width="2"/>
+        <ellipse cx="32" cy="26" rx="7" ry="16" stroke="#7dd3fc" stroke-width="1.4"/>
+        <path d="M17 21h30M17 31h30" stroke="#7dd3fc" stroke-width="1.4"/>
+      </svg>`;
+  }
+}
+
+function getTopicChipIconSvg(cat) {
+  switch (cat) {
+    case 'auto':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 13l2.5-5.5c.7-1.4 2-2.2 3.5-2.2h4c1.5 0 2.8.8 3.5 2.2L20 13c1 .6 1.5 1.5 1.5 2.6V18a1.5 1.5 0 0 1-1.5 1.5h-1.5v-1.5h-13v1.5H4A1.5 1.5 0 0 1 2.5 18v-2.4c0-1.1.5-2 1.5-2.6Z" fill="#38bdf8"/><circle cx="7" cy="14.5" r="1.2" fill="#082f49"/><circle cx="17" cy="14.5" r="1.2" fill="#082f49"/></svg>`;
+    case 'business':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7" stroke="#fcd34d" stroke-width="1.8"/><rect x="3.5" y="7" width="17" height="12.5" rx="2.5" fill="#f59e0b"/><path d="M3.5 12h17" stroke="#78350f" stroke-width="1.4"/></svg>`;
+    case 'travel':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 14l16.5-7-5.2 10.5-3.6-1.8-3.2 3.2-.5-4.3L3.5 14Z" fill="#60a5fa" stroke="#bfdbfe" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+    case 'food':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.5 13a3.5 3.5 0 0 1-.5-6.9 4.5 4.5 0 0 1 12 0A3.5 3.5 0 0 1 17.5 13v4.5h-11V13Z" fill="#f1f5f9"/><rect x="6" y="17" width="12" height="2.8" rx="1" fill="#cbd5e1"/></svg>`;
+    case 'finance':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><ellipse cx="10" cy="17" rx="5.5" ry="2.2" fill="#d97706"/><ellipse cx="10" cy="13.5" rx="5.5" ry="2.2" fill="#f59e0b"/><ellipse cx="10" cy="10" rx="5.5" ry="2.2" fill="#fde047"/><ellipse cx="15.5" cy="15.5" rx="4.5" ry="1.8" fill="#f59e0b"/><ellipse cx="15.5" cy="12" rx="4.5" ry="1.8" fill="#fde047"/></svg>`;
+    default:
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H14v-5h-4v5H5.5A1.5 1.5 0 0 1 4 19v-8.5Z" fill="#a78bfa"/></svg>`;
+  }
+}
+
+function getLeaderboardCrownSvg(rank) {
+  const color = rank === 1 ? '#fde047' : (rank === 2 ? '#e2e8f0' : '#f59e0b');
+  return `<svg class="leader-crown-svg" viewBox="0 0 24 20" fill="none" aria-hidden="true"><path d="M2.5 16L4 6l5 4.5L12 3l3 7.5L20 6l1.5 10h-19Z" fill="${color}"/></svg>`;
+}
+
+function getPilotAvatarSvg(idx, isYou) {
+  const palettes = [
+    { bg: '#1e3a8a', hair: '#475569', shirt: '#3b82f6' },
+    { bg: '#581c87', hair: '#7c2d12', shirt: '#ec4899' },
+    { bg: '#0f766e', hair: '#1e293b', shirt: '#38bdf8' }
+  ];
+  const p = isYou ? palettes[2] : palettes[idx % palettes.length];
+  return `<svg class="leader-avatar-svg" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+    <circle cx="16" cy="16" r="15" fill="${p.bg}" stroke="rgba(148,163,184,0.45)" stroke-width="1.2"/>
+    <path d="M7.5 27.5c1.5-4.4 4.8-6.5 8.5-6.5s7 2.1 8.5 6.5" fill="${p.shirt}"/>
+    <circle cx="16" cy="13.5" r="5" fill="#fed7aa"/>
+    <path d="M11 12.5c.4-3.4 2.6-5 5-5s4.6 1.6 5 5c-1.5-1.2-3.2-1.7-5-1.7s-3.5.5-5 1.7Z" fill="${p.hair}"/>
+  </svg>`;
+}
+
+export function updatePromoTargetPill() {
+  if (!promoTargetPill || !promoTargetWordText) return;
+  const tr = t();
+  if (promoTargetLabel && tr.promoTargetPrefix) {
+    promoTargetLabel.textContent = tr.promoTargetPrefix;
+  }
+  let targetObj = state.demoWords.find(w => w.id === state.demoTargetId) || state.demoWords[0] || null;
+  let targetEntry = targetObj ? targetObj.entry : null;
+  if (!targetEntry) {
+    const { course, mod, lesson } = getActiveSelection();
+    if (course && mod && lesson) {
+      const words = resolveLessonBaseWords(course, mod, lesson, state.activeLessonIndex);
+      if (words.length > 0) targetEntry = words[0];
+    }
+  }
+  const translated = targetEntry ? getWordTranslation(targetEntry) : '';
+  promoTargetWordText.textContent = translated ? `«${translated}»` : '«…»';
+}
+
+export function renderDesktopMissionCard() {
+  const tr = t();
+  if (labelContinueMission && tr.continueMissionTitle) {
+    labelContinueMission.textContent = tr.continueMissionTitle;
+  }
+  if (labelMissionLaunch && tr.continueGameBtn) {
+    labelMissionLaunch.textContent = tr.continueGameBtn;
+  }
+  if (labelDailyGoalTitle && tr.dailyGoalTitle) {
+    labelDailyGoalTitle.textContent = tr.dailyGoalTitle;
+  }
+
+  const { course, mod } = getActiveSelection();
+  if (course) {
+    const artKey = course.source === 'user' ? 'anki' : inferCourseCategory(course);
+    if (homeMissionArtwork && homeMissionArtwork.dataset.artKey !== artKey) {
+      homeMissionArtwork.dataset.artKey = artKey;
+      homeMissionArtwork.innerHTML = getMissionArtworkSvg(course);
+    }
+    if (homeMissionTitle) {
+      homeMissionTitle.textContent = getLocalizedField(course, 'titles');
+    }
+    if (homeMissionSubtitle) {
+      const modTitle = mod ? getLocalizedField(mod, 'titles') : '';
+      const levelBit = course.levelTag ? ` (${course.levelTag})` : '';
+      homeMissionSubtitle.textContent = modTitle ? `${modTitle}${levelBit}` : (course.levelTag || '');
+    }
+    const { learned, total } = countLearnedWordsInCourse(course);
+    const pct = total > 0 ? Math.min(100, Math.round((learned / total) * 100)) : 0;
+    if (homeMissionProgFill) {
+      homeMissionProgFill.style.width = `${pct}%`;
+    }
+    if (homeMissionProgText) {
+      homeMissionProgText.textContent = tr.missionProgressSummary
+        ? tr.missionProgressSummary(learned, total, pct)
+        : `${learned} / ${total} · ${pct}%`;
+    }
+  }
+
+  const doneToday = todayLearnedSet.size;
+  const goalPct = Math.min(100, Math.round((doneToday / DAILY_GOAL_WORDS) * 100));
+  if (homeDailyGoalTarget) {
+    const unit = tr.dailyGoalWordsUnit ? tr.dailyGoalWordsUnit(DAILY_GOAL_WORDS) : 'words';
+    homeDailyGoalTarget.innerHTML = `<strong>${DAILY_GOAL_WORDS}</strong> ${escapeHtml(unit)}`;
+  }
+  if (homeDailyGoalFill) {
+    homeDailyGoalFill.style.width = `${goalPct}%`;
+  }
+  if (homeDailyGoalText) {
+    homeDailyGoalText.textContent = `${doneToday} / ${DAILY_GOAL_WORDS}`;
+  }
+}
+
+export function renderDesktopLevelPills() {
+  if (!homeLevelPills) return;
+  const tr = t();
+  if (labelHomeLevelFilter && tr.homeLevelLabel) {
+    labelHomeLevelFilter.textContent = tr.homeLevelLabel;
+  }
+  const { course } = getActiveSelection();
+  let hintMatched = false;
+  homeLevelPills.querySelectorAll('.home-level-pill').forEach(btn => {
+    const lvl = btn.dataset.homeLevel;
+    const isExplicit = state.homeLevelFilter === lvl;
+    const matchesCourse = state.homeLevelFilter === 'all' && !hintMatched && course && courseMatchesLevelFilter(course, lvl);
+    if (matchesCourse) hintMatched = true;
+    btn.classList.toggle('active', isExplicit);
+    btn.classList.toggle('course-hint', Boolean(matchesCourse));
+    btn.setAttribute('aria-pressed', isExplicit ? 'true' : 'false');
+  });
+}
+
+export function renderDesktopTopicsBar() {
+  if (!desktopTopicsChips) return;
+  const tr = t();
+  if (labelDesktopTopics && tr.topicsBarTitle) {
+    labelDesktopTopics.textContent = tr.topicsBarTitle;
+  }
+  const { course: activeCourse } = getActiveSelection();
+  const activeCat = activeCourse && activeCourse.source !== 'user' ? inferCourseCategory(activeCourse) : '';
+  const allCourses = getCoursesForTargetLang(state.targetLang);
+
+  const topicSpecs = [
+    { cat: 'auto', title: tr.topicAutoTitle },
+    { cat: 'business', title: tr.topicBusinessTitle },
+    { cat: 'travel', title: tr.topicTravelTitle },
+    { cat: 'food', title: tr.topicFoodTitle },
+    { cat: 'finance', title: tr.topicFinanceTitle },
+    { cat: 'base', title: tr.topicDailyTitle }
+  ];
+
+  desktopTopicsChips.innerHTML = '';
+  topicSpecs.forEach(tp => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'desktop-topic-chip' + (activeCat === tp.cat ? ' active' : '');
+    btn.innerHTML = `${getTopicChipIconSvg(tp.cat)}<span>${escapeHtml(tp.title || tp.cat)}</span>`;
+    btn.addEventListener('click', () => {
+      state.homeLevelFilter = 'all';
+      const matched = allCourses.find(c => c.source !== 'user' && inferCourseCategory(c) === tp.cat);
+      if (matched) {
+        actions.selectCourseLesson(matched.id, 0, 0, false);
+      } else {
+        actions.openDecksPage({
+          sourceFilter: 'all',
+          categoryFilter: tp.cat,
+          levelFilter: 'all'
+        });
+      }
+    });
+    desktopTopicsChips.appendChild(btn);
+  });
+}
+
 export function renderHomeQuickStartGrid() {
   if (!homeQuickStartGrid) return;
   const tr = t();
-  const courses = getCoursesForTargetLang(state.targetLang);
+  const allCourses = getCoursesForTargetLang(state.targetLang);
+  const filteredCourses = state.homeLevelFilter !== 'all'
+    ? allCourses.filter(c => courseMatchesLevelFilter(c, state.homeLevelFilter))
+    : allCourses;
+
+  let displayCourses = filteredCourses.slice(0, 4);
+  if (
+    state.homeLevelFilter === 'all' &&
+    allCourses.length > 4 &&
+    state.activeCourseId &&
+    !displayCourses.some(c => c.id === state.activeCourseId)
+  ) {
+    const activeCourseObj = allCourses.find(c => c.id === state.activeCourseId);
+    if (activeCourseObj) {
+      displayCourses = [...allCourses.slice(0, 3), activeCourseObj];
+    }
+  }
+
   homeQuickStartGrid.innerHTML = '';
 
-  const displayCourses = courses.slice(0, 4);
   displayCourses.forEach(course => {
-    const theme = getCourseVisualTheme(course);
     const { learned, total } = countLearnedWordsInCourse(course);
+    const regularLessons = (course.modules || []).reduce(
+      (sum, m) => sum + (m.lessons ? m.lessons.filter(l => !l.isBoss).length : 0),
+      0
+    );
+    const totalLessons = regularLessons || (course.modules || []).reduce((sum, m) => sum + (m.lessons ? m.lessons.length : 0), 0);
     const pct = total > 0 ? Math.min(100, Math.round((learned / total) * 100)) : 0;
     const isActive = course.id === state.activeCourseId;
+    const metaLabel = tr.courseMetaWordsLessons
+      ? tr.courseMetaWordsLessons(total, totalLessons)
+      : `${total} · ${totalLessons}`;
 
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'qs-course-card' + (isActive ? ' active' : '');
     btn.innerHTML = `
-      <div class="qs-card-art ${theme.cls}">
-        <span class="qs-art-badge">${escapeHtml(theme.tag)}</span>
-        <span class="qs-art-emoji">${escapeHtml(course.icon || theme.emoji)}</span>
-        <span class="qs-art-play" data-launch-now="1" title="▶">▶</span>
+      <div class="qs-card-icon-wrap">
+        ${getCourseCardIconSvg(course)}
       </div>
       <div class="qs-card-body">
         <div class="qs-card-title">${escapeHtml(getLocalizedField(course, 'titles'))}</div>
+        <div class="qs-card-meta-row">
+          <span class="qs-card-meta">${escapeHtml(metaLabel)}</span>
+          <span class="qs-art-play" data-launch-now="1" title="▶">▶</span>
+        </div>
         <div class="qs-card-prog-row">
           <div class="qs-prog-bar">
             <div class="qs-prog-fill" style="width:${pct}%;"></div>
           </div>
-          <span class="qs-prog-text">${learned} / ${total}</span>
+          <span class="qs-prog-text">${pct}%</span>
         </div>
       </div>
     `;
@@ -197,15 +616,17 @@ export function renderHomeQuickStartGrid() {
   if (displayCourses.length < 4) {
     const ankiCard = document.createElement('button');
     ankiCard.type = 'button';
-    ankiCard.className = 'qs-course-card';
+    ankiCard.className = 'qs-course-card qs-anki-card';
     ankiCard.innerHTML = `
-      <div class="qs-card-art art-anki">
-        <span class="qs-art-badge">+ .APKG</span>
-        <span class="qs-art-emoji">📥</span>
-        <span class="qs-art-play">＋</span>
+      <div class="qs-card-icon-wrap">
+        ${getCourseCardIconSvg({ source: 'user' })}
       </div>
       <div class="qs-card-body">
         <div class="qs-card-title">${escapeHtml(tr.quickAnkiCardTitle)}</div>
+        <div class="qs-card-meta-row">
+          <span class="qs-card-meta">.apkg / .tsv</span>
+          <span class="qs-art-play">＋</span>
+        </div>
         <div class="qs-card-prog-row">
           <div class="qs-prog-bar">
             <div class="qs-prog-fill" style="width:0%;"></div>
@@ -345,20 +766,18 @@ export function renderMobileDiscoveryBlocks() {
 }
 
 export function renderHomeDashboardWidgets() {
-  const tr = t();
+  renderDesktopMissionCard();
+  renderDesktopLevelPills();
   renderHomeQuickStartGrid();
+  renderDesktopTopicsBar();
   renderMobileDiscoveryBlocks();
+  updatePromoTargetPill();
 
-  // Круговая диаграмма «Твой прогресс»
-  const langWords = getAllWordsInTargetLang(state.targetLang);
-  let learnedInLang = 0;
-  for (const w of langWords) {
-    if (learnedWordsSet.has(makeWordKey(state.targetLang, w))) {
-      learnedInLang++;
-    }
-  }
-  const pct = langWords.length > 0
-    ? Math.min(100, Math.round((learnedInLang / langWords.length) * 100))
+  // Круговая диаграмма «Мой прогресс» по активному курсу
+  const { course } = getActiveSelection();
+  const courseStats = course ? countLearnedWordsInCourse(course) : { learned: 0, total: 0 };
+  const pct = courseStats.total > 0
+    ? Math.min(100, Math.round((courseStats.learned / courseStats.total) * 100))
     : 0;
 
   if (homeProgressPercent) homeProgressPercent.textContent = `${pct}%`;
@@ -366,15 +785,10 @@ export function renderHomeDashboardWidgets() {
     const circ = 219.9;
     homeProgressRingCircle.style.strokeDashoffset = (circ * (1 - pct / 100)).toFixed(1);
   }
-  if (homeStatLearned) homeStatLearned.textContent = learnedWordsSet.size.toLocaleString();
-  if (homeStatDecks) {
-    const officialCount = ['de', 'en', 'es'].reduce((acc, lg) => {
-      return acc + getOfficialCoursesForTargetLang(lg).length;
-    }, 0);
-    homeStatDecks.textContent = String(officialCount + state.userCourses.length);
-  }
+  if (homeStatLearned) homeStatLearned.textContent = courseStats.learned.toLocaleString();
+  if (homeStatDecks) homeStatDecks.textContent = courseStats.total.toLocaleString();
   if (homeStatStreak) {
-    homeStatStreak.textContent = tr.streakDays(dailyProgress.bestStreakDays || 1);
+    homeStatStreak.textContent = `${todayLearnedSet.size} / ${DAILY_GOAL_WORDS}`;
   }
 
   // Мини-список Топ-3 недели на Главной
@@ -386,16 +800,16 @@ export function renderHomeDashboardWidgets() {
       if (youRow) topSlice[2] = youRow;
     }
     homeLeaderboardMiniList.innerHTML = '';
-    topSlice.forEach(row => {
-      const rankCls = row.rank === 1 ? 'r1' : (row.rank === 2 ? 'r2' : (row.rank === 3 ? 'r3' : ''));
+    topSlice.forEach((row, idx) => {
       const div = document.createElement('div');
       div.className = 'mini-leader-row' + (row.isYou ? ' is-you' : '');
       div.innerHTML = `
         <span class="mini-leader-left">
-          <span class="leader-rank-badge ${rankCls}">${row.rank}</span>
-          <span class="leader-name">${escapeHtml(row.avatar)} ${escapeHtml(row.name)}</span>
+          ${getLeaderboardCrownSvg(idx + 1)}
+          ${getPilotAvatarSvg(idx, row.isYou)}
+          <span class="leader-name">${escapeHtml(row.name)}</span>
         </span>
-        <span class="leader-score">${row.score.toLocaleString()}</span>
+        <span class="leader-score">${row.score.toLocaleString('ru-RU')}</span>
       `;
       homeLeaderboardMiniList.appendChild(div);
     });

@@ -73,19 +73,39 @@
 
         <div class="home-nav-links">
           <button type="button" class="home-nav-pill active" id="btnNavHome">
-            🏠 <span id="labelNavHome">Главная</span>
+            <svg class="nav-pill-svg icon-home" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3.5 10.6L12 3.5l8.5 7.1V20a1.5 1.5 0 0 1-1.5 1.5h-4.5v-5.8h-5v5.8H5A1.5 1.5 0 0 1 3.5 20v-9.4Z" fill="#2dd4bf" fill-opacity="0.24" stroke="#5eead4" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+            <span id="labelNavHome">Главная</span>
           </button>
           <button type="button" class="home-nav-pill" id="btnNavPlay">
-            🎮 <span id="labelNavPlay">Играть</span>
+            <svg class="nav-pill-svg icon-play" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="3" y="6.5" width="18" height="11" rx="5.5" fill="#818cf8" fill-opacity="0.18" stroke="#a5b4fc" stroke-width="1.7"/>
+              <path d="M8.5 10v4M6.5 12h4M15.4 10.7h.01M17.4 12.7h.01" stroke="#c7d2fe" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+            <span id="labelNavPlay">Играть</span>
           </button>
           <button type="button" class="home-nav-pill" id="btnNavDecks">
-            📁 <span id="labelNavDecks">Мои колоды</span>
+            <svg class="nav-pill-svg icon-decks" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 4.5L3.5 9 12 13.5 20.5 9 12 4.5Z" fill="#60a5fa" fill-opacity="0.28" stroke="#93c5fd" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M3.5 13.2L12 17.7l8.5-4.5M3.5 17L12 21.5 20.5 17" stroke="#60a5fa" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span id="labelNavDecks">Мои колоды</span>
           </button>
           <button type="button" class="home-nav-pill" id="btnNavStats">
-            📊 <span id="labelNavStats">Статистика</span>
+            <svg class="nav-pill-svg icon-stats" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="4" y="13" width="3.5" height="7" rx="1" fill="#818cf8"/>
+              <rect x="10.25" y="9" width="3.5" height="11" rx="1" fill="#a78bfa"/>
+              <rect x="16.5" y="4.5" width="3.5" height="15.5" rx="1" fill="#38bdf8"/>
+            </svg>
+            <span id="labelNavStats">Статистика</span>
           </button>
           <button type="button" class="home-nav-pill" id="btnNavLeaderboard">
-            🏆 <span id="labelNavLeaderboard">Рейтинг</span>
+            <svg class="nav-pill-svg icon-trophy" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 4.5h10v5a5 5 0 0 1-10 0v-5Z" fill="#fbbf24" fill-opacity="0.22" stroke="#fcd34d" stroke-width="1.7"/>
+              <path d="M7 6.5H4.5a1.5 1.5 0 0 0-1.5 1.5v1.2A3 3 0 0 0 6 12h1M17 6.5h2.5A1.5 1.5 0 0 1 21 8v1.2A3 3 0 0 1 18 12h-1M12 14.5V19M8.5 19.5h7" stroke="#fcd34d" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <span id="labelNavLeaderboard">Рейтинг</span>
           </button>
           <button type="button" class="home-nav-pill admin-nav-pill" id="btnNavAdmin" title="Супер-Админ: создание уроков, AI-перевод и распределение категорий">
             👑 <span id="labelNavAdmin">Админ</span>
@@ -94,19 +114,37 @@
 
         <div class="home-nav-right">
           <button type="button" class="home-stat-chip streak" id="btnHomeStreakChip" title="Ударная серия дней подряд">
-            🔥 <span id="homeStreakBadge">1 дн.</span>
+            <span class="chip-icon-orb streak-orb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12.5 2.5c.8 3.2-1.5 4.8-1.5 7.2 0 1.4 1.1 2.4 2.4 2.4 1.5 0 2.5-1.3 2.5-3.1 2.1 1.8 3.1 4.1 3.1 6.5a7 7 0 1 1-14 0c0-3.7 2.4-7.4 7.5-13Z" fill="url(#navFlameGrad)"/><defs><linearGradient id="navFlameGrad" x1="12" y1="2.5" x2="12" y2="22.5" gradientUnits="userSpaceOnUse"><stop stop-color="#fef08a"/><stop offset="0.55" stop-color="#fb923c"/><stop offset="1" stop-color="#ea580c"/></linearGradient></defs></svg>
+            </span>
+            <span id="homeStreakBadge">1 дн.</span>
           </button>
           <button type="button" class="home-stat-chip trophy" id="pilotRankPill" title="Ваш рекорд очков и звание">
-            🏆 <span id="homeScoreBadge">0</span>
+            <span class="chip-icon-orb star-orb" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" fill="url(#navCoinGrad)"/><path d="M12 6.8l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5L12 6.8Z" fill="#451a03"/><defs><linearGradient id="navCoinGrad" x1="5" y1="4" x2="19" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#fef08a"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs></svg>
+            </span>
+            <span id="homeScoreBadge">0</span>
             <span class="sr-only" id="pilotRankText">КАДЕТ</span>
           </button>
-          <div class="lang-quick-group compact-nav-langs" title="Язык интерфейса и перевода">
-            <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
-            <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
-            <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
+          <div class="lang-quick-group compact-nav-langs nav-lang-dropdown" id="navLangDropdownWrap" title="Язык интерфейса и перевода">
+            <button type="button" class="nav-lang-trigger" id="btnNavLangToggle" aria-expanded="false" aria-haspopup="true">
+              <span class="nav-lang-flag-badge" id="navLangFlag" aria-hidden="true"></span>
+              <span class="nav-lang-code" id="navLangCode">RU</span>
+              <svg class="nav-lang-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+            </button>
+            <div class="nav-lang-menu hidden" id="navLangDropdownMenu" role="menu">
+              <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU · Русский</button>
+              <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN · English</button>
+              <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 HE · עברית</button>
+            </div>
           </div>
           <button type="button" class="home-avatar-btn" id="btnHomeSettings" title="Профиль и настройки игры">
-            <span class="avatar-gear-desktop" aria-hidden="true">⚙️</span>
+            <span class="avatar-gear-desktop" aria-hidden="true">
+              <svg class="avatar-user-desktop-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="8.5" r="3.4" stroke="currentColor" stroke-width="1.8" />
+                <path d="M5.5 19.2c1.1-3 3.5-4.5 6.5-4.5s5.4 1.5 6.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+            </span>
             <svg class="avatar-user-mobile" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <circle cx="12" cy="8.5" r="3.6" fill="currentColor" />
               <path d="M5.5 19.2c1.1-3.1 3.5-4.7 6.5-4.7s5.4 1.6 6.5 4.7" fill="currentColor" />
@@ -117,84 +155,128 @@
 
       <!-- ПОДЭКРАН А: ГЛАВНЫЙ ДАШБОРД С ПРОМО-БОЕМ -->
       <div class="home-dashboard-view" id="homeDashboardView">
-      <!-- 2. Hero-секция: призыв к игре слева + ЖИВОЕ ПРОМО-ОКНО КОРАБЛЯ справа -->
+      <!-- 2. Hero-секция: призыв к игре / карточка миссии слева + ЖИВОЕ ПРОМО-ОКНО КОРАБЛЯ справа -->
       <div class="home-hero-grid">
         <div class="home-hero-copy">
-          <h1 class="home-hero-heading">
-            <span class="hero-line-white" id="homeHeroTitleTop">Изучай иностранные языки</span>
-            <span class="hero-line-gold" id="homeHeroTitleAccent">в формате игры!</span>
-          </h1>
-
-          <div class="hero-sub-and-art">
-            <p class="home-hero-subtitle">
-              <span class="desktop-copy" id="titleTagline">Стреляй по словам, запоминай перевод при взрыве и расширяй словарный запас.</span>
-              <span class="mobile-copy" id="titleTaglineMobile">Стреляй по словам, учи перевод и прокачивай арсенал!</span>
-            </p>
-
-            <!-- Декоративная космическая сцена только для мобильного Hero (планета + истребитель + мишень) -->
-            <div class="mobile-hero-space-art" aria-hidden="true">
-              <div class="mhero-planet-orb"></div>
-              <div class="mhero-target-pill">
-                <span class="mhero-target-art" id="mobileHeroArtArticle">die</span>
-                <span class="mhero-target-word" id="mobileHeroArtWord">Kreuzfahrt</span>
+          <!-- Десктопная карточка «Продолжить миссию» + «Дневная цель» -->
+          <div class="desktop-mission-card" id="desktopMissionCard">
+            <div class="mission-main-col">
+              <div class="mission-kicker" id="labelContinueMission">Продолжить миссию</div>
+              <div class="mission-body-row">
+                <div class="mission-thumb-art" id="homeMissionArtwork" aria-hidden="true"></div>
+                <div class="mission-info-col">
+                  <h2 class="mission-course-title" id="homeMissionTitle">Авто и дорога (AUTO)</h2>
+                  <p class="mission-course-sub" id="homeMissionSubtitle">Базовый курс (A1 – A2)</p>
+                  <div class="mission-prog-bar">
+                    <div class="mission-prog-fill" id="homeMissionProgFill" style="width: 0%;"></div>
+                  </div>
+                  <div class="mission-prog-caption" id="homeMissionProgText">0 из 73 слов · 0%</div>
+                  <button type="button" class="mission-launch-cta" id="btnMissionLaunch">
+                    <span class="launch-glow"></span>
+                    <span class="mission-cta-play" aria-hidden="true">▶</span>
+                    <span class="launch-text" id="labelMissionLaunch">Продолжить игру</span>
+                  </button>
+                </div>
               </div>
-              <svg class="mhero-fighter-svg" viewBox="0 0 130 105" fill="none">
-                <defs>
-                  <linearGradient id="mheroLaserGrad" x1="48" y1="54" x2="106" y2="12" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.95" />
-                    <stop offset="70%" stop-color="#67e8f9" stop-opacity="1" />
-                    <stop offset="100%" stop-color="#f472b6" stop-opacity="0.95" />
-                  </linearGradient>
-                  <linearGradient id="mheroFlameGrad" x1="28" y1="68" x2="4" y2="94" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#fef08a" />
-                    <stop offset="50%" stop-color="#fb923c" />
-                    <stop offset="100%" stop-color="#ea580c" stop-opacity="0" />
-                  </linearGradient>
-                </defs>
-                <!-- Лазерный луч и вспышка попадания -->
-                <line x1="56" y1="48" x2="102" y2="14" stroke="url(#mheroLaserGrad)" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="18 5 30 0" />
-                <circle cx="103" cy="13" r="4.5" fill="#fdf2f8" />
-                <!-- Пламя двигателей -->
-                <polygon points="27,67 7,89 19,61" fill="url(#mheroFlameGrad)" />
-                <polygon points="34,73 15,95 28,67" fill="url(#mheroFlameGrad)" />
-                <!-- Силуэт неонового истребителя -->
-                <g transform="translate(42 58) rotate(-37)">
-                  <path d="M0 -24 L17 14 L6 10 L0 16 L-6 10 L-17 14 Z" fill="#08172e" stroke="#38bdf8" stroke-width="2.3" stroke-linejoin="round" />
-                  <path d="M0 -13 L5 4 L-5 4 Z" fill="#67e8f9" fill-opacity="0.88" />
-                  <line x1="-11" y1="6" x2="-4" y2="-4" stroke="#22d3ee" stroke-width="1.5" />
-                  <line x1="11" y1="6" x2="4" y2="-4" stroke="#22d3ee" stroke-width="1.5" />
-                </g>
+            </div>
+
+            <div class="mission-v-divider" aria-hidden="true"></div>
+
+            <button type="button" class="mission-daily-goal" id="btnMissionDailyGoal" title="Подробная статистика пилота">
+              <svg class="daily-goal-target-svg" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <circle cx="20" cy="20" r="14" stroke="#60a5fa" stroke-width="2.2" stroke-opacity="0.88"/>
+                <circle cx="20" cy="20" r="8.5" stroke="#38bdf8" stroke-width="2.2"/>
+                <circle cx="20" cy="20" r="3.4" fill="#67e8f9"/>
+                <path d="M29.5 10.5L21.5 18.5" stroke="#93c5fd" stroke-width="2.2" stroke-linecap="round"/>
+                <path d="M28.5 7.5l1 3 3 1-2.5 2-2.5-1 .5-2.5-1.5-1.5 2-1Z" fill="#60a5fa"/>
               </svg>
-            </div>
+              <span class="daily-goal-label" id="labelDailyGoalTitle">Дневная цель</span>
+              <div class="daily-goal-target" id="homeDailyGoalTarget"><strong>20</strong> слов</div>
+              <div class="daily-goal-bar">
+                <div class="daily-goal-fill" id="homeDailyGoalFill" style="width: 0%;"></div>
+              </div>
+              <span class="daily-goal-counter" id="homeDailyGoalText" dir="ltr">0 / 20</span>
+            </button>
           </div>
 
-          <div class="home-hero-perks">
-            <div class="hero-perk-item">
-              <span class="hero-perk-icon">🎮</span>
-              <span id="labelPerkPlay">Игра и практика</span>
-            </div>
-            <div class="hero-perk-item">
-              <span class="hero-perk-icon">🧠</span>
-              <span id="labelPerkMemory">Эффективное запоминание</span>
-            </div>
-            <div class="hero-perk-item">
-              <span class="hero-perk-icon">🗂️</span>
-              <span id="labelPerkAnki">Свои колоды (Anki)</span>
-            </div>
-          </div>
+          <!-- Мобильный Hero-блок (скрыт на ПК > 768px, полностью активен на <= 768px) -->
+          <div class="mobile-only-hero-stack">
+            <h1 class="home-hero-heading">
+              <span class="hero-line-white" id="homeHeroTitleTop">Изучай иностранные языки</span>
+              <span class="hero-line-gold" id="homeHeroTitleAccent">в формате игры!</span>
+            </h1>
 
-          <div class="mobile-hero-planet-horizon" aria-hidden="true"></div>
+            <div class="hero-sub-and-art">
+              <p class="home-hero-subtitle">
+                <span class="desktop-copy" id="titleTagline">Стреляй по словам, запоминай перевод при взрыве и расширяй словарный запас.</span>
+                <span class="mobile-copy" id="titleTaglineMobile">Стреляй по словам, учи перевод и прокачивай арсенал!</span>
+              </p>
 
-          <div class="home-hero-cta-row">
-            <button type="button" class="hero-green-cta" id="btnArcadeLaunch">
-              <span class="launch-glow"></span>
-              <span class="hero-cta-play-icon">▶</span>
-              <span class="launch-text" id="labelArcadeLaunch">Начать игру</span>
-              <span class="hero-cta-arrow">›</span>
-            </button>
-            <button type="button" class="arcade-logo-sub" id="arcadeLogoSub" title="Выбрать курс или урок">
-              🚗 Авто и дорога (AUTO) ▾
-            </button>
+              <!-- Декоративная космическая сцена только для мобильного Hero (планета + истребитель + мишень) -->
+              <div class="mobile-hero-space-art" aria-hidden="true">
+                <div class="mhero-planet-orb"></div>
+                <div class="mhero-target-pill">
+                  <span class="mhero-target-art" id="mobileHeroArtArticle">die</span>
+                  <span class="mhero-target-word" id="mobileHeroArtWord">Kreuzfahrt</span>
+                </div>
+                <svg class="mhero-fighter-svg" viewBox="0 0 130 105" fill="none">
+                  <defs>
+                    <linearGradient id="mheroLaserGrad" x1="48" y1="54" x2="106" y2="12" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.95" />
+                      <stop offset="70%" stop-color="#67e8f9" stop-opacity="1" />
+                      <stop offset="100%" stop-color="#f472b6" stop-opacity="0.95" />
+                    </linearGradient>
+                    <linearGradient id="mheroFlameGrad" x1="28" y1="68" x2="4" y2="94" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#fef08a" />
+                      <stop offset="50%" stop-color="#fb923c" />
+                      <stop offset="100%" stop-color="#ea580c" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <!-- Лазерный луч и вспышка попадания -->
+                  <line x1="56" y1="48" x2="102" y2="14" stroke="url(#mheroLaserGrad)" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="18 5 30 0" />
+                  <circle cx="103" cy="13" r="4.5" fill="#fdf2f8" />
+                  <!-- Пламя двигателей -->
+                  <polygon points="27,67 7,89 19,61" fill="url(#mheroFlameGrad)" />
+                  <polygon points="34,73 15,95 28,67" fill="url(#mheroFlameGrad)" />
+                  <!-- Силуэт неонового истребителя -->
+                  <g transform="translate(42 58) rotate(-37)">
+                    <path d="M0 -24 L17 14 L6 10 L0 16 L-6 10 L-17 14 Z" fill="#08172e" stroke="#38bdf8" stroke-width="2.3" stroke-linejoin="round" />
+                    <path d="M0 -13 L5 4 L-5 4 Z" fill="#67e8f9" fill-opacity="0.88" />
+                    <line x1="-11" y1="6" x2="-4" y2="-4" stroke="#22d3ee" stroke-width="1.5" />
+                    <line x1="11" y1="6" x2="4" y2="-4" stroke="#22d3ee" stroke-width="1.5" />
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            <div class="home-hero-perks">
+              <div class="hero-perk-item">
+                <span class="hero-perk-icon">🎮</span>
+                <span id="labelPerkPlay">Игра и практика</span>
+              </div>
+              <div class="hero-perk-item">
+                <span class="hero-perk-icon">🧠</span>
+                <span id="labelPerkMemory">Эффективное запоминание</span>
+              </div>
+              <div class="hero-perk-item">
+                <span class="hero-perk-icon">🗂️</span>
+                <span id="labelPerkAnki">Свои колоды (Anki)</span>
+              </div>
+            </div>
+
+            <div class="mobile-hero-planet-horizon" aria-hidden="true"></div>
+
+            <div class="home-hero-cta-row">
+              <button type="button" class="hero-green-cta" id="btnArcadeLaunch">
+                <span class="launch-glow"></span>
+                <span class="hero-cta-play-icon">▶</span>
+                <span class="launch-text" id="labelArcadeLaunch">Начать игру</span>
+                <span class="hero-cta-arrow">›</span>
+              </button>
+              <button type="button" class="arcade-logo-sub" id="arcadeLogoSub" title="Выбрать курс или урок">
+                🚗 Авто и дорога (AUTO) ▾
+              </button>
+            </div>
           </div>
         </div>
 
@@ -202,11 +284,26 @@
         <div class="home-promo-monitor" id="titleSpaceWindow">
           <div class="promo-monitor-topbar">
             <div class="promo-topbar-left">
-              <span class="promo-hearts" aria-hidden="true">❤️❤️❤️</span>
+              <span class="promo-hearts" aria-hidden="true">
+                <svg class="promo-heart-svg" viewBox="0 0 24 24" fill="none"><path d="M12 20.4l-1.2-1.1C5.8 14.8 2.8 12.1 2.8 8.6A4.7 4.7 0 0 1 7.6 3.9c1.7 0 3.3.8 4.4 2.1a5.8 5.8 0 0 1 4.4-2.1 4.7 4.7 0 0 1 4.8 4.7c0 3.5-3 6.2-8 10.7L12 20.4Z" fill="url(#promoHeartGrad)"/><defs><linearGradient id="promoHeartGrad" x1="4" y1="4" x2="20" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#fb7185"/><stop offset="1" stop-color="#e11d48"/></linearGradient></defs></svg>
+                <svg class="promo-heart-svg" viewBox="0 0 24 24" fill="none"><path d="M12 20.4l-1.2-1.1C5.8 14.8 2.8 12.1 2.8 8.6A4.7 4.7 0 0 1 7.6 3.9c1.7 0 3.3.8 4.4 2.1a5.8 5.8 0 0 1 4.4-2.1 4.7 4.7 0 0 1 4.8 4.7c0 3.5-3 6.2-8 10.7L12 20.4Z" fill="url(#promoHeartGrad2)"/><defs><linearGradient id="promoHeartGrad2" x1="4" y1="4" x2="20" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#fb7185"/><stop offset="1" stop-color="#e11d48"/></linearGradient></defs></svg>
+                <svg class="promo-heart-svg" viewBox="0 0 24 24" fill="none"><path d="M12 20.4l-1.2-1.1C5.8 14.8 2.8 12.1 2.8 8.6A4.7 4.7 0 0 1 7.6 3.9c1.7 0 3.3.8 4.4 2.1a5.8 5.8 0 0 1 4.4-2.1 4.7 4.7 0 0 1 4.8 4.7c0 3.5-3 6.2-8 10.7L12 20.4Z" fill="url(#promoHeartGrad3)"/><defs><linearGradient id="promoHeartGrad3" x1="4" y1="4" x2="20" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#fb7185"/><stop offset="1" stop-color="#e11d48"/></linearGradient></defs></svg>
+              </span>
               <span class="promo-live-divider mobile-copy" aria-hidden="true">|</span>
               <span class="promo-live-label mobile-copy" id="promoLiveLabel">ЖИВОЕ ПРЕВЬЮ УРОКА</span>
             </div>
-            <span class="promo-stage-pill desktop-copy" id="promoMonitorBadge">УРОК 1 · АВТО И ДОРОГА</span>
+            <div class="promo-center-pills">
+              <span class="promo-stage-pill desktop-copy" id="promoMonitorBadge">УРОК 1 · АВТО И ДОРОГА</span>
+              <div class="promo-target-pill desktop-copy" id="promoTargetPill">
+                <svg class="promo-target-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8.5" stroke="#fbbf24" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="4.5" stroke="#fde047" stroke-width="1.8"/>
+                  <circle cx="12" cy="12" r="1.8" fill="#fef08a"/>
+                </svg>
+                <span class="promo-target-label" id="promoTargetLabel">Цель:</span>
+                <strong class="promo-target-word" id="promoTargetWordText">«…»</strong>
+              </div>
+            </div>
             <button type="button" class="promo-weapon-cycle" id="btnPromoWeaponCycle" title="Нажмите, чтобы испытать другое оружие в промо-бою!">
               ⚡
             </button>
@@ -238,7 +335,7 @@
         </div>
       </div>
 
-      <!-- 3. Секция «Как это работает» (горизонтальная полоса на ПК / 3-колоночная карточка на мобильном) -->
+      <!-- 3. Секция «Как это работает» (скрыта на ПК > 768px / 3-колоночная карточка на мобильном) -->
       <div class="home-how-section">
         <h2 class="mobile-how-heading">
           <span class="how-bolt-icon" aria-hidden="true">⚡</span>
@@ -269,97 +366,108 @@
         </div>
       </div>
 
-      <!-- 4. Основная 3-колоночная сетка блоков (Выбор языка | Быстрый старт | Прогресс и Топ) -->
+      <!-- 4. Основная 3-колоночная сетка блоков (Изучаемый язык + Уровень | Популярные курсы | Прогресс и Топ) -->
       <div class="home-bento-grid" id="titleBottomDock">
-        <!-- Левая карточка: Выбери язык -->
+        <!-- Левая карточка: Изучаемый язык и Уровень -->
         <div class="bento-card home-lang-card" id="titleTargetLangBar">
           <div class="bento-card-header">
-            <span class="bento-card-title">🌐 <span id="labelTargetFilter">Выбери язык</span></span>
+            <span class="bento-card-title">
+              <svg class="bento-title-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" stroke="#38bdf8" stroke-width="1.8"/>
+                <ellipse cx="12" cy="12" rx="4" ry="9" stroke="#38bdf8" stroke-width="1.5"/>
+                <path d="M3.5 9.2h17M3.5 14.8h17" stroke="#38bdf8" stroke-width="1.4"/>
+              </svg>
+              <span id="labelTargetFilter">Изучаемый язык</span>
+            </span>
           </div>
 
-          <div class="home-lang-list">
-            <button type="button" class="home-lang-row target-lang-pill active" data-target-lang="de">
-              <span class="home-lang-left">
-                <span class="home-lang-flag">🇩🇪</span>
-                <span class="home-lang-name" data-tlang-name="de">Немецкий</span>
+          <div class="target-lang-dropdown" id="targetLangDropdownWrap">
+            <button type="button" class="lang-dropdown-trigger" id="btnTargetLangDropdown" aria-expanded="false" aria-haspopup="listbox">
+              <span class="lang-dropdown-val">
+                <span class="lang-dropdown-flag" id="targetLangDropdownFlag" aria-hidden="true"></span>
+                <span class="lang-dropdown-name" id="targetLangDropdownName">Немецкий</span>
               </span>
-              <span class="home-lang-check">✓</span>
+              <svg class="lang-dropdown-caret" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
             </button>
+            <div class="lang-dropdown-menu hidden" id="targetLangDropdownMenu" role="listbox">
+              <button type="button" class="home-lang-row target-lang-pill active" data-target-lang="de">
+                <span class="home-lang-left">
+                  <span class="home-lang-flag">🇩🇪</span>
+                  <span class="home-lang-name" data-tlang-name="de">Немецкий</span>
+                </span>
+                <span class="home-lang-check">✓</span>
+              </button>
 
-            <button type="button" class="home-lang-row target-lang-pill" data-target-lang="en">
-              <span class="home-lang-left">
-                <span class="home-lang-flag">🇬🇧</span>
-                <span class="home-lang-name" data-tlang-name="en">Английский</span>
-              </span>
-              <span class="home-lang-check">✓</span>
-            </button>
+              <button type="button" class="home-lang-row target-lang-pill" data-target-lang="en">
+                <span class="home-lang-left">
+                  <span class="home-lang-flag">🇬🇧</span>
+                  <span class="home-lang-name" data-tlang-name="en">Английский</span>
+                </span>
+                <span class="home-lang-check">✓</span>
+              </button>
 
-            <button type="button" class="home-lang-row target-lang-pill" data-target-lang="es">
-              <span class="home-lang-left">
-                <span class="home-lang-flag">🇪🇸</span>
-                <span class="home-lang-name" data-tlang-name="es">Испанский</span>
-              </span>
-              <span class="home-lang-check">✓</span>
-            </button>
+              <button type="button" class="home-lang-row target-lang-pill" data-target-lang="es">
+                <span class="home-lang-left">
+                  <span class="home-lang-flag">🇪🇸</span>
+                  <span class="home-lang-name" data-tlang-name="es">Испанский</span>
+                </span>
+                <span class="home-lang-check">✓</span>
+              </button>
+            </div>
           </div>
 
-          <div class="home-native-subbox">
-            <span class="home-native-caption" id="labelNativeFilter">Перевод слов:</span>
-            <div class="home-native-pills">
-              <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
-              <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
-              <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
+          <div class="home-level-section">
+            <div class="home-level-label" id="labelHomeLevelFilter">Уровень</div>
+            <div class="home-level-pills" id="homeLevelPills">
+              <button type="button" class="home-level-pill" data-home-level="A1">A1</button>
+              <button type="button" class="home-level-pill" data-home-level="A2">A2</button>
+              <button type="button" class="home-level-pill" data-home-level="B1">B1</button>
+              <button type="button" class="home-level-pill" data-home-level="B2">B2</button>
             </div>
           </div>
 
           <button type="button" class="home-more-langs-btn" id="btnTitleCustom">
-            ＋ <span id="labelTitleCustom">Своя колода / язык (Anki)</span>
+            📥 <span id="labelTitleCustom">Своя колода / язык (Anki)</span>
           </button>
         </div>
 
-        <!-- Центральная широкая карточка: Быстрый старт (4 иллюстрированные карточки курсов + уроки + пушки) -->
+        <!-- Центральная широкая карточка: Популярные курсы (4 карточки курсов) -->
         <div class="bento-card home-quickstart-card" id="titleCourseStrip">
           <div class="bento-card-header">
             <div class="quickstart-title-wrap">
-              <span class="bento-card-title">🎯 <span id="labelQuickStartTitle">Быстрый старт</span></span>
-              <span class="origin-badge official" id="titleCourseOriginBadge">🏛️</span>
-              <span class="quickstart-active-sub" id="titleCourseName">🚗 Авто · М1</span>
+              <span class="bento-card-title">
+                <svg class="bento-title-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 4.5L3.5 9 12 13.5 20.5 9 12 4.5Z" fill="#38bdf8" fill-opacity="0.28" stroke="#67e8f9" stroke-width="1.7" stroke-linejoin="round"/>
+                  <path d="M3.5 13.2L12 17.7l8.5-4.5M3.5 17L12 21.5 20.5 17" stroke="#38bdf8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="labelQuickStartTitle">Популярные курсы</span>
+              </span>
             </div>
             <div class="quickstart-header-actions">
-              <button type="button" class="anki-import-cta-btn" id="btnQuickStartAnki">
-                📥 <span id="labelQuickAnkiBtn">Импорт Anki</span> <span class="apkg-tag">.apkg</span>
-              </button>
-              <button type="button" class="hud-btn" id="btnOpenCatalogTitle" title="Все курсы и модули">
-                🗂️ <span id="labelOpenCatalogTitle">Все курсы</span>
+              <button type="button" class="courses-all-link" id="btnOpenCatalogTitle" title="Все курсы и модули">
+                <span id="labelOpenCatalogTitle">Все курсы</span> <span class="dir-arrow" aria-hidden="true">→</span>
               </button>
             </div>
           </div>
 
-          <!-- 4 визуальные карточки курсов (генерируются динамически под выбранный язык) -->
+          <!-- 4 визуальные карточки курсов (генерируются динамически под выбранный язык и фильтр уровня) -->
           <div class="quickstart-cards-grid" id="homeQuickStartGrid"></div>
-
-          <!-- Компактная полоска уроков активного модуля + выбор оружия -->
-          <div class="quickstart-subbar">
-            <div class="mobile-level-Chips" id="titleStageChips"></div>
-          </div>
-
-          <div class="quickstart-arsenal-strip">
-            <div class="arsenal-mini-meta">
-              <span class="arsenal-label" id="titleArsenalLabel">🚀 Оружие:</span>
-              <span class="learned-progress-pill" id="learnedProgressPill">📖 0 сл.</span>
-              <span class="arsenal-desc" id="titleWeaponDesc">Плазма</span>
-            </div>
-            <div class="weapon-selector-row home-compact-weapons" id="titleWeaponRow"></div>
-          </div>
         </div>
 
-        <!-- Правая колонка: 2 карточки друг над другом (Твой прогресс + Топ игроков) -->
+        <!-- Правая колонка: 2 карточки друг над другом (Мой прогресс + Топ игроков) -->
         <div class="home-right-stack">
-          <!-- Карточка 3А: Твой прогресс с круговой диаграммой -->
+          <!-- Карточка 3А: Мой прогресс с круговой диаграммой -->
           <div class="bento-card home-progress-card">
             <div class="bento-card-header">
-              <span class="bento-card-title">📊 <span id="labelHomeProgressTitle">Твой прогресс</span></span>
-              <button type="button" class="card-link-btn" id="btnOpenStatsCard">→</button>
+              <span class="bento-card-title">
+                <svg class="bento-title-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="4" y="13" width="3.5" height="7" rx="1" fill="#60a5fa"/>
+                  <rect x="10.25" y="9" width="3.5" height="11" rx="1" fill="#38bdf8"/>
+                  <rect x="16.5" y="4.5" width="3.5" height="15.5" rx="1" fill="#34d399"/>
+                </svg>
+                <span id="labelHomeProgressTitle">Мой прогресс</span>
+              </span>
+              <button type="button" class="card-link-btn" id="btnOpenStatsCard" aria-label="Статистика"><span class="dir-arrow" aria-hidden="true">→</span></button>
             </div>
             <div class="progress-ring-layout">
               <div class="donut-ring-wrap">
@@ -367,6 +475,7 @@
                   <defs>
                     <linearGradient id="zlingoRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stop-color="#38bdf8" />
+                      <stop offset="55%" stop-color="#2dd4bf" />
                       <stop offset="100%" stop-color="#34d399" />
                     </linearGradient>
                   </defs>
@@ -378,16 +487,25 @@
 
               <div class="progress-metrics-list">
                 <div class="prog-metric-row">
-                  <span class="prog-metric-label">📖 <span id="labelMetricLearned">Выучено слов</span></span>
+                  <span class="prog-metric-label">
+                    <svg class="metric-mini-svg" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 4.5C6.5 4.5 9 5.3 10 6.5c1-1.2 3.5-2 6.5-2v10.5c-3 0-5.5.8-6.5 2-1-1.2-3.5-2-6.5-2V4.5Z" fill="#60a5fa" fill-opacity="0.25" stroke="#93c5fd" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                    <span id="labelMetricLearned">Изучено слов</span>
+                  </span>
                   <strong class="prog-metric-val" id="homeStatLearned">0</strong>
                 </div>
                 <div class="prog-metric-row">
-                  <span class="prog-metric-label">🗂️ <span id="labelMetricDecks">Колоды</span></span>
-                  <strong class="prog-metric-val" id="homeStatDecks">9</strong>
+                  <span class="prog-metric-label">
+                    <svg class="metric-mini-svg" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3.5L3 7.2 10 11l7-3.8-7-3.7ZM3 10.7l7 3.8 7-3.8M3 13.8l7 3.7 7-3.7" stroke="#818cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span id="labelMetricDecks">Всего в курсе</span>
+                  </span>
+                  <strong class="prog-metric-val" id="homeStatDecks">0</strong>
                 </div>
                 <div class="prog-metric-row">
-                  <span class="prog-metric-label">🏆 <span id="labelMetricStreak">Рекорд серии</span></span>
-                  <strong class="prog-metric-val accent-amber" id="homeStatStreak">1 дн.</strong>
+                  <span class="prog-metric-label">
+                    <svg class="metric-mini-svg" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="6.8" stroke="#f87171" stroke-width="1.6"/><circle cx="10" cy="10" r="3.4" stroke="#fca5a5" stroke-width="1.4"/><circle cx="10" cy="10" r="1.4" fill="#fb7185"/></svg>
+                    <span id="labelMetricStreak">Дневная цель</span>
+                  </span>
+                  <strong class="prog-metric-val" id="homeStatStreak" dir="ltr">0 / 20</strong>
                 </div>
               </div>
             </div>
@@ -396,9 +514,15 @@
           <!-- Карточка 3Б: Топ игроков (неделя) -->
           <div class="bento-card home-leaderboard-card">
             <div class="bento-card-header">
-              <span class="bento-card-title">🏆 <span id="labelHomeTopTitle">Топ игроков (неделя)</span></span>
-              <button type="button" class="card-link-btn" id="btnOpenLeaderboardCard">
-                <span id="labelSeeAllTop">Все</span> →
+              <span class="bento-card-title">
+                <svg class="bento-title-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 4.5h10v5a5 5 0 0 1-10 0v-5Z" fill="#fbbf24" fill-opacity="0.24" stroke="#fcd34d" stroke-width="1.7"/>
+                  <path d="M7 6.5H4.5a1.5 1.5 0 0 0-1.5 1.5v1.2A3 3 0 0 0 6 12h1M17 6.5h2.5A1.5 1.5 0 0 1 21 8v1.2A3 3 0 0 1 18 12h-1M12 14.5V19M8.5 19.5h7" stroke="#fcd34d" stroke-width="1.7" stroke-linecap="round"/>
+                </svg>
+                <span id="labelHomeTopTitle">Топ игроков (неделя)</span>
+              </span>
+              <button type="button" class="card-link-btn" id="btnOpenLeaderboardCard" aria-label="Рейтинг">
+                <span class="sr-only" id="labelSeeAllTop">Все</span> <span class="dir-arrow" aria-hidden="true">→</span>
               </button>
             </div>
             <div class="mini-leaderboard-list" id="homeLeaderboardMiniList"></div>
@@ -406,7 +530,33 @@
         </div>
       </div>
 
-      <!-- 5. Нижняя полоса возможностей (все элементы кликабельны!) -->
+      <!-- 4Б. Нижняя панель быстрого фильтра по темам (только ПК > 768px) -->
+      <section class="desktop-topics-bar" id="desktopTopicsBar" aria-label="Темы">
+        <div class="desktop-topics-heading">
+          <svg class="bento-title-svg topics-layers-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 4.5L3.5 9 12 13.5 20.5 9 12 4.5Z" fill="#818cf8" fill-opacity="0.35" stroke="#a5b4fc" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M3.5 13.2L12 17.7l8.5-4.5M3.5 17L12 21.5 20.5 17" stroke="#60a5fa" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span id="labelDesktopTopics">Темы</span>
+        </div>
+        <div class="desktop-topics-chips" id="desktopTopicsChips"></div>
+      </section>
+
+      <!-- Скрытый контейнер обратной совместимости ID для статического линкера и общих виджетов -->
+      <div hidden aria-hidden="true">
+        <span id="labelNativeFilter">Перевод:</span>
+        <span id="titleCourseOriginBadge">🏛️</span>
+        <span id="titleCourseName"></span>
+        <button type="button" id="btnQuickStartAnki"></button>
+        <span id="labelQuickAnkiBtn"></span>
+        <div id="titleStageChips"></div>
+        <span id="titleArsenalLabel"></span>
+        <span id="learnedProgressPill"></span>
+        <span id="titleWeaponDesc"></span>
+        <div id="titleWeaponRow"></div>
+      </div>
+
+      <!-- 5. Нижняя полоса возможностей (скрыта на новом десктопе и мобильном, сохранена для ID) -->
       <footer class="home-bottom-features">
         <button type="button" class="bottom-feat-btn" id="btnTitleAllCourses">
           <span class="feat-icon amber">⚡</span>

@@ -123,6 +123,8 @@ const initialTargetLang = (initialSave.targetLang && TARGET_LANG_META[initialSav
   ? initialSave.targetLang
   : detectDefaultTargetLanguage();
 
+export const DAILY_GOAL_WORDS = 20;
+
 export const state = {
   screenMode: 'title', // 'title' | 'play'
   running: false,
@@ -190,6 +192,7 @@ export const state = {
   decksViewMode: 'grid', // 'grid' | 'list'
   decksCategoryFilter: 'all',
   decksLevelFilter: 'all',
+  homeLevelFilter: 'all',
   decksSearchQuery: '',
   openedDeckId: '',
   openedDeckEditMode: false,

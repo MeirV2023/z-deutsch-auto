@@ -19,8 +19,8 @@ export function getPlayBounds() {
       if (rect.width > 80 && rect.height > 70) {
         const left = rect.left + 10;
         const right = Math.max(left + 120, rect.right - 10);
-        const top = rect.top + 42;
-        const bottom = Math.max(top + 66, rect.bottom - 12);
+        const top = rect.top + (window.innerWidth > 768 ? 94 : 56);
+        const bottom = Math.max(top + 66, rect.bottom - (window.innerWidth > 768 ? 16 : 12));
         return {
           left,
           right,
@@ -214,9 +214,9 @@ export function getWordFontPx(textLength) {
     if (isMobile) {
       return textLength >= 15 ? 14 : 16;
     }
-    if (textLength >= 18) return 17;
-    if (textLength >= 13) return 19.5;
-    return 22;
+    if (textLength >= 16) return 14;
+    if (textLength >= 12) return 15.5;
+    return 17;
   }
   if (!isMobile) {
     if (textLength >= 23) return 18.5;
@@ -245,6 +245,21 @@ export function getTopBadgeTextForWord(entry) {
 
 export function measureWordCapsule(text, entry) {
   const fontPx = getWordFontPx(text.length);
+  if (state.screenMode === 'title' && canvas.width > 768) {
+    const artRaw = (entry && entry.article) || '';
+    const hasRealArt = Boolean(artRaw) && !['Verb', 'Noun', 'Adj.', 'Adv.'].includes(artRaw) && !state.typeWithArticle;
+    const artPrefix = hasRealArt ? `${artRaw} ` : '';
+    const displayTop = `${artPrefix}${text}`;
+    ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
+    const topW = ctx.measureText(displayTop).width;
+    let transStr = entry ? getWordTranslation(entry) : '';
+    if (transStr.length > 18) transStr = transStr.slice(0, 17) + '…';
+    ctx.font = `500 11px ${CANVAS_WORD_FONT}`;
+    const subW = transStr ? ctx.measureText(transStr).width : 0;
+    const boxW = Math.max(96, Math.max(topW, subW) + 28);
+    const boxH = fontPx + 30;
+    return { boxW, boxH, fontPx };
+  }
   ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
   const textW = ctx.measureText(text).width;
   const padX = canvas.width < 520 ? 11 : 15;

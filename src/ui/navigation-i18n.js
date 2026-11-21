@@ -32,6 +32,8 @@ import {
   btnDownloadSampleApkg,
   btnHudLangPair,
   btnLangMode,
+  btnMissionDailyGoal,
+  btnMissionLaunch,
   btnMobNavDecks,
   btnMobNavHome,
   btnMobNavPlay,
@@ -39,12 +41,14 @@ import {
   btnNavAdmin,
   btnNavDecks,
   btnNavHome,
+  btnNavLangToggle,
   btnNavPlay,
   btnOverlayCatalog,
   btnSaveAnkiToDecks,
   btnSaveCustomWords,
   btnSidebarCatalog,
   btnSpeedMode,
+  btnTargetLangDropdown,
   btnTargetLangHud,
   catalogDialogBody,
   catalogDialogTitle,
@@ -70,6 +74,7 @@ import {
   homeDashboardView,
   homeHeroTitleAccent,
   homeHeroTitleTop,
+  homeLevelPills,
   homeStepItem1,
   homeStepItem2,
   homeStepItem3,
@@ -171,6 +176,10 @@ import {
   mobileHeroArtArticle,
   mobileHeroArtWord,
   mobHudWaveText,
+  navLangCode,
+  navLangDropdownMenu,
+  navLangDropdownWrap,
+  navLangFlag,
   overlayCard,
   overlayWeaponTitle,
   promoLiveLabel,
@@ -184,6 +193,10 @@ import {
   tabSourceAll,
   tabSourceOfficial,
   tabSourceUser,
+  targetLangDropdownFlag,
+  targetLangDropdownMenu,
+  targetLangDropdownName,
+  targetLangDropdownWrap,
   titleArsenalLabel,
   titleTagline,
   titleTaglineMobile,
@@ -193,8 +206,11 @@ import {
 import { resizeCanvas } from '../engine/arena-physics.js';
 import { renderWeaponSelectors, updateHudWeaponBtn } from '../engine/weapon-vfx.js';
 import {
+  getLangFlagSvg,
   refreshHitSpotlightPinState,
+  renderDesktopLevelPills,
   renderHomeDashboardWidgets,
+  renderHomeQuickStartGrid,
   renderLevelSidebar,
   rerenderKillFeed,
   updateBottomTargetUI,
@@ -226,6 +242,58 @@ import { renderAdminStudio } from './admin-studio.js';
 
 let _resizeBound = false;
 
+function closeAllHomeDropdowns() {
+  if (navLangDropdownMenu) {
+    navLangDropdownMenu.classList.add('hidden');
+  }
+  if (btnNavLangToggle) {
+    btnNavLangToggle.setAttribute('aria-expanded', 'false');
+  }
+  if (targetLangDropdownMenu) {
+    targetLangDropdownMenu.classList.add('hidden');
+  }
+  if (btnTargetLangDropdown) {
+    btnTargetLangDropdown.setAttribute('aria-expanded', 'false');
+  }
+  const langCard = targetLangDropdownWrap && targetLangDropdownWrap.closest('.home-lang-card');
+  if (langCard) {
+    langCard.classList.remove('dropdown-open');
+  }
+}
+
+function syncDropdownTriggerLabels() {
+  if (navLangFlag) {
+    navLangFlag.innerHTML = getLangFlagSvg(state.nativeLang);
+  }
+  if (navLangCode) {
+    navLangCode.textContent = state.nativeLang.toUpperCase();
+  }
+  if (navLangDropdownMenu) {
+    navLangDropdownMenu.querySelectorAll('.native-lang-btn').forEach(btn => {
+      const code = btn.dataset.nativeLang;
+      const labels = { ru: 'RU · Русский', en: 'EN · English', he: 'HE · עברית' };
+      btn.innerHTML = `${getLangFlagSvg(code)}<span>${escapeHtml(labels[code] || code.toUpperCase())}</span>`;
+    });
+  }
+
+  const targetMeta = TARGET_LANG_META[state.targetLang] || TARGET_LANG_META.de;
+  if (targetLangDropdownFlag) {
+    targetLangDropdownFlag.innerHTML = getLangFlagSvg(state.targetLang);
+  }
+  if (targetLangDropdownName) {
+    targetLangDropdownName.textContent = targetMeta.names[state.nativeLang] || targetMeta.names.en;
+  }
+  if (targetLangDropdownMenu) {
+    targetLangDropdownMenu.querySelectorAll('.target-lang-pill').forEach(btn => {
+      const code = btn.dataset.targetLang;
+      const flagEl = btn.querySelector('.home-lang-flag');
+      if (flagEl) {
+        flagEl.innerHTML = getLangFlagSvg(code);
+      }
+    });
+  }
+}
+
 export function setNativeLanguage(langId) {
   if (!UI_TEXT[langId]) return;
   state.nativeLang = langId;
@@ -239,6 +307,7 @@ export function setNativeLanguage(langId) {
     btn.classList.toggle('active', btn.dataset.nativeLang === langId);
   });
 
+  closeAllHomeDropdowns();
   applyStaticUILocalization();
   renderWeaponSelectors();
   updateHudWeaponBtn();
@@ -293,6 +362,7 @@ export function setTargetLanguage(targetLangId) {
   renderZtypeKeyboard();
 
   if (changed) {
+    state.homeLevelFilter = 'all';
     state.demoWords = [];
     state.demoTargetId = null;
     state.killHistory = [];
@@ -305,6 +375,7 @@ export function setTargetLanguage(targetLangId) {
     }
   }
 
+  closeAllHomeDropdowns();
   applyStaticUILocalization();
   renderLevelSidebar();
   refreshOverlayContent();
@@ -408,17 +479,18 @@ export function applyStaticUILocalization() {
   if (labelMobNavDecks && tr.mobNavDecks) labelMobNavDecks.textContent = tr.mobNavDecks;
   if (labelMobNavStats && tr.mobNavStats) labelMobNavStats.textContent = tr.mobNavStats;
 
-  if (labelQuickStartTitle) labelQuickStartTitle.textContent = tr.quickStartTitle;
+  if (labelQuickStartTitle) labelQuickStartTitle.textContent = tr.popularCoursesTitle || tr.quickStartTitle;
   if (labelQuickAnkiBtn) labelQuickAnkiBtn.textContent = tr.quickAnkiBtn;
   if (labelOpenCatalogTitle) labelOpenCatalogTitle.textContent = tr.allCoursesBtn;
   if (titleArsenalLabel) titleArsenalLabel.textContent = tr.titleArsenalLabel;
 
-  if (labelHomeProgressTitle) labelHomeProgressTitle.textContent = tr.homeProgressTitle;
-  if (labelMetricLearned) labelMetricLearned.textContent = tr.metricLearned;
-  if (labelMetricDecks) labelMetricDecks.textContent = tr.metricDecks;
-  if (labelMetricStreak) labelMetricStreak.textContent = tr.metricStreak;
+  if (labelHomeProgressTitle) labelHomeProgressTitle.textContent = tr.myProgressTitle || tr.homeProgressTitle;
+  if (labelMetricLearned) labelMetricLearned.textContent = tr.metricCourseLearned || tr.metricLearned;
+  if (labelMetricDecks) labelMetricDecks.textContent = tr.metricCourseTotal || tr.metricDecks;
+  if (labelMetricStreak) labelMetricStreak.textContent = tr.metricDailyGoal || tr.metricStreak;
   if (labelHomeTopTitle) labelHomeTopTitle.textContent = tr.homeTopTitle;
   if (labelSeeAllTop) labelSeeAllTop.textContent = tr.seeAllTop;
+  syncDropdownTriggerLabels();
 
   const courseWords = course ? getAllWordsInCourse(course) : [];
   const preset = state.speedPresets[state.speedPresetIndex] || state.speedPresets[0];
@@ -681,7 +753,70 @@ export function bindInteractiveStep(el, handler) {
 export function bindNavigationEvents() {
   if (!_resizeBound) {
     window.addEventListener('resize', resizeCanvas);
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!target || !target.closest) return;
+      if (!target.closest('#navLangDropdownWrap') && !target.closest('#targetLangDropdownWrap')) {
+        closeAllHomeDropdowns();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAllHomeDropdowns();
+    });
     _resizeBound = true;
+  }
+
+  if (btnNavLangToggle && navLangDropdownMenu) {
+    btnNavLangToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const willOpen = navLangDropdownMenu.classList.contains('hidden');
+      closeAllHomeDropdowns();
+      if (willOpen) {
+        navLangDropdownMenu.classList.remove('hidden');
+        btnNavLangToggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+  }
+
+  if (btnTargetLangDropdown && targetLangDropdownMenu) {
+    btnTargetLangDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const willOpen = targetLangDropdownMenu.classList.contains('hidden');
+      closeAllHomeDropdowns();
+      if (willOpen) {
+        targetLangDropdownMenu.classList.remove('hidden');
+        btnTargetLangDropdown.setAttribute('aria-expanded', 'true');
+        const langCard = targetLangDropdownWrap && targetLangDropdownWrap.closest('.home-lang-card');
+        if (langCard) langCard.classList.add('dropdown-open');
+      }
+    });
+  }
+
+  if (homeLevelPills) {
+    homeLevelPills.addEventListener('click', (e) => {
+      const btn = e.target && e.target.closest && e.target.closest('[data-home-level]');
+      if (!btn) return;
+      const lvl = btn.dataset.homeLevel;
+      state.homeLevelFilter = state.homeLevelFilter === lvl ? 'all' : lvl;
+      renderDesktopLevelPills();
+      renderHomeQuickStartGrid();
+      btn.blur();
+    });
+  }
+
+  if (btnMissionLaunch) {
+    btnMissionLaunch.addEventListener('click', () => {
+      launchFromTitleScreen();
+      btnMissionLaunch.blur();
+    });
+  }
+
+  if (btnMissionDailyGoal) {
+    btnMissionDailyGoal.addEventListener('click', () => {
+      sound.init();
+      openStatsModal();
+      btnMissionDailyGoal.blur();
+    });
   }
   btnLangMode.addEventListener('click', () => {
     const idx = state.nativeLangModes.findIndex(m => m.id === state.nativeLang);

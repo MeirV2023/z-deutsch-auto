@@ -49,7 +49,11 @@ export function render(now = 0) {
     }
   }
 
-  // На полноэкранной странице «Мои колоды» рендерим только звёздное небо и туманности на фоне
+  if (state.screenMode === 'title' && canvas.width > 768) {
+    drawDesktopCosmicBackdrop();
+  }
+
+  // На полноэкранной странице «Мои колоды» рендерим только звёздное небо, туманности и горизонт на фоне
   if (state.screenMode === 'title' && state.homeSubView !== 'home') {
     return;
   }
@@ -57,28 +61,33 @@ export function render(now = 0) {
   const hasClip = Boolean(bounds.clipRect);
   if (hasClip) {
     ctx.save();
-    roundRect(ctx, bounds.clipRect.x, bounds.clipRect.y, bounds.clipRect.w, bounds.clipRect.h, 16);
+    const clipRad = (state.screenMode === 'title' && canvas.width > 768) ? 22 : 16;
+    roundRect(ctx, bounds.clipRect.x, bounds.clipRect.y, bounds.clipRect.w, bounds.clipRect.h, clipRad);
     ctx.clip();
   }
 
   if (state.screenMode === 'title') {
-    // Концентрические неоновые радарные дуги за кораблём в окне LIVE LESSON PREVIEW
-    const arcCx = bounds.centerX;
-    const arcCy = bounds.bottom + 26;
-    const arcRadii = [58, 104, 152];
-    ctx.save();
-    ctx.lineCap = 'round';
-    arcRadii.forEach((rad, idx) => {
-      const alpha = 0.28 - idx * 0.065;
-      ctx.strokeStyle = `rgba(45, 212, 191, ${Math.max(0.08, alpha)})`;
-      ctx.shadowColor = 'rgba(45, 212, 191, 0.45)';
-      ctx.shadowBlur = idx === 0 ? 10 : 6;
-      ctx.lineWidth = idx === 0 ? 1.5 : 1.15;
-      ctx.beginPath();
-      ctx.arc(arcCx, arcCy, rad, -Math.PI * 0.86, -Math.PI * 0.14);
-      ctx.stroke();
-    });
-    ctx.restore();
+    if (canvas.width > 768) {
+      drawDesktopPromoAtmosphere(bounds, now);
+    } else {
+      // Концентрические неоновые радарные дуги за кораблём в окне LIVE LESSON PREVIEW на мобильном
+      const arcCx = bounds.centerX;
+      const arcCy = bounds.bottom + 26;
+      const arcRadii = [58, 104, 152];
+      ctx.save();
+      ctx.lineCap = 'round';
+      arcRadii.forEach((rad, idx) => {
+        const alpha = 0.28 - idx * 0.065;
+        ctx.strokeStyle = `rgba(45, 212, 191, ${Math.max(0.08, alpha)})`;
+        ctx.shadowColor = 'rgba(45, 212, 191, 0.45)';
+        ctx.shadowBlur = idx === 0 ? 10 : 6;
+        ctx.lineWidth = idx === 0 ? 1.5 : 1.15;
+        ctx.beginPath();
+        ctx.arc(arcCx, arcCy, rad, -Math.PI * 0.86, -Math.PI * 0.14);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
   } else if (state.screenMode === 'play') {
     ctx.save();
     ctx.strokeStyle = 'rgba(45, 212, 191, 0.045)';
@@ -394,6 +403,10 @@ export function drawPlayerShip(now = 0) {
 }
 
 export function drawWordNode(w, isLocked, bounds) {
+  if (state.screenMode === 'title' && canvas.width > 768) {
+    drawDesktopPromoWordCard(w, isLocked, bounds);
+    return;
+  }
   const style = getArticleStyle(w.entry.article, state.targetLang);
   const remainText = w.text.slice(w.typedCount);
   const typedText = w.text.slice(0, w.typedCount);
@@ -529,8 +542,8 @@ export function drawFloatingTranslation(ft, bounds) {
   const isMobile = canvas.width < 600;
   const isPromoBox = state.screenMode === 'title';
   const cleanWord = (ft.entry && (ft.entry.withArticle || ft.entry.word)) || ft.rawDe;
-  let deFontPx = (isMobile || isPromoBox) ? (isMobile ? 16 : 17.5) : 22;
-  let ruFontPx = (isMobile || isPromoBox) ? (isMobile ? 18.5 : 20) : 25;
+  let deFontPx = (isMobile || isPromoBox) ? (isMobile ? 16 : 15) : 22;
+  let ruFontPx = (isMobile || isPromoBox) ? (isMobile ? 18.5 : 16.5) : 25;
 
   ctx.font = `700 ${deFontPx}px ${CANVAS_WORD_FONT}`;
   let deW = ctx.measureText(cleanWord).width;
@@ -553,9 +566,9 @@ export function drawFloatingTranslation(ft, bounds) {
   }
 
   const cardW = Math.min(maxAllowedW, Math.max(deW, transW) + 32);
-  const cardH = (isMobile || isPromoBox) ? (isMobile ? 58 : 64) : 74;
-  const yTopOffset = (isMobile || isPromoBox) ? -12 : -14.5;
-  const yBotOffset = (isMobile || isPromoBox) ? 13 : 15;
+  const cardH = (isMobile || isPromoBox) ? (isMobile ? 58 : 52) : 74;
+  const yTopOffset = (isMobile || isPromoBox) ? (isMobile ? -12 : -10.5) : -14.5;
+  const yBotOffset = (isMobile || isPromoBox) ? (isMobile ? 13 : 11.5) : 15;
 
   const drawX = Math.max(bounds.left + cardW / 2 + 6, Math.min(bounds.right - cardW / 2 - 6, ft.x));
   const drawY = Math.max(bounds.top + cardH / 2 + 6, Math.min(bounds.bottom - cardH / 2 - 6, ft.y));
@@ -631,5 +644,220 @@ export function drawLayoutWarning(bounds) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(t().layoutWarning, 0, 0);
+  ctx.restore();
+}
+
+function drawDesktopCosmicBackdrop() {
+  ctx.save();
+
+  // Космическая фиолетово-пурпурная туманность в правом верхнем углу и лазурная слева
+  const nebRight = ctx.createRadialGradient(
+    canvas.width * 0.92, canvas.height * 0.14, 10,
+    canvas.width * 0.92, canvas.height * 0.14, Math.max(360, canvas.width * 0.34)
+  );
+  nebRight.addColorStop(0, 'rgba(192, 132, 252, 0.24)');
+  nebRight.addColorStop(0.45, 'rgba(139, 92, 246, 0.11)');
+  nebRight.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = nebRight;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const nebLeft = ctx.createRadialGradient(
+    canvas.width * 0.06, canvas.height * 0.24, 10,
+    canvas.width * 0.06, canvas.height * 0.24, Math.max(320, canvas.width * 0.28)
+  );
+  nebLeft.addColorStop(0, 'rgba(56, 189, 248, 0.18)');
+  nebLeft.addColorStop(0.5, 'rgba(37, 99, 235, 0.08)');
+  nebLeft.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = nebLeft;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Светящаяся дуга Земли в нижней части космического фона
+  const earthR = Math.max(canvas.width * 1.48, 1700);
+  const earthCx = canvas.width * 0.5;
+  const earthCy = canvas.height + earthR - Math.max(66, canvas.height * 0.092);
+
+  const atmosGlow = ctx.createRadialGradient(
+    earthCx, earthCy, earthR - 22,
+    earthCx, earthCy, earthR + 115
+  );
+  atmosGlow.addColorStop(0, 'rgba(56, 189, 248, 0.52)');
+  atmosGlow.addColorStop(0.35, 'rgba(14, 165, 233, 0.28)');
+  atmosGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = atmosGlow;
+  ctx.beginPath();
+  ctx.arc(earthCx, earthCy, earthR + 115, Math.PI * 1.25, Math.PI * 1.75);
+  ctx.fill();
+
+  const planetGrad = ctx.createLinearGradient(0, canvas.height - 110, 0, canvas.height);
+  planetGrad.addColorStop(0, '#0ea5e9');
+  planetGrad.addColorStop(0.32, '#1d4ed8');
+  planetGrad.addColorStop(1, '#020617');
+  ctx.fillStyle = planetGrad;
+  ctx.beginPath();
+  ctx.arc(earthCx, earthCy, earthR, Math.PI * 1.25, Math.PI * 1.75);
+  ctx.fill();
+
+  ctx.strokeStyle = 'rgba(125, 211, 252, 0.85)';
+  ctx.shadowColor = 'rgba(56, 189, 248, 0.9)';
+  ctx.shadowBlur = 22;
+  ctx.lineWidth = 2.6;
+  ctx.beginPath();
+  ctx.arc(earthCx, earthCy, earthR, Math.PI * 1.28, Math.PI * 1.72);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawDesktopPromoAtmosphere(bounds, now) {
+  ctx.save();
+
+  // Астероиды по краям боевого монитора
+  const wSpan = bounds.right - bounds.left;
+  const hSpan = bounds.bottom - bounds.top;
+  const rocks = [
+    { x: bounds.left + 26, y: bounds.top + hSpan * 0.16 + Math.sin(now * 0.001) * 3, r: 13, rot: 0.4 },
+    { x: bounds.right - 28, y: bounds.top + hSpan * 0.62 + Math.cos(now * 0.0009) * 3, r: 16, rot: 1.9 },
+    { x: bounds.left + wSpan * 0.12, y: bounds.bottom - 52 + Math.sin(now * 0.0007 + 1) * 2, r: 8, rot: 0.9 }
+  ];
+  rocks.forEach(rk => {
+    ctx.save();
+    ctx.translate(rk.x, rk.y);
+    ctx.rotate(rk.rot);
+    ctx.fillStyle = 'rgba(30, 41, 68, 0.72)';
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.32)';
+    ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    const sides = 7;
+    for (let i = 0; i < sides; i++) {
+      const ang = (i / sides) * Math.PI * 2;
+      const rad = rk.r * (i % 2 === 0 ? 1 : 0.78);
+      if (i === 0) ctx.moveTo(Math.cos(ang) * rad, Math.sin(ang) * rad);
+      else ctx.lineTo(Math.cos(ang) * rad, Math.sin(ang) * rad);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  // Изогнутый горизонт планеты под кораблём внутри окна превью
+  const pR = Math.max(320, wSpan * 0.85);
+  const pCx = bounds.centerX;
+  const pCy = bounds.bottom + pR - 42;
+
+  const rimGlow = ctx.createRadialGradient(pCx, pCy, pR - 14, pCx, pCy, pR + 48);
+  rimGlow.addColorStop(0, 'rgba(56, 189, 248, 0.42)');
+  rimGlow.addColorStop(0.5, 'rgba(14, 165, 233, 0.16)');
+  rimGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  ctx.fillStyle = rimGlow;
+  ctx.beginPath();
+  ctx.arc(pCx, pCy, pR + 48, -Math.PI * 0.85, -Math.PI * 0.15);
+  ctx.fill();
+
+  const surfaceGrad = ctx.createLinearGradient(pCx, bounds.bottom - 48, pCx, bounds.bottom + 20);
+  surfaceGrad.addColorStop(0, 'rgba(14, 116, 194, 0.52)');
+  surfaceGrad.addColorStop(0.55, 'rgba(15, 23, 52, 0.88)');
+  surfaceGrad.addColorStop(1, 'rgba(5, 10, 26, 0.96)');
+  ctx.fillStyle = surfaceGrad;
+  ctx.beginPath();
+  ctx.arc(pCx, pCy, pR, -Math.PI * 0.85, -Math.PI * 0.15);
+  ctx.fill();
+
+  ctx.strokeStyle = 'rgba(125, 211, 252, 0.78)';
+  ctx.shadowColor = 'rgba(56, 189, 248, 0.85)';
+  ctx.shadowBlur = 14;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(pCx, pCy, pR, -Math.PI * 0.8, -Math.PI * 0.2);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawDesktopPromoWordCard(w, isLocked, bounds) {
+  const remainText = w.text.slice(w.typedCount);
+  const typedText = w.text.slice(0, w.typedCount);
+  const artRaw = (w.entry && w.entry.article) || '';
+  const hasRealArt = Boolean(artRaw) && !['Verb', 'Noun', 'Adj.', 'Adv.'].includes(artRaw) && !state.typeWithArticle;
+  const artPrefix = hasRealArt ? `${artRaw} ` : '';
+
+  const fontPx = getWordFontPx(w.text.length);
+  ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
+  const artW = artPrefix ? ctx.measureText(artPrefix).width : 0;
+  const typedW = ctx.measureText(typedText).width;
+  const remainW = ctx.measureText(remainText).width;
+  const topLineW = artW + typedW + remainW;
+
+  let transStr = !isLocked && w.entry ? getWordTranslation(w.entry) : '';
+  if (transStr.length > 18) transStr = transStr.slice(0, 17) + '…';
+  ctx.font = `500 11px ${CANVAS_WORD_FONT}`;
+  const subLineW = transStr ? ctx.measureText(transStr).width : 0;
+
+  const padX = 14;
+  const boxW = Math.min((bounds.right - bounds.left) - 16, Math.max(96, Math.max(topLineW, subLineW) + padX * 2));
+  const boxH = isLocked ? fontPx + 22 : fontPx + 30;
+  w.boxW = boxW;
+  w.boxH = boxH;
+
+  const clampedDrawX = Math.max(bounds.left + boxW / 2 + 4, Math.min(bounds.right - boxW / 2 - 4, w.x));
+  const clampedDrawY = Math.max(bounds.top + boxH / 2 + 2, w.y);
+  w.x = clampedDrawX;
+  w.y = clampedDrawY;
+
+  ctx.save();
+  ctx.translate(clampedDrawX, clampedDrawY);
+
+  const boxX = -boxW / 2;
+  const boxY = -boxH / 2;
+
+  ctx.shadowColor = isLocked ? '#f43f5e' : '#38bdf8';
+  ctx.shadowBlur = isLocked ? 20 : 13;
+
+  const bgGrad = ctx.createLinearGradient(0, boxY, 0, boxY + boxH);
+  if (isLocked) {
+    bgGrad.addColorStop(0, 'rgba(82, 16, 56, 0.90)');
+    bgGrad.addColorStop(1, 'rgba(26, 14, 44, 0.94)');
+  } else {
+    bgGrad.addColorStop(0, 'rgba(14, 38, 74, 0.86)');
+    bgGrad.addColorStop(1, 'rgba(8, 20, 44, 0.92)');
+  }
+  ctx.fillStyle = bgGrad;
+  ctx.strokeStyle = isLocked ? '#fb7185' : (w.hitFlash > 0 ? '#ffffff' : '#38bdf8');
+  ctx.lineWidth = isLocked ? 2.2 : 1.6;
+
+  roundRect(ctx, boxX, boxY, boxW, boxH, 14);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.shadowBlur = 0;
+  ctx.direction = 'ltr';
+  ctx.textBaseline = 'middle';
+
+  const topY = isLocked ? 0.5 : -6.5;
+  const startX = -topLineW / 2;
+  ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
+  ctx.textAlign = 'left';
+
+  if (artPrefix) {
+    ctx.fillStyle = isLocked ? '#fbcfe8' : '#bae6fd';
+    ctx.fillText(artPrefix, startX, topY);
+  }
+  if (typedText.length > 0) {
+    ctx.fillStyle = '#34d399';
+    ctx.fillText(typedText, startX + artW, topY);
+  }
+  if (remainText.length > 0) {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(remainText, startX + artW + typedW, topY);
+  }
+
+  if (transStr) {
+    ctx.direction = isRtlTranslation(w.entry) ? 'rtl' : 'ltr';
+    ctx.font = `500 11px ${CANVAS_WORD_FONT}`;
+    ctx.fillStyle = '#94a3b8';
+    ctx.textAlign = 'center';
+    ctx.fillText(transStr, 0, 11.5, boxW - 14);
+  }
+
   ctx.restore();
 }

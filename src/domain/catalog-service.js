@@ -391,7 +391,9 @@ export function courseMatchesLevelFilter(course, filterVal) {
   const raw = String(course.levelTag || '').toUpperCase().replace(/-/g, '–');
   const bucket = normalizeCefrBucket(course.levelTag);
   if (bucket === filterVal) return true;
-  if (filterVal === 'B1' && (raw === 'B1' || raw === 'A2–B1')) return true;
+  if (filterVal === 'A1' && raw.includes('A1')) return true;
+  if (filterVal === 'A2' && raw.includes('A2')) return true;
+  if (filterVal === 'B1' && (raw === 'B1' || raw === 'A2–B1' || raw.includes('B1'))) return true;
   if (filterVal === 'B2' && (raw.includes('B2') || raw.includes('C1'))) return true;
   if (filterVal === 'A1–A2' && (raw.includes('A1') || raw === 'A2')) return true;
   if (filterVal === 'A2–B1' && (raw.includes('A2') || raw === 'A1–B1')) return true;

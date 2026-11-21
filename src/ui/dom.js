@@ -309,7 +309,26 @@ export const btnHomeStreakChip = document.getElementById('btnHomeStreakChip');
 export const homeStreakBadge = document.getElementById('homeStreakBadge');
 export const pilotRankPill = document.getElementById('pilotRankPill');
 export const homeScoreBadge = document.getElementById('homeScoreBadge');
+export const navLangDropdownWrap = document.getElementById('navLangDropdownWrap');
+export const btnNavLangToggle = document.getElementById('btnNavLangToggle');
+export const navLangDropdownMenu = document.getElementById('navLangDropdownMenu');
+export const navLangFlag = document.getElementById('navLangFlag');
+export const navLangCode = document.getElementById('navLangCode');
 export const btnHomeSettings = document.getElementById('btnHomeSettings');
+
+export const labelContinueMission = document.getElementById('labelContinueMission');
+export const homeMissionArtwork = document.getElementById('homeMissionArtwork');
+export const homeMissionTitle = document.getElementById('homeMissionTitle');
+export const homeMissionSubtitle = document.getElementById('homeMissionSubtitle');
+export const homeMissionProgFill = document.getElementById('homeMissionProgFill');
+export const homeMissionProgText = document.getElementById('homeMissionProgText');
+export const btnMissionLaunch = document.getElementById('btnMissionLaunch');
+export const labelMissionLaunch = document.getElementById('labelMissionLaunch');
+export const btnMissionDailyGoal = document.getElementById('btnMissionDailyGoal');
+export const labelDailyGoalTitle = document.getElementById('labelDailyGoalTitle');
+export const homeDailyGoalTarget = document.getElementById('homeDailyGoalTarget');
+export const homeDailyGoalFill = document.getElementById('homeDailyGoalFill');
+export const homeDailyGoalText = document.getElementById('homeDailyGoalText');
 
 export const homeHeroTitleTop = document.getElementById('homeHeroTitleTop');
 export const homeHeroTitleAccent = document.getElementById('homeHeroTitleAccent');
@@ -322,7 +341,21 @@ export const mobileHeroArtWord = document.getElementById('mobileHeroArtWord');
 export const titleSpaceWindow = document.getElementById('titleSpaceWindow');
 export const promoLiveLabel = document.getElementById('promoLiveLabel');
 export const promoMonitorBadge = document.getElementById('promoMonitorBadge');
+export const promoTargetPill = document.getElementById('promoTargetPill');
+export const promoTargetLabel = document.getElementById('promoTargetLabel');
+export const promoTargetWordText = document.getElementById('promoTargetWordText');
 export const btnPromoWeaponCycle = document.getElementById('btnPromoWeaponCycle');
+
+export const targetLangDropdownWrap = document.getElementById('targetLangDropdownWrap');
+export const btnTargetLangDropdown = document.getElementById('btnTargetLangDropdown');
+export const targetLangDropdownFlag = document.getElementById('targetLangDropdownFlag');
+export const targetLangDropdownName = document.getElementById('targetLangDropdownName');
+export const targetLangDropdownMenu = document.getElementById('targetLangDropdownMenu');
+export const labelHomeLevelFilter = document.getElementById('labelHomeLevelFilter');
+export const homeLevelPills = document.getElementById('homeLevelPills');
+export const desktopTopicsBar = document.getElementById('desktopTopicsBar');
+export const labelDesktopTopics = document.getElementById('labelDesktopTopics');
+export const desktopTopicsChips = document.getElementById('desktopTopicsChips');
 
 export const labelHowItWorks = document.getElementById('labelHowItWorks');
 export const mobileDiscoverySection = document.getElementById('mobileDiscoverySection');
@@ -771,7 +804,25 @@ export const dom = {
   homeStreakBadge,
   pilotRankPill,
   homeScoreBadge,
+  navLangDropdownWrap,
+  btnNavLangToggle,
+  navLangDropdownMenu,
+  navLangFlag,
+  navLangCode,
   btnHomeSettings,
+  labelContinueMission,
+  homeMissionArtwork,
+  homeMissionTitle,
+  homeMissionSubtitle,
+  homeMissionProgFill,
+  homeMissionProgText,
+  btnMissionLaunch,
+  labelMissionLaunch,
+  btnMissionDailyGoal,
+  labelDailyGoalTitle,
+  homeDailyGoalTarget,
+  homeDailyGoalFill,
+  homeDailyGoalText,
   homeHeroTitleTop,
   homeHeroTitleAccent,
   labelPerkPlay,
@@ -783,7 +834,20 @@ export const dom = {
   titleSpaceWindow,
   promoLiveLabel,
   promoMonitorBadge,
+  promoTargetPill,
+  promoTargetLabel,
+  promoTargetWordText,
   btnPromoWeaponCycle,
+  targetLangDropdownWrap,
+  btnTargetLangDropdown,
+  targetLangDropdownFlag,
+  targetLangDropdownName,
+  targetLangDropdownMenu,
+  labelHomeLevelFilter,
+  homeLevelPills,
+  desktopTopicsBar,
+  labelDesktopTopics,
+  desktopTopicsChips,
   labelHowItWorks,
   mobileDiscoverySection,
   labelMobChooseLevel,

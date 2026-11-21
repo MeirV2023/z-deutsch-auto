@@ -28,7 +28,7 @@ import {
   spawnParticles
 } from './arena-physics.js';
 import { spawnWeaponVisualEffect } from './weapon-vfx.js';
-import { renderLevelSidebar, updatePilotRankUI } from '../ui/hud-widgets.js';
+import { renderLevelSidebar, updatePilotRankUI, updatePromoTargetPill } from '../ui/hud-widgets.js';
 
 export function launchFromTitleScreen() {
   if (state.screenMode !== 'title') return;
@@ -99,16 +99,24 @@ export function seedTitleDemoWords() {
 
   const { course } = getActiveSelection();
   const courseWords = course ? getAllWordsInCourse(course) : [];
-  const demoPool = courseWords.length >= 4 ? courseWords : getAllWordsInTargetLang(state.targetLang);
-  if (demoPool.length === 0) return;
+  const rawPool = courseWords.length >= 4 ? courseWords : getAllWordsInTargetLang(state.targetLang);
+  if (rawPool.length === 0) return;
+
+  const isDesktopPromo = window.innerWidth > 768;
+  const shortPool = isDesktopPromo ? rawPool.filter(w => w.word && w.word.length <= 13) : rawPool;
+  const demoPool = shortPool.length >= 6 ? shortPool : rawPool;
 
   state.demoWords = [];
   state.demoTargetId = null;
 
   const promoSpan = bounds.right - bounds.left;
   const desiredCount = promoSpan >= 315 ? 3 : 2;
-  const laneFracs = desiredCount === 3 ? [0.22, 0.78, 0.5] : [0.3, 0.72];
-  const yFracs = desiredCount === 3 ? [0.24, 0.32, 0.16] : [0.24, 0.36];
+  const laneFracs = desiredCount === 3
+    ? (isDesktopPromo ? [0.18, 0.50, 0.82] : [0.22, 0.78, 0.5])
+    : [0.3, 0.72];
+  const yFracs = desiredCount === 3
+    ? (isDesktopPromo ? [0.38, 0.22, 0.34] : [0.24, 0.34, 0.18])
+    : [0.24, 0.36];
   const usedRaw = new Set();
 
   for (let i = 0; i < desiredCount; i++) {
@@ -127,10 +135,11 @@ export function seedTitleDemoWords() {
     const meas = measureWordCapsule(sample.word, sample);
     const halfW = Math.min((bounds.right - bounds.left) * 0.42, meas.boxW * 0.5);
     const rawX = bounds.left + (bounds.right - bounds.left) * laneFracs[i];
-    const clampedX = Math.max(bounds.left + halfW + 12, Math.min(bounds.right - halfW - 12, rawX));
+    const clampedX = Math.max(bounds.left + halfW + 10, Math.min(bounds.right - halfW - 10, rawX));
+    const minCenterY = bounds.top + meas.boxH * 0.5 + 4;
     const spawnY = Math.min(
-      Math.max(bounds.top + 22, bounds.top + corridorH * yFracs[i]),
-      Math.max(bounds.top + 26, bounds.bottom - 62)
+      Math.max(minCenterY, bounds.top + corridorH * yFracs[i]),
+      Math.max(minCenterY + 4, bounds.bottom - 58)
     );
 
     state.demoWords.push({
@@ -165,6 +174,7 @@ export function seedTitleDemoWords() {
     state.demoFireTimer = 0.12;
     state.demoSpawnTimer = 0.9;
   }
+  updatePromoTargetPill();
 }
 
 export function updateTitleDemo(dt) {
@@ -204,20 +214,23 @@ export function updateTitleDemo(dt) {
     return;
   }
 
-  const spawnY = bounds.top + 22;
   const promoSpan = bounds.right - bounds.left;
+  const isDesktopPromo = window.innerWidth > 768;
   const maxDemoWords = state.weaponId === 'gravity'
     ? (canvas.width > 640 ? 5 : 3)
     : (promoSpan >= 315 ? 3 : 2);
   const { course } = getActiveSelection();
   const courseWords = course ? getAllWordsInCourse(course) : [];
-  const demoPool = courseWords.length >= 4 ? courseWords : getAllWordsInTargetLang(state.targetLang);
+  const rawPool = courseWords.length >= 4 ? courseWords : getAllWordsInTargetLang(state.targetLang);
+  const shortPool = isDesktopPromo ? rawPool.filter(w => w.word && w.word.length <= 13) : rawPool;
+  const demoPool = shortPool.length >= 6 ? shortPool : rawPool;
 
   state.demoSpawnTimer -= dt;
   if (state.demoSpawnTimer <= 0 && state.demoWords.length < maxDemoWords && demoPool.length > 0) {
     const sample = demoPool[Math.floor(Math.random() * demoPool.length)];
     if (sample) {
       const meas = measureWordCapsule(sample.word, sample);
+      const spawnY = bounds.top + meas.boxH * 0.5 + 6;
       const pos = findSafeSpawnX(meas.boxW, meas.boxH, spawnY, state.demoWords, bounds);
       if (pos.clear || state.demoWords.length === 0) {
         state.demoWords.push({
@@ -241,10 +254,11 @@ export function updateTitleDemo(dt) {
     state.demoSpawnTimer = state.weaponId === 'gravity' ? 0.75 : 0.95;
   }
 
-  resolveWordCollisions(state.demoWords, bounds, dt, bounds.top + 20);
+  resolveWordCollisions(state.demoWords, bounds, dt, bounds.top + 30);
 
   for (let i = state.demoWords.length - 1; i >= 0; i--) {
     const dw = state.demoWords[i];
+    const minCenterY = bounds.top + (dw.boxH ? dw.boxH * 0.5 + 4 : 26);
     if (dw.pushVx) {
       dw.x += dw.pushVx * dt;
       dw.pushVx *= Math.exp(-3.0 * dt);
@@ -257,14 +271,14 @@ export function updateTitleDemo(dt) {
     }
 
     if (dw.recoilY > 0) {
-      dw.y = Math.max(bounds.top + 20, dw.y - dw.recoilY * 5.5 * dt);
+      dw.y = Math.max(minCenterY, dw.y - dw.recoilY * 5.5 * dt);
       dw.recoilY = Math.max(0, dw.recoilY - 24 * dt);
     } else {
       dw.y += (dw.frameVy ?? dw.vy) * dt;
     }
 
-    if (dw.y < bounds.top + 20) {
-      dw.y = bounds.top + 20;
+    if (dw.y < minCenterY) {
+      dw.y = minCenterY;
       if (dw.pushVy < 0) dw.pushVy = 0;
     }
     if (dw.hitFlash > 0) dw.hitFlash = Math.max(0, dw.hitFlash - dt * 5);
@@ -275,11 +289,15 @@ export function updateTitleDemo(dt) {
     }
   }
 
+  const prevDemoTargetId = state.demoTargetId;
   let activeDemoTarget = state.demoWords.find(w => w.id === state.demoTargetId);
   if (!activeDemoTarget && state.demoWords.length > 0) {
     // Наводимся на нижнее (ближайшее к кораблю) слово — выглядит как живой автопилот!
     activeDemoTarget = state.demoWords.reduce((best, cur) => (cur.y > best.y ? cur : best), state.demoWords[0]);
     state.demoTargetId = activeDemoTarget.id;
+  }
+  if (state.demoTargetId !== prevDemoTargetId) {
+    updatePromoTargetPill();
   }
 
   if (activeDemoTarget) {
@@ -306,6 +324,7 @@ export function updateTitleDemo(dt) {
         const idx = state.demoWords.findIndex(w => w.id === target.id);
         if (idx !== -1) state.demoWords.splice(idx, 1);
         state.demoTargetId = null;
+        updatePromoTargetPill();
 
         state.shockwaves.push({
           x: target.x,

@@ -105,7 +105,41 @@ export const RU_TEXT = {
   mobNavDecks: 'Колоды',
   mobNavStats: 'Статистика',
   mobNavProfile: 'Профиль',
-  chooseLangTitle: 'Выбери язык',
+  chooseLangTitle: 'Изучаемый язык',
+  continueMissionTitle: 'Продолжить миссию',
+  continueGameBtn: 'Продолжить игру',
+  dailyGoalTitle: 'Дневная цель',
+  dailyGoalWordsUnit: (n) => {
+    const m100 = n % 100;
+    const m10 = n % 10;
+    if (m100 >= 11 && m100 <= 14) return 'слов';
+    if (m10 === 1) return 'слово';
+    if (m10 >= 2 && m10 <= 4) return 'слова';
+    return 'слов';
+  },
+  missionProgressSummary: (learned, total, pct) => {
+    const m100 = total % 100;
+    const m10 = total % 10;
+    const wWord = (m10 === 1 && m100 !== 11) ? 'слова' : 'слов';
+    return `${learned} из ${total} ${wWord} · ${pct}%`;
+  },
+  promoTargetPrefix: 'Цель:',
+  homeLevelLabel: 'Уровень',
+  popularCoursesTitle: 'Популярные курсы',
+  myProgressTitle: 'Мой прогресс',
+  metricCourseLearned: 'Изучено слов',
+  metricCourseTotal: 'Всего в курсе',
+  metricDailyGoal: 'Дневная цель',
+  topicsBarTitle: 'Темы',
+  courseMetaWordsLessons: (w, l) => {
+    const wm100 = w % 100;
+    const wm10 = w % 10;
+    const wWord = (wm100 >= 11 && wm100 <= 14) ? 'слов' : (wm10 === 1 ? 'слово' : (wm10 >= 2 && wm10 <= 4 ? 'слова' : 'слов'));
+    const lm100 = l % 100;
+    const lm10 = l % 10;
+    const lWord = (lm100 >= 11 && lm100 <= 14) ? 'уроков' : (lm10 === 1 ? 'урок' : (lm10 >= 2 && lm10 <= 4 ? 'урока' : 'уроков'));
+    return `${w} ${wWord} · ${l} ${lWord}`;
+  },
   quickStartTitle: 'Быстрый старт',
   quickAnkiBtn: 'Импорт Anki',
   quickAnkiCardTitle: 'Загрузить свою колоду Anki (.apkg)',
