@@ -4,13 +4,14 @@ import {
   ADMIN_CATALOG_LS_KEY,
   ADMIN_GH_TOKEN_LS_KEY,
   ADMIN_PASSWORD_LS_KEY,
+  ADMIN_UNLOCKED_LS_KEY,
   saveJsonStorage
 } from '../core/storage.js';
 import { escapeHtml } from '../core/utils.js';
 import { TARGET_LANG_META } from '../config/constants.js';
 import { AnkiImporter } from '../anki/index.js';
 import { ttsManager } from '../services/tts-service.js';
-import { state } from '../state/store.js';
+import { state, t } from '../state/store.js';
 import {
   ensureValidCourseSelection,
   getAllCategories,
@@ -56,19 +57,134 @@ import {
   btnAdminCreateCategory,
   btnAdminExportJson,
   btnAdminImportJson,
+  btnAdminLockMode,
   btnAdminSaveCreds,
   btnAdminSyncCloud,
   btnAdminToggleNewCat,
   btnDecksOpenAdmin,
   btnNavAdmin,
+  btnOpenAdminFromSettings,
   centerOverlay,
-  courseBrowserDialog
+  courseBrowserDialog,
+  homeBrandLogo
 } from './dom.js';
 import { renderHomeDashboardWidgets, renderLevelSidebar } from './hud-widgets.js';
 import { selectCourseLesson } from '../engine/gameplay.js';
 import { launchDeckLessonFromPage, openDecksPage, renderDecksPage } from './decks-page.js';
 
+export function isAdminUnlocked() {
+  try {
+    if (localStorage.getItem(ADMIN_UNLOCKED_LS_KEY) === '1') return true;
+    if (localStorage.getItem(ADMIN_GH_TOKEN_LS_KEY) || localStorage.getItem(ADMIN_PASSWORD_LS_KEY)) {
+      return true;
+    }
+  } catch (_) {}
+  return false;
+}
+
+export function syncAdminVisibilityUI() {
+  const unlocked = isAdminUnlocked();
+  document.body.classList.toggle('is-admin-unlocked', unlocked);
+  [btnNavAdmin, btnDecksOpenAdmin, btnOpenAdminFromSettings].forEach(el => {
+    if (!el) return;
+    el.hidden = !unlocked;
+    el.setAttribute('aria-hidden', unlocked ? 'false' : 'true');
+  });
+}
+
+export async function promptAndUnlockAdmin(autoOpenStudio = true) {
+  if (isAdminUnlocked()) {
+    syncAdminVisibilityUI();
+    if (autoOpenStudio) openAdminStudio();
+    return true;
+  }
+
+  const tr = t();
+  const entered = window.prompt(tr.adminUnlockPrompt || '🔐 Введите пароль Супер-Админа:');
+  if (!entered || !entered.trim()) {
+    return false;
+  }
+  const cleanPass = entered.trim();
+
+  const isLocalHost = /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname) || window.location.protocol === 'file:';
+  try {
+    const res = await fetch('/api/admin-publish', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-password': cleanPass
+      },
+      body: JSON.stringify({ action: 'verify' })
+    });
+
+    if (res.status === 401) {
+      window.alert(tr.adminUnlockWrongPass || '❌ Неверный пароль администратора.');
+      return false;
+    }
+
+    if (res.ok) {
+      const data = await res.json().catch(() => ({}));
+      try {
+        localStorage.setItem(ADMIN_UNLOCKED_LS_KEY, '1');
+        localStorage.setItem(ADMIN_PASSWORD_LS_KEY, cleanPass);
+      } catch (_) {}
+      syncAdminVisibilityUI();
+      if (autoOpenStudio) openAdminStudio();
+      if (!data.hasServerPassword) {
+        showAdminStatus('⚠️ На сервере Vercel ещё не задан ADMIN_PASSWORD — добавьте его в Environment Variables для защиты публикации.', false);
+      }
+      return true;
+    }
+
+    if (isLocalHost && (res.status === 404 || res.status === 501)) {
+      try {
+        localStorage.setItem(ADMIN_UNLOCKED_LS_KEY, '1');
+        localStorage.setItem(ADMIN_PASSWORD_LS_KEY, cleanPass);
+      } catch (_) {}
+      syncAdminVisibilityUI();
+      if (autoOpenStudio) openAdminStudio();
+      return true;
+    }
+
+    window.alert(tr.adminUnlockWrongPass || '❌ Ошибка проверки доступа администратора.');
+    return false;
+  } catch (_) {
+    if (isLocalHost) {
+      try {
+        localStorage.setItem(ADMIN_UNLOCKED_LS_KEY, '1');
+        localStorage.setItem(ADMIN_PASSWORD_LS_KEY, cleanPass);
+      } catch (__) {}
+      syncAdminVisibilityUI();
+      if (autoOpenStudio) openAdminStudio();
+      return true;
+    }
+    window.alert('⚠️ Нет соединения с сервером проверки пароля.');
+    return false;
+  }
+}
+
+export function lockAdminMode() {
+  try {
+    localStorage.removeItem(ADMIN_UNLOCKED_LS_KEY);
+    localStorage.removeItem(ADMIN_PASSWORD_LS_KEY);
+    localStorage.removeItem(ADMIN_GH_TOKEN_LS_KEY);
+  } catch (_) {}
+  if (adminPasswordInput) adminPasswordInput.value = '';
+  if (adminGithubTokenInput) adminGithubTokenInput.value = '';
+  syncAdminVisibilityUI();
+  if (state.homeSubView === 'admin') {
+    actions.switchHomeSubView('home');
+  }
+  if (state.homeSubView === 'decks') {
+    renderDecksPage();
+  }
+}
+
 export function openAdminStudio(focusCourseLang = '') {
+  if (!isAdminUnlocked()) {
+    promptAndUnlockAdmin(true);
+    return;
+  }
   if (courseBrowserDialog && courseBrowserDialog.open) {
     courseBrowserDialog.close();
   }
@@ -876,6 +992,50 @@ export function renderAdminStudio() {
 }
 
 export function bindAdminStudioEvents() {
+  syncAdminVisibilityUI();
+
+  if (btnAdminLockMode) {
+    btnAdminLockMode.addEventListener('click', () => {
+      lockAdminMode();
+      btnAdminLockMode.blur();
+    });
+  }
+
+  if (homeBrandLogo) {
+    let logoClicks = 0;
+    let logoTimer = null;
+    homeBrandLogo.addEventListener('click', () => {
+      logoClicks += 1;
+      if (logoTimer) clearTimeout(logoTimer);
+      logoTimer = setTimeout(() => { logoClicks = 0; }, 2500);
+      if (logoClicks >= 5) {
+        logoClicks = 0;
+        clearTimeout(logoTimer);
+        promptAndUnlockAdmin(true);
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.altKey && e.shiftKey && (e.key === 'A' || e.key === 'a' || e.code === 'KeyA')) {
+      e.preventDefault();
+      promptAndUnlockAdmin(true);
+    }
+  });
+
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === '1' || window.location.hash === '#admin') {
+      params.delete('admin');
+      const nextSearch = params.toString();
+      const nextUrl = window.location.pathname + (nextSearch ? `?${nextSearch}` : '');
+      window.history.replaceState({}, '', nextUrl);
+      setTimeout(() => {
+        promptAndUnlockAdmin(true);
+      }, 120);
+    }
+  } catch (_) {}
+
   [btnNavAdmin, btnDecksOpenAdmin].forEach(el => {
     if (!el) return;
     el.addEventListener('click', () => {

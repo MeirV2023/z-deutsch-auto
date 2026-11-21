@@ -25,6 +25,7 @@ import {
   arcadeLogoSub,
   arcadeTitleScreen,
   arenaWavePill,
+  btnAdminLockMode,
   btnArticleMode,
   btnBackToTitle,
   btnDecksLevelAll,
@@ -429,6 +430,7 @@ export function applyStaticUILocalization() {
   if (labelNavStats) labelNavStats.textContent = tr.navStats;
   if (labelNavLeaderboard) labelNavLeaderboard.textContent = tr.navLeaderboard;
   if (labelNavAdmin) labelNavAdmin.textContent = tr.navAdmin;
+  if (btnAdminLockMode && tr.adminLockBtn) btnAdminLockMode.textContent = tr.adminLockBtn;
 
   // Hero-блок и рамка живого промо-боя
   const { course, mod, lesson } = getActiveSelection();

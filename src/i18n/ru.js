@@ -106,8 +106,12 @@ export const RU_TEXT = {
   mobNavStats: 'Статистика',
   mobNavProfile: 'Профиль',
   chooseLangTitle: 'Изучаемый язык',
+  startMissionTitle: 'Начать миссию',
   continueMissionTitle: 'Продолжить миссию',
   continueGameBtn: 'Продолжить игру',
+  adminUnlockPrompt: '🔐 Введите пароль Супер-Админа:',
+  adminUnlockWrongPass: '❌ Неверный пароль администратора.',
+  adminLockBtn: '🔒 Скрыть админку',
   dailyGoalTitle: 'Дневная цель',
   dailyGoalWordsUnit: (n) => {
     const m100 = n % 100;

@@ -38,6 +38,14 @@ module.exports = async function handler(req, res) {
     });
   }
 
+  const body = getJsonBody(req);
+  if (body && body.action === 'verify') {
+    return res.status(200).json({
+      ok: true,
+      hasServerPassword: Boolean(serverPass)
+    });
+  }
+
   const activeGhToken = headerGhToken || (serverPass ? serverGhToken : '');
   if (!activeGhToken) {
     return res.status(503).json({
@@ -49,7 +57,6 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  const body = getJsonBody(req);
   const catalog = body.catalog;
   if (!catalog || typeof catalog !== 'object' || !catalog.courses) {
     return res.status(400).json({ error: 'INVALID_CATALOG_PAYLOAD' });

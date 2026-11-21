@@ -428,17 +428,12 @@ export function updatePromoTargetPill() {
 
 export function renderDesktopMissionCard() {
   const tr = t();
-  if (labelContinueMission && tr.continueMissionTitle) {
-    labelContinueMission.textContent = tr.continueMissionTitle;
-  }
-  if (labelMissionLaunch && tr.continueGameBtn) {
-    labelMissionLaunch.textContent = tr.continueGameBtn;
-  }
   if (labelDailyGoalTitle && tr.dailyGoalTitle) {
     labelDailyGoalTitle.textContent = tr.dailyGoalTitle;
   }
 
   const { course, mod } = getActiveSelection();
+  let hasCourseProgress = false;
   if (course) {
     const artKey = course.source === 'user' ? 'anki' : inferCourseCategory(course);
     if (homeMissionArtwork && homeMissionArtwork.dataset.artKey !== artKey) {
@@ -454,6 +449,10 @@ export function renderDesktopMissionCard() {
       homeMissionSubtitle.textContent = modTitle ? `${modTitle}${levelBit}` : (course.levelTag || '');
     }
     const { learned, total } = countLearnedWordsInCourse(course);
+    const hasDoneLesson = (course.modules || []).some(
+      m => (m.lessons || []).some(ls => state.completedLessonIds.has(ls.id))
+    );
+    hasCourseProgress = learned > 0 || hasDoneLesson;
     const pct = total > 0 ? Math.min(100, Math.round((learned / total) * 100)) : 0;
     if (homeMissionProgFill) {
       homeMissionProgFill.style.width = `${pct}%`;
@@ -463,6 +462,17 @@ export function renderDesktopMissionCard() {
         ? tr.missionProgressSummary(learned, total, pct)
         : `${learned} / ${total} · ${pct}%`;
     }
+  }
+
+  if (labelContinueMission) {
+    labelContinueMission.textContent = hasCourseProgress
+      ? (tr.continueMissionTitle || 'Продолжить миссию')
+      : (tr.startMissionTitle || 'Начать миссию');
+  }
+  if (labelMissionLaunch) {
+    labelMissionLaunch.textContent = hasCourseProgress
+      ? (tr.continueGameBtn || 'Продолжить игру')
+      : (tr.launchFreeBtn || 'Начать игру');
   }
 
   const doneToday = todayLearnedSet.size;

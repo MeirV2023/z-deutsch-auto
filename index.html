@@ -161,7 +161,7 @@
           <!-- Десктопная карточка «Продолжить миссию» + «Дневная цель» -->
           <div class="desktop-mission-card" id="desktopMissionCard">
             <div class="mission-main-col">
-              <div class="mission-kicker" id="labelContinueMission">Продолжить миссию</div>
+              <div class="mission-kicker" id="labelContinueMission">Начать миссию</div>
               <div class="mission-body-row">
                 <div class="mission-thumb-art" id="homeMissionArtwork" aria-hidden="true"></div>
                 <div class="mission-info-col">
@@ -174,7 +174,7 @@
                   <button type="button" class="mission-launch-cta" id="btnMissionLaunch">
                     <span class="launch-glow"></span>
                     <span class="mission-cta-play" aria-hidden="true">▶</span>
-                    <span class="launch-text" id="labelMissionLaunch">Продолжить игру</span>
+                    <span class="launch-text" id="labelMissionLaunch">Начать игру</span>
                   </button>
                 </div>
               </div>
@@ -941,6 +941,9 @@
             <input type="file" id="adminImportJsonInput" accept=".json,application/json" hidden />
             <button type="button" class="decks-emerald-create-btn" id="btnAdminSyncCloud" title="Отправить текущий каталог в GitHub -> автоматический деплой Vercel для всех игроков">
               🌍 Опубликовать изменения на хостинг
+            </button>
+            <button type="button" class="deck-btn-secondary admin-lock-btn" id="btnAdminLockMode" title="Скрыть панель Супер-Админа на этом устройстве">
+              🔒 Скрыть админку
             </button>
           </div>
         </div>

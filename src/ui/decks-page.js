@@ -153,7 +153,7 @@ export function openDeckContextMenu(anchorEl, course) {
     addMenuAction(tr.deleteDeckBtn, () => {
       removeUserDeckById(course.id);
     }, 'danger');
-  } else {
+  } else if (document.body.classList.contains('is-admin-unlocked')) {
     addMenuAction(tr.deckMenuAdmin, () => {
       actions.openAdminStudio(course.targetLang || state.targetLang);
     });
@@ -345,7 +345,7 @@ export function renderDeckDetailPane(course, stats) {
     delBtn.textContent = tr.deleteDeckBtn;
     delBtn.addEventListener('click', () => removeUserDeckById(course.id));
     actionsWrap.appendChild(delBtn);
-  } else {
+  } else if (document.body.classList.contains('is-admin-unlocked')) {
     const manageAdminBtn = document.createElement('button');
     manageAdminBtn.type = 'button';
     manageAdminBtn.className = 'deck-btn-secondary';

@@ -343,7 +343,7 @@ export function updateTitleDemo(dt) {
           rawDe: target.entry.raw,
           color: style.main,
           life: 0,
-          maxLife: 2.7
+          maxLife: window.innerWidth > 768 ? 1.85 : 2.5
         });
         separateFloatingTranslations(bounds);
         state.demoFireTimer = 0.5;

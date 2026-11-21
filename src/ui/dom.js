@@ -260,6 +260,7 @@ export const btnAdminExportJson = document.getElementById('btnAdminExportJson');
 export const btnAdminImportJson = document.getElementById('btnAdminImportJson');
 export const adminImportJsonInput = document.getElementById('adminImportJsonInput');
 export const btnAdminSyncCloud = document.getElementById('btnAdminSyncCloud');
+export const btnAdminLockMode = document.getElementById('btnAdminLockMode');
 export const adminGeminiKeyInput = document.getElementById('adminGeminiKeyInput');
 export const adminGithubTokenInput = document.getElementById('adminGithubTokenInput');
 export const adminPasswordInput = document.getElementById('adminPasswordInput');
@@ -756,6 +757,7 @@ export const dom = {
   btnAdminImportJson,
   adminImportJsonInput,
   btnAdminSyncCloud,
+  btnAdminLockMode,
   adminGeminiKeyInput,
   adminGithubTokenInput,
   adminPasswordInput,
