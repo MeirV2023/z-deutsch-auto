@@ -59,6 +59,7 @@ import {
   customDialogHint,
   customDialogTitle,
   customWordsDialog,
+  decksCompactLangPills,
   decksHeroSubtitle,
   decksHeroSubtitleMobile,
   decksHeroTitle,
@@ -91,26 +92,27 @@ import {
   labelCombo,
   labelCustomBtn,
   labelDecksAllHeading,
-  labelDecksCategoryHeader,
   labelDecksContinueHeading,
   labelDecksCreateBtn,
   labelDecksFiltersTitle,
   labelDecksImportAnkiBtn,
-  labelDecksInProgressSub,
   labelDecksLangHeader,
   labelDecksLevelHeader,
   labelDecksOpenAdmin,
+  labelDecksRecentTitle,
   labelDecksReturnBattle,
-  labelDecksSidebarProgTitle,
-  labelDecksSourceHeader,
-  labelDecksSrcAll,
-  labelDecksSrcOfficial,
-  labelDecksSrcUser,
   labelDecksStatLearned,
   labelDecksStatStreak,
   labelDecksStatTotal,
-  labelDecksViewGrid,
-  labelDecksViewList,
+  labelDesktopFilterAll,
+  labelDesktopFilterFav,
+  labelDesktopFilterRecent,
+  labelDesktopTabCourses,
+  labelDesktopTabUser,
+  labelQuickFilterAll,
+  labelQuickFilterCourses,
+  labelQuickFilterFav,
+  labelQuickFilterUser,
   labelDictPinnedFilter,
   labelFeatAnki,
   labelFeatCourses,
@@ -288,6 +290,15 @@ function syncDropdownTriggerLabels() {
     targetLangDropdownMenu.querySelectorAll('.target-lang-pill').forEach(btn => {
       const code = btn.dataset.targetLang;
       const flagEl = btn.querySelector('.home-lang-flag');
+      if (flagEl) {
+        flagEl.innerHTML = getLangFlagSvg(code);
+      }
+    });
+  }
+  if (decksCompactLangPills) {
+    decksCompactLangPills.querySelectorAll('.target-lang-pill').forEach(btn => {
+      const code = btn.dataset.targetLang;
+      const flagEl = btn.querySelector('.decks-lang-flag');
       if (flagEl) {
         flagEl.innerHTML = getLangFlagSvg(code);
       }
@@ -581,18 +592,21 @@ export function applyStaticUILocalization() {
   if (btnSaveCustomWords) btnSaveCustomWords.textContent = tr.customSaveBtn;
 
   // Полноэкранная страница «Мои колоды» / «Курсы»
-  if (labelDecksFiltersTitle) labelDecksFiltersTitle.textContent = tr.decksFiltersTitle;
+  if (labelDecksFiltersTitle) labelDecksFiltersTitle.textContent = tr.decksQuickFiltersTitle || tr.decksFiltersTitle;
   if (labelDecksLangHeader) labelDecksLangHeader.textContent = tr.decksLangHeader;
-  if (labelDecksSourceHeader) labelDecksSourceHeader.textContent = tr.decksSourceHeader;
-  if (labelDecksSrcAll) labelDecksSrcAll.textContent = tr.decksSrcAll;
-  if (labelDecksSrcOfficial) labelDecksSrcOfficial.textContent = tr.decksSrcOfficial;
-  if (labelDecksSrcUser) labelDecksSrcUser.textContent = tr.decksSrcUser;
-  if (labelDecksCategoryHeader) labelDecksCategoryHeader.textContent = tr.decksCategoryHeader;
   if (labelDecksLevelHeader) labelDecksLevelHeader.textContent = tr.decksLevelHeader;
   if (btnDecksLevelAll) btnDecksLevelAll.textContent = tr.decksLevelAll;
   if (labelDecksOpenAdmin) labelDecksOpenAdmin.textContent = tr.decksAdminBtn;
-  if (labelDecksSidebarProgTitle) labelDecksSidebarProgTitle.textContent = tr.decksSidebarProgTitle;
-  if (labelDecksInProgressSub) labelDecksInProgressSub.textContent = tr.decksInProgressSub;
+  if (labelDesktopTabCourses && tr.decksTabCourses) labelDesktopTabCourses.textContent = tr.decksTabCourses;
+  if (labelDesktopTabUser && tr.decksTabUser) labelDesktopTabUser.textContent = tr.decksTabUser;
+  if (labelDesktopFilterAll && tr.decksPillAll) labelDesktopFilterAll.textContent = tr.decksPillAll;
+  if (labelDesktopFilterRecent && tr.decksPillRecent) labelDesktopFilterRecent.textContent = tr.decksPillRecent;
+  if (labelDesktopFilterFav && tr.decksPillFav) labelDesktopFilterFav.textContent = tr.decksPillFav;
+  if (labelQuickFilterAll && tr.decksQuickAll) labelQuickFilterAll.textContent = tr.decksQuickAll;
+  if (labelQuickFilterCourses && tr.decksTabCourses) labelQuickFilterCourses.textContent = tr.decksTabCourses;
+  if (labelQuickFilterUser && tr.decksTabUser) labelQuickFilterUser.textContent = tr.decksTabUser;
+  if (labelQuickFilterFav && tr.decksPillFav) labelQuickFilterFav.textContent = tr.decksPillFav;
+  if (labelDecksRecentTitle && tr.decksRecentActivityTitle) labelDecksRecentTitle.textContent = tr.decksRecentActivityTitle;
   if (decksHeroTitle) {
     decksHeroTitle.textContent = tr.decksHeroTitleMy;
   }
@@ -611,8 +625,6 @@ export function applyStaticUILocalization() {
   if (labelDecksStatLearned) labelDecksStatLearned.textContent = tr.decksStatLearned;
   if (labelDecksStatStreak) labelDecksStatStreak.textContent = tr.decksStatStreak;
   if (labelDecksReturnBattle) labelDecksReturnBattle.textContent = tr.decksReturnBattle;
-  if (labelDecksViewGrid) labelDecksViewGrid.textContent = tr.decksViewGrid;
-  if (labelDecksViewList) labelDecksViewList.textContent = tr.decksViewList;
   if (labelDecksContinueHeading) labelDecksContinueHeading.textContent = tr.decksContinueHeading;
   if (labelDecksAllHeading) labelDecksAllHeading.textContent = tr.decksAllHeading;
 

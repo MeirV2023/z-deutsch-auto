@@ -27,10 +27,6 @@
   display: none !important;
 }
 
-.deck-desktop-card-inner {
-  display: contents;
-}
-
 .deck-icon-tile.art-base {
   background: radial-gradient(circle at 30% 25%, rgba(34, 197, 94, 0.4), rgba(12, 34, 24, 0.95));
   border-color: rgba(74, 222, 128, 0.45);
@@ -1004,18 +1000,24 @@
   }
 
   /* 6. Страница «Мои колоды» на мобильных экранах по макету (чистый космический список карточек) */
-  .decks-filter-sidebar,
+  .decks-right-sidebar,
+  .decks-desktop-tabs-bar,
+  .decks-cat-chips-row,
+  .decks-desktop-planet-fx,
+  .decks-heading-layers-svg,
   .decks-hero-right,
-  .decks-hero-bg-fx,
   #decksContinueSection,
   #decksOverviewPane > .decks-section-block > .decks-section-heading,
-  .decks-view-toggle,
   #btnDecksOpenAdmin {
     display: none !important;
   }
 
-  .decks-subbar-row:not(.has-return-battle) {
-    display: none !important;
+  .decks-page-view {
+    gap: 12px;
+  }
+
+  .decks-page-layout {
+    display: block;
   }
 
   .decks-page-view.detail-open .decks-hero-banner,

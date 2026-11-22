@@ -585,266 +585,154 @@
            ПОДЭКРАН Б: ПОЛНОЭКРАННАЯ СТРАНИЦА «МОИ КОЛОДЫ» / «КУРСЫ» (БЕЗ МОДАЛКИ!)
            ==================================================================== -->
       <div class="decks-page-view hidden" id="decksPageView">
-        <div class="decks-page-layout">
-          <!-- Левая колонка фильтров + карточка прогресса -->
-          <aside class="decks-filter-sidebar" aria-label="Фильтры колод">
-            <div class="decks-filter-card" id="decksFilterCard">
-              <div class="decks-sidebar-heading" id="btnDecksMobileFilterToggle" role="button" tabindex="0" aria-expanded="false">
-                <span class="decks-heading-left">
-                  <span class="filter-bars-icon" aria-hidden="true">☰</span>
-                  <span id="labelDecksFiltersTitle">Фильтры</span>
-                </span>
-                <span class="mobile-filter-chevron mobile-copy" aria-hidden="true">▾</span>
-              </div>
+        <!-- Верхний космический заголовок с поиском, кнопками и 3 KPI-метриками справа -->
+        <header class="decks-hero-banner">
+          <!-- Космическое свечение синей планеты на мобильных экранах -->
+          <div class="decks-mobile-planet-bg" aria-hidden="true"></div>
+          <!-- Свечение голубого горизонта Земли на десктопе позади заголовка -->
+          <div class="decks-desktop-planet-fx" aria-hidden="true"></div>
 
-              <!-- Язык обучения -->
-              <div class="decks-filter-group">
-                <div class="decks-filter-label">🌐 <span id="labelDecksLangHeader">Язык обучения</span></div>
-                <div class="decks-filter-list">
-                  <button type="button" class="decks-filter-row target-lang-pill active" data-target-lang="de">
-                    <span class="decks-filter-left">
-                      <span class="decks-lang-code">DE</span>
-                      <span data-tlang-name="de">Немецкий</span>
-                    </span>
-                    <span class="decks-filter-check">✓</span>
-                  </button>
-                  <button type="button" class="decks-filter-row target-lang-pill" data-target-lang="en">
-                    <span class="decks-filter-left">
-                      <span class="decks-lang-code">GB</span>
-                      <span data-tlang-name="en">Английский</span>
-                    </span>
-                    <span class="decks-filter-check">✓</span>
-                  </button>
-                  <button type="button" class="decks-filter-row target-lang-pill" data-target-lang="es">
-                    <span class="decks-filter-left">
-                      <span class="decks-lang-code">ES</span>
-                      <span data-tlang-name="es">Испанский</span>
-                    </span>
-                    <span class="decks-filter-check">✓</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Источник -->
-              <div class="decks-filter-group">
-                <div class="decks-filter-label">❖ <span id="labelDecksSourceHeader">Источник</span></div>
-                <div class="decks-filter-list" id="decksSourceFilterGroup">
-                  <button type="button" class="decks-filter-row decks-source-btn active" data-source-filter="all">
-                    <span class="decks-filter-left">
-                      <span class="decks-src-icon">◉</span>
-                      <span id="labelDecksSrcAll">Все</span>
-                    </span>
-                    <span class="decks-filter-check">✓</span>
-                  </button>
-                  <button type="button" class="decks-filter-row decks-source-btn" data-source-filter="official">
-                    <span class="decks-filter-left">
-                      <span class="decks-src-icon">🏛️</span>
-                      <span id="labelDecksSrcOfficial">От создателя</span>
-                    </span>
-                    <span class="decks-filter-check">✓</span>
-                  </button>
-                  <button type="button" class="decks-filter-row decks-source-btn" data-source-filter="user">
-                    <span class="decks-filter-left">
-                      <span class="decks-src-icon">👤</span>
-                      <span id="labelDecksSrcUser">Личные / Anki</span>
-                    </span>
-                    <span class="decks-filter-check">✓</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Категория (Auto, Бизнес, Базовый, IT...) -->
-              <div class="decks-filter-group">
-                <div class="decks-filter-label">🗂️ <span id="labelDecksCategoryHeader">Категория</span></div>
-                <div class="decks-level-pills" id="decksCategoryFilterGroup">
-                  <button type="button" class="decks-level-pill active" data-category-filter="all">Все</button>
-                </div>
-              </div>
-
-              <!-- Уровень CEFR -->
-              <div class="decks-filter-group">
-                <div class="decks-filter-label">📊 <span id="labelDecksLevelHeader">Уровень</span></div>
-                <div class="decks-level-pills" id="decksLevelFilterGroup">
-                  <button type="button" class="decks-level-pill active" data-level-filter="all" id="btnDecksLevelAll">Все</button>
-                  <button type="button" class="decks-level-pill" data-level-filter="A1–A2">A1–A2</button>
-                  <button type="button" class="decks-level-pill" data-level-filter="A2–B1">A2–B1</button>
-                  <button type="button" class="decks-level-pill" data-level-filter="B1">B1</button>
-                  <button type="button" class="decks-level-pill" data-level-filter="B1–B2">B1–B2</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Космическая карточка прогресса по колодам -->
-            <div class="decks-sidebar-progress-card">
-              <div class="decks-sidebar-prog-head">📊 <span id="labelDecksSidebarProgTitle">Ваш прогресс</span></div>
-              <div class="decks-sidebar-prog-big">
-                <strong id="decksSidebarStartedNum">0</strong>
-                <span id="decksSidebarTotalLabel">из 7 колод</span>
-              </div>
-              <div class="decks-sidebar-prog-sub" id="labelDecksInProgressSub">в процессе обучения</div>
-              <div class="decks-prog-bar-row">
-                <div class="decks-prog-track">
-                  <div class="decks-prog-fill" id="decksSidebarProgFill" style="width: 0%;"></div>
-                </div>
-                <span class="decks-prog-pct" id="decksSidebarProgPct">0%</span>
-              </div>
-              <div class="decks-sidebar-planet-art" aria-hidden="true"></div>
-            </div>
-          </aside>
-
-          <!-- Правая основная область страницы «Мои колоды» -->
-          <div class="decks-main-column">
-            <!-- Верхний космический баннер с поиском, импортом Anki, статистикой и маскотом -->
-            <div class="decks-hero-banner">
-              <!-- Космическое свечение синей планеты справа на мобильных экранах -->
-              <div class="decks-mobile-planet-bg" aria-hidden="true"></div>
-
-              <div class="decks-hero-bg-fx" aria-hidden="true">
-                <svg class="decks-bg-shuttle" viewBox="0 0 220 72" fill="none">
+          <div class="decks-hero-left">
+            <div class="decks-hero-title-row">
+              <span class="decks-folder-svg-mobile" aria-hidden="true">
+                <svg viewBox="0 0 48 44" fill="none">
                   <defs>
-                    <linearGradient id="shuttleTrailGrad" x1="0" y1="54" x2="178" y2="18" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0" />
-                      <stop offset="65%" stop-color="#38bdf8" stop-opacity="0.45" />
-                      <stop offset="100%" stop-color="#67e8f9" stop-opacity="0.95" />
+                    <linearGradient id="mobFolderBack" x1="6" y1="6" x2="40" y2="34" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#f59e0b" />
+                      <stop offset="100%" stop-color="#d97706" />
+                    </linearGradient>
+                    <linearGradient id="mobFolderFront" x1="6" y1="14" x2="44" y2="40" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#fde047" />
+                      <stop offset="55%" stop-color="#facc15" />
+                      <stop offset="100%" stop-color="#eab308" />
                     </linearGradient>
                   </defs>
-                  <path d="M8 58 Q96 42 176 20" stroke="url(#shuttleTrailGrad)" stroke-width="3.2" stroke-linecap="round" />
-                  <polygon points="202,13 173,13 181,21 176,30" fill="#e0f2fe" stroke="#38bdf8" stroke-width="1.5" />
+                  <path d="M5 10.5A4.5 4.5 0 0 1 9.5 6h9.4a3.5 3.5 0 0 1 2.7 1.28l2.5 3.02H38.5A4.5 4.5 0 0 1 43 14.8v19.7A4.5 4.5 0 0 1 38.5 39h-29A4.5 4.5 0 0 1 5 34.5v-24z" fill="url(#mobFolderBack)" />
+                  <path d="M7.8 16.5A3.8 3.8 0 0 1 11.6 13h30.2a3.2 3.2 0 0 1 3.13 3.88l-3.45 18.6A4.2 4.2 0 0 1 37.35 39H8.6A3.6 3.6 0 0 1 5.05 34.8l2.75-18.3z" fill="url(#mobFolderFront)" />
                 </svg>
-              </div>
-
-              <div class="decks-hero-left">
-                <div class="decks-hero-title-row">
-                  <span class="decks-folder-hero-icon desktop-copy" aria-hidden="true">📁</span>
-                  <span class="decks-folder-svg-mobile mobile-copy" aria-hidden="true">
-                    <svg viewBox="0 0 48 44" fill="none">
-                      <defs>
-                        <linearGradient id="mobFolderBack" x1="6" y1="6" x2="40" y2="34" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stop-color="#f59e0b" />
-                          <stop offset="100%" stop-color="#d97706" />
-                        </linearGradient>
-                        <linearGradient id="mobFolderFront" x1="6" y1="14" x2="44" y2="40" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stop-color="#fde047" />
-                          <stop offset="55%" stop-color="#facc15" />
-                          <stop offset="100%" stop-color="#eab308" />
-                        </linearGradient>
-                      </defs>
-                      <path d="M5 10.5A4.5 4.5 0 0 1 9.5 6h9.4a3.5 3.5 0 0 1 2.7 1.28l2.5 3.02H38.5A4.5 4.5 0 0 1 43 14.8v19.7A4.5 4.5 0 0 1 38.5 39h-29A4.5 4.5 0 0 1 5 34.5v-24z" fill="url(#mobFolderBack)" />
-                      <path d="M7.8 16.5A3.8 3.8 0 0 1 11.6 13h30.2a3.2 3.2 0 0 1 3.13 3.88l-3.45 18.6A4.2 4.2 0 0 1 37.35 39H8.6A3.6 3.6 0 0 1 5.05 34.8l2.75-18.3z" fill="url(#mobFolderFront)" />
-                    </svg>
-                  </span>
-                  <div class="decks-hero-titles-box">
-                    <h1 class="decks-hero-title" id="decksHeroTitle">Мои колоды</h1>
-                    <p class="decks-hero-subtitle">
-                      <span class="desktop-copy" id="decksHeroSubtitle">Ваши личные курсы и импортированные Anki-колоды</span>
-                      <span class="mobile-copy" id="decksHeroSubtitleMobile">Ваши курсы и Anki-колоды</span>
-                    </p>
-                  </div>
-                </div>
-
-                <div class="decks-hero-controls">
-                  <label class="decks-search-box" for="decksSearchInput">
-                    <span class="decks-search-icon desktop-copy" aria-hidden="true">🔍</span>
-                    <svg class="decks-search-svg mobile-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <circle cx="11" cy="11" r="7" />
-                      <path d="M20 20l-3.85-3.85" />
-                    </svg>
-                    <input
-                      type="search"
-                      id="decksSearchInput"
-                      placeholder="Поиск по названию, описанию или словам..."
-                      autocomplete="off"
-                    />
-                  </label>
-
-                  <button type="button" class="decks-amber-anki-btn" id="btnDecksImportAnki">
-                    <span class="desktop-copy" aria-hidden="true">📦</span>
-                    <svg class="anki-dl-svg-mobile mobile-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M12 4v11" />
-                      <path d="M7.5 10.5L12 15l4.5-4.5" />
-                      <path d="M4.5 16.5v2a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-2" />
-                    </svg>
-                    <span id="labelDecksImportAnkiBtn">Импорт Anki (.apkg)</span>
-                  </button>
-
-                  <button type="button" class="decks-emerald-create-btn" id="btnDecksCreateDeck">
-                    <span class="create-plus-glyph" aria-hidden="true">＋</span>
-                    <span id="labelDecksCreateBtn">Создать колоду</span>
-                  </button>
-                </div>
-              </div>
-
-              <div class="decks-hero-right">
-                <div class="decks-hero-metrics">
-                  <div class="decks-hero-metric-row">
-                    <span>📚 <span id="labelDecksStatTotal">Всего колод</span></span>
-                    <strong id="decksHeroTotalCount">7</strong>
-                  </div>
-                  <div class="decks-hero-metric-row">
-                    <span>⚡ <span id="labelDecksStatLearned">Выучено слов</span></span>
-                    <strong id="decksHeroLearnedCount">0</strong>
-                  </div>
-                  <div class="decks-hero-metric-row">
-                    <span>🔥 <span id="labelDecksStatStreak">Текущая серия</span></span>
-                    <strong id="decksHeroStreakCount">1 дн.</strong>
-                  </div>
-                </div>
-
-                <!-- Космический робот-астронавт Z-Lingo -->
-                <div class="decks-mascot-wrap" aria-hidden="true">
-                  <svg class="decks-mascot-svg" viewBox="0 0 112 118" fill="none">
-                    <defs>
-                      <linearGradient id="suitGrad" x1="20" y1="16" x2="92" y2="108" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stop-color="#f8fafc" />
-                        <stop offset="55%" stop-color="#cbd5e1" />
-                        <stop offset="100%" stop-color="#94a3b8" />
-                      </linearGradient>
-                      <linearGradient id="visorGrad" x1="30" y1="28" x2="82" y2="62" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stop-color="#09152b" />
-                        <stop offset="100%" stop-color="#0f294a" />
-                      </linearGradient>
-                    </defs>
-                    <!-- Ушки шлема -->
-                    <path d="M28 30 L22 12 L41 21 Z" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
-                    <path d="M84 30 L90 12 L71 21 Z" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
-                    <!-- Поднятая приветствующая лапка -->
-                    <rect x="10" y="52" width="16" height="26" rx="8" transform="rotate(-28 18 65)" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
-                    <rect x="84" y="62" width="15" height="24" rx="7.5" transform="rotate(14 91 74)" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
-                    <!-- Туловище и ножки скафандра -->
-                    <rect x="34" y="68" width="44" height="32" rx="14" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.6" />
-                    <rect x="37" y="94" width="15" height="17" rx="7" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
-                    <rect x="60" y="94" width="15" height="17" rx="7" fill="url(#suitGrad)" stroke="#64748b" stroke-width="1.5" />
-                    <!-- Звёздочка на груди -->
-                    <polygon points="56,75 58.6,80.4 64.5,81.2 60.2,85.3 61.3,91.1 56,88.3 50.7,91.1 51.8,85.3 47.5,81.2 53.4,80.4" fill="#fbbf24" />
-                    <!-- Шлем и неоновый визор -->
-                    <rect x="22" y="18" width="68" height="54" rx="25" fill="url(#suitGrad)" stroke="#94a3b8" stroke-width="1.8" />
-                    <rect x="30" y="27" width="52" height="36" rx="16" fill="url(#visorGrad)" stroke="#38bdf8" stroke-width="1.6" />
-                    <!-- Светящиеся глазки и улыбка -->
-                    <path d="M40 45 Q45 38 50 45" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" />
-                    <path d="M62 45 Q67 38 72 45" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" />
-                    <path d="M51 52 Q56 57 61 52" stroke="#34d399" stroke-width="2.6" stroke-linecap="round" />
-                  </svg>
-                </div>
+              </span>
+              <div class="decks-hero-titles-box">
+                <h1 class="decks-hero-title" id="decksHeroTitle">Мои колоды</h1>
+                <p class="decks-hero-subtitle">
+                  <span class="desktop-copy" id="decksHeroSubtitle">Готовые курсы по темам и ваши импортированные Anki-колоды</span>
+                  <span class="mobile-copy" id="decksHeroSubtitleMobile">Ваши курсы и Anki-колоды</span>
+                </p>
               </div>
             </div>
 
-            <!-- Панель управления колодами: Супер-Админ / возврат в бой и вид [Карточки | Список] -->
-            <div class="decks-subbar-row">
-              <div class="decks-subtabs-left">
-                <button type="button" class="decks-subtab-pill" id="btnDecksOpenAdmin">
-                  👑 <span id="labelDecksOpenAdmin">Супер-Админ</span>
+            <div class="decks-hero-controls">
+              <label class="decks-search-box" for="decksSearchInput">
+                <svg class="decks-search-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="M20 20l-3.85-3.85" />
+                </svg>
+                <input
+                  type="search"
+                  id="decksSearchInput"
+                  placeholder="Поиск по названию, описанию или словам..."
+                  autocomplete="off"
+                />
+              </label>
+
+              <button type="button" class="decks-amber-anki-btn" id="btnDecksImportAnki">
+                <svg class="decks-anki-box-svg desktop-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+                  <path d="M12 12l8-4.5" />
+                  <path d="M12 12v9" />
+                  <path d="M12 12L4 7.5" />
+                  <path d="M16 5.25L8 9.75" />
+                </svg>
+                <svg class="anki-dl-svg-mobile mobile-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 4v11" />
+                  <path d="M7.5 10.5L12 15l4.5-4.5" />
+                  <path d="M4.5 16.5v2a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-2" />
+                </svg>
+                <span id="labelDecksImportAnkiBtn">Импорт Anki (.apkg)</span>
+              </button>
+
+              <button type="button" class="decks-emerald-create-btn" id="btnDecksCreateDeck">
+                <span class="create-plus-glyph" aria-hidden="true">+</span>
+                <span id="labelDecksCreateBtn">Создать колоду</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="decks-hero-right">
+            <div class="decks-hero-stats-grid">
+              <div class="decks-kpi-cell">
+                <svg class="decks-kpi-svg kpi-cyan" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3L2.5 8 12 13 21.5 8 12 3z" fill="#38bdf8" />
+                  <path d="M3.5 12.2L12 16.8l8.5-4.6" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M3.5 16.5L12 21l8.5-4.5" stroke="#0ea5e9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="decks-kpi-label" id="labelDecksStatTotal">Всего колод</span>
+                <strong class="decks-kpi-val" id="decksHeroTotalCount">0</strong>
+              </div>
+              <div class="decks-kpi-cell">
+                <svg class="decks-kpi-svg kpi-gold" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M13 2L4.5 13.5h6.2L9.5 22l9.5-11.5h-6.2L13 2z" fill="#fbbf24" stroke="#fef08a" stroke-width="1" stroke-linejoin="round" />
+                </svg>
+                <span class="decks-kpi-label" id="labelDecksStatLearned">Выучено слов</span>
+                <strong class="decks-kpi-val" id="decksHeroLearnedCount">0</strong>
+              </div>
+              <div class="decks-kpi-cell">
+                <svg class="decks-kpi-svg kpi-flame" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12.5 2.5c.8 3.6 4.5 5.4 4.5 9.8a5.5 5.5 0 0 1-11 0c0-2.5 1.1-4.8 3-6.5.2 1.8 1.2 2.9 2.3 3.2-.5-2.1-.1-4.4 1.2-6.5Z" fill="#fb923c" />
+                  <path d="M12 12.5c1.5 1.3 2.3 2.5 2.3 4a2.3 2.3 0 0 1-4.6 0c0-1.3.7-2.6 2.3-4Z" fill="#fde047" />
+                </svg>
+                <span class="decks-kpi-label" id="labelDecksStatStreak">Текущая серия</span>
+                <strong class="decks-kpi-val" id="decksHeroStreakCount">1 дн.</strong>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Основная двухколоночная сетка: контент слева + панель фильтров/активности справа -->
+        <div class="decks-page-layout">
+          <!-- Левая основная колонка страницы «Мои колоды» -->
+          <div class="decks-main-column">
+            <!-- Десктопная панель вкладок [Курсы | Личные / Anki] и пилюль [Все | Недавние | Избранные] -->
+            <div class="decks-desktop-tabs-bar" id="decksDesktopTabsBar">
+              <div class="decks-tabs-primary" role="tablist" aria-label="Разделы колод">
+                <button type="button" class="decks-top-tab" id="btnDesktopTabCourses" data-desktop-tab="official">
+                  <svg class="decks-tab-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 3.5L3 8l9 4.5L21 8l-9-4.5z" fill="#34d399" />
+                    <path d="M4 12.2L12 16.2l8-4" stroke="#2dd4bf" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M4 16.4L12 20.4l8-4" stroke="#38bdf8" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span id="labelDesktopTabCourses">Курсы</span>
+                </button>
+                <button type="button" class="decks-top-tab" id="btnDesktopTabUser" data-desktop-tab="user">
+                  <svg class="decks-tab-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3.6" fill="#60a5fa" />
+                    <path d="M4.8 20c1.4-3.4 3.9-5 7.2-5s5.8 1.6 7.2 5" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" fill="rgba(96, 165, 250, 0.25)" />
+                  </svg>
+                  <span id="labelDesktopTabUser">Личные / Anki</span>
+                </button>
+              </div>
+
+              <div class="decks-tabs-pills">
+                <button type="button" class="decks-top-pill active" id="btnDesktopFilterAll" data-desktop-pill="all">
+                  <span id="labelDesktopFilterAll">Все</span>
+                </button>
+                <button type="button" class="decks-top-pill" id="btnDesktopFilterRecent" data-desktop-pill="recent">
+                  <svg class="decks-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="8.5" />
+                    <path d="M12 7.5V12l3 2" />
+                  </svg>
+                  <span id="labelDesktopFilterRecent">Недавние</span>
+                </button>
+                <button type="button" class="decks-top-pill" id="btnDesktopFilterFav" data-desktop-pill="favorites">
+                  <svg class="decks-pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="12 3 14.8 8.7 21 9.6 16.5 14 17.6 20.2 12 17.3 6.4 20.2 7.5 14 3 9.6 9.2 8.7 12 3" />
+                  </svg>
+                  <span id="labelDesktopFilterFav">Избранные</span>
                 </button>
                 <button type="button" class="decks-subtab-pill return-battle hidden" id="btnDecksReturnBattle">
                   🚀 <span id="labelDecksReturnBattle">Вернуться в бой</span>
                 </button>
-              </div>
-
-              <div class="decks-view-toggle">
-                <button type="button" class="decks-view-btn active" id="btnDecksViewGrid">
-                  ⊞ <span id="labelDecksViewGrid">Карточки</span>
-                </button>
-                <button type="button" class="decks-view-btn" id="btnDecksViewList">
-                  ☰ <span id="labelDecksViewList">Список</span>
+                <button type="button" class="decks-subtab-pill" id="btnDecksOpenAdmin">
+                  👑 <span id="labelDecksOpenAdmin">Супер-Админ</span>
                 </button>
               </div>
             </div>
@@ -898,11 +786,17 @@
                 <div class="decks-continue-grid" id="decksContinueGrid"></div>
               </section>
 
-              <section class="decks-section-block">
+              <section class="decks-section-block" id="decksAllSection">
                 <h2 class="decks-section-heading">
-                  📚 <span id="labelDecksAllHeading">Все колоды</span>
+                  <svg class="decks-heading-layers-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 3.5L3 8l9 4.5L21 8l-9-4.5z" fill="#67e8f9" />
+                    <path d="M4 12.2L12 16.2l8-4" stroke="#38bdf8" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M4 16.4L12 20.4l8-4" stroke="#818cf8" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span id="labelDecksAllHeading">Все колоды</span>
                   <span class="decks-count-muted" id="decksAllCountBadge">(0)</span>
                 </h2>
+                <div class="decks-cat-chips-row" id="decksCategoryFilterGroup"></div>
                 <div class="decks-all-grid" id="decksAllGrid"></div>
               </section>
             </div>
@@ -910,6 +804,116 @@
             <!-- ВСТРОЕННАЯ СТРАНИЦА ОТКРЫТОЙ КОЛОДЫ / РЕДАКТОРА (БЕЗ ВСПЛЫВАЮЩЕГО ОКНА!) -->
             <div id="deckDetailPane" class="deck-detail-pane hidden"></div>
           </div>
+
+          <!-- Правый сайдбар: Быстрые фильтры + Недавняя активность -->
+          <aside class="decks-right-sidebar" aria-label="Быстрые фильтры и активность">
+            <div class="decks-quick-filters-card" id="decksFilterCard">
+              <div class="decks-sidebar-heading" id="btnDecksMobileFilterToggle" role="button" tabindex="0" aria-expanded="false">
+                <span class="decks-heading-left">
+                  <svg class="decks-sidebar-head-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M4 7h16" />
+                    <path d="M7 12h10" />
+                    <path d="M10 17h4" />
+                  </svg>
+                  <span id="labelDecksFiltersTitle">Быстрые фильтры</span>
+                </span>
+                <span class="mobile-filter-chevron mobile-copy" aria-hidden="true">▾</span>
+              </div>
+
+              <div class="decks-quick-filters-list" id="decksQuickFiltersList">
+                <button type="button" class="decks-quick-row active" id="btnQuickFilterAll" data-quick-filter="all">
+                  <span class="decks-quick-left">
+                    <svg class="decks-quick-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="3.5" y="3.5" width="7" height="7" rx="1.5" />
+                      <rect x="13.5" y="3.5" width="7" height="7" rx="1.5" />
+                      <rect x="3.5" y="13.5" width="7" height="7" rx="1.5" />
+                      <rect x="13.5" y="13.5" width="7" height="7" rx="1.5" />
+                    </svg>
+                    <span id="labelQuickFilterAll">Все колоды</span>
+                  </span>
+                  <span class="decks-quick-count" id="countQuickAll">0</span>
+                </button>
+
+                <button type="button" class="decks-quick-row" id="btnQuickFilterCourses" data-quick-filter="official">
+                  <span class="decks-quick-left">
+                    <svg class="decks-quick-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 4L3.5 8.5 12 13l8.5-4.5L12 4z" />
+                      <path d="M4 13l8 4.2 8-4.2" />
+                      <path d="M4 17l8 4.2 8-4.2" />
+                    </svg>
+                    <span id="labelQuickFilterCourses">Курсы</span>
+                  </span>
+                  <span class="decks-quick-count" id="countQuickCourses">0</span>
+                </button>
+
+                <button type="button" class="decks-quick-row" id="btnQuickFilterUser" data-quick-filter="user">
+                  <span class="decks-quick-left">
+                    <svg class="decks-quick-svg is-user" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <circle cx="12" cy="8" r="3.6" fill="#60a5fa" />
+                      <path d="M5 19.8c1.3-3.2 3.8-4.8 7-4.8s5.7 1.6 7 4.8" stroke="#93c5fd" stroke-width="1.9" stroke-linecap="round" fill="rgba(96,165,250,0.22)" />
+                    </svg>
+                    <span id="labelQuickFilterUser">Личные / Anki</span>
+                  </span>
+                  <span class="decks-quick-count" id="countQuickUser">0</span>
+                </button>
+
+                <button type="button" class="decks-quick-row" id="btnQuickFilterFav" data-quick-filter="favorites">
+                  <span class="decks-quick-left">
+                    <svg class="decks-quick-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true">
+                      <polygon points="12 3 14.8 8.7 21 9.6 16.5 14 17.6 20.2 12 17.3 6.4 20.2 7.5 14 3 9.6 9.2 8.7 12 3" />
+                    </svg>
+                    <span id="labelQuickFilterFav">Избранные</span>
+                  </span>
+                  <span class="decks-quick-count" id="countQuickFav">0</span>
+                </button>
+              </div>
+
+              <!-- Компактные фильтры языка обучения и уровня CEFR -->
+              <div class="decks-sidebar-compact-filters">
+                <div class="decks-compact-group">
+                  <span class="decks-compact-label" id="labelDecksLangHeader">Язык обучения</span>
+                  <div class="decks-compact-lang-pills" id="decksCompactLangPills">
+                    <button type="button" class="decks-compact-lang-btn target-lang-pill active" data-target-lang="de">
+                      <span class="decks-lang-flag" data-flag-code="de"></span>
+                      <span>DE</span>
+                    </button>
+                    <button type="button" class="decks-compact-lang-btn target-lang-pill" data-target-lang="en">
+                      <span class="decks-lang-flag" data-flag-code="en"></span>
+                      <span>EN</span>
+                    </button>
+                    <button type="button" class="decks-compact-lang-btn target-lang-pill" data-target-lang="es">
+                      <span class="decks-lang-flag" data-flag-code="es"></span>
+                      <span>ES</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="decks-compact-group">
+                  <span class="decks-compact-label" id="labelDecksLevelHeader">Уровень</span>
+                  <div class="decks-level-pills" id="decksLevelFilterGroup">
+                    <button type="button" class="decks-level-pill active" data-level-filter="all" id="btnDecksLevelAll">Все</button>
+                    <button type="button" class="decks-level-pill" data-level-filter="A1–A2">A1–A2</button>
+                    <button type="button" class="decks-level-pill" data-level-filter="A2–B1">A2–B1</button>
+                    <button type="button" class="decks-level-pill" data-level-filter="B1">B1</button>
+                    <button type="button" class="decks-level-pill" data-level-filter="B1–B2">B1–B2</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="decks-recent-activity-card">
+              <div class="decks-sidebar-heading">
+                <span class="decks-heading-left">
+                  <svg class="decks-sidebar-head-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="8.5" />
+                    <path d="M12 7.5V12l3 2" />
+                  </svg>
+                  <span id="labelDecksRecentTitle">Недавняя активность</span>
+                </span>
+              </div>
+              <div class="decks-recent-activity-list" id="decksRecentActivityList"></div>
+            </div>
+          </aside>
         </div>
       </div><!-- /#decksPageView -->
 

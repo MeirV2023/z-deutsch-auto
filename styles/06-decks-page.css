@@ -3,9 +3,6 @@
    Полноэкранная страница «Мои колоды» / «Курсы» (#decksPageView)
    ========================================================================== */
 
-/* ==========================================================================
-   ПОЛНОЭКРАННАЯ СТРАНИЦА «МОИ КОЛОДЫ» / «КУРСЫ» (#decksPageView)
-   ========================================================================== */
 .home-dashboard-view {
   flex: 1 1 auto;
   display: flex;
@@ -22,322 +19,57 @@
 }
 
 .decks-page-view {
+  position: relative;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  padding-bottom: 18px;
-}
-
-.decks-page-layout {
-  display: grid;
-  grid-template-columns: 248px minmax(0, 1fr);
   gap: 16px;
-  align-items: start;
+  padding-bottom: 24px;
 }
 
-/* --- Левый сайдбар фильтров --- */
-.decks-filter-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  position: sticky;
-  top: 8px;
+.decks-page-view.detail-open .decks-desktop-tabs-bar {
+  display: none;
 }
 
-.decks-filter-card {
-  border-radius: 18px;
-  padding: 16px 14px;
-  background: linear-gradient(180deg, rgba(9, 16, 34, 0.94) 0%, rgba(7, 12, 26, 0.95) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.22);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(14px);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.decks-sidebar-heading {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #f8fafc;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
-}
-
-.filter-bars-icon {
-  color: #38bdf8;
-  font-size: 1rem;
-}
-
-.decks-filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.decks-filter-label {
-  font-family: var(--font-ui);
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #cbd5e1;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.decks-filter-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.decks-filter-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 11px;
-  border-radius: 11px;
-  border: 1.5px solid rgba(148, 163, 184, 0.2);
-  background: rgba(15, 23, 42, 0.78);
-  color: #cbd5e1;
-  font-family: var(--font-ui);
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  text-align: start;
-}
-
-.decks-filter-row:hover {
-  border-color: rgba(56, 189, 248, 0.5);
-  color: #ffffff;
-  background: rgba(30, 41, 59, 0.9);
-}
-
-.decks-filter-left {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.decks-lang-code {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 25px;
-  padding: 2px 5px;
-  border-radius: 6px;
-  background: rgba(30, 41, 59, 0.95);
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: #94a3b8;
-}
-
-.decks-src-icon {
-  font-size: 0.92rem;
-  width: 20px;
-  text-align: center;
-}
-
-.decks-filter-check {
-  opacity: 0;
-  color: #34d399;
-  font-weight: 900;
-  transition: opacity 0.14s ease;
-}
-
-.decks-filter-row.active {
-  border-color: rgba(52, 211, 153, 0.82);
-  background: linear-gradient(90deg, rgba(16, 185, 129, 0.24), rgba(15, 23, 42, 0.92));
-  color: #ffffff;
-  box-shadow: 0 0 14px rgba(16, 185, 129, 0.2);
-}
-
-.decks-filter-row.active .decks-lang-code {
-  color: #a7f3d0;
-  border-color: rgba(52, 211, 153, 0.55);
-  background: rgba(6, 78, 59, 0.65);
-}
-
-.decks-filter-row.active .decks-filter-check {
-  opacity: 1;
-}
-
-.decks-level-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.decks-level-pill {
-  padding: 5px 11px;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  background: rgba(15, 23, 42, 0.85);
-  color: #cbd5e1;
-  font-family: var(--font-ui);
-  font-size: 0.78rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.14s ease;
-}
-
-.decks-level-pill:hover {
-  border-color: rgba(56, 189, 248, 0.55);
-  color: #ffffff;
-}
-
-.decks-level-pill.active {
-  border-color: #34d399;
-  background: rgba(16, 185, 129, 0.22);
-  color: #ecfdf5;
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.22);
-}
-
-/* Карточка прогресса внизу левого сайдбара */
-.decks-sidebar-progress-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 18px;
-  padding: 15px 14px 48px;
-  background: linear-gradient(180deg, rgba(10, 18, 38, 0.95) 0%, rgba(18, 16, 48, 0.96) 100%);
-  border: 1px solid rgba(99, 102, 241, 0.35);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.52);
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.decks-sidebar-prog-head {
-  font-family: var(--font-heading);
-  font-size: 0.92rem;
-  font-weight: 800;
-  color: #e2e8f0;
-}
-
-.decks-sidebar-prog-big {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  margin-top: 2px;
-}
-
-.decks-sidebar-prog-big strong {
-  font-family: var(--font-heading);
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1;
-}
-
-.decks-sidebar-prog-big span {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #cbd5e1;
-}
-
-.decks-sidebar-prog-sub {
-  font-size: 0.78rem;
-  color: #94a3b8;
-  margin-bottom: 4px;
-}
-
-.decks-prog-bar-row {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.decks-prog-track {
-  flex: 1 1 auto;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(30, 41, 59, 0.92);
-  overflow: hidden;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-}
-
-.decks-prog-fill {
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #34d399 0%, #2dd4bf 60%, #38bdf8 100%);
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.55);
-  transition: width 0.3s ease;
-}
-
-.decks-prog-pct {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #e2e8f0;
-  min-width: 34px;
-  text-align: end;
-}
-
-.decks-sidebar-planet-art {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 40px;
-  background:
-    radial-gradient(65% 95% at 24% 112%, rgba(56, 189, 248, 0.45) 0%, rgba(14, 165, 233, 0.12) 55%, transparent 75%),
-    radial-gradient(60% 95% at 82% 108%, rgba(168, 85, 247, 0.42) 0%, transparent 72%);
-  border-top: 1px solid rgba(129, 140, 248, 0.18);
-  pointer-events: none;
-}
-
-/* --- Правая колонка страницы «Мои колоды» --- */
-.decks-main-column {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  min-width: 0;
-}
-
-/* Верхний Hero-баннер колод */
+/* --- Верхний космический заголовок над двухколоночной сеткой --- */
 .decks-hero-banner {
   position: relative;
-  overflow: hidden;
-  border-radius: 20px;
-  padding: 18px 20px;
-  background:
-    radial-gradient(52% 95% at 62% 110%, rgba(14, 165, 233, 0.25) 0%, transparent 72%),
-    linear-gradient(135deg, rgba(9, 17, 36, 0.95) 0%, rgba(13, 23, 48, 0.92) 58%, rgba(16, 20, 48, 0.95) 100%);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: visible;
+  padding: 6px 0 2px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 18px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) 292px;
+  gap: 20px;
+  align-items: end;
 }
 
-.decks-hero-bg-fx {
+.decks-desktop-planet-fx {
   position: absolute;
-  top: 6px;
-  right: 325px;
-  width: 210px;
-  height: 70px;
+  right: 135px;
+  top: -12px;
+  width: 620px;
+  height: 620px;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side at 50% 42%, rgba(56, 189, 248, 0.42) 0%, rgba(37, 99, 235, 0.36) 48%, rgba(14, 116, 144, 0.16) 78%, rgba(15, 23, 42, 0.05) 100%);
+  box-shadow:
+    inset 0 4px 22px rgba(186, 230, 253, 0.9),
+    inset 0 18px 54px rgba(56, 189, 248, 0.42),
+    0 -10px 44px rgba(56, 189, 248, 0.36);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.88) 20%, rgba(0, 0, 0, 0) 35%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.88) 20%, rgba(0, 0, 0, 0) 35%);
   pointer-events: none;
-  opacity: 0.85;
+  z-index: 0;
+  opacity: 0.9;
 }
 
-.decks-bg-shuttle {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.55));
+[dir="rtl"] .decks-desktop-planet-fx {
+  right: auto;
+  left: 135px;
 }
 
 .decks-hero-left {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -350,45 +82,60 @@
   gap: 14px;
 }
 
-.decks-folder-hero-icon {
-  font-size: 2.35rem;
-  line-height: 1;
-  filter: drop-shadow(0 4px 12px rgba(251, 191, 36, 0.4));
+.decks-folder-svg-mobile {
+  display: inline-flex;
+  width: 48px;
+  height: 44px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 6px 14px rgba(250, 204, 21, 0.36));
+}
+
+.decks-folder-svg-mobile svg {
+  width: 100%;
+  height: 100%;
+}
+
+.decks-hero-titles-box {
+  min-width: 0;
 }
 
 .decks-hero-title {
   font-family: var(--font-heading);
-  font-size: clamp(1.65rem, 2.3vw, 2.15rem);
+  font-size: clamp(1.72rem, 2.3vw, 2.2rem);
   font-weight: 800;
   color: #ffffff;
-  line-height: 1.12;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   margin: 0;
+  text-shadow: 0 2px 18px rgba(2, 6, 23, 0.7);
 }
 
 .decks-hero-subtitle {
   font-family: var(--font-ui);
   font-size: 0.92rem;
-  color: #94a3b8;
-  margin: 3px 0 0;
+  color: #a8b7cc;
+  margin: 4px 0 0;
 }
 
 .decks-hero-controls {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .decks-search-box {
-  flex: 1 1 250px;
+  flex: 1 1 280px;
   min-width: 210px;
+  height: 42px;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 9px 14px;
+  gap: 10px;
+  padding: 0 15px;
   border-radius: 12px;
-  background: rgba(7, 13, 27, 0.9);
+  background: rgba(8, 15, 32, 0.82);
   border: 1px solid rgba(148, 163, 184, 0.28);
+  backdrop-filter: blur(12px);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -397,9 +144,11 @@
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
 }
 
-.decks-search-icon {
-  font-size: 0.92rem;
-  opacity: 0.75;
+.decks-search-svg {
+  width: 17px;
+  height: 17px;
+  color: #94a3b8;
+  flex-shrink: 0;
 }
 
 .decks-search-box input {
@@ -409,53 +158,66 @@
   background: transparent;
   color: #f8fafc;
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .decks-search-box input::placeholder {
-  color: #64748b;
+  color: #7c8ea8;
 }
 
 .decks-amber-anki-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
+  height: 42px;
+  padding: 0 16px;
   border-radius: 12px;
-  border: 1.5px solid rgba(245, 158, 11, 0.72);
-  background: linear-gradient(135deg, rgba(120, 53, 15, 0.48), rgba(30, 27, 18, 0.88));
-  color: #fef3c7;
+  border: 1px solid rgba(148, 163, 184, 0.34);
+  background: rgba(11, 20, 42, 0.86);
+  color: #f1f5f9;
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 0.87rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 0 18px rgba(245, 158, 11, 0.16);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transition: all 0.15s ease;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .decks-amber-anki-btn:hover {
   transform: translateY(-1px);
-  border-color: #fbbf24;
-  background: linear-gradient(135deg, rgba(180, 83, 9, 0.55), rgba(45, 32, 15, 0.92));
+  border-color: rgba(56, 189, 248, 0.65);
+  background: rgba(16, 28, 56, 0.94);
+  color: #ffffff;
+}
+
+.decks-anki-box-svg {
+  width: 17px;
+  height: 17px;
+  color: #93c5fd;
+  flex-shrink: 0;
 }
 
 .decks-emerald-create-btn {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 10px 18px;
+  height: 42px;
+  padding: 0 18px;
   border-radius: 12px;
-  border: 1.5px solid rgba(167, 243, 208, 0.85);
+  border: 1px solid rgba(167, 243, 208, 0.85);
   background: linear-gradient(180deg, #34d399 0%, #10b981 65%, #059669 100%);
   color: #022c22;
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 0 22px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.45);
   transition: all 0.15s ease;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .decks-emerald-create-btn:hover {
@@ -463,101 +225,225 @@
   filter: brightness(1.06);
 }
 
+.decks-emerald-create-btn .create-plus-glyph {
+  font-size: 1.08rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Правый верхний 3-колоночный блок KPI */
 .decks-hero-right {
   position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
+  z-index: 2;
   border-radius: 16px;
-  background: rgba(8, 15, 32, 0.82);
-  border: 1px solid rgba(56, 189, 248, 0.22);
+  background: linear-gradient(160deg, rgba(11, 21, 44, 0.88) 0%, rgba(7, 14, 30, 0.92) 100%);
+  border: 1px solid rgba(100, 148, 214, 0.28);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  padding: 12px 4px;
 }
 
-.decks-hero-metrics {
+.decks-hero-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+}
+
+.decks-kpi-cell {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  min-width: 178px;
-}
-
-.decks-hero-metric-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 5px 10px;
-  border-radius: 9px;
-  background: rgba(15, 23, 42, 0.78);
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  font-size: 0.82rem;
-  color: #cbd5e1;
-}
-
-.decks-hero-metric-row strong {
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.decks-mascot-wrap {
-  width: 86px;
-  height: 92px;
-  flex-shrink: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 6px 16px rgba(56, 189, 248, 0.3));
+  gap: 4px;
+  padding: 2px 6px;
+  text-align: center;
+  border-inline-end: 1px solid rgba(148, 163, 184, 0.16);
 }
 
-.decks-mascot-svg {
-  width: 100%;
-  height: 100%;
+.decks-kpi-cell:last-child {
+  border-inline-end: none;
 }
 
-/* Полоса подвкладок [Курсы | Мои колоды] и переключателя [Карточки | Список] */
-.decks-subbar-row {
+.decks-kpi-svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.decks-kpi-svg.kpi-cyan {
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.55));
+}
+
+.decks-kpi-svg.kpi-gold {
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.55));
+}
+
+.decks-kpi-svg.kpi-flame {
+  filter: drop-shadow(0 0 8px rgba(251, 146, 60, 0.55));
+}
+
+.decks-kpi-label {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #94a3b8;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.decks-kpi-val {
+  font-family: var(--font-heading);
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+/* --- Двухколоночный корпус страницы --- */
+.decks-page-layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 292px;
+  gap: 20px;
+  align-items: start;
+}
+
+.decks-main-column {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* --- Десктопная панель вкладок [Курсы | Личные / Anki] и правых пилюль [Все | Недавние | Избранные] --- */
+.decks-desktop-tabs-bar {
+  display: flex;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  padding-bottom: 0;
 }
 
-.decks-subtabs-left {
+.decks-tabs-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.decks-top-tab {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  padding: 10px 18px 12px;
+  border: none;
+  border-radius: 12px 12px 0 0;
+  background: transparent;
+  color: #94a3b8;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.decks-top-tab:hover {
+  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.decks-top-tab.soft-active,
+.decks-top-tab.active {
+  color: #ffffff;
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.22) 100%);
+}
+
+.decks-top-tab.soft-active::after,
+.decks-top-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  height: 2.5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #34d399, #2dd4bf);
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.85);
+}
+
+.decks-tab-svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.decks-tabs-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
   flex-wrap: wrap;
+}
+
+.decks-top-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(100, 136, 190, 0.28);
+  background: rgba(11, 19, 38, 0.85);
+  color: #cbd5e1;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.decks-top-pill:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  color: #ffffff;
+}
+
+.decks-top-pill.active {
+  border-color: #34d399;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(6, 78, 59, 0.42));
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.24);
+}
+
+.decks-pill-svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: #94a3b8;
+}
+
+.decks-top-pill.active .decks-pill-svg {
+  color: #34d399;
 }
 
 .decks-subtab-pill {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 16px;
+  height: 32px;
+  padding: 0 14px;
   border-radius: 999px;
-  border: 1.5px solid rgba(148, 163, 184, 0.25);
+  border: 1px solid rgba(148, 163, 184, 0.28);
   background: rgba(12, 20, 38, 0.86);
   color: #cbd5e1;
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
-}
-
-.decks-subtab-pill:hover {
-  border-color: rgba(56, 189, 248, 0.55);
-  color: #ffffff;
-}
-
-.decks-subtab-pill.active {
-  border-color: #34d399;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(14, 165, 233, 0.22));
-  color: #ecfdf5;
-  box-shadow: 0 0 18px rgba(16, 185, 129, 0.25);
 }
 
 .decks-subtab-pill.return-battle {
@@ -566,39 +452,7 @@
   color: #e0f2fe;
 }
 
-.decks-view-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px;
-  border-radius: 12px;
-  background: rgba(9, 16, 33, 0.9);
-  border: 1px solid rgba(148, 163, 184, 0.22);
-}
-
-.decks-view-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: 9px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: #94a3b8;
-  font-family: var(--font-ui);
-  font-size: 0.82rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.14s ease;
-}
-
-.decks-view-btn.active {
-  border-color: rgba(52, 211, 153, 0.65);
-  background: rgba(16, 185, 129, 0.2);
-  color: #ecfdf5;
-}
-
-/* --- Секции «Продолжить обучение» и «Все колоды» --- */
+/* --- Общие стили прогресс-бара и секций --- */
 .decks-overview-pane {
   display: flex;
   flex-direction: column;
@@ -613,7 +467,7 @@
 
 .decks-section-heading {
   font-family: var(--font-heading);
-  font-size: 1.18rem;
+  font-size: 1.12rem;
   font-weight: 800;
   color: #ffffff;
   display: inline-flex;
@@ -622,82 +476,148 @@
   margin: 0;
 }
 
+.decks-heading-layers-svg {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+}
+
 .decks-play-tri {
   color: #34d399;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
+}
+
+[dir="rtl"] .decks-play-tri {
+  transform: scaleX(-1);
 }
 
 .decks-count-muted {
   color: #94a3b8;
   font-weight: 700;
-  font-size: 1.02rem;
+  font-size: 0.96rem;
 }
 
-/* Полоса 3 карточек «Продолжить обучение» */
+.decks-prog-bar-row {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.decks-prog-track {
+  flex: 1 1 auto;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.92);
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.decks-prog-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #34d399 0%, #2dd4bf 60%, #38bdf8 100%);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.58);
+  transition: width 0.3s ease;
+}
+
+.decks-prog-pct {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #f8fafc;
+  min-width: 32px;
+  text-align: end;
+}
+
+/* --- Секция 1: 2 карточки «▶ Продолжить обучение» --- */
 .decks-continue-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .deck-continue-card {
   border-radius: 16px;
-  padding: 13px 14px;
-  background: linear-gradient(145deg, rgba(11, 19, 39, 0.94) 0%, rgba(8, 14, 30, 0.95) 100%);
-  border: 1px solid rgba(99, 102, 241, 0.28);
+  padding: 14px 16px;
+  background: linear-gradient(155deg, rgba(11, 20, 42, 0.92) 0%, rgba(8, 14, 30, 0.95) 100%);
+  border: 1px solid rgba(100, 136, 190, 0.26);
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 11px;
   min-width: 0;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .deck-continue-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(56, 189, 248, 0.55);
+  border-color: rgba(56, 189, 248, 0.58);
 }
 
 .deck-continue-card.is-active {
-  border-color: rgba(52, 211, 153, 0.62);
+  border: 1.5px solid rgba(52, 211, 153, 0.82);
+  background: linear-gradient(155deg, rgba(11, 28, 42, 0.94) 0%, rgba(8, 18, 32, 0.96) 100%);
+  box-shadow: 0 0 26px rgba(16, 185, 129, 0.2), inset 0 0 18px rgba(16, 185, 129, 0.08);
+}
+
+.deck-cont-top {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
 }
 
 .deck-icon-tile {
-  width: 50px;
-  height: 50px;
+  width: 54px;
+  height: 54px;
   border-radius: 14px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.55rem;
+  font-size: 1.5rem;
   background: radial-gradient(circle at 30% 25%, rgba(56, 189, 248, 0.28), rgba(15, 23, 42, 0.95));
   border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.deck-tile-svg {
+  width: 34px;
+  height: 34px;
+  filter: drop-shadow(0 3px 6px rgba(2, 6, 23, 0.5));
 }
 
 .deck-icon-tile.art-auto {
-  background: radial-gradient(circle at 30% 25%, rgba(244, 63, 94, 0.34), rgba(24, 16, 36, 0.95));
+  background: radial-gradient(circle at 30% 25%, rgba(225, 29, 72, 0.4), rgba(28, 16, 40, 0.95));
   border-color: rgba(251, 113, 133, 0.42);
 }
 
+.deck-icon-tile.art-business {
+  background: radial-gradient(circle at 30% 25%, rgba(217, 119, 6, 0.42), rgba(38, 26, 16, 0.95));
+  border-color: rgba(245, 158, 11, 0.44);
+}
+
 .deck-icon-tile.art-anki {
-  background: radial-gradient(circle at 30% 25%, rgba(245, 158, 11, 0.34), rgba(34, 22, 16, 0.95));
-  border-color: rgba(251, 191, 36, 0.45);
+  background: radial-gradient(circle at 30% 25%, rgba(217, 119, 6, 0.36), rgba(34, 24, 20, 0.95));
+  border-color: rgba(245, 158, 11, 0.38);
 }
 
 .deck-icon-tile.art-travel {
-  background: radial-gradient(circle at 30% 25%, rgba(139, 92, 246, 0.38), rgba(22, 18, 44, 0.95));
-  border-color: rgba(167, 139, 250, 0.48);
+  background: radial-gradient(circle at 30% 25%, rgba(56, 189, 248, 0.4), rgba(14, 32, 62, 0.95));
+  border-color: rgba(96, 165, 250, 0.46);
 }
 
 .deck-icon-tile.art-food {
-  background: radial-gradient(circle at 30% 25%, rgba(249, 115, 22, 0.34), rgba(32, 19, 16, 0.95));
-  border-color: rgba(251, 146, 60, 0.45);
+  background: radial-gradient(circle at 30% 25%, rgba(168, 85, 247, 0.4), rgba(28, 16, 48, 0.95));
+  border-color: rgba(192, 132, 252, 0.45);
 }
 
+.deck-icon-tile.art-base,
 .deck-icon-tile.art-chat,
 .deck-icon-tile.art-it {
-  background: radial-gradient(circle at 30% 25%, rgba(16, 185, 129, 0.34), rgba(12, 30, 32, 0.95));
+  background: radial-gradient(circle at 30% 25%, rgba(16, 185, 129, 0.36), rgba(12, 34, 30, 0.95));
   border-color: rgba(52, 211, 153, 0.45);
 }
 
@@ -706,7 +626,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .deck-badges-inline {
@@ -723,22 +643,29 @@
   padding: 2px 8px;
   border-radius: 6px;
   font-family: var(--font-ui);
-  font-size: 0.66rem;
+  font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.03em;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.deck-badge-mini-svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 .deck-tag-badge.creator {
-  background: rgba(14, 165, 233, 0.2);
-  border: 1px solid rgba(56, 189, 248, 0.48);
+  background: rgba(14, 165, 233, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.44);
   color: #bae6fd;
 }
 
 .deck-tag-badge.anki {
-  background: rgba(139, 92, 246, 0.25);
-  border: 1px solid rgba(167, 139, 250, 0.58);
-  color: #ddd6fe;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(96, 165, 250, 0.46);
+  color: #bfdbfe;
 }
 
 .deck-tag-badge.cefr {
@@ -749,16 +676,19 @@
 
 .deck-cont-title {
   font-family: var(--font-heading);
-  font-size: 0.95rem;
+  font-size: 0.94rem;
   font-weight: 800;
   color: #ffffff;
-  white-space: nowrap;
+  line-height: 1.22;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .deck-cont-meta {
-  font-size: 0.75rem;
+  font-size: 0.77rem;
   color: #94a3b8;
   white-space: nowrap;
   overflow: hidden;
@@ -769,89 +699,207 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 7px 13px;
+  height: 36px;
+  padding: 0 16px;
   border-radius: 999px;
-  border: 1.5px solid rgba(52, 211, 153, 0.72);
-  background: rgba(16, 185, 129, 0.16);
-  color: #a7f3d0;
+  border: 1px solid rgba(167, 243, 208, 0.85);
+  background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+  color: #022c22;
+  font-family: var(--font-ui);
+  font-size: 0.83rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(16, 185, 129, 0.36);
+  transition: all 0.14s ease;
+  white-space: nowrap;
+}
+
+.deck-cont-btn:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+/* --- Горизонтальные чипы категорий над списком «Все колоды» --- */
+.decks-cat-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.decks-cat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(100, 136, 190, 0.28);
+  background: rgba(11, 19, 38, 0.84);
+  color: #cbd5e1;
   font-family: var(--font-ui);
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.14s ease;
 }
 
-.deck-cont-btn:hover {
-  background: #10b981;
-  color: #022c22;
+.decks-cat-chip:hover {
+  border-color: rgba(56, 189, 248, 0.58);
+  color: #ffffff;
+  background: rgba(19, 31, 60, 0.92);
 }
 
-/* --- Сетка «Все колоды» (Карточки 3 в ряд или Список) --- */
+.decks-cat-chip.active {
+  border-color: #34d399;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.24), rgba(6, 78, 59, 0.45));
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.25);
+}
+
+.decks-cat-chip .topic-chip-svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* --- Вертикальный список горизонтальных строк колод (#decksAllGrid) --- */
 .decks-all-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.decks-all-grid.list-mode {
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
 .deck-full-card {
   position: relative;
-  border-radius: 18px;
-  padding: 16px;
-  background: linear-gradient(165deg, rgba(11, 19, 39, 0.95) 0%, rgba(7, 13, 28, 0.96) 100%);
-  border: 1px solid rgba(99, 102, 241, 0.28);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  padding: 13px 16px;
+  background: linear-gradient(160deg, rgba(11, 19, 39, 0.92) 0%, rgba(7, 13, 28, 0.95) 100%);
+  border: 1px solid rgba(100, 136, 190, 0.24);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 9px;
   min-width: 0;
-  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .deck-full-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(56, 189, 248, 0.55);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.58), 0 0 22px rgba(56, 189, 248, 0.12);
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.52);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.52), 0 0 18px rgba(56, 189, 248, 0.1);
 }
 
 .deck-full-card.is-active {
-  border-color: rgba(52, 211, 153, 0.65);
+  border-color: rgba(52, 211, 153, 0.56);
 }
 
-.deck-card-top {
+.deck-desktop-card-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.38fr) minmax(205px, 0.88fr) auto;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+}
+
+.deck-row-info {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
 }
 
-.deck-card-head-info {
+.deck-row-info .deck-icon-tile {
+  width: 50px;
+  height: 50px;
+  border-radius: 13px;
+}
+
+.deck-row-info .deck-tile-svg {
+  width: 31px;
+  height: 31px;
+}
+
+.deck-row-texts {
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
 }
 
-.deck-card-top-bar {
+.deck-row-title-line {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 6px;
+  min-width: 0;
+}
+
+.deck-card-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.22;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deck-row-fav-star {
+  color: #fbbf24;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.deck-card-desc {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.deck-row-mid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.deck-row-meta {
+  font-size: 0.77rem;
+  color: #94a3b8;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deck-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .deck-more-btn {
-  width: 28px;
-  height: 26px;
+  width: 30px;
+  height: 32px;
   border-radius: 8px;
   border: 1px solid transparent;
   background: transparent;
   color: #94a3b8;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
   line-height: 1;
   cursor: pointer;
   display: inline-flex;
@@ -864,29 +912,6 @@
   background: rgba(30, 41, 59, 0.9);
   border-color: rgba(148, 163, 184, 0.3);
   color: #ffffff;
-}
-
-.deck-card-title {
-  font-family: var(--font-heading);
-  font-size: 1.08rem;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1.22;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.deck-card-desc {
-  font-size: 0.81rem;
-  color: #94a3b8;
-  line-height: 1.38;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 2.2em;
 }
 
 /* Плашка предупреждения, если в старом импорте в браузере не было русского перевода */
@@ -915,13 +940,6 @@
   font-size: 0.74rem;
   font-weight: 700;
   cursor: pointer;
-}
-
-/* 3 мини-плитки уроков внутри карточки колоды */
-.deck-lessons-preview-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 7px;
 }
 
 .deck-mini-lesson {
@@ -974,20 +992,12 @@
   line-height: 1.22;
 }
 
-.deck-progress-block {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
 .deck-lessons-count-sub {
   font-size: 0.76rem;
   color: #94a3b8;
   font-weight: 600;
 }
 
-/* Нижние кнопки карточки колоды: [▶ Продолжить] [📖 Открыть] [✏️ Редактировать] */
 .deck-card-actions {
   display: flex;
   align-items: center;
@@ -996,21 +1006,22 @@
 }
 
 .deck-btn-primary {
-  flex: 1.15 1 110px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 9px 12px;
+  height: 36px;
+  padding: 0 15px;
   border-radius: 999px;
-  border: 1px solid rgba(167, 243, 208, 0.8);
+  border: 1px solid rgba(167, 243, 208, 0.85);
   background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
   color: #022c22;
   font-family: var(--font-ui);
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.28);
+  white-space: nowrap;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.3);
   transition: all 0.14s ease;
 }
 
@@ -1020,20 +1031,21 @@
 }
 
 .deck-btn-secondary {
-  flex: 1 1 88px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 8px 11px;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
   border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.28);
+  border: 1px solid rgba(100, 148, 214, 0.34);
   background: rgba(15, 23, 42, 0.88);
   color: #e2e8f0;
   font-family: var(--font-ui);
   font-size: 0.81rem;
   font-weight: 700;
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.14s ease;
 }
 
@@ -1043,30 +1055,322 @@
   background: rgba(30, 41, 59, 0.95);
 }
 
-/* Режим «Список» */
-.decks-all-grid.list-mode .deck-full-card {
-  flex-direction: row;
+.deck-open-book-svg {
+  width: 14px;
+  height: 14px;
+  color: #93c5fd;
+  flex-shrink: 0;
+}
+
+/* --- Правый сайдбар: Быстрые фильтры + Недавняя активность --- */
+.decks-right-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 8px;
+}
+
+.decks-quick-filters-card,
+.decks-recent-activity-card {
+  border-radius: 16px;
+  padding: 15px;
+  background: linear-gradient(175deg, rgba(10, 18, 38, 0.92) 0%, rgba(7, 12, 26, 0.95) 100%);
+  border: 1px solid rgba(100, 148, 214, 0.24);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.decks-sidebar-heading {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 13px 16px;
-  gap: 16px;
+  gap: 9px;
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #f8fafc;
 }
 
-.decks-all-grid.list-mode .deck-card-top {
-  flex: 1.4 1 280px;
+.decks-heading-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.decks-all-grid.list-mode .deck-lessons-preview-row {
-  display: none;
+.decks-sidebar-head-svg {
+  width: 17px;
+  height: 17px;
+  color: #94a3b8;
+  flex-shrink: 0;
 }
 
-.decks-all-grid.list-mode .deck-progress-block {
-  flex: 0.9 1 190px;
-  margin-top: 0;
+.decks-quick-filters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
-.decks-all-grid.list-mode .deck-card-actions {
-  flex: 0 0 auto;
+.decks-quick-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 11px;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.65);
+  color: #cbd5e1;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: start;
+}
+
+.decks-quick-row:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(24, 36, 62, 0.82);
+  color: #ffffff;
+}
+
+.decks-quick-row.active {
+  border-color: rgba(52, 211, 153, 0.78);
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.22), rgba(15, 23, 42, 0.88));
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.22);
+}
+
+.decks-quick-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.decks-quick-svg {
+  width: 16px;
+  height: 16px;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.decks-quick-row.active .decks-quick-svg:not(.is-user) {
+  color: #34d399;
+}
+
+.decks-quick-count {
+  min-width: 24px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: rgba(30, 41, 59, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  color: #cbd5e1;
+  font-size: 0.74rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.decks-quick-row.active .decks-quick-count {
+  border-color: rgba(52, 211, 153, 0.65);
+  background: rgba(6, 78, 59, 0.72);
+  color: #a7f3d0;
+}
+
+.decks-sidebar-compact-filters {
+  padding-top: 10px;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.decks-compact-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.decks-compact-label {
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.decks-compact-lang-pills {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.decks-compact-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 30px;
+  border-radius: 9px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.8);
+  color: #cbd5e1;
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.decks-compact-lang-btn:hover {
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #ffffff;
+}
+
+.decks-compact-lang-btn.active {
+  border-color: rgba(52, 211, 153, 0.78);
+  background: rgba(16, 185, 129, 0.22);
+  color: #ecfdf5;
+}
+
+.decks-lang-flag {
+  display: inline-flex;
+  align-items: center;
+}
+
+.decks-lang-flag .svg-flag-icon {
+  width: 16px;
+  height: 11px;
+  border-radius: 2px;
+}
+
+.decks-level-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.decks-level-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.85);
+  color: #cbd5e1;
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.decks-level-pill:hover {
+  border-color: rgba(56, 189, 248, 0.55);
+  color: #ffffff;
+}
+
+.decks-level-pill.active {
+  border-color: #34d399;
+  background: rgba(16, 185, 129, 0.22);
+  color: #ecfdf5;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.22);
+}
+
+/* Недавняя активность */
+.decks-recent-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.decks-recent-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.56);
+  cursor: pointer;
+  transition: all 0.14s ease;
+  min-width: 0;
+}
+
+.decks-recent-item:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(24, 36, 62, 0.8);
+}
+
+.decks-recent-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 25%, rgba(56, 189, 248, 0.28), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.decks-recent-icon .deck-tile-svg {
+  width: 24px;
+  height: 24px;
+}
+
+.decks-recent-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.decks-recent-name {
+  font-family: var(--font-heading);
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #f8fafc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.decks-recent-sub {
+  font-size: 0.71rem;
+  color: #8496b0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.decks-recent-play-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #34d399;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.14s ease, transform 0.14s ease;
+}
+
+.decks-recent-play-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+  transform: scale(1.08);
+}
+
+[dir="rtl"] .decks-recent-play-btn {
+  transform: scaleX(-1);
 }
 
 /* --- Встроенная страница деталей и редактирования колоды (#deckDetailPane) --- */
@@ -1325,13 +1629,30 @@ html[lang="he"] .decks-sidebar-heading,
 
 /* Адаптивность для ноутбуков и мобильных устройств */
 @media (max-width: 1180px) {
-  .decks-continue-grid,
-  .decks-all-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .decks-hero-banner,
+  .decks-page-layout {
+    grid-template-columns: minmax(0, 1fr) 264px;
+    gap: 16px;
   }
 
-  .decks-hero-bg-fx {
-    display: none;
+  .deck-desktop-card-inner {
+    grid-template-columns: minmax(0, 1.15fr) minmax(185px, 0.85fr) auto;
+    gap: 14px;
+  }
+
+  .decks-hero-controls {
+    flex-wrap: wrap;
+  }
+
+  .decks-desktop-planet-fx {
+    right: 110px;
+    width: 520px;
+    height: 520px;
+  }
+
+  [dir="rtl"] .decks-desktop-planet-fx {
+    right: auto;
+    left: 110px;
   }
 }
 
@@ -1348,33 +1669,25 @@ html[lang="he"] .decks-sidebar-heading,
   .quickstart-cards-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .decks-hero-banner {
-    grid-template-columns: 1fr;
-  }
-
-  .decks-hero-right {
-    justify-content: space-between;
-  }
 }
 
 @media (max-width: 960px) {
+  .decks-hero-banner,
   .decks-page-layout {
     grid-template-columns: 1fr;
   }
 
-  .decks-filter-sidebar {
+  .decks-right-sidebar {
     position: static;
   }
 
-  .decks-continue-grid,
-  .decks-all-grid {
+  .decks-continue-grid {
     grid-template-columns: 1fr;
   }
 
-  .decks-all-grid.list-mode .deck-full-card {
-    flex-direction: column;
-    align-items: stretch;
+  .deck-desktop-card-inner {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .deck-editor-grid {

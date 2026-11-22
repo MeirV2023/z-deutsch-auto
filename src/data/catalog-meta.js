@@ -65,9 +65,9 @@ export const BASE_CATEGORIES = [
     "id": "auto",
     "icon": "🚗",
     "titles": {
-      "ru": "Auto",
-      "en": "Auto",
-      "he": "Auto (רכב)"
+      "ru": "Авто и дорога",
+      "en": "Auto & Road",
+      "he": "רכב ודרכים"
     },
     "descriptions": {
       "ru": "Автомобиль, устройство, автобан, ПДД, поломки и страховка",

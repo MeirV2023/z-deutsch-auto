@@ -7,6 +7,7 @@ import {
   FAV_DECKS_KEY,
   LEARNED_STORAGE_KEY,
   DAILY_PROGRESS_KEY,
+  RECENT_DECKS_LS_KEY,
   getLocalIsoDateString,
   loadJsonStorage,
   saveJsonStorage,
@@ -50,6 +51,35 @@ const savedPinnedObj = loadJsonStorage(PINNED_STORAGE_KEY, {});
 export const pinnedWordsMap = new Map(Object.entries(savedPinnedObj || {}));
 const savedFavDecksArr = loadJsonStorage(FAV_DECKS_KEY, []);
 export const favoriteDeckIds = new Set(Array.isArray(savedFavDecksArr) ? savedFavDecksArr : []);
+
+const rawRecentDecks = loadJsonStorage(RECENT_DECKS_LS_KEY, []);
+const recentDeckActivity = Array.isArray(rawRecentDecks)
+  ? rawRecentDecks
+      .filter(x => x && typeof x.courseId === 'string' && x.courseId)
+      .slice(0, 15)
+  : [];
+
+export function recordDeckActivity(courseId, action = 'open') {
+  if (!courseId) return;
+  const idx = recentDeckActivity.findIndex(x => x.courseId === courseId);
+  const entry = {
+    courseId,
+    ts: Date.now(),
+    action: action || 'open'
+  };
+  if (idx !== -1) {
+    recentDeckActivity.splice(idx, 1);
+  }
+  recentDeckActivity.unshift(entry);
+  if (recentDeckActivity.length > 15) {
+    recentDeckActivity.length = 15;
+  }
+  saveJsonStorage(RECENT_DECKS_LS_KEY, recentDeckActivity);
+}
+
+export function getRecentDeckActivity() {
+  return recentDeckActivity.slice();
+}
 
 // Ударная серия дней подряд (🔥 Streak) и счётчик выученных за сегодня слов
 export const dailyProgress = (() => {
@@ -188,6 +218,7 @@ export const state = {
   adminTitleManuallyEdited: false,
   catalogSourceFilter: 'all', // 'all' | 'official' | 'user'
   decksOnlyFavorites: false,
+  decksOnlyRecent: false,
   homeSubView: 'home', // 'home' | 'decks' | 'admin'
   decksViewMode: 'grid', // 'grid' | 'list'
   decksCategoryFilter: 'all',
@@ -353,6 +384,9 @@ export function recordWordLearned(entry, targetLang = state.targetLang) {
   const prevCount = learnedWordsSet.size;
   const key = makeWordKey(targetLang, entry);
   recordTodayWord(key);
+  if (state.activeCourseId) {
+    recordDeckActivity(state.activeCourseId, 'study');
+  }
 
   if (learnedWordsSet.has(key)) {
     bus.emit('learned:updated', { entry, targetLang, newlyUnlocked: null, alreadyKnown: true });
@@ -452,4 +486,26 @@ export function formatDeckWordsCountFull(n) {
     return `${count.toLocaleString('he-IL')} מילים`;
   }
   return `${count.toLocaleString('en-US')} ${count === 1 ? 'word' : 'words'}`;
+}
+
+export function formatDeckLessonsCountFull(n) {
+  const count = Math.max(0, Number(n) || 0);
+  if (state.nativeLang === 'ru') {
+    const numStr = count.toLocaleString('ru-RU');
+    const mod100 = count % 100;
+    const mod10 = count % 10;
+    let noun = 'уроков';
+    if (mod100 >= 11 && mod100 <= 14) {
+      noun = 'уроков';
+    } else if (mod10 === 1) {
+      noun = 'урок';
+    } else if (mod10 >= 2 && mod10 <= 4) {
+      noun = 'урока';
+    }
+    return `${numStr} ${noun}`;
+  }
+  if (state.nativeLang === 'he') {
+    return `${count.toLocaleString('he-IL')} שלבים`;
+  }
+  return `${count.toLocaleString('en-US')} ${count === 1 ? 'lesson' : 'lessons'}`;
 }

@@ -8,12 +8,15 @@ import { ttsManager } from '../services/tts-service.js';
 import {
   dailyProgress,
   favoriteDeckIds,
+  formatDeckLessonsCountFull,
   formatDeckWordsCountFull,
   getLocalizedField,
+  getRecentDeckActivity,
   getWordTranslation,
   isEntryPinned,
   isRtlTranslation,
   learnedWordsSet,
+  recordDeckActivity,
   state,
   t,
   toggleDeckFavorite,
@@ -39,8 +42,11 @@ import {
   btnDecksCreateDeck,
   btnDecksMobileFilterToggle,
   btnDecksReturnBattle,
-  btnDecksViewGrid,
-  btnDecksViewList,
+  btnDesktopFilterAll,
+  btnDesktopFilterFav,
+  btnDesktopFilterRecent,
+  btnDesktopTabCourses,
+  btnDesktopTabUser,
   btnMobFilterAll,
   btnMobFilterCourses,
   btnMobFilterFav,
@@ -51,9 +57,17 @@ import {
   btnOpenCatalogHud,
   btnOpenCatalogTitle,
   btnOverlayCatalog,
+  btnQuickFilterAll,
+  btnQuickFilterCourses,
+  btnQuickFilterFav,
+  btnQuickFilterUser,
   btnSidebarCatalog,
   btnTitleAllCourses,
   centerOverlay,
+  countQuickAll,
+  countQuickCourses,
+  countQuickFav,
+  countQuickUser,
   courseBrowserDialog,
   deckContextMenu,
   deckDetailPane,
@@ -73,12 +87,9 @@ import {
   decksMobileFilterBar,
   decksOverviewPane,
   decksPageView,
+  decksQuickFiltersList,
+  decksRecentActivityList,
   decksSearchInput,
-  decksSidebarProgFill,
-  decksSidebarProgPct,
-  decksSidebarStartedNum,
-  decksSidebarTotalLabel,
-  decksSourceFilterGroup,
   homeDashboardView,
   labelMobFilterAll,
   labelMobFilterCourses,
@@ -87,9 +98,21 @@ import {
   sidebarActiveDeckCard
 } from './dom.js';
 import { resizeCanvas } from '../engine/arena-physics.js';
-import { renderLevelSidebar } from './hud-widgets.js';
+import { getTopicChipIconSvg, renderLevelSidebar } from './hud-widgets.js';
 import { launchFromTitleScreen } from '../engine/promo-autopilot.js';
 import { selectCourseLesson, showLevelIntroOverlay, startLevelNow } from '../engine/gameplay.js';
+
+function openCourseDetails(courseId, editMode = false) {
+  if (!courseId) return;
+  recordDeckActivity(courseId, 'open');
+  state.openedDeckId = courseId;
+  state.openedDeckEditMode = Boolean(editMode);
+  state.openedDeckSubdeckFilter = 'all';
+  state.openedDeckWordQuery = '';
+  state.openedDeckWordsLimit = 120;
+  renderDecksPage();
+  if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 export function closeDeckContextMenu() {
   if (!deckContextMenu || deckContextMenu.classList.contains('hidden')) return;
@@ -127,13 +150,7 @@ export function openDeckContextMenu(anchorEl, course) {
   };
 
   addMenuAction(tr.deckMenuOpen, () => {
-    state.openedDeckId = course.id;
-    state.openedDeckEditMode = false;
-    state.openedDeckSubdeckFilter = 'all';
-    state.openedDeckWordQuery = '';
-    state.openedDeckWordsLimit = 120;
-    renderDecksPage();
-    if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+    openCourseDetails(course.id, false);
   });
 
   addMenuAction(isFavExplicit ? tr.deckMenuFavRemove : tr.deckMenuFavAdd, () => {
@@ -142,13 +159,7 @@ export function openDeckContextMenu(anchorEl, course) {
 
   if (isUser) {
     addMenuAction(tr.deckMenuEdit, () => {
-      state.openedDeckId = course.id;
-      state.openedDeckEditMode = true;
-      state.openedDeckSubdeckFilter = 'all';
-      state.openedDeckWordQuery = '';
-      state.openedDeckWordsLimit = 120;
-      renderDecksPage();
-      if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
+      openCourseDetails(course.id, true);
     });
     addMenuAction(tr.deleteDeckBtn, () => {
       removeUserDeckById(course.id);
@@ -203,6 +214,7 @@ export function openDecksPage(opts = {}) {
   state.decksLevelFilter = opts.levelFilter || 'all';
   state.decksCategoryFilter = opts.categoryFilter || 'all';
   state.decksOnlyFavorites = Boolean(opts.onlyFavorites);
+  state.decksOnlyRecent = Boolean(opts.onlyRecent);
   if (typeof opts.openCourseId === 'string') {
     state.openedDeckId = opts.openCourseId;
   } else {
@@ -246,6 +258,7 @@ export function resumeBattleFromDecksPage() {
 
 export function launchDeckLessonFromPage(courseId, modIdx = 0, lessonIdx = 0) {
   state.decksOpenedFromPlay = false;
+  recordDeckActivity(courseId, 'continue');
   selectCourseLesson(courseId, modIdx, lessonIdx, false);
   if (state.screenMode === 'title') {
     launchFromTitleScreen();
@@ -313,7 +326,8 @@ export function renderDeckDetailPane(course, stats) {
   const playBtn = document.createElement('button');
   playBtn.type = 'button';
   playBtn.className = 'deck-btn-primary';
-  playBtn.textContent = tr.decksContinueBtn;
+  const hasProgress = stats && (stats.learnedInCourse > 0 || stats.doneLessons > 0);
+  playBtn.textContent = hasProgress ? tr.decksContinueBtn : (tr.decksStartBtn || tr.decksContinueBtn);
   playBtn.addEventListener('click', () => {
     launchDeckLessonFromPage(course.id, stats.nextModIdx, stats.nextLessonIdx);
   });
@@ -713,6 +727,120 @@ export function renderDeckDetailPane(course, stats) {
   deckDetailPane.appendChild(wordsBox);
 }
 
+/** Returns crisp vector artwork for square deck icon tiles on desktop. */
+function getDeckTileSvg(course) {
+  if (course && course.source === 'user') {
+    return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+      <path d="M24 7 40 15.2v17.6L24 41 8 32.8V15.2L24 7z" fill="#b45309" stroke="#fcd34d" stroke-width="1.3" stroke-linejoin="round"/>
+      <path d="M24 7 40 15.2 24 23.4 8 15.2 24 7z" fill="#f59e0b"/>
+      <path d="M24 23.4v17.6L8 32.8V15.2L24 23.4z" fill="#d97706"/>
+      <path d="M17.2 10.6 33.2 18.8l-5.6 2.9-16-8.2 5.6-2.9z" fill="#fde68a" fill-opacity="0.72"/>
+      <path d="M24 23.4l16-8.2v17.6L24 41V23.4z" fill="#92400e"/>
+    </svg>`;
+  }
+  const cat = inferCourseCategory(course);
+  switch (cat) {
+    case 'auto':
+      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <ellipse cx="24" cy="36.5" rx="16" ry="3.2" fill="#020617" fill-opacity="0.55"/>
+        <path d="M8.5 25.5 13 16c1.2-2.2 3.4-3.4 6.2-3.4h9.6c2.8 0 5 1.2 6.2 3.4l4.5 9.5c2 1 3 2.7 3 4.8v3.6c0 1.4-1.1 2.4-2.5 2.4h-2v2a1.8 1.8 0 0 1-1.8 1.8h-2.4a1.8 1.8 0 0 1-1.8-1.8v-2H16v2a1.8 1.8 0 0 1-1.8 1.8h-2.4A1.8 1.8 0 0 1 10 38.3v-2H8c-1.4 0-2.5-1-2.5-2.4v-3.6c0-2.1 1-3.8 3-4.8Z" fill="#dc2626" stroke="#fda4af" stroke-width="1.3"/>
+        <path d="M13.8 16.5h20.4l3.5 7.5H10.3l3.5-7.5Z" fill="#0f172a" stroke="#93c5fd" stroke-width="1.1"/>
+        <rect x="8.5" y="28.2" width="6.5" height="3.2" rx="1.6" fill="#fef08a"/>
+        <rect x="33" y="28.2" width="6.5" height="3.2" rx="1.6" fill="#fef08a"/>
+        <rect x="18.5" y="29" width="11" height="3.5" rx="1.4" fill="#0f172a"/>
+      </svg>`;
+    case 'business':
+      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M17.5 15v-3a3 3 0 0 1 3-3h7a3 3 0 0 1 3 3v3" stroke="#fde68a" stroke-width="2.6" stroke-linecap="round"/>
+        <rect x="8.5" y="15" width="31" height="23" rx="4.5" fill="#d97706" stroke="#fde68a" stroke-width="1.4"/>
+        <path d="M8.5 23.5h31" stroke="#78350f" stroke-width="2"/>
+        <rect x="21" y="21" width="6" height="4.8" rx="1.5" fill="#fef08a"/>
+      </svg>`;
+    case 'base':
+      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M24 39V20" stroke="#4ade80" stroke-width="3.6" stroke-linecap="round"/>
+        <path d="M24 25c0-10-8.5-15-15.5-13.2.8 8.8 7 14 15.5 13.2Z" fill="#4ade80" stroke="#bbf7d0" stroke-width="1.2"/>
+        <path d="M24 21.5c0-11 9.2-16 16.5-14-1 9.5-7.6 14.8-16.5 14Z" fill="#22c55e" stroke="#86efac" stroke-width="1.2"/>
+      </svg>`;
+    case 'it':
+      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <rect x="9" y="11" width="30" height="21" rx="3.5" fill="#1e293b" stroke="#67e8f9" stroke-width="1.5"/>
+        <rect x="12" y="14" width="24" height="15" rx="2" fill="#0f172a"/>
+        <path d="M19.5 19l-4 2.8 4 2.8M28.5 19l4 2.8-4 2.8M25 17.5l-2.2 8.2" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5.5 34.5h37l-2.2 4H7.7l-2.2-4Z" fill="#64748b"/>
+      </svg>`;
+    case 'travel':
+      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M8 26.5l30-13.5-9.2 19.5-6.6-3.4-5.8 5.8-.9-8.2L8 26.5Z" fill="#e0f2fe" stroke="#38bdf8" stroke-width="1.6" stroke-linejoin="round"/>
+      </svg>`;
+    case 'finance':
+      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <ellipse cx="19" cy="34.5" rx="9" ry="3.2" fill="#d97706"/>
+        <ellipse cx="19" cy="29.5" rx="9" ry="3.2" fill="#f59e0b"/>
+        <ellipse cx="19" cy="24.5" rx="9" ry="3.2" fill="#fbbf24" stroke="#fef08a" stroke-width="0.9"/>
+        <ellipse cx="29.5" cy="31.5" rx="8.5" ry="3" fill="#d97706"/>
+        <ellipse cx="29.5" cy="26.5" rx="8.5" ry="3" fill="#f59e0b"/>
+        <ellipse cx="29.5" cy="21.5" rx="8.5" ry="3" fill="#fde047" stroke="#fef9c3" stroke-width="0.9"/>
+      </svg>`;
+    case 'food':
+      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M14.5 26a5.2 5.2 0 0 1-.8-10.2 6.8 6.8 0 0 1 20.6 0A5.2 5.2 0 0 1 33.5 26v7h-19v-7Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+        <rect x="13.8" y="32" width="20.4" height="5" rx="1.8" fill="#cbd5e1"/>
+      </svg>`;
+    default:
+      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <circle cx="24" cy="24" r="13" fill="#0ea5e9" fill-opacity="0.22" stroke="#38bdf8" stroke-width="1.8"/>
+        <ellipse cx="24" cy="24" rx="5.5" ry="13" stroke="#7dd3fc" stroke-width="1.3"/>
+        <path d="M12 20h24M12 28h24" stroke="#7dd3fc" stroke-width="1.3"/>
+      </svg>`;
+  }
+}
+
+/** Builds clean inline origin + CEFR badges for desktop deck cards/rows. */
+function getDeckSourceBadgeMarkup(course, tr) {
+  const isUser = course.source === 'user';
+  const originBadge = !isUser
+    ? `<span class="deck-tag-badge creator">
+        <svg class="deck-badge-mini-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3.5L3 8l9 4.5L21 8l-9-4.5z" fill="#38bdf8"/>
+          <path d="M4.5 12.5L12 16.2l7.5-3.7" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+          <path d="M4.5 16.5L12 20.2l7.5-3.7" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>${escapeHtml(tr.decksBadgeCourse || 'КУРС')}</span>
+      </span>`
+    : `<span class="deck-tag-badge anki">
+        <svg class="deck-badge-mini-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.5" fill="#93c5fd"/>
+          <path d="M5.5 19.5c1.2-3 3.6-4.5 6.5-4.5s5.3 1.5 6.5 4.5" stroke="#bfdbfe" stroke-width="1.9" stroke-linecap="round"/>
+        </svg>
+        <span>${escapeHtml(tr.decksBadgePersonalAnki || 'ЛИЧНЫЕ / ANKI')}</span>
+      </span>`;
+  const showCefr = !isUser || (course.levelTag && course.originType !== 'anki');
+  const cefrBadge = showCefr
+    ? `<span class="deck-tag-badge cefr">${escapeHtml(course.levelTag || 'A2–B1')}</span>`
+    : '';
+  return `${originBadge}${cefrBadge}`;
+}
+
+/** Formats relative date + verb for the right sidebar Recent Activity widget. */
+function formatRecentActivityMeta(entry, tr) {
+  const now = new Date();
+  const then = new Date(entry.ts || Date.now());
+  const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const startThen = new Date(then.getFullYear(), then.getMonth(), then.getDate()).getTime();
+  const diffDays = Math.max(0, Math.round((startToday - startThen) / 86400000));
+
+  let dayLabel = tr.decksRecentToday || 'Сегодня';
+  if (diffDays === 1) dayLabel = tr.decksRecentYesterday || 'Вчера';
+  else if (diffDays > 1) dayLabel = tr.decksRecentDaysAgo ? tr.decksRecentDaysAgo(diffDays) : `${diffDays} дн. назад`;
+
+  let actLabel = tr.decksRecentActOpen || 'Открыли колоду';
+  if (entry.action === 'continue') actLabel = tr.decksRecentActContinue || 'Продолжили обучение';
+  else if (entry.action === 'study') actLabel = tr.decksRecentActStudy || 'Изучали слова';
+
+  return `${dayLabel} · ${actLabel}`;
+}
+
 export function renderDecksPage() {
   if (!decksPageView) return;
   closeDeckContextMenu();
@@ -720,15 +848,12 @@ export function renderDecksPage() {
   const isMobileViewport = window.innerWidth <= 768;
   const allForLang = getCoursesForTargetLang(state.targetLang);
   const statsById = new Map();
-  let startedCount = 0;
 
   allForLang.forEach(c => {
-    const st = computeDeckStats(c);
-    statsById.set(c.id, st);
-    if (st.isStarted) startedCount++;
+    statsById.set(c.id, computeDeckStats(c));
   });
 
-  // 1. Синхронизация шапки, мобильных чипов и боковых фильтров
+  // 1. Синхронизация шапки, вкладок, мобильных чипов и быстрых фильтров
   if (decksHeroTitle) {
     decksHeroTitle.textContent = tr.decksHeroTitleMy;
   }
@@ -745,27 +870,47 @@ export function renderDecksPage() {
   }
   if (btnDecksReturnBattle) {
     btnDecksReturnBattle.classList.toggle('hidden', !state.decksOpenedFromPlay);
-    const subbarRow = btnDecksReturnBattle.closest('.decks-subbar-row');
-    if (subbarRow) {
-      subbarRow.classList.toggle('has-return-battle', Boolean(state.decksOpenedFromPlay));
-    }
-  }
-  if (btnDecksViewGrid) {
-    btnDecksViewGrid.classList.toggle('active', state.decksViewMode !== 'list');
-  }
-  if (btnDecksViewList) {
-    btnDecksViewList.classList.toggle('active', state.decksViewMode === 'list');
-  }
-  if (decksAllGrid) {
-    decksAllGrid.classList.toggle('list-mode', state.decksViewMode === 'list');
   }
 
-  // Мобильная полоса из 4 чипов фильтрации с живыми счётчиками: Все (N) · Курсы (N) · Мои (N) · Избранные
   const allCount = allForLang.length;
   const officialCount = allForLang.filter(c => c.source !== 'user').length;
   const userCount = allForLang.filter(c => c.source === 'user').length;
   const favCount = allForLang.filter(c => isDeckFavorite(c)).length;
 
+  // Десктопные вкладки [Курсы | Личные / Anki] и правые пилюли [Все | Недавние | Избранные]
+  const isPlainAll = !state.decksOnlyFavorites && !state.decksOnlyRecent && state.catalogSourceFilter === 'all';
+  const isOfficialActive = !state.decksOnlyFavorites && !state.decksOnlyRecent && state.catalogSourceFilter === 'official';
+  const isUserActive = !state.decksOnlyFavorites && !state.decksOnlyRecent && state.catalogSourceFilter === 'user';
+
+  if (btnDesktopTabCourses) {
+    btnDesktopTabCourses.classList.toggle('active', isOfficialActive);
+    btnDesktopTabCourses.classList.toggle('soft-active', isPlainAll);
+  }
+  if (btnDesktopTabUser) {
+    btnDesktopTabUser.classList.toggle('active', isUserActive);
+  }
+  if (btnDesktopFilterAll) {
+    btnDesktopFilterAll.classList.toggle('active', isPlainAll);
+  }
+  if (btnDesktopFilterRecent) {
+    btnDesktopFilterRecent.classList.toggle('active', Boolean(state.decksOnlyRecent));
+  }
+  if (btnDesktopFilterFav) {
+    btnDesktopFilterFav.classList.toggle('active', Boolean(state.decksOnlyFavorites));
+  }
+
+  // Правый сайдбар: Быстрые фильтры + живые счётчики
+  if (countQuickAll) countQuickAll.textContent = String(allCount);
+  if (countQuickCourses) countQuickCourses.textContent = String(officialCount);
+  if (countQuickUser) countQuickUser.textContent = String(userCount);
+  if (countQuickFav) countQuickFav.textContent = String(favCount);
+
+  if (btnQuickFilterAll) btnQuickFilterAll.classList.toggle('active', !state.decksOnlyFavorites && !state.decksOnlyRecent && state.catalogSourceFilter === 'all');
+  if (btnQuickFilterCourses) btnQuickFilterCourses.classList.toggle('active', isOfficialActive);
+  if (btnQuickFilterUser) btnQuickFilterUser.classList.toggle('active', isUserActive);
+  if (btnQuickFilterFav) btnQuickFilterFav.classList.toggle('active', Boolean(state.decksOnlyFavorites));
+
+  // Мобильная полоса из 4 чипов фильтрации с живыми счётчиками
   if (labelMobFilterAll && tr.mobFilterAll) labelMobFilterAll.textContent = tr.mobFilterAll(allCount);
   if (labelMobFilterCourses && tr.mobFilterCourses) labelMobFilterCourses.textContent = tr.mobFilterCourses(officialCount);
   if (labelMobFilterUser && tr.mobFilterMy) labelMobFilterUser.textContent = tr.mobFilterMy(userCount);
@@ -812,57 +957,122 @@ export function renderDecksPage() {
     }
   }
 
-  if (decksSourceFilterGroup) {
-    decksSourceFilterGroup.querySelectorAll('.decks-source-btn').forEach(btn => {
-      btn.classList.toggle('active', !state.decksOnlyFavorites && btn.dataset.sourceFilter === state.catalogSourceFilter);
-    });
-  }
+  // Горизонтальные чипы категорий над списком «Все колоды»
   if (decksCategoryFilterGroup) {
-    const usedCatIds = new Set();
-    allForLang.forEach(c => {
-      if (c.source !== 'user') usedCatIds.add(inferCourseCategory(c));
+    const coreCatIds = ['auto', 'business', 'base', 'it', 'travel', 'finance', 'food'];
+    const allCats = getAllCategories();
+    const catById = new Map(allCats.map(c => [c.id, c]));
+    const orderedCats = [];
+    const seenCats = new Set();
+
+    coreCatIds.forEach(id => {
+      if (catById.has(id)) {
+        orderedCats.push(catById.get(id));
+        seenCats.add(id);
+      }
     });
-    const allCats = getAllCategories().filter(cat =>
-      usedCatIds.has(cat.id) || cat.id === 'auto' || cat.id === 'business'
-    );
-    if (state.decksCategoryFilter !== 'all' && !allCats.some(c => c.id === state.decksCategoryFilter)) {
+    allForLang.forEach(c => {
+      if (c.source === 'user') return;
+      const cid = inferCourseCategory(c);
+      if (!seenCats.has(cid) && catById.has(cid)) {
+        orderedCats.push(catById.get(cid));
+        seenCats.add(cid);
+      }
+    });
+
+    if (state.decksCategoryFilter !== 'all' && !seenCats.has(state.decksCategoryFilter)) {
       state.decksCategoryFilter = 'all';
     }
     decksCategoryFilterGroup.innerHTML = '';
-    const allCatBtn = document.createElement('button');
-    allCatBtn.type = 'button';
-    allCatBtn.className = 'decks-level-pill' + (state.decksCategoryFilter === 'all' ? ' active' : '');
-    allCatBtn.dataset.categoryFilter = 'all';
-    allCatBtn.textContent = tr.decksLevelAll;
-    decksCategoryFilterGroup.appendChild(allCatBtn);
-
-    allCats.forEach(cat => {
+    orderedCats.forEach(cat => {
       const cBtn = document.createElement('button');
       cBtn.type = 'button';
-      cBtn.className = 'decks-level-pill' + (state.decksCategoryFilter === cat.id ? ' active' : '');
+      cBtn.className = 'decks-cat-chip' + (state.decksCategoryFilter === cat.id ? ' active' : '');
       cBtn.dataset.categoryFilter = cat.id;
       const cLabel = getLocalizedField(cat, 'titles') || cat.id;
-      cBtn.textContent = `${cat.icon || '🗂️'} ${cLabel}`;
+      cBtn.innerHTML = `${getTopicChipIconSvg(cat.id)}<span>${escapeHtml(cLabel)}</span>`;
       decksCategoryFilterGroup.appendChild(cBtn);
     });
   }
+
   if (decksLevelFilterGroup) {
     decksLevelFilterGroup.querySelectorAll('.decks-level-pill').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.levelFilter === state.decksLevelFilter);
     });
   }
 
-  // 2. Карточка прогресса в левом сайдбаре и 3 метрики в Hero-баннере
-  const totalDecksCount = allForLang.length;
-  const sidebarPct = totalDecksCount > 0 ? Math.round((startedCount / totalDecksCount) * 100) : 0;
-  if (decksSidebarStartedNum) decksSidebarStartedNum.textContent = String(startedCount);
-  if (decksSidebarTotalLabel) decksSidebarTotalLabel.textContent = tr.decksOfTotalDecks(totalDecksCount);
-  if (decksSidebarProgFill) decksSidebarProgFill.style.width = `${sidebarPct}%`;
-  if (decksSidebarProgPct) decksSidebarProgPct.textContent = `${sidebarPct}%`;
-
-  if (decksHeroTotalCount) decksHeroTotalCount.textContent = String(totalDecksCount);
+  // 2. 3 KPI-метрики в Hero-заголовке
+  if (decksHeroTotalCount) decksHeroTotalCount.textContent = String(allCount);
   if (decksHeroLearnedCount) decksHeroLearnedCount.textContent = learnedWordsSet.size.toLocaleString();
   if (decksHeroStreakCount) decksHeroStreakCount.textContent = tr.streakDays(dailyProgress.streakDays || 1);
+
+  // Правый сайдбар: Недавняя активность (всегда актуально, даже при открытой колоде)
+  const recentLog = getRecentDeckActivity();
+  const recentByCourseId = new Map();
+  recentLog.forEach((entry, idx) => {
+    if (!recentByCourseId.has(entry.courseId)) {
+      recentByCourseId.set(entry.courseId, { ...entry, order: idx });
+    }
+  });
+
+  if (decksRecentActivityList) {
+    decksRecentActivityList.innerHTML = '';
+    const recentItems = [];
+    const usedIds = new Set();
+
+    recentLog.forEach(entry => {
+      if (recentItems.length >= 3) return;
+      const match = allForLang.find(c => c.id === entry.courseId);
+      if (match && !usedIds.has(match.id)) {
+        usedIds.add(match.id);
+        recentItems.push({ course: match, sub: formatRecentActivityMeta(entry, tr) });
+      }
+    });
+
+    const fallbackOrder = allForLang.slice().sort((a, b) => {
+      const aAct = a.id === state.activeCourseId ? 2 : (a.source === 'user' ? 1 : 0);
+      const bAct = b.id === state.activeCourseId ? 2 : (b.source === 'user' ? 1 : 0);
+      if (aAct !== bAct) return bAct - aAct;
+      const stA = statsById.get(a.id);
+      const stB = statsById.get(b.id);
+      return (stB ? stB.pct : 0) - (stA ? stA.pct : 0);
+    });
+
+    for (const c of fallbackOrder) {
+      if (recentItems.length >= 3) break;
+      if (usedIds.has(c.id)) continue;
+      usedIds.add(c.id);
+      recentItems.push({ course: c, sub: tr.decksRecentReadySub || 'Готово к запуску' });
+    }
+
+    recentItems.forEach(({ course, sub }) => {
+      const st = statsById.get(course.id) || computeDeckStats(course);
+      const artCls = getDeckArtClass(course);
+      const titleStr = getLocalizedField(course, 'titles');
+
+      const row = document.createElement('div');
+      row.className = 'decks-recent-item';
+      row.innerHTML = `
+        <div class="decks-recent-icon ${artCls}">${getDeckTileSvg(course)}</div>
+        <div class="decks-recent-info">
+          <div class="decks-recent-name" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</div>
+          <div class="decks-recent-sub">${escapeHtml(sub)}</div>
+        </div>
+        <button type="button" class="decks-recent-play-btn" aria-label="${escapeHtml(titleStr)}">▶</button>
+      `;
+      const playBtn = row.querySelector('.decks-recent-play-btn');
+      if (playBtn) {
+        playBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          launchDeckLessonFromPage(course.id, st.nextModIdx, st.nextLessonIdx);
+        });
+      }
+      row.addEventListener('click', () => {
+        openCourseDetails(course.id, false);
+      });
+      decksRecentActivityList.appendChild(row);
+    });
+  }
 
   // 3. Если открыта конкретная колода — показываем встроенную страницу деталей вместо обзора
   if (state.openedDeckId) {
@@ -882,55 +1092,55 @@ export function renderDecksPage() {
   if (decksOverviewPane) decksOverviewPane.classList.remove('hidden');
   if (deckDetailPane) deckDetailPane.classList.add('hidden');
 
-  // 4. Полоса «▶ Продолжить обучение» (до 3 колод: активная + пользовательские Anki + начатые)
+  // 4. Полоса «▶ Продолжить обучение» (2 карточки в ряд: активная + последняя / Anki / с наибольшим прогрессом)
   if (decksContinueGrid && decksContinueSection) {
     const prioritized = allForLang.slice().sort((a, b) => {
       const aActive = a.id === state.activeCourseId ? 1 : 0;
       const bActive = b.id === state.activeCourseId ? 1 : 0;
       if (aActive !== bActive) return bActive - aActive;
+
+      const recA = recentByCourseId.has(a.id) ? recentByCourseId.get(a.id).order : 999;
+      const recB = recentByCourseId.has(b.id) ? recentByCourseId.get(b.id).order : 999;
+      if (recA !== recB) return recA - recB;
+
       const aUser = a.source === 'user' ? 1 : 0;
       const bUser = b.source === 'user' ? 1 : 0;
       if (aUser !== bUser) return bUser - aUser;
+
       const stA = statsById.get(a.id);
       const stB = statsById.get(b.id);
       return (stB ? stB.pct : 0) - (stA ? stA.pct : 0);
-    }).slice(0, 3);
+    }).slice(0, 2);
 
     decksContinueSection.classList.toggle('hidden', prioritized.length === 0);
     decksContinueGrid.innerHTML = '';
 
-    prioritized.forEach(course => {
+    prioritized.forEach((course, idx) => {
       const st = statsById.get(course.id) || computeDeckStats(course);
-      const isUser = course.source === 'user';
       const artCls = getDeckArtClass(course);
-      const badgeCls = !isUser ? 'creator' : 'anki';
-      const badgeText = !isUser
-        ? tr.decksCreatorBadge
-        : (course.originType === 'anki' ? tr.decksAnkiBadge : tr.decksCustomBadge);
-      const iconChar = course.icon || (isUser ? '📦' : '📚');
       const titleStr = getLocalizedField(course, 'titles');
-      const catBadgeText = getCourseCategoryBadgeText(course);
+      const hasDeckProgress = st.learnedInCourse > 0 || st.doneLessons > 0;
+      const ctaText = hasDeckProgress ? tr.decksContinueBtn : (tr.decksStartBtn || tr.decksContinueBtn);
+      const metaText = `${formatDeckWordsCountFull(st.totalWords)} · ${formatDeckLessonsCountFull(st.totalLessons)}`;
 
       const contCard = document.createElement('div');
-      contCard.className = 'deck-continue-card' + (course.id === state.activeCourseId ? ' is-active' : '');
+      contCard.className = 'deck-continue-card' + ((course.id === state.activeCourseId || idx === 0) ? ' is-active' : '');
       contCard.innerHTML = `
-        <div class="deck-icon-tile ${artCls}">${escapeHtml(iconChar)}</div>
-        <div class="deck-cont-body">
-          <div class="deck-badges-inline">
-            <span class="deck-tag-badge ${badgeCls}">${escapeHtml(badgeText)}</span>
-            ${catBadgeText ? `<span class="deck-tag-badge category">${escapeHtml(catBadgeText)}</span>` : ''}
-            <span class="deck-tag-badge cefr">${escapeHtml(course.levelTag || 'A2–B1')}</span>
+        <div class="deck-cont-top">
+          <div class="deck-icon-tile ${artCls}">${getDeckTileSvg(course)}</div>
+          <div class="deck-cont-body">
+            <div class="deck-badges-inline">${getDeckSourceBadgeMarkup(course, tr)}</div>
+            <div class="deck-cont-title" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</div>
+            <div class="deck-cont-meta">${escapeHtml(metaText)}</div>
           </div>
-          <div class="deck-cont-title" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</div>
-          <div class="deck-cont-meta">${escapeHtml(tr.decksMetaWordsLessons(st.totalWords.toLocaleString(), st.doneLessons, st.totalLessons))}</div>
-          <div class="decks-prog-bar-row">
-            <div class="decks-prog-track">
-              <div class="decks-prog-fill" style="width: ${st.pct}%;"></div>
-            </div>
-            <span class="decks-prog-pct">${st.pct}%</span>
-          </div>
+          <button type="button" class="deck-cont-btn">${escapeHtml(ctaText)}</button>
         </div>
-        <button type="button" class="deck-cont-btn">${escapeHtml(tr.decksContinueBtn)}</button>
+        <div class="decks-prog-bar-row">
+          <div class="decks-prog-track">
+            <div class="decks-prog-fill" style="width: ${st.pct}%;"></div>
+          </div>
+          <span class="decks-prog-pct">${st.pct}%</span>
+        </div>
       `;
 
       const btn = contCard.querySelector('.deck-cont-btn');
@@ -941,22 +1151,21 @@ export function renderDecksPage() {
         });
       }
       contCard.addEventListener('click', () => {
-        state.openedDeckId = course.id;
-        state.openedDeckEditMode = false;
-        state.openedDeckSubdeckFilter = 'all';
-        state.openedDeckWordQuery = '';
-        state.openedDeckWordsLimit = 120;
-        renderDecksPage();
+        openCourseDetails(course.id, false);
       });
       decksContinueGrid.appendChild(contCard);
     });
   }
 
-  // 5. Сетка «📚 Все колоды (N)» с учётом фильтров источника, избранных, категории, уровня CEFR и поиска
+  // 5. Горизонтальный список «Все колоды (N)» с фильтрацией по источнику, недавним, избранным, категории, уровню и поиску
   const searchQ = (state.decksSearchQuery || '').trim().toLowerCase();
   const filteredDecks = allForLang.filter(course => {
+    const st = statsById.get(course.id);
     if (state.decksOnlyFavorites) {
       if (!isDeckFavorite(course)) return false;
+    } else if (state.decksOnlyRecent) {
+      const hasActivity = recentByCourseId.has(course.id) || (st && st.isStarted);
+      if (!hasActivity) return false;
     } else {
       if (state.catalogSourceFilter === 'official' && course.source === 'user') return false;
       if (state.catalogSourceFilter === 'user' && course.source !== 'user') return false;
@@ -985,8 +1194,12 @@ export function renderDecksPage() {
     return false;
   });
 
-  // На мобильном: активная колода первой, далее курсы и личные колоды в естественном порядке; на ПК — личные/Anki тоже в 1-м ряду
   const orderedDecks = filteredDecks.slice().sort((a, b) => {
+    if (state.decksOnlyRecent) {
+      const recA = recentByCourseId.has(a.id) ? recentByCourseId.get(a.id).order : 999;
+      const recB = recentByCourseId.has(b.id) ? recentByCourseId.get(b.id).order : 999;
+      if (recA !== recB) return recA - recB;
+    }
     if (isMobileViewport) {
       const aAct = a.id === state.activeCourseId ? 1 : 0;
       const bAct = b.id === state.activeCourseId ? 1 : 0;
@@ -1016,28 +1229,19 @@ export function renderDecksPage() {
     return;
   }
 
-  const openCourseDetails = (courseId, editMode = false) => {
-    state.openedDeckId = courseId;
-    state.openedDeckEditMode = Boolean(editMode);
-    state.openedDeckSubdeckFilter = 'all';
-    state.openedDeckWordQuery = '';
-    state.openedDeckWordsLimit = 120;
-    renderDecksPage();
-    if (arcadeTitleScreen) arcadeTitleScreen.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   orderedDecks.forEach(course => {
     const st = statsById.get(course.id) || computeDeckStats(course);
     const isUser = course.source === 'user';
     const artCls = getDeckArtClass(course);
-    const badgeCls = !isUser ? 'creator' : 'anki';
-    const badgeText = !isUser
-      ? tr.decksCreatorBadge
-      : (course.originType === 'anki' ? tr.decksAnkiBadge : tr.decksCustomBadge);
     const iconChar = course.icon || (isUser ? '📦' : '📚');
     const titleStr = getLocalizedField(course, 'titles');
     const descStr = getLocalizedField(course, 'descriptions');
-    const catBadgeText = getCourseCategoryBadgeText(course);
+    const hasDeckProgress = st.learnedInCourse > 0 || st.doneLessons > 0;
+    const ctaText = hasDeckProgress ? tr.decksContinueBtn : (tr.decksStartBtn || tr.decksContinueBtn);
+    const metaText = `${formatDeckWordsCountFull(st.totalWords)} · ${formatDeckLessonsCountFull(st.totalLessons)}`;
+    const favStarHtml = favoriteDeckIds.has(course.id)
+      ? `<span class="deck-row-fav-star" aria-hidden="true">★</span>`
+      : '';
     const health = isUser && AnkiImporter && AnkiImporter.inspectDeckTranslationHealth
       ? AnkiImporter.inspectDeckTranslationHealth(course)
       : null;
@@ -1045,37 +1249,82 @@ export function renderDecksPage() {
     const card = document.createElement('article');
     card.className = 'deck-full-card' + (course.id === state.activeCourseId ? ' is-active' : '');
 
-    // --- А) ДЕСКТОПНОЕ СОДЕРЖИМОЕ КАРТОЧКИ (> 768px — 100% без изменений!) ---
+    // --- А) ДЕСКТОПНАЯ ГОРИЗОНТАЛЬНАЯ СТРОКА КОЛОДЫ (> 768px) ---
     const desktopInner = document.createElement('div');
     desktopInner.className = 'deck-desktop-card-inner';
 
-    const topDiv = document.createElement('div');
-    topDiv.className = 'deck-card-top';
-    topDiv.innerHTML = `
-      <div class="deck-icon-tile ${artCls}">${escapeHtml(iconChar)}</div>
-      <div class="deck-card-head-info">
-        <div class="deck-card-top-bar">
-          <div class="deck-badges-inline">
-            <span class="deck-tag-badge ${badgeCls}">${escapeHtml(badgeText)}</span>
-            ${catBadgeText ? `<span class="deck-tag-badge category">${escapeHtml(catBadgeText)}</span>` : ''}
-            <span class="deck-tag-badge cefr">${escapeHtml(course.levelTag || 'A2–B1')}</span>
-          </div>
-          <button type="button" class="deck-more-btn" aria-label="More">•••</button>
+    const infoZone = document.createElement('div');
+    infoZone.className = 'deck-row-info';
+    infoZone.innerHTML = `
+      <div class="deck-icon-tile ${artCls}">${getDeckTileSvg(course)}</div>
+      <div class="deck-row-texts">
+        <div class="deck-row-title-line">
+          <h3 class="deck-card-title" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</h3>
+          ${favStarHtml}
         </div>
-        <h3 class="deck-card-title">${escapeHtml(titleStr)}</h3>
         <p class="deck-card-desc">${escapeHtml(descStr)}</p>
       </div>
     `;
-    const moreBtn = topDiv.querySelector('.deck-more-btn');
-    if (moreBtn) {
-      moreBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openDeckContextMenu(moreBtn, course);
-      });
-    }
-    desktopInner.appendChild(topDiv);
+    desktopInner.appendChild(infoZone);
 
-    if (health && health.brokenRu && state.nativeLang === 'ru') {
+    const midZone = document.createElement('div');
+    midZone.className = 'deck-row-mid';
+    midZone.innerHTML = `
+      <div class="deck-badges-inline">${getDeckSourceBadgeMarkup(course, tr)}</div>
+      <div class="deck-row-meta">${escapeHtml(metaText)}</div>
+      <div class="decks-prog-bar-row">
+        <div class="decks-prog-track">
+          <div class="decks-prog-fill" style="width: ${st.pct}%;"></div>
+        </div>
+        <span class="decks-prog-pct">${st.pct}%</span>
+      </div>
+    `;
+    desktopInner.appendChild(midZone);
+
+    const actZone = document.createElement('div');
+    actZone.className = 'deck-row-actions';
+
+    const contBtn = document.createElement('button');
+    contBtn.type = 'button';
+    contBtn.className = 'deck-btn-primary';
+    contBtn.textContent = ctaText;
+    contBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      launchDeckLessonFromPage(course.id, st.nextModIdx, st.nextLessonIdx);
+    });
+    actZone.appendChild(contBtn);
+
+    const openBtn = document.createElement('button');
+    openBtn.type = 'button';
+    openBtn.className = 'deck-btn-secondary';
+    openBtn.innerHTML = `
+      <svg class="deck-open-book-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M2 5.5A2.5 2.5 0 0 1 4.5 3H11v17H4.5A2.5 2.5 0 0 0 2 22V5.5z" />
+        <path d="M22 5.5A2.5 2.5 0 0 0 19.5 3H13v17h6.5a2.5 2.5 0 0 1 2.5 2V5.5z" />
+      </svg>
+      <span>${escapeHtml(tr.decksOpenLabel || 'Открыть')}</span>
+    `;
+    openBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCourseDetails(course.id, false);
+    });
+    actZone.appendChild(openBtn);
+
+    const moreBtn = document.createElement('button');
+    moreBtn.type = 'button';
+    moreBtn.className = 'deck-more-btn';
+    moreBtn.setAttribute('aria-label', 'More');
+    moreBtn.textContent = '•••';
+    moreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDeckContextMenu(moreBtn, course);
+    });
+    actZone.appendChild(moreBtn);
+
+    desktopInner.appendChild(actZone);
+    card.appendChild(desktopInner);
+
+    if (health && health.brokenRu && state.nativeLang === 'ru' && !isMobileViewport) {
       const warnRow = document.createElement('div');
       warnRow.className = 'deck-broken-ru-alert';
       warnRow.innerHTML = `<span>${escapeHtml(tr.decksBrokenRuWarn)}</span>`;
@@ -1087,82 +1336,8 @@ export function renderDecksPage() {
         removeUserDeckById(course.id);
       });
       warnRow.appendChild(quickDel);
-      desktopInner.appendChild(warnRow);
+      card.appendChild(warnRow);
     }
-
-    // 3 мини-плитки первых уроков колоды
-    if (st.previewLessons.length > 0) {
-      const previewRow = document.createElement('div');
-      previewRow.className = 'deck-lessons-preview-row';
-      st.previewLessons.forEach((pItem, idx) => {
-        const miniBtn = document.createElement('button');
-        miniBtn.type = 'button';
-        miniBtn.className = 'deck-mini-lesson' + (pItem.isDone ? ' done' : '');
-        const cleanLessonName = getLocalizedField(pItem.ls, 'titles');
-        miniBtn.innerHTML = `
-          <div class="deck-mini-top">
-            <span>${escapeHtml(tr.decksMiniLessonNum(idx + 1))}</span>
-            ${pItem.isDone ? '<span class="deck-mini-check">✓</span>' : ''}
-          </div>
-          <div class="deck-mini-sub">${escapeHtml(cleanLessonName)}</div>
-        `;
-        miniBtn.addEventListener('click', () => {
-          launchDeckLessonFromPage(course.id, pItem.mIdx, pItem.lIdx);
-        });
-        previewRow.appendChild(miniBtn);
-      });
-      desktopInner.appendChild(previewRow);
-    }
-
-    // Полоса прогресса + счётчик уроков
-    const progBlock = document.createElement('div');
-    progBlock.className = 'deck-progress-block';
-    progBlock.innerHTML = `
-      <div class="decks-prog-bar-row">
-        <div class="decks-prog-track">
-          <div class="decks-prog-fill" style="width: ${st.pct}%;"></div>
-        </div>
-        <span class="decks-prog-pct">${st.pct}%</span>
-      </div>
-      <div class="deck-lessons-count-sub">${escapeHtml(tr.decksLessonsProgress(st.doneLessons, st.totalLessons))}</div>
-    `;
-    desktopInner.appendChild(progBlock);
-
-    // Кнопки карточки: [▶ Продолжить] [📖 Открыть] + [✏️ Редактировать] для личных/Anki
-    const actRow = document.createElement('div');
-    actRow.className = 'deck-card-actions';
-
-    const contBtn = document.createElement('button');
-    contBtn.type = 'button';
-    contBtn.className = 'deck-btn-primary';
-    contBtn.textContent = tr.decksContinueBtn;
-    contBtn.addEventListener('click', () => {
-      launchDeckLessonFromPage(course.id, st.nextModIdx, st.nextLessonIdx);
-    });
-    actRow.appendChild(contBtn);
-
-    const openBtn = document.createElement('button');
-    openBtn.type = 'button';
-    openBtn.className = 'deck-btn-secondary';
-    openBtn.textContent = tr.decksOpenBtn;
-    openBtn.addEventListener('click', () => {
-      openCourseDetails(course.id, false);
-    });
-    actRow.appendChild(openBtn);
-
-    if (isUser) {
-      const editBtn = document.createElement('button');
-      editBtn.type = 'button';
-      editBtn.className = 'deck-btn-secondary';
-      editBtn.textContent = tr.decksEditBtn;
-      editBtn.addEventListener('click', () => {
-        openCourseDetails(course.id, true);
-      });
-      actRow.appendChild(editBtn);
-    }
-
-    desktopInner.appendChild(actRow);
-    card.appendChild(desktopInner);
 
     // --- Б) МОБИЛЬНАЯ ГОРИЗОНТАЛЬНАЯ КАРТОЧКА КОЛОДЫ (<= 768px) ---
     const mobInner = document.createElement('div');
@@ -1193,7 +1368,7 @@ export function renderDecksPage() {
     const ctaStarted = st.pct > 0;
     const ctaClass = ctaStarted ? 'continue' : 'start';
     const ctaLabel = ctaStarted ? (tr.decksContinueLabel || 'Продолжить') : (tr.decksStartLabel || 'Начать');
-    const favStarHtml = favoriteDeckIds.has(course.id)
+    const mobFavStarHtml = favoriteDeckIds.has(course.id)
       ? `<span class="deck-mob-fav-star" aria-hidden="true">★</span>`
       : '';
 
@@ -1213,7 +1388,7 @@ export function renderDecksPage() {
         <div class="deck-mob-meta">
           ${mobMetaSvg}
           <span>${escapeHtml(mobMetaText)}</span>
-          ${favStarHtml}
+          ${mobFavStarHtml}
         </div>
         <div class="deck-mob-bottom-row">
           <div class="deck-mob-prog-wrap">
@@ -1299,26 +1474,79 @@ export function bindDecksPageEvents() {
     });
   }
 
-  if (btnDecksViewGrid) {
-    btnDecksViewGrid.addEventListener('click', () => {
-      state.decksViewMode = 'grid';
-      renderDecksPage();
-    });
-  }
-
-  if (btnDecksViewList) {
-    btnDecksViewList.addEventListener('click', () => {
-      state.decksViewMode = 'list';
-      renderDecksPage();
-    });
-  }
-
-  if (decksSourceFilterGroup) {
-    decksSourceFilterGroup.addEventListener('click', (e) => {
-      const btn = e.target && e.target.closest && e.target.closest('.decks-source-btn');
-      if (!btn || !btn.dataset.sourceFilter) return;
-      state.catalogSourceFilter = btn.dataset.sourceFilter;
+  if (btnDesktopTabCourses) {
+    btnDesktopTabCourses.addEventListener('click', () => {
+      const wasOfficial = !state.decksOnlyFavorites && !state.decksOnlyRecent && state.catalogSourceFilter === 'official';
+      state.catalogSourceFilter = wasOfficial ? 'all' : 'official';
       state.decksOnlyFavorites = false;
+      state.decksOnlyRecent = false;
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
+  if (btnDesktopTabUser) {
+    btnDesktopTabUser.addEventListener('click', () => {
+      state.catalogSourceFilter = 'user';
+      state.decksOnlyFavorites = false;
+      state.decksOnlyRecent = false;
+      state.decksCategoryFilter = 'all';
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
+  if (btnDesktopFilterAll) {
+    btnDesktopFilterAll.addEventListener('click', () => {
+      state.catalogSourceFilter = 'all';
+      state.decksOnlyFavorites = false;
+      state.decksOnlyRecent = false;
+      state.decksCategoryFilter = 'all';
+      state.decksLevelFilter = 'all';
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
+  if (btnDesktopFilterRecent) {
+    btnDesktopFilterRecent.addEventListener('click', () => {
+      const next = !state.decksOnlyRecent;
+      state.decksOnlyRecent = next;
+      state.decksOnlyFavorites = false;
+      if (next) state.catalogSourceFilter = 'all';
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
+  if (btnDesktopFilterFav) {
+    btnDesktopFilterFav.addEventListener('click', () => {
+      const next = !state.decksOnlyFavorites;
+      state.decksOnlyFavorites = next;
+      state.decksOnlyRecent = false;
+      if (next) state.catalogSourceFilter = 'all';
+      state.openedDeckId = '';
+      renderDecksPage();
+    });
+  }
+
+  if (decksQuickFiltersList) {
+    decksQuickFiltersList.addEventListener('click', (e) => {
+      const btn = e.target && e.target.closest && e.target.closest('[data-quick-filter]');
+      if (!btn) return;
+      const f = btn.dataset.quickFilter;
+      state.decksOnlyRecent = false;
+      if (f === 'favorites') {
+        state.decksOnlyFavorites = true;
+        state.catalogSourceFilter = 'all';
+      } else {
+        state.decksOnlyFavorites = false;
+        state.catalogSourceFilter = (f === 'official' || f === 'user') ? f : 'all';
+        if (f === 'all') {
+          state.decksLevelFilter = 'all';
+          state.decksCategoryFilter = 'all';
+        }
+      }
       state.openedDeckId = '';
       renderDecksPage();
     });
@@ -1330,6 +1558,7 @@ export function bindDecksPageEvents() {
       if (!chip) return;
       sound.init();
       const f = chip.dataset.mobDeckFilter;
+      state.decksOnlyRecent = false;
       if (f === 'favorites') {
         state.decksOnlyFavorites = true;
         state.catalogSourceFilter = 'all';
@@ -1350,9 +1579,14 @@ export function bindDecksPageEvents() {
 
   if (decksCategoryFilterGroup) {
     decksCategoryFilterGroup.addEventListener('click', (e) => {
-      const btn = e.target && e.target.closest && e.target.closest('.decks-level-pill');
+      const btn = e.target && e.target.closest && e.target.closest('.decks-cat-chip');
       if (!btn || !btn.dataset.categoryFilter) return;
-      state.decksCategoryFilter = btn.dataset.categoryFilter;
+      const nextCat = btn.dataset.categoryFilter;
+      state.decksCategoryFilter = (state.decksCategoryFilter === nextCat) ? 'all' : nextCat;
+      if (state.decksCategoryFilter !== 'all' && state.catalogSourceFilter === 'user') {
+        state.catalogSourceFilter = 'all';
+        state.decksOnlyFavorites = false;
+      }
       state.openedDeckId = '';
       renderDecksPage();
     });
@@ -1413,9 +1647,11 @@ export function bindDecksPageEvents() {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && deckContextMenu && !deckContextMenu.classList.contains('hidden')) {
+      e.preventDefault();
+      e.stopPropagation();
       closeDeckContextMenu();
     }
-  });
+  }, true);
 
   if (arcadeTitleScreen) {
     arcadeTitleScreen.addEventListener('scroll', closeDeckContextMenu, { passive: true });

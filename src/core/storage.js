@@ -67,3 +67,4 @@ export const ADMIN_CATALOG_LS_KEY = 'zlingo_admin_catalog_v1';
 export const ADMIN_GH_TOKEN_LS_KEY = 'zlingo_admin_gh_token';
 export const ADMIN_PASSWORD_LS_KEY = 'zlingo_admin_password';
 export const ADMIN_UNLOCKED_LS_KEY = 'zlingo_admin_unlocked_v1';
+export const RECENT_DECKS_LS_KEY = 'zlingo_recent_decks_v1';

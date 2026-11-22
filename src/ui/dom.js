@@ -195,22 +195,37 @@ export const homeDashboardView = document.getElementById('homeDashboardView');
 export const decksPageView = document.getElementById('decksPageView');
 export const labelDecksFiltersTitle = document.getElementById('labelDecksFiltersTitle');
 export const labelDecksLangHeader = document.getElementById('labelDecksLangHeader');
-export const labelDecksSourceHeader = document.getElementById('labelDecksSourceHeader');
-export const decksSourceFilterGroup = document.getElementById('decksSourceFilterGroup');
-export const labelDecksSrcAll = document.getElementById('labelDecksSrcAll');
-export const labelDecksSrcOfficial = document.getElementById('labelDecksSrcOfficial');
-export const labelDecksSrcUser = document.getElementById('labelDecksSrcUser');
-export const labelDecksCategoryHeader = document.getElementById('labelDecksCategoryHeader');
+export const decksCompactLangPills = document.getElementById('decksCompactLangPills');
 export const decksCategoryFilterGroup = document.getElementById('decksCategoryFilterGroup');
 export const labelDecksLevelHeader = document.getElementById('labelDecksLevelHeader');
 export const decksLevelFilterGroup = document.getElementById('decksLevelFilterGroup');
 export const btnDecksLevelAll = document.getElementById('btnDecksLevelAll');
-export const labelDecksSidebarProgTitle = document.getElementById('labelDecksSidebarProgTitle');
-export const decksSidebarStartedNum = document.getElementById('decksSidebarStartedNum');
-export const decksSidebarTotalLabel = document.getElementById('decksSidebarTotalLabel');
-export const labelDecksInProgressSub = document.getElementById('labelDecksInProgressSub');
-export const decksSidebarProgFill = document.getElementById('decksSidebarProgFill');
-export const decksSidebarProgPct = document.getElementById('decksSidebarProgPct');
+export const decksDesktopTabsBar = document.getElementById('decksDesktopTabsBar');
+export const btnDesktopTabCourses = document.getElementById('btnDesktopTabCourses');
+export const labelDesktopTabCourses = document.getElementById('labelDesktopTabCourses');
+export const btnDesktopTabUser = document.getElementById('btnDesktopTabUser');
+export const labelDesktopTabUser = document.getElementById('labelDesktopTabUser');
+export const btnDesktopFilterAll = document.getElementById('btnDesktopFilterAll');
+export const labelDesktopFilterAll = document.getElementById('labelDesktopFilterAll');
+export const btnDesktopFilterRecent = document.getElementById('btnDesktopFilterRecent');
+export const labelDesktopFilterRecent = document.getElementById('labelDesktopFilterRecent');
+export const btnDesktopFilterFav = document.getElementById('btnDesktopFilterFav');
+export const labelDesktopFilterFav = document.getElementById('labelDesktopFilterFav');
+export const decksQuickFiltersList = document.getElementById('decksQuickFiltersList');
+export const btnQuickFilterAll = document.getElementById('btnQuickFilterAll');
+export const labelQuickFilterAll = document.getElementById('labelQuickFilterAll');
+export const countQuickAll = document.getElementById('countQuickAll');
+export const btnQuickFilterCourses = document.getElementById('btnQuickFilterCourses');
+export const labelQuickFilterCourses = document.getElementById('labelQuickFilterCourses');
+export const countQuickCourses = document.getElementById('countQuickCourses');
+export const btnQuickFilterUser = document.getElementById('btnQuickFilterUser');
+export const labelQuickFilterUser = document.getElementById('labelQuickFilterUser');
+export const countQuickUser = document.getElementById('countQuickUser');
+export const btnQuickFilterFav = document.getElementById('btnQuickFilterFav');
+export const labelQuickFilterFav = document.getElementById('labelQuickFilterFav');
+export const countQuickFav = document.getElementById('countQuickFav');
+export const labelDecksRecentTitle = document.getElementById('labelDecksRecentTitle');
+export const decksRecentActivityList = document.getElementById('decksRecentActivityList');
 export const decksHeroTitle = document.getElementById('decksHeroTitle');
 export const decksHeroSubtitle = document.getElementById('decksHeroSubtitle');
 export const decksHeroSubtitleMobile = document.getElementById('decksHeroSubtitleMobile');
@@ -240,10 +255,6 @@ export const btnDecksOpenAdmin = document.getElementById('btnDecksOpenAdmin');
 export const labelDecksOpenAdmin = document.getElementById('labelDecksOpenAdmin');
 export const btnDecksReturnBattle = document.getElementById('btnDecksReturnBattle');
 export const labelDecksReturnBattle = document.getElementById('labelDecksReturnBattle');
-export const btnDecksViewGrid = document.getElementById('btnDecksViewGrid');
-export const labelDecksViewGrid = document.getElementById('labelDecksViewGrid');
-export const btnDecksViewList = document.getElementById('btnDecksViewList');
-export const labelDecksViewList = document.getElementById('labelDecksViewList');
 export const decksOverviewPane = document.getElementById('decksOverviewPane');
 export const decksContinueSection = document.getElementById('decksContinueSection');
 export const labelDecksContinueHeading = document.getElementById('labelDecksContinueHeading');
@@ -694,22 +705,37 @@ export const dom = {
   decksPageView,
   labelDecksFiltersTitle,
   labelDecksLangHeader,
-  labelDecksSourceHeader,
-  decksSourceFilterGroup,
-  labelDecksSrcAll,
-  labelDecksSrcOfficial,
-  labelDecksSrcUser,
-  labelDecksCategoryHeader,
+  decksCompactLangPills,
   decksCategoryFilterGroup,
   labelDecksLevelHeader,
   decksLevelFilterGroup,
   btnDecksLevelAll,
-  labelDecksSidebarProgTitle,
-  decksSidebarStartedNum,
-  decksSidebarTotalLabel,
-  labelDecksInProgressSub,
-  decksSidebarProgFill,
-  decksSidebarProgPct,
+  decksDesktopTabsBar,
+  btnDesktopTabCourses,
+  labelDesktopTabCourses,
+  btnDesktopTabUser,
+  labelDesktopTabUser,
+  btnDesktopFilterAll,
+  labelDesktopFilterAll,
+  btnDesktopFilterRecent,
+  labelDesktopFilterRecent,
+  btnDesktopFilterFav,
+  labelDesktopFilterFav,
+  decksQuickFiltersList,
+  btnQuickFilterAll,
+  labelQuickFilterAll,
+  countQuickAll,
+  btnQuickFilterCourses,
+  labelQuickFilterCourses,
+  countQuickCourses,
+  btnQuickFilterUser,
+  labelQuickFilterUser,
+  countQuickUser,
+  btnQuickFilterFav,
+  labelQuickFilterFav,
+  countQuickFav,
+  labelDecksRecentTitle,
+  decksRecentActivityList,
   decksHeroTitle,
   decksHeroSubtitle,
   decksHeroSubtitleMobile,
@@ -739,10 +765,6 @@ export const dom = {
   labelDecksOpenAdmin,
   btnDecksReturnBattle,
   labelDecksReturnBattle,
-  btnDecksViewGrid,
-  labelDecksViewGrid,
-  btnDecksViewList,
-  labelDecksViewList,
   decksOverviewPane,
   decksContinueSection,
   labelDecksContinueHeading,

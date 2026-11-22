@@ -370,12 +370,16 @@ function getCourseCardIconSvg(course) {
   }
 }
 
-function getTopicChipIconSvg(cat) {
+export function getTopicChipIconSvg(cat) {
   switch (cat) {
     case 'auto':
       return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 13l2.5-5.5c.7-1.4 2-2.2 3.5-2.2h4c1.5 0 2.8.8 3.5 2.2L20 13c1 .6 1.5 1.5 1.5 2.6V18a1.5 1.5 0 0 1-1.5 1.5h-1.5v-1.5h-13v1.5H4A1.5 1.5 0 0 1 2.5 18v-2.4c0-1.1.5-2 1.5-2.6Z" fill="#38bdf8"/><circle cx="7" cy="14.5" r="1.2" fill="#082f49"/><circle cx="17" cy="14.5" r="1.2" fill="#082f49"/></svg>`;
     case 'business':
       return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7" stroke="#fcd34d" stroke-width="1.8"/><rect x="3.5" y="7" width="17" height="12.5" rx="2.5" fill="#f59e0b"/><path d="M3.5 12h17" stroke="#78350f" stroke-width="1.4"/></svg>`;
+    case 'base':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 20v-8.5" stroke="#4ade80" stroke-width="2.1" stroke-linecap="round"/><path d="M12 13.5c0-5-4-7.5-7.5-6.8.4 4.4 3.4 7.2 7.5 6.8Z" fill="#4ade80"/><path d="M12 11.5c0-5.4 4.4-8 8-7.2-.4 4.8-3.8 7.6-8 7.2Z" fill="#22c55e"/></svg>`;
+    case 'it':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8.5 7.5 3.5 12l5 4.5M15.5 7.5l5 4.5-5 4.5M13.5 6l-3 12" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     case 'travel':
       return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.5 14l16.5-7-5.2 10.5-3.6-1.8-3.2 3.2-.5-4.3L3.5 14Z" fill="#60a5fa" stroke="#bfdbfe" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
     case 'food':
