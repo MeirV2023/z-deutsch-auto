@@ -27,7 +27,6 @@ import {
   arenaWavePill,
   btnAdminLockMode,
   btnArticleMode,
-  btnBackToTitle,
   btnDecksLevelAll,
   btnDecksReturnBattle,
   btnDownloadSampleApkg,
@@ -44,7 +43,6 @@ import {
   btnNavHome,
   btnNavLangToggle,
   btnNavPlay,
-  btnOverlayCatalog,
   btnSaveAnkiToDecks,
   btnSaveCustomWords,
   btnSidebarCatalog,
@@ -141,6 +139,8 @@ import {
   labelModeTranslate,
   labelModeType,
   labelNativeFilter,
+  labelOverlayBackMenu,
+  labelOverlayCatalog,
   labelNavAdmin,
   labelNavDecks,
   labelNavHome,
@@ -523,9 +523,13 @@ export function applyStaticUILocalization() {
   }
   if (labelCatalogHud) labelCatalogHud.textContent = tr.coursesHudBtn;
   if (btnSidebarCatalog) btnSidebarCatalog.textContent = `${tr.seeAllTop} ▾`;
-  if (btnOverlayCatalog) btnOverlayCatalog.textContent = `🗂️ ${tr.allCoursesBtn}`;
-  if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.overlayWeaponTitle;
-  if (btnBackToTitle) btnBackToTitle.textContent = tr.backToMenuBtn;
+  if (labelOverlayCatalog) labelOverlayCatalog.textContent = tr.allCoursesBtn;
+  if (overlayWeaponTitle) {
+    overlayWeaponTitle.textContent = state.overlayMode === 'complete'
+      ? (tr.ovArsenalShortLabel || tr.overlayWeaponTitle)
+      : tr.overlayWeaponTitle;
+  }
+  if (labelOverlayBackMenu) labelOverlayBackMenu.textContent = tr.ovMenuShortLabel || tr.backToMenuBtn;
 
   if (labelSidebarDecksHeader) labelSidebarDecksHeader.textContent = tr.sidebarDecksHeader;
   if (labelLessonsDrawerSummary) labelLessonsDrawerSummary.textContent = tr.lessonsDrawerSummary;
@@ -562,7 +566,7 @@ export function applyStaticUILocalization() {
   if (legendDas) legendDas.textContent = leg[2];
   if (legendVerb) legendVerb.textContent = leg[3];
 
-  if (quizHeaderTitle) quizHeaderTitle.textContent = tr.quizHeader;
+  if (quizHeaderTitle) quizHeaderTitle.textContent = tr.ovQuickBlitzTitle || tr.quizHeader;
   if (dictDialogTitle && course) {
     dictDialogTitle.textContent = tr.dictTitle(getLocalizedField(course, 'titles'), courseWords.length);
   }

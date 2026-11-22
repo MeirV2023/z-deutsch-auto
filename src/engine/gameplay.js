@@ -15,6 +15,7 @@ import {
   isHebrewUI,
   isRtlTranslation,
   isWeaponUnlocked,
+  learnedWordsSet,
   recordWordLearned,
   state,
   t,
@@ -32,6 +33,7 @@ import {
   btnArticleMode,
   btnBackToTitle,
   btnClearFeed,
+  btnCloseOverlay,
   btnDrillPinned,
   btnEmp,
   btnHitKnow,
@@ -47,6 +49,7 @@ import {
   btnPracticePinned,
   btnPromoWeaponCycle,
   btnQuickLevels,
+  btnQuizSpeak,
   btnSpeedMode,
   btnStartLevel,
   btnTitleSpeed,
@@ -61,18 +64,35 @@ import {
   hudProgressBar,
   hudProgressText,
   kbdProgressFill,
+  labelBtnNextLevel,
+  labelBtnStartLevel,
   labelFeatSettings,
+  labelPracticeMistakes,
   leaderboardDialog,
   levelQuizBox,
   mobHudProgressText,
+  ovStatComboLabel,
+  ovStatComboVal,
+  ovStatLearnedLabel,
+  ovStatLearnedVal,
+  ovStatMistakesLabel,
+  ovStatMistakesVal,
+  ovStatQuizLabel,
+  ovStatQuizVal,
   overlayBadge,
+  overlayCard,
   overlayDesc,
+  overlayLessonPill,
+  overlayLessonPillLabel,
+  overlayLessonStepper,
   overlayOriginBadge,
   overlayTitle,
+  overlayWeaponTitle,
   overlayWordsHeader,
   overlayWordsPreview,
   quizHeaderTitle,
   quizOptionsGrid,
+  quizProgressDots,
   quizQuestionWord,
   quizScoreText,
   statsDialog,
@@ -235,10 +255,97 @@ export function selectCourseLesson(courseId, moduleIndex, lessonIndex, showIntro
   }
 }
 
+function renderOverlayLessonStepper(course, mod) {
+  if (!overlayLessonStepper || !course || !mod) return;
+  const lessons = Array.isArray(mod.lessons) ? mod.lessons : [];
+  const tr = t();
+  overlayLessonStepper.innerHTML = '';
+  if (lessons.length === 0) return;
+
+  const maxStart = Math.max(0, lessons.length - 3);
+  const winStart = Math.max(0, Math.min(state.activeLessonIndex, maxStart));
+  const visible = lessons.slice(winStart, winStart + 3);
+  const shortPrefix = state.nativeLang === 'ru' ? 'Ур.' : (state.nativeLang === 'he' ? 'שלב ' : 'L');
+
+  visible.forEach((ls, offset) => {
+    const lIdx = winStart + offset;
+    const isCompleted = state.completedLessonIds.has(ls.id);
+    const isCurrent = lIdx === state.activeLessonIndex;
+    const tagText = ls.isBoss ? (tr.ovStepBossTag || 'Boss') : `${shortPrefix}${lIdx + 1}`;
+    const titleText = getLocalizedField(ls, 'titles');
+
+    const nodeBtn = document.createElement('button');
+    nodeBtn.type = 'button';
+    nodeBtn.className = 'ov-step-node' +
+      (isCompleted ? ' is-done' : '') +
+      (isCurrent ? ' is-current' : '');
+    nodeBtn.innerHTML = `
+      <span class="ov-step-circle" aria-hidden="true">${isCompleted ? '✓' : ''}</span>
+      <span class="ov-step-tag">${escapeHtml(tagText)}</span>
+      <span class="ov-step-name" title="${escapeHtml(titleText)}">${escapeHtml(titleText)}</span>
+    `;
+    nodeBtn.addEventListener('click', () => {
+      selectCourseLesson(course.id, state.activeModuleIndex, lIdx, false);
+    });
+    overlayLessonStepper.appendChild(nodeBtn);
+
+    if (offset < visible.length - 1) {
+      const conn = document.createElement('span');
+      conn.className = 'ov-step-connector' + (isCompleted ? ' is-done' : '');
+      conn.setAttribute('aria-hidden', 'true');
+      overlayLessonStepper.appendChild(conn);
+    }
+  });
+}
+
+function syncQuizProgressUI() {
+  const quiz = state.activeQuiz;
+  if (quizProgressDots) {
+    quizProgressDots.innerHTML = '';
+    if (quiz && Array.isArray(quiz.questions)) {
+      const total = quiz.questions.length;
+      for (let i = 0; i < total; i++) {
+        const res = quiz.results && quiz.results[i];
+        const dot = document.createElement('span');
+        dot.className = 'quiz-dot' +
+          (res === 'ok' ? ' is-ok' : '') +
+          (res === 'wrong' ? ' is-wrong' : '') +
+          (!res && i === quiz.qIndex ? ' is-current' : '');
+        quizProgressDots.appendChild(dot);
+        if (i < total - 1) {
+          const line = document.createElement('span');
+          line.className = 'quiz-dot-line' + (res ? ' is-done' : '');
+          quizProgressDots.appendChild(line);
+        }
+      }
+    }
+  }
+  if (ovStatQuizVal) {
+    if (!quiz || !Array.isArray(quiz.questions) || quiz.questions.length === 0) {
+      ovStatQuizVal.textContent = '—';
+    } else if (quiz.qIndex >= quiz.questions.length) {
+      ovStatQuizVal.textContent = `${quiz.correctCount}/${quiz.questions.length}`;
+    } else {
+      ovStatQuizVal.textContent = `${quiz.qIndex + 1}/${quiz.questions.length}`;
+    }
+  }
+}
+
 export function refreshOverlayContent() {
   const { course, mod, lesson } = getActiveSelection();
   if (!course || !mod || !lesson) return;
   const tr = t();
+
+  if (overlayCard) {
+    overlayCard.classList.remove('mode-intro', 'mode-complete', 'mode-gameover', 'mode-pause');
+    overlayCard.classList.add(`mode-${state.overlayMode}`);
+    if (state.overlayMode !== 'complete') {
+      overlayCard.classList.remove('has-next-lesson', 'no-quiz');
+    }
+  }
+  if (overlayLessonPill) {
+    overlayLessonPill.classList.toggle('hidden', state.overlayMode !== 'complete');
+  }
 
   updateOriginBadgeElement(overlayOriginBadge, course);
   const lTitle = state.activeCustomRoundTitle || getLocalizedField(lesson, 'titles');
@@ -247,11 +354,32 @@ export function refreshOverlayContent() {
     ? state.currentRoundPool
     : resolveLessonBaseWords(course, mod, lesson, state.activeLessonIndex);
 
-  btnPracticeMistakes.textContent = tr.mistakesBtn(state.mistakeWordsMap.size);
-  btnPracticeMistakes.style.display = state.mistakeWordsMap.size > 0 ? 'inline-flex' : 'none';
+  const mistakesCount = state.mistakeWordsMap.size;
+  if (labelPracticeMistakes) {
+    labelPracticeMistakes.textContent = state.overlayMode === 'complete' && tr.ovRepeatMistakesBtn
+      ? tr.ovRepeatMistakesBtn(mistakesCount)
+      : tr.mistakesBtn(mistakesCount);
+  }
+  if (btnPracticeMistakes) {
+    if (state.overlayMode === 'complete') {
+      btnPracticeMistakes.style.display = 'inline-flex';
+      btnPracticeMistakes.disabled = mistakesCount === 0;
+      btnPracticeMistakes.classList.toggle('is-empty', mistakesCount === 0);
+    } else {
+      btnPracticeMistakes.style.display = mistakesCount > 0 ? 'inline-flex' : 'none';
+      btnPracticeMistakes.disabled = false;
+      btnPracticeMistakes.classList.remove('is-empty');
+    }
+  }
   updatePinnedCountUI();
 
+  const setStartLabel = (txt) => {
+    if (labelBtnStartLevel) labelBtnStartLevel.textContent = txt;
+    else if (btnStartLevel) btnStartLevel.textContent = txt;
+  };
+
   if (state.overlayMode === 'intro') {
+    if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.overlayWeaponTitle;
     overlayBadge.textContent = tr.introBadge(
       getLocalizedField(mod, 'titles'),
       state.activeLessonIndex + 1,
@@ -260,38 +388,67 @@ export function refreshOverlayContent() {
     overlayTitle.textContent = lTitle;
     overlayDesc.innerHTML = escapeHtml(lDesc);
     overlayWordsHeader.textContent = tr.wordsInLevelHeader(previewWords.length);
-    btnStartLevel.textContent = tr.startLevelBtn;
+    setStartLabel(tr.startLevelBtn);
     btnStartLevel.style.display = 'inline-flex';
     btnNextLevel.style.display = 'none';
   } else if (state.overlayMode === 'complete') {
+    if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.ovArsenalShortLabel || tr.overlayWeaponTitle;
     overlayBadge.textContent = tr.completeBadge(state.maxCombo);
-    overlayTitle.textContent = tr.completeTitle(lTitle);
+    overlayTitle.textContent = tr.missionCompleteTitle || tr.completeTitle(lTitle);
     overlayDesc.innerHTML = tr.completeDesc;
     overlayWordsHeader.textContent = tr.learnedWordsHeader(previewWords.length);
-    btnStartLevel.textContent = tr.retryBtn;
-    btnStartLevel.style.display = 'inline-flex';
+
+    if (overlayLessonPillLabel) {
+      const hasNumPrefix = /^(урок|lesson|שלב)\s*\d+/i.test(lTitle);
+      overlayLessonPillLabel.textContent = state.activeCustomRoundTitle
+        ? state.activeCustomRoundTitle
+        : ((lesson.isBoss || hasNumPrefix)
+            ? lTitle
+            : (tr.overlayLessonPillText ? tr.overlayLessonPillText(state.activeLessonIndex + 1, lTitle) : lTitle));
+    }
+
+    if (ovStatLearnedVal) ovStatLearnedVal.textContent = learnedWordsSet.size.toLocaleString();
+    if (ovStatLearnedLabel) ovStatLearnedLabel.textContent = tr.ovStatWordsLearned || '';
+    if (ovStatMistakesVal) ovStatMistakesVal.textContent = String(mistakesCount);
+    if (ovStatMistakesLabel) ovStatMistakesLabel.textContent = tr.ovStatMistakesLabel ? tr.ovStatMistakesLabel(mistakesCount) : '';
+    if (ovStatQuizLabel) ovStatQuizLabel.textContent = tr.ovStatBlitzLabel || '';
+    if (ovStatComboLabel) ovStatComboLabel.textContent = tr.ovStatComboLabel || '';
+    if (ovStatComboVal) ovStatComboVal.textContent = `×${Math.max(1, state.maxCombo || 1)}`;
+
+    renderOverlayLessonStepper(course, mod);
+    syncQuizProgressUI();
 
     const nextPtr = getNextLessonPointer();
+    if (overlayCard) {
+      overlayCard.classList.toggle('has-next-lesson', Boolean(nextPtr));
+    }
+
+    setStartLabel(tr.ovReplayCta || tr.retryBtn);
+    btnStartLevel.style.display = 'inline-flex';
+
     if (nextPtr) {
       btnNextLevel.style.display = 'inline-flex';
-      btnNextLevel.textContent = tr.nextLevelBtn(getLocalizedField(nextPtr.lesson, 'titles'));
+      if (labelBtnNextLevel) labelBtnNextLevel.textContent = tr.ovContinueCta || tr.nextLevelBtn(getLocalizedField(nextPtr.lesson, 'titles'));
+      btnNextLevel.title = tr.nextLevelBtn(getLocalizedField(nextPtr.lesson, 'titles'));
     } else {
       btnNextLevel.style.display = 'none';
     }
   } else if (state.overlayMode === 'gameover') {
+    if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.overlayWeaponTitle;
     overlayBadge.textContent = tr.gameOverBadge;
     overlayTitle.textContent = tr.gameOverTitle(lTitle);
     overlayDesc.innerHTML = tr.gameOverDesc(state.wordsDestroyedInLevel, state.totalWordsInLevel);
     overlayWordsHeader.textContent = tr.wordsInLevelHeader(previewWords.length);
-    btnStartLevel.textContent = tr.tryAgainBtn;
+    setStartLabel(tr.tryAgainBtn);
     btnStartLevel.style.display = 'inline-flex';
     btnNextLevel.style.display = 'none';
   } else if (state.overlayMode === 'pause') {
+    if (overlayWeaponTitle) overlayWeaponTitle.textContent = tr.overlayWeaponTitle;
     overlayBadge.textContent = tr.pauseBadge;
     overlayTitle.textContent = lTitle;
     overlayDesc.innerHTML = tr.pauseDesc(state.wordsDestroyedInLevel, state.totalWordsInLevel);
     overlayWordsHeader.textContent = tr.wordsInLevelHeader(previewWords.length);
-    btnStartLevel.textContent = tr.resumeBtn;
+    setStartLabel(tr.resumeBtn);
     btnStartLevel.style.display = 'inline-flex';
     btnNextLevel.style.display = 'none';
   }
@@ -829,9 +986,12 @@ export function startPostLevelQuiz(levelWords) {
   if (!levelWords || levelWords.length < 3 || langWords.length < 4) {
     state.activeQuiz = null;
     levelQuizBox.style.display = 'none';
+    if (overlayCard) overlayCard.classList.add('no-quiz');
+    syncQuizProgressUI();
     return;
   }
 
+  if (overlayCard) overlayCard.classList.remove('no-quiz');
   levelQuizBox.style.display = 'flex';
   const questions = shuffleArray(levelWords).slice(0, 3).map(currentQ => {
     const wrongPool = langWords.filter(w => w.raw !== currentQ.raw && getWordTranslation(w) !== getWordTranslation(currentQ));
@@ -845,7 +1005,8 @@ export function startPostLevelQuiz(levelWords) {
     qIndex: 0,
     correctCount: 0,
     answered: false,
-    selectedOptRaw: null
+    selectedOptRaw: null,
+    results: []
   };
 
   renderCurrentQuizQuestion(true);
@@ -856,10 +1017,12 @@ export function renderCurrentQuizQuestion(speakNow = false) {
   if (!quiz) return;
   const tr = t();
 
-  if (quizHeaderTitle) quizHeaderTitle.textContent = tr.quizHeader;
+  if (quizHeaderTitle) quizHeaderTitle.textContent = tr.ovQuickBlitzTitle || tr.quizHeader;
+  syncQuizProgressUI();
 
   if (quiz.qIndex >= quiz.questions.length) {
     quizScoreText.textContent = tr.quizDoneScore(quiz.correctCount, quiz.questions.length);
+    if (btnQuizSpeak) btnQuizSpeak.style.display = 'none';
     quizQuestionWord.dir = isHebrewUI() ? 'rtl' : 'ltr';
     quizQuestionWord.textContent = tr.quizDoneTitle(quiz.correctCount, quiz.questions.length);
     quizOptionsGrid.innerHTML = '';
@@ -867,7 +1030,8 @@ export function renderCurrentQuizQuestion(speakNow = false) {
   }
 
   const { currentQ, options } = quiz.questions[quiz.qIndex];
-  quizScoreText.textContent = `${quiz.qIndex + 1} / ${quiz.questions.length}`;
+  if (btnQuizSpeak) btnQuizSpeak.style.display = 'inline-flex';
+  quizScoreText.textContent = `${quiz.qIndex + 1}/${quiz.questions.length}`;
   quizQuestionWord.dir = 'ltr';
   quizQuestionWord.textContent = currentQ.raw;
 
@@ -902,8 +1066,11 @@ export function renderCurrentQuizQuestion(speakNow = false) {
       if (quiz.answered) return;
       quiz.answered = true;
       quiz.selectedOptRaw = opt.raw;
+      const isRight = opt.raw === currentQ.raw;
+      if (!Array.isArray(quiz.results)) quiz.results = [];
+      quiz.results[quiz.qIndex] = isRight ? 'ok' : 'wrong';
 
-      if (opt.raw === currentQ.raw) {
+      if (isRight) {
         quiz.correctCount++;
         state.score += 150;
         if (state.score > state.highScore) {
@@ -1352,7 +1519,11 @@ export function bindGameplayEvents() {
     if (!centerOverlay.classList.contains('hidden')) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        btnStartLevel.click();
+        if (state.overlayMode === 'complete' && btnNextLevel && btnNextLevel.style.display !== 'none') {
+          btnNextLevel.click();
+        } else {
+          btnStartLevel.click();
+        }
       }
       return;
     }
@@ -1399,6 +1570,25 @@ export function bindGameplayEvents() {
   }
   if (btnBackToTitle) {
     btnBackToTitle.addEventListener('click', returnToTitleScreen);
+  }
+  if (btnCloseOverlay) {
+    btnCloseOverlay.addEventListener('click', () => {
+      if (state.overlayMode === 'pause' && state.paused) {
+        togglePause();
+      } else {
+        returnToTitleScreen();
+      }
+    });
+  }
+  if (btnQuizSpeak) {
+    btnQuizSpeak.addEventListener('click', () => {
+      const quiz = state.activeQuiz;
+      const q = quiz && quiz.questions && quiz.questions[quiz.qIndex];
+      if (!q || !q.currentQ) return;
+      sound.init();
+      ttsManager.speak(q.currentQ.withArticle || q.currentQ.word, state.targetLang, true);
+      btnQuizSpeak.blur();
+    });
   }
   if (btnHudHome) {
     btnHudHome.addEventListener('click', returnToTitleScreen);

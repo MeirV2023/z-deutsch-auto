@@ -1940,6 +1940,41 @@
     box-shadow: 0 0 12px rgba(250, 204, 21, 0.22);
     color: #facc15;
   }
+
+  .overlay-card.mode-complete {
+    padding: 14px 12px;
+    border-radius: 18px;
+    gap: 11px;
+  }
+
+  .overlay-card.mode-complete .overlay-kpi-grid {
+    gap: 6px;
+  }
+
+  .overlay-card.mode-complete .ov-kpi-val {
+    font-size: 1.24rem;
+  }
+
+  .overlay-card.mode-complete .ov-kpi-lbl {
+    font-size: 0.66rem;
+  }
+
+  .overlay-card.mode-complete .quiz-header {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .overlay-card.mode-complete .quiz-score-pill {
+    white-space: nowrap;
+  }
+
+  .overlay-card.mode-complete .quiz-options {
+    grid-template-columns: 1fr;
+  }
+
+  .overlay-card.mode-complete .ov-review-actions {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Защита для сверхузких телефонов (320px–370px): ни один элемент шапки не вылезает */

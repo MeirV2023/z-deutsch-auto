@@ -90,25 +90,45 @@ export const bottomTargetPreview = document.getElementById('bottomTargetPreview'
 // Центральный оверлей
 export const centerOverlay = document.getElementById('centerOverlay');
 export const overlayCard = document.getElementById('overlayCard');
+export const btnCloseOverlay = document.getElementById('btnCloseOverlay');
 export const overlayOriginBadge = document.getElementById('overlayOriginBadge');
 export const overlayBadge = document.getElementById('overlayBadge');
 export const overlayTitle = document.getElementById('overlayTitle');
+export const overlayLessonPill = document.getElementById('overlayLessonPill');
+export const overlayLessonPillLabel = document.getElementById('overlayLessonPillLabel');
 export const overlayDesc = document.getElementById('overlayDesc');
+export const ovStatLearnedVal = document.getElementById('ovStatLearnedVal');
+export const ovStatLearnedLabel = document.getElementById('ovStatLearnedLabel');
+export const ovStatMistakesVal = document.getElementById('ovStatMistakesVal');
+export const ovStatMistakesLabel = document.getElementById('ovStatMistakesLabel');
+export const ovStatQuizVal = document.getElementById('ovStatQuizVal');
+export const ovStatQuizLabel = document.getElementById('ovStatQuizLabel');
+export const ovStatComboLabel = document.getElementById('ovStatComboLabel');
+export const ovStatComboVal = document.getElementById('ovStatComboVal');
+export const overlayLessonStepper = document.getElementById('overlayLessonStepper');
 export const overlayWeaponTitle = document.getElementById('overlayWeaponTitle');
 export const overlayLearnedPill = document.getElementById('overlayLearnedPill');
 export const overlayWeaponRow = document.getElementById('overlayWeaponRow');
 export const overlayWordsHeader = document.getElementById('overlayWordsHeader');
 export const overlayWordsPreview = document.getElementById('overlayWordsPreview');
 export const btnStartLevel = document.getElementById('btnStartLevel');
+export const labelBtnStartLevel = document.getElementById('labelBtnStartLevel');
 export const btnNextLevel = document.getElementById('btnNextLevel');
+export const labelBtnNextLevel = document.getElementById('labelBtnNextLevel');
 export const btnPracticePinned = document.getElementById('btnPracticePinned');
+export const labelPracticePinned = document.getElementById('labelPracticePinned');
 export const btnPracticeMistakes = document.getElementById('btnPracticeMistakes');
+export const labelPracticeMistakes = document.getElementById('labelPracticeMistakes');
 export const btnOverlayCatalog = document.getElementById('btnOverlayCatalog');
+export const labelOverlayCatalog = document.getElementById('labelOverlayCatalog');
 export const btnBackToTitle = document.getElementById('btnBackToTitle');
+export const labelOverlayBackMenu = document.getElementById('labelOverlayBackMenu');
 
 export const levelQuizBox = document.getElementById('levelQuizBox');
 export const quizHeaderTitle = document.getElementById('quizHeaderTitle');
 export const quizScoreText = document.getElementById('quizScoreText');
+export const quizProgressDots = document.getElementById('quizProgressDots');
+export const btnQuizSpeak = document.getElementById('btnQuizSpeak');
 export const quizQuestionWord = document.getElementById('quizQuestionWord');
 export const quizOptionsGrid = document.getElementById('quizOptionsGrid');
 
@@ -611,24 +631,44 @@ export const dom = {
   bottomTargetPreview,
   centerOverlay,
   overlayCard,
+  btnCloseOverlay,
   overlayOriginBadge,
   overlayBadge,
   overlayTitle,
+  overlayLessonPill,
+  overlayLessonPillLabel,
   overlayDesc,
+  ovStatLearnedVal,
+  ovStatLearnedLabel,
+  ovStatMistakesVal,
+  ovStatMistakesLabel,
+  ovStatQuizVal,
+  ovStatQuizLabel,
+  ovStatComboLabel,
+  ovStatComboVal,
+  overlayLessonStepper,
   overlayWeaponTitle,
   overlayLearnedPill,
   overlayWeaponRow,
   overlayWordsHeader,
   overlayWordsPreview,
   btnStartLevel,
+  labelBtnStartLevel,
   btnNextLevel,
+  labelBtnNextLevel,
   btnPracticePinned,
+  labelPracticePinned,
   btnPracticeMistakes,
+  labelPracticeMistakes,
   btnOverlayCatalog,
+  labelOverlayCatalog,
   btnBackToTitle,
+  labelOverlayBackMenu,
   levelQuizBox,
   quizHeaderTitle,
   quizScoreText,
+  quizProgressDots,
+  btnQuizSpeak,
   quizQuestionWord,
   quizOptionsGrid,
   courseBrowserDialog,

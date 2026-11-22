@@ -91,6 +91,7 @@ import {
   killFeedContainer,
   labelHitBanner,
   labelHitRepeat,
+  labelPracticePinned,
   learnedProgressPill,
   levelListContainer,
   overlayLearnedPill,
@@ -899,15 +900,26 @@ export function updateLearnedProgressUI() {
 export function updatePinnedCountUI() {
   const pinnedForLang = getPinnedEntriesForTargetLang(state.targetLang);
   const count = pinnedForLang.length;
+  const tr = t();
   if (pinnedCountBadge) pinnedCountBadge.textContent = String(count);
   if (btnDrillPinned) {
     btnDrillPinned.disabled = count === 0;
     btnDrillPinned.style.opacity = count === 0 ? '0.5' : '1';
-    btnDrillPinned.title = t().drillPinnedBtn(count);
+    btnDrillPinned.title = tr.drillPinnedBtn(count);
+  }
+  if (labelPracticePinned) {
+    labelPracticePinned.textContent = tr.ovRepeatPinnedBtn ? tr.ovRepeatPinnedBtn(count) : tr.drillPinnedBtn(count);
   }
   if (btnPracticePinned) {
-    btnPracticePinned.textContent = t().drillPinnedBtn(count);
-    btnPracticePinned.style.display = count > 0 ? 'inline-flex' : 'none';
+    if (state.overlayMode === 'complete') {
+      btnPracticePinned.style.display = 'inline-flex';
+      btnPracticePinned.disabled = count === 0;
+      btnPracticePinned.classList.toggle('is-empty', count === 0);
+    } else {
+      btnPracticePinned.style.display = count > 0 ? 'inline-flex' : 'none';
+      btnPracticePinned.disabled = false;
+      btnPracticePinned.classList.remove('is-empty');
+    }
   }
 }
 

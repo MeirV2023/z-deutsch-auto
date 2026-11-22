@@ -240,6 +240,27 @@ export const RU_TEXT = {
   completeBadge: (maxCombo) => `🎉 УРОК ПРОЙДЕН! МАКС. КОМБО: x${maxCombo}`,
   completeTitle: (name) => `Отличная стрельба! «${name}» зачищен`,
   completeDesc: 'Все слова сбиты! Пройдите быстрый <strong>блиц из 3 вопросов</strong> или переходите к следующему короткому уроку!',
+  missionCompleteTitle: 'Миссия выполнена!',
+  overlayLessonPillText: (num, title) => `Урок ${num}: ${title}`,
+  ovStatWordsLearned: 'слов выучено',
+  ovStatMistakesLabel: (n) => {
+    const m100 = n % 100;
+    const m10 = n % 10;
+    if (m100 >= 11 && m100 <= 14) return 'ошибок';
+    if (m10 === 1) return 'ошибка';
+    if (m10 >= 2 && m10 <= 4) return 'ошибки';
+    return 'ошибок';
+  },
+  ovStatBlitzLabel: 'блиц',
+  ovStatComboLabel: 'Комбо',
+  ovContinueCta: 'Продолжить',
+  ovReplayCta: 'Пройти ещё раз',
+  ovQuickBlitzTitle: 'Быстрый блиц',
+  ovRepeatMistakesBtn: (n) => `Повторить ошибки (${n})`,
+  ovRepeatPinnedBtn: (n) => `Повторить отмеченные (${n})`,
+  ovArsenalShortLabel: 'Арсенал:',
+  ovMenuShortLabel: 'В меню',
+  ovStepBossTag: 'Босс',
   quizHeader: '🧠 БЛИЦ: Выберите верный перевод!',
   quizDoneScore: (c, t) => `${c} / ${t} верно!`,
   quizDoneTitle: (c, t) => `✨ Блиц завершён! Результат: ${c} из ${t}`,
