@@ -177,9 +177,14 @@ function parseSingleAdminVocabLine(frontInput, backInput, targetLang = 'de', inp
   const backCols = rawBack.split(/\s*\|\s*/).map(s => s.trim()).filter(Boolean);
   const primaryTrans = backCols[0] || rawBack;
   const translations = {
-    ru: inputTransLang === 'ru' ? primaryTrans : (backCols[1] && /[а-яёА-ЯЁ]/.test(backCols[1]) ? backCols[1] : primaryTrans),
-    en: inputTransLang === 'en' ? primaryTrans : (backCols.find(c => !/[а-яёА-ЯЁ\u0590-\u05FF]/.test(c)) || primaryTrans),
-    he: inputTransLang === 'he' ? primaryTrans : (backCols.find(c => /[\u0590-\u05FF]/.test(c)) || primaryTrans)
+    ru: inputTransLang === 'ru' ? primaryTrans : (backCols.find(c => /[а-яёА-ЯЁ]/.test(c) && !/[іїєґІЇЄҐ]/.test(c)) || primaryTrans),
+    uk: inputTransLang === 'uk' ? primaryTrans : (backCols.find(c => /[іїєґІЇЄҐ]/.test(c)) || primaryTrans),
+    en: inputTransLang === 'en' ? primaryTrans : (backCols.find(c => !/[а-яёА-ЯЁіїєґІЇЄҐ\u0590-\u05FF\u0600-\u06FF]/.test(c)) || primaryTrans),
+    de: inputTransLang === 'de' ? primaryTrans : primaryTrans,
+    es: inputTransLang === 'es' ? primaryTrans : primaryTrans,
+    tr: inputTransLang === 'tr' ? primaryTrans : (backCols.find(c => /[çğıİöşüÇĞÖŞÜ]/.test(c)) || primaryTrans),
+    he: inputTransLang === 'he' ? primaryTrans : (backCols.find(c => /[\u0590-\u05FF]/.test(c)) || primaryTrans),
+    ar: inputTransLang === 'ar' ? primaryTrans : (backCols.find(c => /[\u0600-\u06FF]/.test(c)) || primaryTrans)
   };
 
   // 1. Постфиксный книжный формат существительных:
@@ -415,13 +420,23 @@ export function buildOfficialAdminCourse({
   const resolvedTitles = {
     ru: (titles && titles.ru) || fallbackTitle,
     en: (titles && titles.en) || fallbackTitle,
-    he: (titles && titles.he) || fallbackTitle
+    de: (titles && titles.de) || fallbackTitle,
+    es: (titles && titles.es) || fallbackTitle,
+    uk: (titles && titles.uk) || fallbackTitle,
+    tr: (titles && titles.tr) || fallbackTitle,
+    he: (titles && titles.he) || fallbackTitle,
+    ar: (titles && titles.ar) || fallbackTitle
   };
 
   const resolvedDescs = {
     ru: (descriptions && descriptions.ru) || `Официальный курс (${cleanWords.length} сл. · уровень ${levelTag}).`,
     en: (descriptions && descriptions.en) || `Official course (${cleanWords.length} words · level ${levelTag}).`,
-    he: (descriptions && descriptions.he) || `קורס רשמי (${cleanWords.length} מילים · רמה ${levelTag}).`
+    de: (descriptions && descriptions.de) || `Offizieller Kurs (${cleanWords.length} Wörter · Niveau ${levelTag}).`,
+    es: (descriptions && descriptions.es) || `Curso oficial (${cleanWords.length} palabras · nivel ${levelTag}).`,
+    uk: (descriptions && descriptions.uk) || `Офіційний курс (${cleanWords.length} сл. · рівень ${levelTag}).`,
+    tr: (descriptions && descriptions.tr) || `Resmî kurs (${cleanWords.length} kelime · seviye ${levelTag}).`,
+    he: (descriptions && descriptions.he) || `קורס רשמי (${cleanWords.length} מילים · רמה ${levelTag}).`,
+    ar: (descriptions && descriptions.ar) || `دورة رسمية (${cleanWords.length} كلمة · مستوى ${levelTag}).`
   };
 
   // Обновляем описания уроков со «Личный набор» на «Официальный урок»
@@ -432,22 +447,38 @@ export function buildOfficialAdminCourse({
       titles: m.subdeckTag ? m.titles : {
         ru: `Модуль ${mIdx + 1}: ${resolvedTitles.ru}`,
         en: `Module ${mIdx + 1}: ${resolvedTitles.en}`,
-        he: `מודול ${mIdx + 1}: ${resolvedTitles.he}`
+        de: `Modul ${mIdx + 1}: ${resolvedTitles.de}`,
+        es: `Módulo ${mIdx + 1}: ${resolvedTitles.es}`,
+        uk: `Модуль ${mIdx + 1}: ${resolvedTitles.uk}`,
+        tr: `Modül ${mIdx + 1}: ${resolvedTitles.tr}`,
+        he: `מודול ${mIdx + 1}: ${resolvedTitles.he}`,
+        ar: `الوحدة ${mIdx + 1}: ${resolvedTitles.ar}`
       },
       lessons: (m.lessons || []).map((ls, lIdx) => {
         if (ls.isBoss) return ls;
         const cnt = (ls.words || []).length;
+        const partN = mIdx * 3 + lIdx + 1;
         return {
           ...ls,
           titles: m.subdeckTag ? ls.titles : {
-            ru: `${resolvedTitles.ru} · Часть ${mIdx * 3 + lIdx + 1}`,
-            en: `${resolvedTitles.en} · Part ${mIdx * 3 + lIdx + 1}`,
-            he: `${resolvedTitles.he} · חלק ${mIdx * 3 + lIdx + 1}`
+            ru: `${resolvedTitles.ru} · Часть ${partN}`,
+            en: `${resolvedTitles.en} · Part ${partN}`,
+            de: `${resolvedTitles.de} · Teil ${partN}`,
+            es: `${resolvedTitles.es} · Parte ${partN}`,
+            uk: `${resolvedTitles.uk} · Частина ${partN}`,
+            tr: `${resolvedTitles.tr} · Bölüm ${partN}`,
+            he: `${resolvedTitles.he} · חלק ${partN}`,
+            ar: `${resolvedTitles.ar} · الجزء ${partN}`
           },
           descriptions: {
             ru: `Тема «${modTitleBase}» (${cnt} сл. · уровень ${levelTag}).`,
             en: `Topic "${resolvedTitles.en}" (${cnt} words · level ${levelTag}).`,
-            he: `נושא «${resolvedTitles.he}» (${cnt} מילים · רמה ${levelTag}).`
+            de: `Thema „${resolvedTitles.de}“ (${cnt} Wörter · Niveau ${levelTag}).`,
+            es: `Tema "${resolvedTitles.es}" (${cnt} palabras · nivel ${levelTag}).`,
+            uk: `Тема «${resolvedTitles.uk}» (${cnt} сл. · рівень ${levelTag}).`,
+            tr: `Konu "${resolvedTitles.tr}" (${cnt} kelime · seviye ${levelTag}).`,
+            he: `נושא «${resolvedTitles.he}» (${cnt} מילים · רמה ${levelTag}).`,
+            ar: `الموضوع «${resolvedTitles.ar}» (${cnt} كلمة · مستوى ${levelTag}).`
           }
         };
       })

@@ -1,12 +1,12 @@
 // Навигация экранов, мобильный нижний док и реактивная локализация RU / EN / HE (SRP)
 import { saveSettingsPatch } from '../core/storage.js';
 import { escapeHtml } from '../core/utils.js';
-import { TARGET_LANG_META } from '../config/constants.js';
+import { ALL_LANG_CODES, TARGET_LANG_META } from '../config/constants.js';
 import { UI_TEXT } from '../i18n/index.js';
 import { sound } from '../services/sound-engine.js';
 import {
   getLocalizedField,
-  isHebrewUI,
+  isRtlUI,
   state,
   t
 } from '../state/store.js';
@@ -274,7 +274,16 @@ function syncDropdownTriggerLabels() {
   if (navLangDropdownMenu) {
     navLangDropdownMenu.querySelectorAll('.native-lang-btn').forEach(btn => {
       const code = btn.dataset.nativeLang;
-      const labels = { ru: 'RU · Русский', en: 'EN · English', he: 'HE · עברית' };
+      const labels = {
+        ru: 'RU · Русский',
+        en: 'EN · English',
+        de: 'DE · Deutsch',
+        es: 'ES · Español',
+        uk: 'UK · Українська',
+        tr: 'TR · Türkçe',
+        he: 'HE · עברית',
+        ar: 'AR · العربية'
+      };
       btn.innerHTML = `${getLangFlagSvg(code)}<span>${escapeHtml(labels[code] || code.toUpperCase())}</span>`;
     });
   }
@@ -308,8 +317,33 @@ function syncDropdownTriggerLabels() {
 
 export function setNativeLanguage(langId) {
   if (!UI_TEXT[langId]) return;
+  const prevNative = state.nativeLang;
   state.nativeLang = langId;
-  saveSettingsPatch({ nativeLang: langId });
+  let swappedTarget = false;
+
+  if (state.targetLang === langId) {
+    const fallbackTarget = (prevNative && prevNative !== langId && TARGET_LANG_META[prevNative])
+      ? prevNative
+      : (langId === 'de' ? 'en' : 'de');
+    state.targetLang = fallbackTarget;
+    swappedTarget = true;
+    saveSettingsPatch({ nativeLang: langId, targetLang: fallbackTarget });
+    document.querySelectorAll('.target-lang-pill').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.targetLang === fallbackTarget);
+    });
+    const tMeta = TARGET_LANG_META[fallbackTarget];
+    if (btnTargetLangHud && tMeta) {
+      btnTargetLangHud.textContent = `${tMeta.flag} ${tMeta.code}`;
+    }
+    ensureValidCourseSelection();
+    renderZtypeKeyboard();
+    state.homeLevelFilter = 'all';
+    state.demoWords = [];
+    state.demoTargetId = null;
+    state.killHistory = [];
+  } else {
+    saveSettingsPatch({ nativeLang: langId });
+  }
   document.documentElement.lang = langId;
 
   const modeObj = state.nativeLangModes.find(m => m.id === langId) || state.nativeLangModes[0];
@@ -330,7 +364,16 @@ export function setNativeLanguage(langId) {
   updateLearnedProgressUI();
   updatePinnedCountUI();
 
-  if (state.lastSpotlightEntry) {
+  if (swappedTarget) {
+    const sel = getActiveSelection();
+    if (sel.course && sel.mod && sel.lesson) {
+      const lWords = resolveLessonBaseWords(sel.course, sel.mod, sel.lesson, state.activeLessonIndex);
+      if (lWords.length > 0) updateHitSpotlightCard(lWords[0], false);
+    }
+    if (state.screenMode === 'title') {
+      requestAnimationFrame(() => seedTitleDemoWords());
+    }
+  } else if (state.lastSpotlightEntry) {
     updateHitSpotlightCard(state.lastSpotlightEntry, false);
   }
   if (courseBrowserDialog && courseBrowserDialog.open) {
@@ -357,9 +400,25 @@ export function setNativeLanguage(langId) {
 
 export function setTargetLanguage(targetLangId) {
   if (!TARGET_LANG_META[targetLangId]) return;
-  const changed = state.targetLang !== targetLangId;
+  const prevTarget = state.targetLang;
+  const changed = prevTarget !== targetLangId;
   state.targetLang = targetLangId;
-  saveSettingsPatch({ targetLang: targetLangId });
+
+  if (state.nativeLang === targetLangId) {
+    const fallbackNative = (prevTarget && prevTarget !== targetLangId && UI_TEXT[prevTarget])
+      ? prevTarget
+      : (targetLangId === 'ru' ? 'en' : 'ru');
+    state.nativeLang = fallbackNative;
+    saveSettingsPatch({ targetLang: targetLangId, nativeLang: fallbackNative });
+    document.documentElement.lang = fallbackNative;
+    const modeObj = state.nativeLangModes.find(m => m.id === fallbackNative) || state.nativeLangModes[0];
+    if (btnLangMode && modeObj) btnLangMode.textContent = modeObj.short;
+    document.querySelectorAll('.native-lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.nativeLang === fallbackNative);
+    });
+  } else {
+    saveSettingsPatch({ targetLang: targetLangId });
+  }
 
   document.querySelectorAll('.target-lang-pill').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.targetLang === targetLangId);
@@ -389,9 +448,13 @@ export function setTargetLanguage(targetLangId) {
 
   closeAllHomeDropdowns();
   applyStaticUILocalization();
+  renderWeaponSelectors();
+  updateHudWeaponBtn();
   renderLevelSidebar();
   refreshOverlayContent();
   renderTtsSettingsUI();
+  updatePilotRankUI();
+  updateLearnedProgressUI();
   updatePinnedCountUI();
   rerenderKillFeed();
   updateBottomTargetUI();
@@ -407,20 +470,22 @@ export function setTargetLanguage(targetLangId) {
 
 export function applyStaticUILocalization() {
   const tr = t();
-  const isHe = isHebrewUI();
+  const isRtl = isRtlUI();
   const targetMeta = TARGET_LANG_META[state.targetLang] || TARGET_LANG_META.de;
   const targetLangLocalName = targetMeta.names[state.nativeLang] || targetMeta.names.en;
   const nativeLangLocalName = (tr.nativeLangNames && tr.nativeLangNames[state.nativeLang]) || state.nativeLang.toUpperCase();
 
-  if (arcadeTitleScreen) arcadeTitleScreen.dir = isHe ? 'rtl' : 'ltr';
-  if (overlayCard) overlayCard.dir = isHe ? 'rtl' : 'ltr';
-  if (ttsDialogBody) ttsDialogBody.dir = isHe ? 'rtl' : 'ltr';
-  if (catalogDialogBody) catalogDialogBody.dir = isHe ? 'rtl' : 'ltr';
-  if (customDialogBody) customDialogBody.dir = isHe ? 'rtl' : 'ltr';
-  if (dictDialogBody) dictDialogBody.dir = isHe ? 'rtl' : 'ltr';
-  if (gameSettingsDialogBody) gameSettingsDialogBody.dir = isHe ? 'rtl' : 'ltr';
-  if (statsDialogBody) statsDialogBody.dir = isHe ? 'rtl' : 'ltr';
-  if (leaderboardDialogBody) leaderboardDialogBody.dir = isHe ? 'rtl' : 'ltr';
+  if (arcadeTitleScreen) arcadeTitleScreen.dir = isRtl ? 'rtl' : 'ltr';
+  if (decksPageView) decksPageView.dir = isRtl ? 'rtl' : 'ltr';
+  if (adminStudioView) adminStudioView.dir = isRtl ? 'rtl' : 'ltr';
+  if (overlayCard) overlayCard.dir = isRtl ? 'rtl' : 'ltr';
+  if (ttsDialogBody) ttsDialogBody.dir = isRtl ? 'rtl' : 'ltr';
+  if (catalogDialogBody) catalogDialogBody.dir = isRtl ? 'rtl' : 'ltr';
+  if (customDialogBody) customDialogBody.dir = isRtl ? 'rtl' : 'ltr';
+  if (dictDialogBody) dictDialogBody.dir = isRtl ? 'rtl' : 'ltr';
+  if (gameSettingsDialogBody) gameSettingsDialogBody.dir = isRtl ? 'rtl' : 'ltr';
+  if (statsDialogBody) statsDialogBody.dir = isRtl ? 'rtl' : 'ltr';
+  if (leaderboardDialogBody) leaderboardDialogBody.dir = isRtl ? 'rtl' : 'ltr';
 
   if (labelNativeFilter) labelNativeFilter.textContent = tr.nativeFilterLabel;
   if (labelTargetFilter) labelTargetFilter.textContent = tr.chooseLangTitle;
@@ -455,9 +520,14 @@ export function applyStaticUILocalization() {
   if (labelArcadeLaunch) labelArcadeLaunch.textContent = tr.launchFreeBtn;
 
   const heroArtSamples = {
-    de: { art: 'die', word: 'Kreuzfahrt' },
-    en: { art: 'Noun', word: 'Breakthrough' },
-    es: { art: 'la', word: 'Aventura' }
+    de: { art: 'der', word: 'Start' },
+    en: { art: 'Noun', word: 'Opportunity' },
+    es: { art: 'la', word: 'Oportunidad' },
+    ru: { art: 'Сущ.', word: 'Возможность' },
+    uk: { art: 'Імен.', word: 'Можливість' },
+    tr: { art: 'İsim', word: 'Başlangıç' },
+    he: { art: 'ש״ע', word: 'התחלה' },
+    ar: { art: 'اسم', word: 'البداية' }
   };
   const hSample = heroArtSamples[state.targetLang] || heroArtSamples.de;
   if (mobileHeroArtArticle) mobileHeroArtArticle.textContent = hSample.art;
@@ -518,8 +588,10 @@ export function applyStaticUILocalization() {
 
   // Боевой экран Академии Z-LINGO
   if (labelAcademySub) labelAcademySub.textContent = tr.academySub;
+  const nativeModeObj = state.nativeLangModes.find(m => m.id === state.nativeLang);
+  const nativeFlag = (nativeModeObj && nativeModeObj.short.split(' ')[0]) || '';
   if (hudLangPairText) {
-    hudLangPairText.textContent = `${targetMeta.flag} ${targetLangLocalName} → ${nativeLangLocalName}`;
+    hudLangPairText.textContent = `${nativeFlag} ${nativeLangLocalName} → ${targetMeta.flag} ${targetLangLocalName}`;
   }
   if (labelCatalogHud) labelCatalogHud.textContent = tr.coursesHudBtn;
   if (btnSidebarCatalog) btnSidebarCatalog.textContent = `${tr.seeAllTop} ▾`;
@@ -860,7 +932,7 @@ export function bindNavigationEvents() {
 
   if (btnTargetLangHud) {
     btnTargetLangHud.addEventListener('click', () => {
-      const order = ['de', 'en', 'es'];
+      const order = ALL_LANG_CODES;
       const next = order[(order.indexOf(state.targetLang) + 1) % order.length];
       setTargetLanguage(next);
       if (state.screenMode === 'play') {
@@ -895,7 +967,7 @@ export function bindNavigationEvents() {
     btnHudLangPair.addEventListener('click', (e) => {
       sound.init();
       if (e.shiftKey) {
-        const order = ['de', 'en', 'es'];
+        const order = ALL_LANG_CODES;
         const nextT = order[(order.indexOf(state.targetLang) + 1) % order.length];
         setTargetLanguage(nextT);
         showLevelIntroOverlay();

@@ -2,7 +2,7 @@
 import { actions } from '../core/events.js';
 import { saveSettingsPatch } from '../core/storage.js';
 import { allocateEntityId, escapeHtml, shuffleArray } from '../core/utils.js';
-import { KEYBOARD_LAYOUTS, getArticleStyle } from '../config/constants.js';
+import { KEYBOARD_LAYOUTS, TARGET_LANG_META, getArticleStyle } from '../config/constants.js';
 import { WEAPONS } from '../config/weapons.js';
 import { sound } from '../services/sound-engine.js';
 import { ttsManager } from '../services/tts-service.js';
@@ -12,8 +12,9 @@ import {
   getPinnedEntriesForTargetLang,
   getWordTranslation,
   isEntryPinned,
-  isHebrewUI,
+  isRtlTargetLang,
   isRtlTranslation,
+  isRtlUI,
   isWeaponUnlocked,
   learnedWordsSet,
   recordWordLearned,
@@ -164,11 +165,14 @@ export function bindVirtualKeyListeners(btn) {
 export function renderZtypeKeyboard() {
   if (!ztypeKeysContainer) return;
   const rows = KEYBOARD_LAYOUTS[state.targetLang] || KEYBOARD_LAYOUTS.de;
+  const isCompactKbd = rows.some(r => r.length >= 11);
+  ztypeKeysContainer.classList.toggle('compact-kbd', isCompactKbd);
   ztypeKeysContainer.innerHTML = '';
 
   rows.forEach((rowItems, rIdx) => {
     const rowDiv = document.createElement('div');
     rowDiv.className = 'ztype-key-row' +
+      (rowItems.length >= 10 ? ' compact-row' : '') +
       (rIdx === 1 ? ' row-middle' + (state.targetLang === 'es' ? ' es-row' : '') : '') +
       (rIdx === 2 ? ' row-bottom' : '');
 
@@ -265,7 +269,17 @@ function renderOverlayLessonStepper(course, mod) {
   const maxStart = Math.max(0, lessons.length - 3);
   const winStart = Math.max(0, Math.min(state.activeLessonIndex, maxStart));
   const visible = lessons.slice(winStart, winStart + 3);
-  const shortPrefix = state.nativeLang === 'ru' ? 'Ур.' : (state.nativeLang === 'he' ? 'שלב ' : 'L');
+  const shortPrefixMap = {
+    ru: 'Ур.',
+    uk: 'Ур.',
+    he: 'שלב ',
+    ar: 'درس ',
+    tr: 'D',
+    de: 'L',
+    es: 'L',
+    en: 'L'
+  };
+  const shortPrefix = shortPrefixMap[state.nativeLang] || 'L';
 
   visible.forEach((ls, offset) => {
     const lIdx = winStart + offset;
@@ -467,11 +481,12 @@ export function renderWordsPreviewList(wordsArray, container) {
     div.dataset.art = item.article || '';
     const transText = getWordTranslation(item);
     const dirAttr = isRtlTranslation(item) ? ' dir="rtl"' : ' dir="ltr"';
+    const wordDirAttr = isRtlTargetLang(state.targetLang) ? ' dir="rtl"' : ' dir="ltr"';
     const pinned = isEntryPinned(item);
 
     div.innerHTML = `
-      <div class="preview-word-top" dir="ltr">
-        <span class="preview-word-de">${escapeHtml(item.raw)}</span>
+      <div class="preview-word-top">
+        <span class="preview-word-de"${wordDirAttr}>${escapeHtml(item.raw)}</span>
         <button type="button" class="pin-star-btn${pinned ? ' pinned' : ''}" title="${escapeHtml(tr.pinTooltip)}">${pinned ? '⭐' : '☆'}</button>
       </div>
       <span class="preview-word-ru"${dirAttr}>${escapeHtml(transText)}</span>
@@ -852,8 +867,9 @@ export function handleVirtualKeyPress(btn, e) {
 }
 
 export function isBridgeSeparator(ch) {
-  return ch === '-' || ch === ' ' || ch === "'" || ch === '/' ||
-    ch === '.' || ch === ',' || ch === '!' || ch === '?' || ch === '(' || ch === ')';
+  return ch === '-' || ch === ' ' || ch === "'" || ch === 'ʼ' || ch === '/' ||
+    ch === '.' || ch === ',' || ch === '،' || ch === '!' || ch === '?' || ch === '؟' ||
+    ch === '…' || ch === ';' || ch === ':' || ch === '(' || ch === ')' || ch === '״' || ch === '׳';
 }
 
 export function processTypedChar(char) {
@@ -1023,7 +1039,7 @@ export function renderCurrentQuizQuestion(speakNow = false) {
   if (quiz.qIndex >= quiz.questions.length) {
     quizScoreText.textContent = tr.quizDoneScore(quiz.correctCount, quiz.questions.length);
     if (btnQuizSpeak) btnQuizSpeak.style.display = 'none';
-    quizQuestionWord.dir = isHebrewUI() ? 'rtl' : 'ltr';
+    quizQuestionWord.dir = isRtlUI() ? 'rtl' : 'ltr';
     quizQuestionWord.textContent = tr.quizDoneTitle(quiz.correctCount, quiz.questions.length);
     quizOptionsGrid.innerHTML = '';
     return;
@@ -1032,7 +1048,7 @@ export function renderCurrentQuizQuestion(speakNow = false) {
   const { currentQ, options } = quiz.questions[quiz.qIndex];
   if (btnQuizSpeak) btnQuizSpeak.style.display = 'inline-flex';
   quizScoreText.textContent = `${quiz.qIndex + 1}/${quiz.questions.length}`;
-  quizQuestionWord.dir = 'ltr';
+  quizQuestionWord.dir = isRtlTargetLang(state.targetLang) ? 'rtl' : 'ltr';
   quizQuestionWord.textContent = currentQ.raw;
 
   if (speakNow) {
@@ -1553,11 +1569,24 @@ export function bindGameplayEvents() {
     if (e.ctrlKey || e.altKey || e.metaKey || e.key.length !== 1) return;
 
     const char = e.key;
-    if (/[а-яёА-ЯЁ\u0590-\u05FF]/.test(char)) {
-      e.preventDefault();
-      state.layoutWarningTimer = 2.6;
-      sound.playMiss();
-      return;
+    const isLetter = /\p{L}/u.test(char);
+    if (isLetter) {
+      const targetScript = (TARGET_LANG_META[state.targetLang] && TARGET_LANG_META[state.targetLang].script) || 'latin';
+      const isLatinChar = /[A-Za-zÀ-ÖØ-öø-ÿÇĞİIÖŞÜçğıiöşü]/.test(char);
+      const isCyrillicChar = /[\u0400-\u04FF]/.test(char);
+      const isHebrewChar = /[\u0590-\u05FF]/.test(char);
+      const isArabicChar = /[\u0600-\u06FF]/.test(char);
+      const wrongScript =
+        (targetScript === 'latin' && (isCyrillicChar || isHebrewChar || isArabicChar)) ||
+        (targetScript === 'cyrillic' && (isLatinChar || isHebrewChar || isArabicChar)) ||
+        (targetScript === 'hebrew' && (isLatinChar || isCyrillicChar || isArabicChar)) ||
+        (targetScript === 'arabic' && (isLatinChar || isCyrillicChar || isHebrewChar));
+      if (wrongScript) {
+        e.preventDefault();
+        state.layoutWarningTimer = 2.6;
+        sound.playMiss();
+        return;
+      }
     }
 
     e.preventDefault();

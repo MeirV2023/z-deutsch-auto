@@ -1,11 +1,16 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-15T17:35:00Z",
+  "updatedAt": "2026-11-23T16:30:00Z",
   "categories": [],
   "courses": {
     "de": [],
     "en": [],
-    "es": []
+    "es": [],
+    "ru": [],
+    "uk": [],
+    "tr": [],
+    "he": [],
+    "ar": []
   },
   "courseOverrides": {},
   "deletedCourseIds": []

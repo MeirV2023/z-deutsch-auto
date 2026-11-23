@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>VOCANOVA — Космический языковой шутер (DE · EN · ES | Gemini 3.8 TTS | Anki .apkg)</title>
+  <title>VOCANOVA — Космический языковой шутер (DE · EN · ES · RU · UK · TR · HE · AR | Gemini 3.8 TTS | Anki .apkg)</title>
   <link rel="icon" type="image/svg+xml" href="image/favicon.svg" />
   <link rel="icon" type="image/png" sizes="64x64" href="image/favicon-64.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="image/favicon-32.png" />
@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&family=Noto+Sans+Hebrew:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&family=Rubik:wght@400;500;600;700;800;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&family=Noto+Sans+Hebrew:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&family=Rubik:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet"
   />
   <!-- Модульные таблицы стилей Z-LINGO (строгий каскад 01..08, параллельная загрузка по HTTP/2) -->
@@ -135,7 +135,12 @@
             <div class="nav-lang-menu hidden" id="navLangDropdownMenu" role="menu">
               <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU · Русский</button>
               <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN · English</button>
+              <button type="button" class="hud-btn native-lang-btn" data-native-lang="de">🇩🇪 DE · Deutsch</button>
+              <button type="button" class="hud-btn native-lang-btn" data-native-lang="es">🇪🇸 ES · Español</button>
+              <button type="button" class="hud-btn native-lang-btn" data-native-lang="uk">🇺🇦 UK · Українська</button>
+              <button type="button" class="hud-btn native-lang-btn" data-native-lang="tr">🇹🇷 TR · Türkçe</button>
               <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 HE · עברית</button>
+              <button type="button" class="hud-btn native-lang-btn" data-native-lang="ar">🇸🇦 AR · العربية</button>
             </div>
           </div>
           <button type="button" class="home-avatar-btn" id="btnHomeSettings" title="Профиль и настройки игры">
@@ -410,6 +415,46 @@
                 <span class="home-lang-left">
                   <span class="home-lang-flag">🇪🇸</span>
                   <span class="home-lang-name" data-tlang-name="es">Испанский</span>
+                </span>
+                <span class="home-lang-check">✓</span>
+              </button>
+
+              <button type="button" class="home-lang-row target-lang-pill" data-target-lang="ru">
+                <span class="home-lang-left">
+                  <span class="home-lang-flag">🇷🇺</span>
+                  <span class="home-lang-name" data-tlang-name="ru">Русский</span>
+                </span>
+                <span class="home-lang-check">✓</span>
+              </button>
+
+              <button type="button" class="home-lang-row target-lang-pill" data-target-lang="uk">
+                <span class="home-lang-left">
+                  <span class="home-lang-flag">🇺🇦</span>
+                  <span class="home-lang-name" data-tlang-name="uk">Украинский</span>
+                </span>
+                <span class="home-lang-check">✓</span>
+              </button>
+
+              <button type="button" class="home-lang-row target-lang-pill" data-target-lang="tr">
+                <span class="home-lang-left">
+                  <span class="home-lang-flag">🇹🇷</span>
+                  <span class="home-lang-name" data-tlang-name="tr">Турецкий</span>
+                </span>
+                <span class="home-lang-check">✓</span>
+              </button>
+
+              <button type="button" class="home-lang-row target-lang-pill" data-target-lang="he">
+                <span class="home-lang-left">
+                  <span class="home-lang-flag">🇮🇱</span>
+                  <span class="home-lang-name" data-tlang-name="he">Иврит</span>
+                </span>
+                <span class="home-lang-check">✓</span>
+              </button>
+
+              <button type="button" class="home-lang-row target-lang-pill" data-target-lang="ar">
+                <span class="home-lang-left">
+                  <span class="home-lang-flag">🇸🇦</span>
+                  <span class="home-lang-name" data-tlang-name="ar">Арабский</span>
                 </span>
                 <span class="home-lang-check">✓</span>
               </button>
@@ -885,6 +930,26 @@
                       <span class="decks-lang-flag" data-flag-code="es"></span>
                       <span>ES</span>
                     </button>
+                    <button type="button" class="decks-compact-lang-btn target-lang-pill" data-target-lang="ru">
+                      <span class="decks-lang-flag" data-flag-code="ru"></span>
+                      <span>RU</span>
+                    </button>
+                    <button type="button" class="decks-compact-lang-btn target-lang-pill" data-target-lang="uk">
+                      <span class="decks-lang-flag" data-flag-code="uk"></span>
+                      <span>UK</span>
+                    </button>
+                    <button type="button" class="decks-compact-lang-btn target-lang-pill" data-target-lang="tr">
+                      <span class="decks-lang-flag" data-flag-code="tr"></span>
+                      <span>TR</span>
+                    </button>
+                    <button type="button" class="decks-compact-lang-btn target-lang-pill" data-target-lang="he">
+                      <span class="decks-lang-flag" data-flag-code="he"></span>
+                      <span>HE</span>
+                    </button>
+                    <button type="button" class="decks-compact-lang-btn target-lang-pill" data-target-lang="ar">
+                      <span class="decks-lang-flag" data-flag-code="ar"></span>
+                      <span>AR</span>
+                    </button>
                   </div>
                 </div>
 
@@ -993,15 +1058,25 @@
                   <option value="de" selected>🇩🇪 Немецкий (DE)</option>
                   <option value="en">🇬🇧 Английский (EN)</option>
                   <option value="es">🇪🇸 Испанский (ES)</option>
+                  <option value="ru">🇷🇺 Русский (RU)</option>
+                  <option value="uk">🇺🇦 Украинский (UK)</option>
+                  <option value="tr">🇹🇷 Турецкий (TR)</option>
+                  <option value="he">🇮🇱 Иврит (HE)</option>
+                  <option value="ar">🇸🇦 Арабский (AR)</option>
                 </select>
               </div>
 
               <div class="anki-field-col">
                 <label for="adminTransLangSelect">💬 Язык перевода в вашем списке:</label>
                 <select class="dict-search-input" id="adminTransLangSelect">
-                  <option value="ru" selected>🇷🇺 Русский (Немецкий → Русский)</option>
+                  <option value="ru" selected>🇷🇺 Русский (→ Русский)</option>
                   <option value="en">🇬🇧 English (→ English)</option>
+                  <option value="de">🇩🇪 Deutsch (→ Немецкий)</option>
+                  <option value="es">🇪🇸 Español (→ Испанский)</option>
+                  <option value="uk">🇺🇦 Українська (→ Украинский)</option>
+                  <option value="tr">🇹🇷 Türkçe (→ Турецкий)</option>
                   <option value="he">🇮🇱 עברית (→ Иврит)</option>
+                  <option value="ar">🇸🇦 العربية (→ Арабский)</option>
                 </select>
               </div>
             </div>
@@ -1515,7 +1590,12 @@
           <div class="lang-quick-group">
             <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
             <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
+            <button type="button" class="hud-btn native-lang-btn" data-native-lang="de">🇩🇪 DE</button>
+            <button type="button" class="hud-btn native-lang-btn" data-native-lang="es">🇪🇸 ES</button>
+            <button type="button" class="hud-btn native-lang-btn" data-native-lang="uk">🇺🇦 UK</button>
+            <button type="button" class="hud-btn native-lang-btn" data-native-lang="tr">🇹🇷 TR</button>
             <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
+            <button type="button" class="hud-btn native-lang-btn" data-native-lang="ar">🇸🇦 العربية</button>
           </div>
         </div>
 
@@ -1732,6 +1812,11 @@
           <button type="button" class="target-lang-pill active" data-target-lang="de">🇩🇪 <span data-tlang-name="de">Немецкий</span></button>
           <button type="button" class="target-lang-pill" data-target-lang="en">🇬🇧 <span data-tlang-name="en">Английский</span></button>
           <button type="button" class="target-lang-pill" data-target-lang="es">🇪🇸 <span data-tlang-name="es">Испанский</span></button>
+          <button type="button" class="target-lang-pill" data-target-lang="ru">🇷🇺 <span data-tlang-name="ru">Русский</span></button>
+          <button type="button" class="target-lang-pill" data-target-lang="uk">🇺🇦 <span data-tlang-name="uk">Украинский</span></button>
+          <button type="button" class="target-lang-pill" data-target-lang="tr">🇹🇷 <span data-tlang-name="tr">Турецкий</span></button>
+          <button type="button" class="target-lang-pill" data-target-lang="he">🇮🇱 <span data-tlang-name="he">Иврит</span></button>
+          <button type="button" class="target-lang-pill" data-target-lang="ar">🇸🇦 <span data-tlang-name="ar">Арабский</span></button>
         </div>
 
         <div class="source-filter-tabs" id="catalogSourceTabs">
@@ -1773,6 +1858,11 @@
           <button type="button" class="import-tlang-btn active" data-import-lang="de">🇩🇪 DE</button>
           <button type="button" class="import-tlang-btn" data-import-lang="en">🇬🇧 EN</button>
           <button type="button" class="import-tlang-btn" data-import-lang="es">🇪🇸 ES</button>
+          <button type="button" class="import-tlang-btn" data-import-lang="ru">🇷🇺 RU</button>
+          <button type="button" class="import-tlang-btn" data-import-lang="uk">🇺🇦 UK</button>
+          <button type="button" class="import-tlang-btn" data-import-lang="tr">🇹🇷 TR</button>
+          <button type="button" class="import-tlang-btn" data-import-lang="he">🇮🇱 HE</button>
+          <button type="button" class="import-tlang-btn" data-import-lang="ar">🇸🇦 AR</button>
         </div>
       </div>
 
@@ -1888,6 +1978,11 @@
           <button type="button" class="hud-btn target-lang-pill active" data-target-lang="de">🇩🇪 <span data-tlang-name="de">Немецкий</span></button>
           <button type="button" class="hud-btn target-lang-pill" data-target-lang="en">🇬🇧 <span data-tlang-name="en">Английский</span></button>
           <button type="button" class="hud-btn target-lang-pill" data-target-lang="es">🇪🇸 <span data-tlang-name="es">Испанский</span></button>
+          <button type="button" class="hud-btn target-lang-pill" data-target-lang="ru">🇷🇺 <span data-tlang-name="ru">Русский</span></button>
+          <button type="button" class="hud-btn target-lang-pill" data-target-lang="uk">🇺🇦 <span data-tlang-name="uk">Украинский</span></button>
+          <button type="button" class="hud-btn target-lang-pill" data-target-lang="tr">🇹🇷 <span data-tlang-name="tr">Турецкий</span></button>
+          <button type="button" class="hud-btn target-lang-pill" data-target-lang="he">🇮🇱 <span data-tlang-name="he">Иврит</span></button>
+          <button type="button" class="hud-btn target-lang-pill" data-target-lang="ar">🇸🇦 <span data-tlang-name="ar">Арабский</span></button>
         </div>
       </div>
 
@@ -1897,7 +1992,12 @@
         <div class="settings-pills-row">
           <button type="button" class="hud-btn native-lang-btn active" data-native-lang="ru">🇷🇺 RU</button>
           <button type="button" class="hud-btn native-lang-btn" data-native-lang="en">🇬🇧 EN</button>
+          <button type="button" class="hud-btn native-lang-btn" data-native-lang="de">🇩🇪 DE</button>
+          <button type="button" class="hud-btn native-lang-btn" data-native-lang="es">🇪🇸 ES</button>
+          <button type="button" class="hud-btn native-lang-btn" data-native-lang="uk">🇺🇦 UK</button>
+          <button type="button" class="hud-btn native-lang-btn" data-native-lang="tr">🇹🇷 TR</button>
           <button type="button" class="hud-btn native-lang-btn" data-native-lang="he">🇮🇱 עברית</button>
+          <button type="button" class="hud-btn native-lang-btn" data-native-lang="ar">🇸🇦 العربية</button>
         </div>
       </div>
 

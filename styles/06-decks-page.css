@@ -1206,8 +1206,8 @@
 
 .decks-compact-lang-pills {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
 }
 
 .decks-compact-lang-btn {

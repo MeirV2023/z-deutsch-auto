@@ -90,6 +90,14 @@ export const HE_TEXT = {
   topicTravelSub: 'טיולים, מלונות, מדינות',
   topicDailyTitle: 'חיי יומיום',
   topicDailySub: 'בית, שיחה, שגרה',
+  topicMedicineTitle: 'רפואה ובריאות',
+  topicMedicineSub: 'בריאות, רופא, טיפול',
+  topicNatureTitle: 'טבע וסביבה',
+  topicNatureSub: 'אקולוגיה, אקלים, טבע',
+  topicSocietyTitle: 'חברה ופוליטיקה',
+  topicSocietySub: 'פוליטיקה, עתיד, אזרחות',
+  topicItTitle: 'העולם הדיגיטלי',
+  topicItSub: 'אינטרנט, מדיה, רשת',
   mobActiveFilterReset: 'נקה',
   mobNavHome: 'ראשי',
   mobNavPlay: 'שחק',
@@ -132,9 +140,12 @@ export const HE_TEXT = {
   featVoice: 'קריינות Gemini 3.8 AI',
   promoMonitorBadge: (num, title) => `שלב ${num} · ${title}`,
   academySub: 'האקדמיה החללית לשפות',
-  nativeLangNames: { ru: 'רוסית', en: 'אנגלית', he: 'עברית' },
+  nativeLangNames: {
+    ru: 'רוסית', en: 'אנגלית', de: 'גרמנית', es: 'ספרדית',
+    uk: 'אוקראינית', tr: 'טורקית', he: 'עברית', ar: 'ערבית'
+  },
   arenaWaveLabel: (lessonNum, waveNum) => `שלב ${lessonNum} · גל ${String(waveNum).padStart(2, '0')}`,
-  desktopPromptIdle: '⌨️ הקלידו מילה באותיות לטיניות כדי לירות',
+  desktopPromptIdle: '⌨️ הקלידו מילה כדי לירות לייזר',
   mobLivesLabel: 'חיים:',
   mobTargetPromptIdle: 'הקלידו מילה כדי לירות',
   sidebarDecksHeader: 'החפיסות שלי',
@@ -193,7 +204,12 @@ export const HE_TEXT = {
   legends: {
     de: ['der (זכר)', 'die (נקבה)', 'das (נייטרלי)', 'פועל/אחר'],
     en: ['Noun (שם עצם)', 'Adj. (תואר)', 'Verb (פועל)', 'אחר'],
-    es: ['el (זכר)', 'la (נקבה)', 'Verbo (פועל)', 'תואר/אחר']
+    es: ['el (זכר)', 'la (נקבה)', 'Verbo (פועל)', 'תואר/אחר'],
+    ru: ['Сущ. (ש״ע)', 'Прил. (תואר)', 'Глаг. (פועל)', 'אחר'],
+    uk: ['Імен. (ש״ע)', 'Прикм. (תואר)', 'Дієсл. (פועל)', 'אחר'],
+    tr: ['İsim (ש״ע)', 'Sıfat (תואר)', 'Fiil (פועל)', 'אחר'],
+    he: ['ש״ע', 'תואר', 'פועל', 'ביטוי/אחר'],
+    ar: ['اسم (ש״ע)', 'صفة (תואר)', 'فعل (פועל)', 'אחר']
   },
 
   targetIdle: 'הקישו על האותיות כדי לירות במילים...',
@@ -237,7 +253,7 @@ export const HE_TEXT = {
   dictTitle: (courseTitle, n) => `📚 מילון: ${courseTitle} (${n} מילים)`,
   dictSearchPlaceholder: 'חיפוש מילה או תרגום...',
   dictPinnedFilter: 'מסומנות ב-⭐',
-  layoutWarning: '⚠️ החליפו מקלדת לאותיות לטיניות!',
+  layoutWarning: '⚠️ החליפו את שפת המקלדת לשפת המילה הנלמדת!',
 
   catalogTitle: '🗂️ קטלוג קורסים, מודולים ושלבים',
   tabAll: 'הכל',

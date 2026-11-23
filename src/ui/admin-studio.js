@@ -8,7 +8,7 @@ import {
   saveJsonStorage
 } from '../core/storage.js';
 import { escapeHtml } from '../core/utils.js';
-import { TARGET_LANG_META } from '../config/constants.js';
+import { ALL_LANG_CODES, TARGET_LANG_META } from '../config/constants.js';
 import { AnkiImporter } from '../anki/index.js';
 import { ttsManager } from '../services/tts-service.js';
 import { state, t } from '../state/store.js';
@@ -246,15 +246,15 @@ export async function fetchAndMergeCloudAdminCatalog() {
     (cloudNewer ? local.categories : cloud.categories).forEach(c => { if (c && c.id) catMap.set(c.id, c); });
     (cloudNewer ? cloud.categories : local.categories).forEach(c => { if (c && c.id) catMap.set(c.id, c); });
 
-    const mergedCourses = { de: [], en: [], es: [] };
+    const mergedCourses = {};
     const delSet = new Set(cloudNewer ? cloud.deletedCourseIds : local.deletedCourseIds);
 
-    ['de', 'en', 'es'].forEach(lg => {
+    ALL_LANG_CODES.forEach(lg => {
       const cMap = new Map();
       const olderList = cloudNewer ? local.courses[lg] : cloud.courses[lg];
       const newerList = cloudNewer ? cloud.courses[lg] : local.courses[lg];
-      olderList.forEach(c => { if (c && c.id && !delSet.has(c.id)) cMap.set(c.id, c); });
-      newerList.forEach(c => { if (c && c.id && !delSet.has(c.id)) cMap.set(c.id, c); });
+      (olderList || []).forEach(c => { if (c && c.id && !delSet.has(c.id)) cMap.set(c.id, c); });
+      (newerList || []).forEach(c => { if (c && c.id && !delSet.has(c.id)) cMap.set(c.id, c); });
       mergedCourses[lg] = Array.from(cMap.values());
     });
 
@@ -350,7 +350,7 @@ export function ensureCourseOverrideRecord(courseId) {
 }
 
 export function findMutableAdminCourse(courseId, langHint = '') {
-  const langs = langHint ? [langHint, 'de', 'en', 'es'] : ['de', 'en', 'es'];
+  const langs = langHint ? [langHint, ...ALL_LANG_CODES] : ALL_LANG_CODES;
   for (const lg of langs) {
     const arr = state.adminCatalog.courses && state.adminCatalog.courses[lg];
     if (!Array.isArray(arr)) continue;
@@ -416,11 +416,11 @@ export function getAdminParsedDraft() {
     parsed.words.forEach(w => {
       const hit = mapByRaw.get(w.raw);
       if (hit) {
-        w.translations = {
-          ru: hit.ru || (w.translations && w.translations.ru) || '',
-          en: hit.en || (w.translations && w.translations.en) || '',
-          he: hit.he || (w.translations && w.translations.he) || ''
-        };
+        const nextTr = { ...(w.translations || {}) };
+        ALL_LANG_CODES.forEach(lg => {
+          if (hit[lg]) nextTr[lg] = hit[lg];
+        });
+        w.translations = nextTr;
       }
     });
   }
@@ -529,11 +529,11 @@ export async function enrichWordsViaGeminiApi(words, targetLang, inputTransLang,
       const targetItem = slice[tRow.idx];
       if (!targetItem) return;
       const authorVal = (targetItem.translations && targetItem.translations[inputTransLang]) || '';
-      targetItem.translations = {
-        ru: (inputTransLang === 'ru' && authorVal) ? authorVal : (tRow.ru || authorVal),
-        en: (inputTransLang === 'en' && authorVal) ? authorVal : (tRow.en || authorVal),
-        he: (inputTransLang === 'he' && authorVal) ? authorVal : (tRow.he || authorVal)
-      };
+      const nextTr = {};
+      ALL_LANG_CODES.forEach(lg => {
+        nextTr[lg] = (inputTransLang === lg && authorVal) ? authorVal : (tRow[lg] || authorVal);
+      });
+      targetItem.translations = nextTr;
     });
   }
 
@@ -599,11 +599,11 @@ export async function cloneCourseToTargetLangViaGemini(words, fromLang, toLang, 
       );
       const wObj = parsedOne.words && parsedOne.words[0];
       if (wObj) {
-        wObj.translations = {
-          ru: row.ru || wObj.translations.ru || '',
-          en: row.en || wObj.translations.en || '',
-          he: row.he || wObj.translations.he || ''
-        };
+        const nextTr = {};
+        ALL_LANG_CODES.forEach(lg => {
+          nextTr[lg] = row[lg] || (wObj.translations && wObj.translations[lg]) || '';
+        });
+        wObj.translations = nextTr;
         clonedEntries.push(wObj);
       }
     });
@@ -1281,7 +1281,7 @@ export function bindAdminStudioEvents() {
 
           // Опциональное клонирование курса на другие изучаемые языки (EN / ES / DE)
           if (adminAiCloneTargetsCheck && adminAiCloneTargetsCheck.checked) {
-            const otherLangs = ['de', 'en', 'es'].filter(lg => lg !== srcLang);
+            const otherLangs = ALL_LANG_CODES.filter(lg => lg !== srcLang);
             for (const toLg of otherLangs) {
               try {
                 showAdminStatus(`🌐 Генерируем версию курса для языка ${toLg.toUpperCase()} через Gemini 3.8 AI...`, false);

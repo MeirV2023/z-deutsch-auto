@@ -1,17 +1,11 @@
-// Единая точка сборки встроенного каталога курсов Z-LINGO (SRP / OCP)
+// Единая точка сборки встроенного каталога курсов VOCANOVA (SRP / OCP)
 import { TARGET_LANGUAGES, NATIVE_LANGUAGES, BASE_CATEGORIES } from './catalog-meta.js';
-import { COURSES_DE } from './courses-de.js';
-import { COURSES_EN } from './courses-en.js';
-import { COURSES_ES } from './courses-es.js';
+import { buildAllCoursesMap } from './b1-catalog-builder.js';
 
 export const GAME_CATALOG = {
   targetLanguages: TARGET_LANGUAGES,
   nativeLanguages: NATIVE_LANGUAGES,
-  courses: {
-    de: COURSES_DE,
-    en: COURSES_EN,
-    es: COURSES_ES
-  },
+  courses: buildAllCoursesMap(),
   categories: BASE_CATEGORIES
 };
 

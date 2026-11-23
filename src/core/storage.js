@@ -46,13 +46,23 @@ export function detectBrowserNativeLanguage() {
     : [navigator.language || 'en'];
   for (const rawTag of candidates) {
     const tag = String(rawTag || '').toLowerCase();
-    if (/^(ru|uk|be|kk)/.test(tag)) return 'ru';
+    if (/^uk/.test(tag)) return 'uk';
+    if (/^(ru|be|kk)/.test(tag)) return 'ru';
+    if (/^tr/.test(tag)) return 'tr';
+    if (/^ar/.test(tag)) return 'ar';
     if (/^(he|iw)/.test(tag)) return 'he';
+    if (/^de/.test(tag)) return 'de';
+    if (/^es/.test(tag)) return 'es';
     if (/^en/.test(tag)) return 'en';
   }
   const primary = String(candidates[0] || '').toLowerCase();
-  if (/^(ru|uk|be|kk)/.test(primary)) return 'ru';
+  if (/^uk/.test(primary)) return 'uk';
+  if (/^(ru|be|kk)/.test(primary)) return 'ru';
+  if (/^tr/.test(primary)) return 'tr';
+  if (/^ar/.test(primary)) return 'ar';
   if (/^(he|iw)/.test(primary)) return 'he';
+  if (/^de/.test(primary)) return 'de';
+  if (/^es/.test(primary)) return 'es';
   return 'en';
 }
 

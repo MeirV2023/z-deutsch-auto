@@ -24,7 +24,10 @@ const LANG_NAMES = {
   en: 'English',
   es: 'Spanish',
   ru: 'Russian',
-  he: 'Hebrew'
+  uk: 'Ukrainian',
+  tr: 'Turkish',
+  he: 'Hebrew',
+  ar: 'Arabic'
 };
 
 const LOCALIZED_STRINGS_SCHEMA = {
@@ -32,9 +35,14 @@ const LOCALIZED_STRINGS_SCHEMA = {
   properties: {
     ru: { type: 'string' },
     en: { type: 'string' },
-    he: { type: 'string' }
+    de: { type: 'string' },
+    es: { type: 'string' },
+    uk: { type: 'string' },
+    tr: { type: 'string' },
+    he: { type: 'string' },
+    ar: { type: 'string' }
   },
-  required: ['ru', 'en', 'he']
+  required: ['ru', 'en', 'de', 'es', 'uk', 'tr', 'he', 'ar']
 };
 
 async function callGeminiStructuredJson(apiKey, promptText, jsonSchema) {
@@ -117,7 +125,7 @@ module.exports = async function handler(req, res) {
         `You are an expert multilingual curriculum designer for a fast-paced arcade language typing game (CEFR level ${levelTag}).`,
         `Convert the following ${LANG_NAMES[fromLang] || fromLang} course "${courseTitle}" into natural ${LANG_NAMES[toLang] || toLang} target vocabulary.`,
         articleRule,
-        'Also provide concise, accurate translations in Russian (ru), English (en), and Hebrew (he) without nikud.',
+        'Also provide concise, accurate translations in Russian (ru), English (en), German (de), Spanish (es), Ukrainian (uk), Turkish (tr), Hebrew (he, no nikud), and Arabic (ar, no tashkeel).',
         'Input items JSON:',
         JSON.stringify(rawItems)
       ].join('\n');
@@ -136,9 +144,14 @@ module.exports = async function handler(req, res) {
                 front: { type: 'string' },
                 ru: { type: 'string' },
                 en: { type: 'string' },
-                he: { type: 'string' }
+                de: { type: 'string' },
+                es: { type: 'string' },
+                uk: { type: 'string' },
+                tr: { type: 'string' },
+                he: { type: 'string' },
+                ar: { type: 'string' }
               },
-              required: ['idx', 'front', 'ru', 'en', 'he']
+              required: ['idx', 'front', 'ru', 'en', 'de', 'es', 'uk', 'tr', 'he', 'ar']
             }
           }
         },
@@ -160,8 +173,8 @@ module.exports = async function handler(req, res) {
       `Author's provided translation language: ${LANG_NAMES[inputTransLang] || inputTransLang}.`,
       `Course title: "${courseTitle}".`,
       'Task:',
-      '1) Localize the course title and a 1-sentence course description into Russian (ru), English (en), and Hebrew (he).',
-      `2) For each item, keep the author's ${inputTransLang} translation accurate and natural, and translate the exact meaning of the ${LANG_NAMES[targetLang] || targetLang} expression into the other UI languages (ru, en, he — Hebrew without nikud, concise 1-5 words).`,
+      '1) Localize the course title and a 1-sentence course description into ru, en, de, es, uk, tr, he, ar.',
+      `2) For each item, keep the author's ${inputTransLang} translation accurate and natural, and translate the exact meaning of the ${LANG_NAMES[targetLang] || targetLang} expression into all UI languages (ru, en, de, es, uk, tr, he without nikud, ar without tashkeel — concise 1-5 words).`,
       'Input items JSON:',
       JSON.stringify(rawItems)
     ].join('\n');
@@ -179,9 +192,14 @@ module.exports = async function handler(req, res) {
               idx: { type: 'integer' },
               ru: { type: 'string' },
               en: { type: 'string' },
-              he: { type: 'string' }
+              de: { type: 'string' },
+              es: { type: 'string' },
+              uk: { type: 'string' },
+              tr: { type: 'string' },
+              he: { type: 'string' },
+              ar: { type: 'string' }
             },
-            required: ['idx', 'ru', 'en', 'he']
+            required: ['idx', 'ru', 'en', 'de', 'es', 'uk', 'tr', 'he', 'ar']
           }
         }
       },

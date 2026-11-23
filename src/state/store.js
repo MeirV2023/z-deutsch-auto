@@ -15,10 +15,9 @@ import {
   detectBrowserNativeLanguage,
   detectDefaultTargetLanguage
 } from '../core/storage.js';
-import { TARGET_LANG_META } from '../config/constants.js';
+import { ALL_LANG_CODES, TARGET_LANG_META } from '../config/constants.js';
 import { WEAPONS } from '../config/weapons.js';
 import { UI_TEXT } from '../i18n/index.js';
-import { GAME_CATALOG } from '../data/index.js';
 import { sound } from '../services/sound-engine.js';
 
 const initialSave = loadSavedSettings();
@@ -26,25 +25,6 @@ const initialSave = loadSavedSettings();
 // Восстановление выученных слов (для прокачки оружия)
 const savedLearnedArr = loadJsonStorage(LEARNED_STORAGE_KEY, []);
 export const learnedWordsSet = new Set(Array.isArray(savedLearnedArr) ? savedLearnedArr : []);
-
-// Если у игрока уже были закрытые уровни в старой версии — зачисляем стартовый бонус, чтобы не терялся прогресс
-if (learnedWordsSet.size === 0 && Array.isArray(initialSave.completedLevelIds) && initialSave.completedLevelIds.length > 0) {
-  const deAuto = (GAME_CATALOG.courses.de || [])[0];
-  if (deAuto) {
-    const creditLessons = Math.min(initialSave.completedLevelIds.length, 4);
-    let credited = 0;
-    for (const mod of deAuto.modules) {
-      for (const ls of mod.lessons) {
-        if (ls.isBoss) continue;
-        if (credited < creditLessons) {
-          ls.words.forEach(w => learnedWordsSet.add(`de::${w.word.toLowerCase()}`));
-          credited++;
-        }
-      }
-    }
-    saveJsonStorage(LEARNED_STORAGE_KEY, Array.from(learnedWordsSet));
-  }
-}
 
 // Восстановление слов со звёздочкой ⭐ («Повторить ещё раз») и избранных колод
 const savedPinnedObj = loadJsonStorage(PINNED_STORAGE_KEY, {});
@@ -149,11 +129,22 @@ function determineInitialNativeLang() {
 }
 
 const initialNativeLang = determineInitialNativeLang();
-const initialTargetLang = (initialSave.targetLang && TARGET_LANG_META[initialSave.targetLang])
+let initialTargetLang = (initialSave.targetLang && TARGET_LANG_META[initialSave.targetLang])
   ? initialSave.targetLang
   : detectDefaultTargetLanguage();
+if (initialTargetLang === initialNativeLang) {
+  initialTargetLang = initialNativeLang === 'de' ? 'en' : 'de';
+}
 
 export const DAILY_GOAL_WORDS = 20;
+
+function createEmptyAdminCoursesMap(rawCourses = null) {
+  const map = {};
+  for (const lg of ALL_LANG_CODES) {
+    map[lg] = (rawCourses && Array.isArray(rawCourses[lg])) ? rawCourses[lg] : [];
+  }
+  return map;
+}
 
 export const state = {
   screenMode: 'title', // 'title' | 'play'
@@ -163,13 +154,18 @@ export const state = {
   overlayMode: 'pause', // 'intro' | 'complete' | 'gameover' | 'pause'
   activeQuiz: null,
 
-  // Два независимых языковых фильтра
-  targetLang: initialTargetLang, // 'de' | 'en' | 'es'
-  nativeLang: initialNativeLang, // 'ru' | 'en' | 'he'
+  // Два независимых языковых фильтра (8 языков в обе стороны)
+  targetLang: initialTargetLang,
+  nativeLang: initialNativeLang,
   nativeLangModes: [
     { id: 'ru', short: '🇷🇺 RU' },
     { id: 'en', short: '🇬🇧 EN' },
-    { id: 'he', short: '🇮🇱 עברית' }
+    { id: 'de', short: '🇩🇪 DE' },
+    { id: 'es', short: '🇪🇸 ES' },
+    { id: 'uk', short: '🇺🇦 UK' },
+    { id: 'tr', short: '🇹🇷 TR' },
+    { id: 'he', short: '🇮🇱 עברית' },
+    { id: 'ar', short: '🇸🇦 العربية' }
   ],
 
   // Режим обучения в Академии ('type' | 'listen' | 'translate') и клавиатура ПК
@@ -192,11 +188,7 @@ export const state = {
           version: 1,
           updatedAt: parsed.updatedAt || '',
           categories: Array.isArray(parsed.categories) ? parsed.categories : [],
-          courses: {
-            de: (parsed.courses && Array.isArray(parsed.courses.de)) ? parsed.courses.de : [],
-            en: (parsed.courses && Array.isArray(parsed.courses.en)) ? parsed.courses.en : [],
-            es: (parsed.courses && Array.isArray(parsed.courses.es)) ? parsed.courses.es : []
-          },
+          courses: createEmptyAdminCoursesMap(parsed.courses),
           courseOverrides: (parsed.courseOverrides && typeof parsed.courseOverrides === 'object')
             ? parsed.courseOverrides
             : {},
@@ -208,7 +200,7 @@ export const state = {
       version: 1,
       updatedAt: '',
       categories: [],
-      courses: { de: [], en: [], es: [] },
+      courses: createEmptyAdminCoursesMap(),
       courseOverrides: {},
       deletedCourseIds: []
     };
@@ -423,8 +415,20 @@ export function toggleDeckFavorite(courseId) {
   return nowFav;
 }
 
+export function isRtlUI() {
+  return state.nativeLang === 'he' || state.nativeLang === 'ar';
+}
+
 export function isHebrewUI() {
-  return state.nativeLang === 'he';
+  return isRtlUI();
+}
+
+export function isRtlTargetLang(lang = state.targetLang) {
+  return lang === 'he' || lang === 'ar';
+}
+
+export function isRtlText(str) {
+  return /[\u0590-\u05FF\u0600-\u06FF]/.test(String(str || ''));
 }
 
 export function t() {
@@ -435,7 +439,7 @@ export function getLocalizedField(obj, fieldName = 'titles') {
   if (!obj) return '';
   const map = obj[fieldName];
   if (map && typeof map === 'object') {
-    return map[state.nativeLang] || map.en || map.ru || map.he || '';
+    return map[state.nativeLang] || map.en || map.ru || map.de || map.he || '';
   }
   return '';
 }
@@ -455,7 +459,7 @@ export function getWeaponDesc(w) {
 export function getWordTranslation(entry) {
   if (!entry) return '';
   if (entry.translations && typeof entry.translations === 'object') {
-    return entry.translations[state.nativeLang] || entry.translations.en || entry.translations.ru || entry.translations.he || '';
+    return entry.translations[state.nativeLang] || entry.translations.en || entry.translations.ru || entry.translations.de || entry.translations.he || '';
   }
   if (state.nativeLang === 'he') return entry.he || entry.ru || '';
   return entry.ru || entry.he || '';
@@ -463,49 +467,58 @@ export function getWordTranslation(entry) {
 
 export function isRtlTranslation(entry) {
   const txt = getWordTranslation(entry);
-  return state.nativeLang === 'he' || /[\u0590-\u05FF]/.test(txt);
+  return isRtlUI() || isRtlText(txt);
+}
+
+function pickSlavicNoun(count, one, few, many) {
+  const mod100 = count % 100;
+  const mod10 = count % 10;
+  if (mod100 >= 11 && mod100 <= 14) return many;
+  if (mod10 === 1) return one;
+  if (mod10 >= 2 && mod10 <= 4) return few;
+  return many;
 }
 
 export function formatDeckWordsCountFull(n) {
   const count = Math.max(0, Number(n) || 0);
-  if (state.nativeLang === 'ru') {
-    const numStr = count.toLocaleString('ru-RU');
-    const mod100 = count % 100;
-    const mod10 = count % 10;
-    let noun = 'слов';
-    if (mod100 >= 11 && mod100 <= 14) {
-      noun = 'слов';
-    } else if (mod10 === 1) {
-      noun = 'слово';
-    } else if (mod10 >= 2 && mod10 <= 4) {
-      noun = 'слова';
-    }
-    return `${numStr} ${noun}`;
+  switch (state.nativeLang) {
+    case 'ru':
+      return `${count.toLocaleString('ru-RU')} ${pickSlavicNoun(count, 'слово', 'слова', 'слов')}`;
+    case 'uk':
+      return `${count.toLocaleString('uk-UA')} ${pickSlavicNoun(count, 'слово', 'слова', 'слів')}`;
+    case 'de':
+      return `${count.toLocaleString('de-DE')} ${count === 1 ? 'Wort' : 'Wörter'}`;
+    case 'es':
+      return `${count.toLocaleString('es-ES')} ${count === 1 ? 'palabra' : 'palabras'}`;
+    case 'tr':
+      return `${count.toLocaleString('tr-TR')} kelime`;
+    case 'he':
+      return `${count.toLocaleString('he-IL')} מילים`;
+    case 'ar':
+      return `${count.toLocaleString('en-US')} ${count === 1 ? 'كلمة' : (count <= 10 ? 'كلمات' : 'كلمة')}`;
+    default:
+      return `${count.toLocaleString('en-US')} ${count === 1 ? 'word' : 'words'}`;
   }
-  if (state.nativeLang === 'he') {
-    return `${count.toLocaleString('he-IL')} מילים`;
-  }
-  return `${count.toLocaleString('en-US')} ${count === 1 ? 'word' : 'words'}`;
 }
 
 export function formatDeckLessonsCountFull(n) {
   const count = Math.max(0, Number(n) || 0);
-  if (state.nativeLang === 'ru') {
-    const numStr = count.toLocaleString('ru-RU');
-    const mod100 = count % 100;
-    const mod10 = count % 10;
-    let noun = 'уроков';
-    if (mod100 >= 11 && mod100 <= 14) {
-      noun = 'уроков';
-    } else if (mod10 === 1) {
-      noun = 'урок';
-    } else if (mod10 >= 2 && mod10 <= 4) {
-      noun = 'урока';
-    }
-    return `${numStr} ${noun}`;
+  switch (state.nativeLang) {
+    case 'ru':
+      return `${count.toLocaleString('ru-RU')} ${pickSlavicNoun(count, 'урок', 'урока', 'уроков')}`;
+    case 'uk':
+      return `${count.toLocaleString('uk-UA')} ${pickSlavicNoun(count, 'урок', 'уроки', 'уроків')}`;
+    case 'de':
+      return `${count.toLocaleString('de-DE')} ${count === 1 ? 'Lektion' : 'Lektionen'}`;
+    case 'es':
+      return `${count.toLocaleString('es-ES')} ${count === 1 ? 'lección' : 'lecciones'}`;
+    case 'tr':
+      return `${count.toLocaleString('tr-TR')} ders`;
+    case 'he':
+      return `${count.toLocaleString('he-IL')} שלבים`;
+    case 'ar':
+      return `${count.toLocaleString('en-US')} ${count === 1 ? 'درس' : (count <= 10 ? 'دروس' : 'درسًا')}`;
+    default:
+      return `${count.toLocaleString('en-US')} ${count === 1 ? 'lesson' : 'lessons'}`;
   }
-  if (state.nativeLang === 'he') {
-    return `${count.toLocaleString('he-IL')} שלבים`;
-  }
-  return `${count.toLocaleString('en-US')} ${count === 1 ? 'lesson' : 'lessons'}`;
 }

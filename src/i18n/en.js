@@ -90,6 +90,14 @@ export const EN_TEXT = {
   topicTravelSub: 'Trips, hotels, countries',
   topicDailyTitle: 'Daily Life',
   topicDailySub: 'Home, chat, routine',
+  topicMedicineTitle: 'Medicine',
+  topicMedicineSub: 'Health, doctor, treatment',
+  topicNatureTitle: 'Nature',
+  topicNatureSub: 'Ecology, climate, wildlife',
+  topicSocietyTitle: 'Society',
+  topicSocietySub: 'Politics, future, people',
+  topicItTitle: 'Digital World',
+  topicItSub: 'Internet, media, online',
   mobActiveFilterReset: 'Clear',
   mobNavHome: 'Home',
   mobNavPlay: 'Play',
@@ -132,7 +140,10 @@ export const EN_TEXT = {
   featVoice: 'Gemini 3.8 AI Voice',
   promoMonitorBadge: (num, title) => `LESSON ${num} · ${title}`,
   academySub: 'SPACE LANGUAGE ACADEMY',
-  nativeLangNames: { ru: 'Russian', en: 'English', he: 'Hebrew' },
+  nativeLangNames: {
+    ru: 'Russian', en: 'English', de: 'German', es: 'Spanish',
+    uk: 'Ukrainian', tr: 'Turkish', he: 'Hebrew', ar: 'Arabic'
+  },
   arenaWaveLabel: (lessonNum, waveNum) => `LESSON ${lessonNum} · WAVE ${String(waveNum).padStart(2, '0')}`,
   desktopPromptIdle: '⌨️ Type any word to fire lasers',
   mobLivesLabel: 'LIVES:',
@@ -193,7 +204,12 @@ export const EN_TEXT = {
   legends: {
     de: ['der (masc.)', 'die (fem.)', 'das (neut.)', 'Verb/Other'],
     en: ['Noun', 'Adjective', 'Verb', 'Adv./Other'],
-    es: ['el (masc.)', 'la (fem.)', 'Verbo', 'Adj./Other']
+    es: ['el (masc.)', 'la (fem.)', 'Verbo', 'Adj./Other'],
+    ru: ['Сущ. (Noun)', 'Прил. (Adj.)', 'Глаг. (Verb)', 'Adv./Other'],
+    uk: ['Імен. (Noun)', 'Прикм. (Adj.)', 'Дієсл. (Verb)', 'Adv./Other'],
+    tr: ['İsim (Noun)', 'Sıfat (Adj.)', 'Fiil (Verb)', 'Zarf/Other'],
+    he: ['ש״ע (Noun)', 'תואר (Adj.)', 'פועל (Verb)', 'Other'],
+    ar: ['اسم (Noun)', 'صفة (Adj.)', 'فعل (Verb)', 'Other']
   },
 
   targetIdle: 'Type or tap letters to shoot incoming words...',
@@ -237,7 +253,7 @@ export const EN_TEXT = {
   dictTitle: (courseTitle, n) => `📚 Dictionary: ${courseTitle} (${n} words)`,
   dictSearchPlaceholder: 'Search word or translation...',
   dictPinnedFilter: 'Pinned',
-  layoutWarning: '⚠️ Switch keyboard layout to Latin characters!',
+  layoutWarning: '⚠️ Switch keyboard layout to match the target language!',
 
   catalogTitle: '🗂️ 3-Tier Courses, Modules & Short Lessons',
   tabAll: 'All Courses',

@@ -1907,6 +1907,22 @@
     gap: 6px;
   }
 
+  body.mode-play .ztype-keys-container.compact-kbd .ztype-key-row {
+    gap: 2.5px;
+  }
+
+  body.mode-play .ztype-keys-container.compact-kbd .zkey {
+    font-size: 1.05rem;
+    height: 43px;
+    border-radius: 9px;
+  }
+
+  body.mode-play .ztype-keys-container.compact-kbd .zkey .uml-sub {
+    font-size: 0.62rem;
+    top: 1px;
+    right: 2px;
+  }
+
   body.mode-play .ztype-key-row {
     gap: 5px;
   }

@@ -11,6 +11,7 @@ import {
   getPinnedEntriesForTargetLang,
   getWordTranslation,
   isEntryPinned,
+  isRtlTargetLang,
   isRtlTranslation,
   isWeaponUnlocked,
   learnedWordsSet,
@@ -284,8 +285,9 @@ export function renderAnkiPreviewCards() {
     rowEl.className = 'anki-preview-item';
     const transText = getWordTranslation(item);
     const rtlAttr = isRtlTranslation(item) ? ' dir="rtl"' : ' dir="ltr"';
+    const wordDir = isRtlTargetLang(state.importTargetLang) ? 'rtl' : 'ltr';
     rowEl.innerHTML = `
-      <strong style="color:#fff; font-family: var(--font-ui);" dir="ltr">${escapeHtml(item.raw)}</strong>
+      <strong style="color:#fff; font-family: var(--font-ui);" dir="${wordDir}">${escapeHtml(item.raw)}</strong>
       <span style="color: var(--accent-amber); font-weight: 600;"${rtlAttr}>${escapeHtml(transText)}</span>
     `;
     ankiSampleCards.appendChild(rowEl);
@@ -424,12 +426,13 @@ export function renderFullDictionary(filterQuery = '') {
     if (state.dictOnlyPinned && !isEntryPinned(item)) return false;
     if (!q) return true;
     const trObj = item.translations || {};
-    return (
+    if (
       item.raw.toLowerCase().includes(q) ||
-      (trObj.ru && trObj.ru.toLowerCase().includes(q)) ||
-      (trObj.en && trObj.en.toLowerCase().includes(q)) ||
-      (trObj.he && trObj.he.toLowerCase().includes(q))
-    );
+      Object.values(trObj).some(val => typeof val === 'string' && val.toLowerCase().includes(q))
+    ) {
+      return true;
+    }
+    return false;
   });
   renderWordsPreviewList(filtered, dictFullList);
 }

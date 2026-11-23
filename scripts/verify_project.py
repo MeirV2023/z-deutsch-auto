@@ -354,13 +354,12 @@ print(f"[OK] DOM Registry: all {len(queried_ids)} getElementById lookups verifie
 def extract_i18n_keys(p: Path):
     return set(re.findall(r"(?m)^\s{2}([A-Za-z0-9_]+)\s*:", p.read_text(encoding="utf-8")))
 
-ru_keys = extract_i18n_keys(ROOT / "src/i18n/ru.js")
-en_keys = extract_i18n_keys(ROOT / "src/i18n/en.js")
-he_keys = extract_i18n_keys(ROOT / "src/i18n/he.js")
-assert ru_keys == en_keys == he_keys, (
-    f"i18n key mismatch! RU-EN={ru_keys ^ en_keys}, RU-HE={ru_keys ^ he_keys}"
-)
-print(f"[OK] Localization: {len(ru_keys)} keys 100% synchronized across RU, EN, and HE")
+i18n_langs = ["ru", "en", "he", "de", "es", "uk", "tr", "ar"]
+i18n_key_sets = {lg: extract_i18n_keys(ROOT / f"src/i18n/{lg}.js") for lg in i18n_langs}
+base_keys = i18n_key_sets["ru"]
+for lg, kset in i18n_key_sets.items():
+    assert kset == base_keys, f"i18n key mismatch for {lg}! diff={base_keys ^ kset}"
+print(f"[OK] Localization: {len(base_keys)} keys 100% synchronized across all {len(i18n_langs)} languages ({', '.join(l.upper() for l in i18n_langs)})")
 
 cat_json = json.loads((ROOT / "admin-catalog.json").read_text(encoding="utf-8"))
 assert cat_json.get("version") == 1

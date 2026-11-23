@@ -98,6 +98,14 @@ export const RU_TEXT = {
   topicTravelSub: 'Поездки, отели, страны',
   topicDailyTitle: 'Повседневность',
   topicDailySub: 'Быт, общение, рутина',
+  topicMedicineTitle: 'Медицина',
+  topicMedicineSub: 'Здоровье, врач, лечение',
+  topicNatureTitle: 'Природа',
+  topicNatureSub: 'Экология, климат, мир',
+  topicSocietyTitle: 'Общество',
+  topicSocietySub: 'Политика, будущее, люди',
+  topicItTitle: 'Цифровой мир',
+  topicItSub: 'Интернет, медиа, сети',
   mobActiveFilterReset: 'Сбросить',
   mobNavHome: 'Главная',
   mobNavPlay: 'Играть',
@@ -160,7 +168,10 @@ export const RU_TEXT = {
   featVoice: 'Озвучка Gemini 3.8 AI',
   promoMonitorBadge: (num, title) => `УРОК ${num} · ${title}`,
   academySub: 'SPACE LANGUAGE ACADEMY',
-  nativeLangNames: { ru: 'Русский', en: 'Английский', he: 'Иврит' },
+  nativeLangNames: {
+    ru: 'Русский', en: 'Английский', de: 'Немецкий', es: 'Испанский',
+    uk: 'Украинский', tr: 'Турецкий', he: 'Иврит', ar: 'Арабский'
+  },
   arenaWaveLabel: (lessonNum, waveNum) => `УРОК ${lessonNum} · ВОЛНА ${String(waveNum).padStart(2, '0')}`,
   desktopPromptIdle: '⌨️ Печатайте слово, чтобы стрелять',
   mobLivesLabel: 'ЖИЗНИ:',
@@ -221,7 +232,12 @@ export const RU_TEXT = {
   legends: {
     de: ['der (м.р.)', 'die (ж.р.)', 'das (ср.р.)', 'Глаг./Пр.'],
     en: ['Noun (сущ.)', 'Adj. (прил.)', 'Verb (глаг.)', 'Adv./Пр.'],
-    es: ['el (м.р.)', 'la (ж.р.)', 'Verbo (глаг.)', 'Adj./Пр.']
+    es: ['el (м.р.)', 'la (ж.р.)', 'Verbo (глаг.)', 'Adj./Пр.'],
+    ru: ['Сущ.', 'Прил.', 'Глаг.', 'Нареч./Пр.'],
+    uk: ['Імен.', 'Прикм.', 'Дієсл.', 'Присл./Ін.'],
+    tr: ['İsim (сущ.)', 'Sıfat (прил.)', 'Fiil (глаг.)', 'Zarf/Пр.'],
+    he: ['ש״ע (сущ.)', 'תואר (прил.)', 'פועל (глаг.)', 'ביטוי/Пр.'],
+    ar: ['اسم (сущ.)', 'صفة (прил.)', 'فعل (глаг.)', 'ظرف/Пр.']
   },
 
   targetIdle: 'Нажимайте буквы, чтобы стрелять по словам...',
@@ -272,7 +288,7 @@ export const RU_TEXT = {
   dictTitle: (courseTitle, n) => `📚 Словарь: ${courseTitle} (${n} сл.)`,
   dictSearchPlaceholder: 'Поиск слова или перевода...',
   dictPinnedFilter: 'Отмеченные',
-  layoutWarning: '⚠️ Переключите раскладку клавиатуры на латиницу!',
+  layoutWarning: '⚠️ Переключите раскладку клавиатуры на язык изучаемого слова!',
 
   // Каталог курсов и импорт Anki
   catalogTitle: '🗂️ Трёхступенчатый каталог курсов и уроков',

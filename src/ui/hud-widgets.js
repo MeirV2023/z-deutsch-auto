@@ -12,6 +12,7 @@ import {
   getWeaponName,
   getWordTranslation,
   isEntryPinned,
+  isRtlTargetLang,
   isRtlTranslation,
   learnedWordsSet,
   state,
@@ -173,8 +174,14 @@ export function getLangFlagSvg(code) {
       return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgEs"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgEs)"><rect width="24" height="16" fill="#dc2626"/><rect width="24" height="8" y="4" fill="#facc15"/><circle cx="7.5" cy="8" r="1.9" fill="#b45309"/></g></svg>`;
     case 'ru':
       return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgRu"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgRu)"><rect width="24" height="5.4" y="0" fill="#f8fafc"/><rect width="24" height="5.4" y="5.3" fill="#2563eb"/><rect width="24" height="5.4" y="10.6" fill="#dc2626"/></g></svg>`;
+    case 'uk':
+      return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgUk"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgUk)"><rect width="24" height="8" y="0" fill="#0057b7"/><rect width="24" height="8" y="8" fill="#ffd700"/></g></svg>`;
+    case 'tr':
+      return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgTr"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgTr)"><rect width="24" height="16" fill="#e30a17"/><circle cx="10.2" cy="8" r="4" fill="#ffffff"/><circle cx="11.3" cy="8" r="3.2" fill="#e30a17"/><path d="M15.4 6.2l.5 1.3 1.4.1-1.1.8.4 1.3-1.2-.8-1.1.8.4-1.3-1.1-.8 1.4-.1.4-1.3Z" fill="#ffffff"/></g></svg>`;
     case 'he':
       return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgHe"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgHe)"><rect width="24" height="16" fill="#f8fafc"/><rect width="24" height="2.4" y="2" fill="#2563eb"/><rect width="24" height="2.4" y="11.6" fill="#2563eb"/><path d="M12 5.2l2.3 4H9.7l2.3-4Zm0 5.6l-2.3-4h4.6l-2.3 4Z" fill="none" stroke="#1d4ed8" stroke-width="0.9"/></g></svg>`;
+    case 'ar':
+      return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><clipPath id="flgAr"><rect width="24" height="16" rx="3"/></clipPath><g clip-path="url(#flgAr)"><rect width="24" height="16" fill="#15803d"/><path d="M5.5 7.2h13" stroke="#f8fafc" stroke-width="1.5" stroke-linecap="round"/><path d="M6.5 10.6h11" stroke="#f8fafc" stroke-width="1.3" stroke-linecap="round"/><circle cx="9" cy="5" r="0.8" fill="#f8fafc"/><circle cx="12" cy="4.7" r="0.8" fill="#f8fafc"/><circle cx="15" cy="5" r="0.8" fill="#f8fafc"/></g></svg>`;
     default:
       return `<svg class="svg-flag-icon" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" rx="3" fill="#1e293b"/></svg>`;
   }
@@ -281,6 +288,35 @@ function getMissionArtworkSvg(course) {
       <path d="M26 52l26-18 18 10 34-22" stroke="#34d399" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`;
   }
+  if (cat === 'medicine') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <rect width="134" height="134" fill="#0f172a"/>
+      <circle cx="67" cy="67" r="44" fill="#fb7185" fill-opacity="0.16"/>
+      <rect x="57" y="34" width="20" height="66" rx="6" fill="#fb7185"/>
+      <rect x="34" y="57" width="66" height="20" rx="6" fill="#fb7185"/>
+      <path d="M24 94h22l9-16 11 26 11-22 9 12h24" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+  }
+  if (cat === 'nature') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <rect width="134" height="134" fill="#064e3b"/>
+      <circle cx="96" cy="30" r="15" fill="#fde047" fill-opacity="0.45"/>
+      <path d="M0 98l42-34 28 22 30-26 34 26v48H0V98Z" fill="#059669" fill-opacity="0.65"/>
+      <path d="M67 104V52" stroke="#4ade80" stroke-width="5" stroke-linecap="round"/>
+      <path d="M67 64c0-22-18-30-32-27 2 18 15 30 32 27Z" fill="#4ade80"/>
+      <path d="M67 56c0-22 18-30 32-27-2 18-15 30-32 27Z" fill="#22c55e"/>
+    </svg>`;
+  }
+  if (cat === 'society') {
+    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
+      <rect width="134" height="134" fill="#1e1b4b"/>
+      <path d="M67 24L22 50h90L67 24Z" fill="#a78bfa" stroke="#ddd6fe" stroke-width="1.8"/>
+      <rect x="32" y="54" width="12" height="44" rx="2" fill="#38bdf8"/>
+      <rect x="61" y="54" width="12" height="44" rx="2" fill="#38bdf8"/>
+      <rect x="90" y="54" width="12" height="44" rx="2" fill="#38bdf8"/>
+      <rect x="20" y="100" width="94" height="12" rx="4" fill="#6366f1"/>
+    </svg>`;
+  }
   if (cat === 'anki') {
     return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
       <rect width="134" height="134" fill="#31105f"/>
@@ -356,6 +392,25 @@ function getCourseCardIconSvg(course) {
       return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
         <path d="M10 30l42-18-13 26-9-4.5-8 8-1-11-11 2.5Z" fill="#e0f2fe" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round"/>
       </svg>`;
+    case 'medicine':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <rect x="26" y="8" width="12" height="36" rx="3" fill="#fb7185"/>
+        <rect x="14" y="20" width="36" height="12" rx="3" fill="#fb7185"/>
+      </svg>`;
+    case 'nature':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <path d="M32 45V20" stroke="#4ade80" stroke-width="3.6" stroke-linecap="round"/>
+        <path d="M32 28c0-13-12-19-21-17 1 12 9 19 21 17Z" fill="#4ade80"/>
+        <path d="M32 23c0-14 12-20 22-17-1 12-10 19-22 17Z" fill="#22c55e"/>
+      </svg>`;
+    case 'society':
+      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
+        <path d="M32 8L12 20h40L32 8Z" fill="#a78bfa"/>
+        <rect x="17" y="22" width="6" height="17" rx="1.5" fill="#38bdf8"/>
+        <rect x="29" y="22" width="6" height="17" rx="1.5" fill="#38bdf8"/>
+        <rect x="41" y="22" width="6" height="17" rx="1.5" fill="#38bdf8"/>
+        <rect x="12" y="40" width="40" height="5" rx="2" fill="#6366f1"/>
+      </svg>`;
     case 'anki':
       return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
         <rect x="18" y="8" width="28" height="34" rx="5" transform="rotate(-7 32 25)" fill="#1e293b" stroke="#38bdf8" stroke-width="1.6"/>
@@ -387,6 +442,12 @@ export function getTopicChipIconSvg(cat) {
       return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.5 13a3.5 3.5 0 0 1-.5-6.9 4.5 4.5 0 0 1 12 0A3.5 3.5 0 0 1 17.5 13v4.5h-11V13Z" fill="#f1f5f9"/><rect x="6" y="17" width="12" height="2.8" rx="1" fill="#cbd5e1"/></svg>`;
     case 'finance':
       return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><ellipse cx="10" cy="17" rx="5.5" ry="2.2" fill="#d97706"/><ellipse cx="10" cy="13.5" rx="5.5" ry="2.2" fill="#f59e0b"/><ellipse cx="10" cy="10" rx="5.5" ry="2.2" fill="#fde047"/><ellipse cx="15.5" cy="15.5" rx="4.5" ry="1.8" fill="#f59e0b"/><ellipse cx="15.5" cy="12" rx="4.5" ry="1.8" fill="#fde047"/></svg>`;
+    case 'medicine':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9.5" y="4" width="5" height="16" rx="1.5" fill="#fb7185"/><rect x="4" y="9.5" width="16" height="5" rx="1.5" fill="#fb7185"/></svg>`;
+    case 'nature':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 20v-8" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/><path d="M12 13c0-5-4-7.5-7.5-6.8.4 4.4 3.4 7.2 7.5 6.8Z" fill="#4ade80"/><path d="M12 11c0-5.4 4.4-8 8-7.2-.4 4.8-3.8 7.6-8 7.2Z" fill="#22c55e"/></svg>`;
+    case 'society':
+      return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4L4 9h16L12 4Z" fill="#a78bfa"/><rect x="6" y="10" width="2.5" height="7" fill="#38bdf8"/><rect x="10.75" y="10" width="2.5" height="7" fill="#38bdf8"/><rect x="15.5" y="10" width="2.5" height="7" fill="#38bdf8"/><rect x="4" y="18" width="16" height="2.2" rx="1" fill="#6366f1"/></svg>`;
     default:
       return `<svg class="topic-chip-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H14v-5h-4v5H5.5A1.5 1.5 0 0 1 4 19v-8.5Z" fill="#a78bfa"/></svg>`;
   }
@@ -524,12 +585,13 @@ export function renderDesktopTopicsBar() {
   const allCourses = getCoursesForTargetLang(state.targetLang);
 
   const topicSpecs = [
-    { cat: 'auto', title: tr.topicAutoTitle },
     { cat: 'business', title: tr.topicBusinessTitle },
+    { cat: 'base', title: tr.topicDailyTitle },
+    { cat: 'it', title: tr.topicItTitle },
+    { cat: 'medicine', title: tr.topicMedicineTitle },
     { cat: 'travel', title: tr.topicTravelTitle },
-    { cat: 'food', title: tr.topicFoodTitle },
-    { cat: 'finance', title: tr.topicFinanceTitle },
-    { cat: 'base', title: tr.topicDailyTitle }
+    { cat: 'nature', title: tr.topicNatureTitle },
+    { cat: 'society', title: tr.topicSocietyTitle }
   ];
 
   desktopTopicsChips.innerHTML = '';
@@ -743,12 +805,13 @@ export function renderMobileDiscoveryBlocks() {
 
   if (mobileTopicGrid) {
     const topicSpecs = [
-      { cat: 'finance', cls: 'topic-finance', icon: '🪙', title: tr.topicFinanceTitle, sub: tr.topicFinanceSub },
-      { cat: 'auto', cls: 'topic-auto', icon: '🚗', title: tr.topicAutoTitle, sub: tr.topicAutoSub },
-      { cat: 'food', cls: 'topic-food', icon: '👨‍🍳', title: tr.topicFoodTitle, sub: tr.topicFoodSub },
       { cat: 'business', cls: 'topic-business', icon: '💼', title: tr.topicBusinessTitle, sub: tr.topicBusinessSub },
+      { cat: 'base', cls: 'topic-daily', icon: '🏠', title: tr.topicDailyTitle, sub: tr.topicDailySub },
+      { cat: 'it', cls: 'topic-auto', icon: '💻', title: tr.topicItTitle, sub: tr.topicItSub },
+      { cat: 'medicine', cls: 'topic-food', icon: '🩺', title: tr.topicMedicineTitle, sub: tr.topicMedicineSub },
       { cat: 'travel', cls: 'topic-travel', icon: '✈️', title: tr.topicTravelTitle, sub: tr.topicTravelSub },
-      { cat: 'base', cls: 'topic-daily', icon: '🏠', title: tr.topicDailyTitle, sub: tr.topicDailySub }
+      { cat: 'nature', cls: 'topic-finance', icon: '🌿', title: tr.topicNatureTitle, sub: tr.topicNatureSub },
+      { cat: 'society', cls: 'topic-business', icon: '🏛️', title: tr.topicSocietyTitle, sub: tr.topicSocietySub }
     ];
 
     mobileTopicGrid.innerHTML = '';
@@ -860,6 +923,7 @@ export function updateHitSpotlightCard(entry, isHitFlash = true) {
   }
   if (hitWordMain) {
     hitWordMain.textContent = entry.word || entry.raw || '';
+    hitWordMain.dir = isRtlTargetLang(state.targetLang) ? 'rtl' : 'ltr';
   }
   if (hitVisualEmoji) {
     hitVisualEmoji.textContent = (course && course.icon) || theme.emoji;
@@ -943,7 +1007,9 @@ export function renderLevelSidebar() {
   const courseTitle = `${course.icon || '🚀'} ${getLocalizedField(course, 'titles')}`;
   const modTitle = getLocalizedField(mod, 'titles');
   if (titleCourseName) {
-    const modPrefix = state.nativeLang === 'ru' ? 'М' : (state.nativeLang === 'he' ? 'מ׳' : 'M');
+    const modPrefix = (state.nativeLang === 'ru' || state.nativeLang === 'uk')
+      ? 'М'
+      : (state.nativeLang === 'he' ? 'מ׳' : (state.nativeLang === 'ar' ? 'و' : 'M'));
     titleCourseName.textContent = `${courseTitle} · ${modPrefix}${state.activeModuleIndex + 1}`;
     if (btnOpenCatalogTitle) {
       btnOpenCatalogTitle.title = `${courseTitle} — ${modTitle}`;
@@ -1057,11 +1123,12 @@ export function rerenderKillFeed() {
 
     const transText = getWordTranslation(entry);
     const dirAttr = isRtlTranslation(entry) ? ' dir="rtl"' : ' dir="ltr"';
+    const wordDirAttr = isRtlTargetLang(state.targetLang) ? ' dir="rtl"' : ' dir="ltr"';
     const pinned = isEntryPinned(entry);
 
     card.innerHTML = `
-      <div class="kill-card-top" dir="ltr">
-        <span class="kill-de">${escapeHtml(entry.raw)}</span>
+      <div class="kill-card-top">
+        <span class="kill-de"${wordDirAttr}>${escapeHtml(entry.raw)}</span>
         <div class="kill-card-actions">
           <button type="button" class="pin-star-btn${pinned ? ' pinned' : ''}" title="${escapeHtml(tr.pinTooltip)}" aria-label="${escapeHtml(tr.pinTooltip)}">${pinned ? '⭐' : '☆'}</button>
           <button type="button" class="kill-speak-btn" title="🔊 Gemini 3.8 TTS" aria-label="🔊">🔊</button>
@@ -1115,12 +1182,13 @@ export function updateBottomTargetUI() {
   const remainPart = locked.text.slice(locked.typedCount);
   const transText = getWordTranslation(locked.entry);
   const dirAttr = isRtlTranslation(locked.entry) ? ' dir="rtl"' : ' dir="ltr"';
+  const targetDir = isRtlTargetLang(state.targetLang) ? 'rtl' : 'ltr';
   const artBadge = locked.entry.article
     ? `<span style="color: var(--accent-cyan);" dir="ltr">[${escapeHtml(locked.entry.article)}]</span> `
     : '';
 
   const lockedHtml = `
-    ${artBadge}<span dir="ltr"><span class="target-word-typed">${escapeHtml(typedPart)}</span><strong style="color:#fff;">${escapeHtml(remainPart)}</strong></span>
+    ${artBadge}<span dir="${targetDir}"><span class="target-word-typed">${escapeHtml(typedPart)}</span><strong style="color:#fff;">${escapeHtml(remainPart)}</strong></span>
     <span style="color: var(--accent-amber);"${dirAttr}>— ${escapeHtml(transText)}</span>
   `;
   bottomTargetPreview.innerHTML = lockedHtml;

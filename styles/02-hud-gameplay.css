@@ -476,8 +476,21 @@
   padding: 0 4%;
 }
 
+.ztype-key-row.row-middle.compact-row {
+  padding: 0 1%;
+}
+
 .ztype-key-row.row-bottom {
   padding: 0 1%;
+}
+
+.ztype-keys-container.compact-kbd .ztype-key-row {
+  gap: 2px;
+}
+
+.ztype-keys-container.compact-kbd .zkey {
+  font-size: 1.14rem;
+  height: 43px;
 }
 
 .zkey {
@@ -643,7 +656,13 @@
 .lang-quick-group {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.overlay-top-bar .lang-quick-group .native-lang-btn {
+  padding: 4px 8px;
+  font-size: 0.74rem;
 }
 
 .overlay-badge {

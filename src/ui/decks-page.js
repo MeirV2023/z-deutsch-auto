@@ -14,7 +14,9 @@ import {
   getRecentDeckActivity,
   getWordTranslation,
   isEntryPinned,
+  isRtlTargetLang,
   isRtlTranslation,
+  isRtlUI,
   learnedWordsSet,
   recordDeckActivity,
   state,
@@ -178,7 +180,7 @@ export function openDeckContextMenu(anchorEl, course) {
   const menuRect = deckContextMenu.getBoundingClientRect();
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const isRtl = document.documentElement.dir === 'rtl';
+  const isRtl = isRtlUI();
 
   let left = isRtl ? btnRect.left : (btnRect.right - menuRect.width);
   left = Math.max(12, Math.min(vw - menuRect.width - 12, left));
@@ -658,10 +660,11 @@ export function renderDeckDetailPane(course, stats) {
     const pinned = isEntryPinned(item, course.targetLang);
     const transStr = getWordTranslation(item);
     const rtlAttr = isRtlTranslation(item) ? ' dir="rtl"' : ' dir="ltr"';
+    const wordDir = isRtlTargetLang(course.targetLang) ? 'rtl' : 'ltr';
 
     wCard.innerHTML = `
       <div class="deck-word-item-main">
-        <div class="deck-word-foreign" dir="ltr">${escapeHtml(item.raw)}</div>
+        <div class="deck-word-foreign" dir="${wordDir}">${escapeHtml(item.raw)}</div>
         <div class="deck-word-trans"${rtlAttr}>${escapeHtml(transStr)}</div>
       </div>
       <div class="deck-word-item-btns">
@@ -959,14 +962,17 @@ export function renderDecksPage() {
 
   // Горизонтальные чипы категорий над списком «Все колоды»
   if (decksCategoryFilterGroup) {
-    const coreCatIds = ['auto', 'business', 'base', 'it', 'travel', 'finance', 'food'];
+    const preferredOrder = ['business', 'base', 'it', 'medicine', 'travel', 'nature', 'society', 'auto', 'finance', 'food'];
     const allCats = getAllCategories();
     const catById = new Map(allCats.map(c => [c.id, c]));
+    const usedCatIds = new Set(
+      allForLang.filter(c => c.source !== 'user').map(c => inferCourseCategory(c))
+    );
     const orderedCats = [];
     const seenCats = new Set();
 
-    coreCatIds.forEach(id => {
-      if (catById.has(id)) {
+    preferredOrder.forEach(id => {
+      if (usedCatIds.has(id) && catById.has(id)) {
         orderedCats.push(catById.get(id));
         seenCats.add(id);
       }

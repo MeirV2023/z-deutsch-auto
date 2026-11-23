@@ -1,6 +1,6 @@
 // Геометрия арены, авто-замедление длинных слов и анти-коллизии капсул (SRP)
 import { shuffleArray } from '../core/utils.js';
-import { CANVAS_WORD_FONT } from '../config/constants.js';
+import { CANVAS_WORD_FONT, REAL_ARTICLES } from '../config/constants.js';
 import { getWordTranslation, isEntryPinned, state } from '../state/store.js';
 import {
   battleArenaFrame,
@@ -149,25 +149,39 @@ export function getTargetString(wordEntry) {
   return state.typeWithArticle ? (wordEntry.withArticle || wordEntry.word) : wordEntry.word;
 }
 
+function normalizeSingleChar(ch) {
+  if (!ch) return '';
+  return String(ch).toLowerCase().replace(/\u0307/g, '');
+}
+
 export function mapTargetCharToBaseKey(ch) {
   if (!ch) return '';
-  const low = ch.toLowerCase();
+  const low = normalizeSingleChar(ch);
   if (low === 'ñ') {
     return state.targetLang === 'es' ? 'ñ' : 'n';
   }
   if (low === 'ä' || low === 'á' || low === 'à' || low === 'â') return 'a';
   if (low === 'é' || low === 'è' || low === 'ê' || low === 'ë') return 'e';
-  if (low === 'í' || low === 'ì' || low === 'î' || low === 'ï') return 'i';
+  if (low === 'í' || low === 'ì' || low === 'î' || low === 'ï' || low === 'ı') return 'i';
   if (low === 'ö' || low === 'ó' || low === 'ò' || low === 'ô') return 'o';
   if (low === 'ü' || low === 'ú' || low === 'ù' || low === 'û') return 'u';
-  if (low === 'ß') return 's';
+  if (low === 'ß' || low === 'ş') return 's';
+  if (low === 'ç') return 'c';
+  if (low === 'ğ') return 'g';
+  if (low === 'ё') return 'е';
+  if (low === 'ъ') return 'ь';
+  if (low === 'ґ') return 'г';
+  if (low === 'ї') return 'і';
+  if (low === 'أ' || low === 'إ' || low === 'آ') return 'ا';
+  if (low === 'ؤ') return 'و';
+  if (low === 'ئ') return 'ي';
   return low;
 }
 
 export function charsMatchTargetLang(inputChar, targetChar) {
   if (!inputChar || !targetChar) return { matched: false, umlautSub: false, eszettSub: false };
-  const inp = inputChar.toLowerCase();
-  const tgt = targetChar.toLowerCase();
+  const inp = normalizeSingleChar(inputChar);
+  const tgt = normalizeSingleChar(targetChar);
   if (inp === tgt) return { matched: true, umlautSub: false, eszettSub: false };
 
   // Немецкие умлауты и эсцет
@@ -176,13 +190,43 @@ export function charsMatchTargetLang(inputChar, targetChar) {
   if (tgt === 'ü' && inp === 'u') return { matched: true, umlautSub: true, eszettSub: false };
   if (tgt === 'ß' && inp === 's') return { matched: true, umlautSub: false, eszettSub: true };
 
-  // Испанские диакритики и ñ (чтобы удобно печатать и с испанской, и со стандартной клавиатуры!)
+  // Испанские диакритики и ñ
   if ((tgt === 'á' || tgt === 'à') && (inp === 'a' || inp === 'á')) return { matched: true, umlautSub: false, eszettSub: false };
   if ((tgt === 'é' || tgt === 'è') && (inp === 'e' || inp === 'é')) return { matched: true, umlautSub: false, eszettSub: false };
   if ((tgt === 'í' || tgt === 'ì') && (inp === 'i' || inp === 'í')) return { matched: true, umlautSub: false, eszettSub: false };
   if ((tgt === 'ó' || tgt === 'ò') && (inp === 'o' || inp === 'ó')) return { matched: true, umlautSub: false, eszettSub: false };
   if ((tgt === 'ú' || tgt === 'ù') && (inp === 'u' || inp === 'ú')) return { matched: true, umlautSub: false, eszettSub: false };
   if (tgt === 'ñ' && (inp === 'ñ' || inp === 'n')) return { matched: true, umlautSub: false, eszettSub: false };
+
+  // Турецкий (ç, ğ, ı, ö, ş, ü) — удобный ввод и с обычной латиницы, и с турецкой раскладки
+  if (tgt === 'ç' && inp === 'c') return { matched: true, umlautSub: false, eszettSub: false };
+  if (tgt === 'ğ' && inp === 'g') return { matched: true, umlautSub: false, eszettSub: false };
+  if (tgt === 'ı' && inp === 'i') return { matched: true, umlautSub: false, eszettSub: false };
+  if (tgt === 'i' && inp === 'ı') return { matched: true, umlautSub: false, eszettSub: false };
+  if (tgt === 'ş' && inp === 's') return { matched: true, umlautSub: false, eszettSub: false };
+
+  // Русский (е ↔ ё, ь ↔ ъ с экранной клавиатуры)
+  if ((tgt === 'ё' && inp === 'е') || (tgt === 'е' && inp === 'ё')) return { matched: true, umlautSub: false, eszettSub: false };
+  if ((tgt === 'ъ' && inp === 'ь') || (tgt === 'ь' && inp === 'ъ')) return { matched: true, umlautSub: false, eszettSub: false };
+
+  // Украинский (ґ ↔ г, ї ↔ і, а также типографский апостроф)
+  if (tgt === 'ґ' && inp === 'г') return { matched: true, umlautSub: false, eszettSub: false };
+  if (tgt === 'ї' && inp === 'і') return { matched: true, umlautSub: false, eszettSub: false };
+  if ((tgt === "'" || tgt === 'ʼ') && (inp === "'" || inp === 'ʼ')) return { matched: true, umlautSub: false, eszettSub: false };
+
+  // Иврит (допуск обычной и конечной формы софит)
+  if ((tgt === 'ך' && inp === 'כ') || (tgt === 'כ' && inp === 'ך')) return { matched: true, umlautSub: false, eszettSub: false };
+  if ((tgt === 'ם' && inp === 'מ') || (tgt === 'מ' && inp === 'ם')) return { matched: true, umlautSub: false, eszettSub: false };
+  if ((tgt === 'ן' && inp === 'נ') || (tgt === 'נ' && inp === 'ן')) return { matched: true, umlautSub: false, eszettSub: false };
+  if ((tgt === 'ף' && inp === 'פ') || (tgt === 'פ' && inp === 'ף')) return { matched: true, umlautSub: false, eszettSub: false };
+  if ((tgt === 'ץ' && inp === 'צ') || (tgt === 'צ' && inp === 'ץ')) return { matched: true, umlautSub: false, eszettSub: false };
+
+  // Арабский (варианты алиф/хамза, та марбута ↔ ха, алиф максура ↔ йа)
+  if (['أ', 'إ', 'آ', 'ا'].includes(tgt) && ['أ', 'إ', 'آ', 'ا'].includes(inp)) return { matched: true, umlautSub: false, eszettSub: false };
+  if ((tgt === 'ة' && inp === 'ه') || (tgt === 'ه' && inp === 'ة')) return { matched: true, umlautSub: false, eszettSub: false };
+  if ((tgt === 'ى' && inp === 'ي') || (tgt === 'ي' && inp === 'ى')) return { matched: true, umlautSub: false, eszettSub: false };
+  if (tgt === 'ؤ' && (inp === 'و' || inp === 'ء')) return { matched: true, umlautSub: false, eszettSub: false };
+  if (tgt === 'ئ' && (inp === 'ي' || inp === 'ء')) return { matched: true, umlautSub: false, eszettSub: false };
 
   return { matched: false, umlautSub: false, eszettSub: false };
 }
@@ -247,7 +291,7 @@ export function measureWordCapsule(text, entry) {
   const fontPx = getWordFontPx(text.length);
   if (state.screenMode === 'title' && canvas.width > 768) {
     const artRaw = (entry && entry.article) || '';
-    const hasRealArt = Boolean(artRaw) && !['Verb', 'Noun', 'Adj.', 'Adv.'].includes(artRaw) && !state.typeWithArticle;
+    const hasRealArt = Boolean(artRaw) && REAL_ARTICLES.has(artRaw) && !state.typeWithArticle;
     const artPrefix = hasRealArt ? `${artRaw} ` : '';
     const displayTop = `${artPrefix}${text}`;
     ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;

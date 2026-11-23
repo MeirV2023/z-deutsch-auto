@@ -22,7 +22,12 @@ const ALLOWED_MODELS = new Set([
 const LANG_SPEECH_STYLE = {
   de: 'clear, natural Standard German pronunciation, crisp diction, warm studio voice',
   en: 'clear, natural Standard English pronunciation, crisp diction, warm studio voice',
-  es: 'clear, natural Standard Spanish pronunciation, crisp diction, warm studio voice'
+  es: 'clear, natural Standard Spanish pronunciation, crisp diction, warm studio voice',
+  ru: 'clear, natural Standard Russian pronunciation, crisp diction, warm studio voice',
+  uk: 'clear, natural Standard Ukrainian pronunciation, crisp diction, warm studio voice',
+  tr: 'clear, natural Standard Turkish pronunciation, crisp diction, warm studio voice',
+  he: 'clear, natural Modern Israeli Hebrew pronunciation, crisp diction, warm studio voice',
+  ar: 'clear, natural Modern Standard Arabic pronunciation, crisp diction, warm studio voice'
 };
 
 const ALLOWED_VOICES = new Set([

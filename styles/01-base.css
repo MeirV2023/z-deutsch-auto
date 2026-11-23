@@ -28,20 +28,22 @@
   --art-pl: #fde047;       /* Янтарный — множественное (Pl.) */
   --art-verb: #c084fc;     /* Фиолетовый — глаголы / прочее */
 
-  /* Фирменная многоязычная типографика Z-LINGO (RU · EN · DE · FR · ES · HE) */
+  /* Фирменная многоязычная типографика VOCANOVA (8 языков) */
   --font-logo: 'Orbitron', 'Exo 2', 'Rubik', sans-serif;
-  --font-heading: 'Exo 2', 'Rubik', 'Noto Sans Hebrew', sans-serif;
-  --font-ui: 'Rubik', 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-words: 'Rubik', 'Noto Sans Hebrew', sans-serif;
-  --font-mono: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  --font-heading: 'Exo 2', 'Rubik', 'Noto Sans Hebrew', 'Noto Sans Arabic', sans-serif;
+  --font-ui: 'Rubik', 'Noto Sans Hebrew', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-words: 'Rubik', 'Noto Sans Hebrew', 'Noto Sans Arabic', sans-serif;
+  --font-mono: 'Rubik', 'Noto Sans Hebrew', 'Noto Sans Arabic', sans-serif;
 }
 
 /* Языковые профили шрифтов по таблице */
 html[lang="ru"],
+html[lang="uk"],
+html[lang="tr"],
 html[lang="de"],
 html[lang="fr"],
 html[lang="es"] {
-  --font-ui: 'Rubik', 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-ui: 'Rubik', 'Noto Sans Hebrew', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-heading: 'Exo 2', 'Rubik', sans-serif;
 }
 
@@ -51,10 +53,11 @@ html[lang="en"] {
 }
 
 html[lang="he"],
+html[lang="ar"],
 [dir="rtl"] {
-  --font-ui: 'Rubik', 'Noto Sans Hebrew', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-heading: 'Rubik', 'Noto Sans Hebrew', sans-serif;
-  --font-words: 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  --font-ui: 'Rubik', 'Noto Sans Hebrew', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Rubik', 'Noto Sans Hebrew', 'Noto Sans Arabic', sans-serif;
+  --font-words: 'Rubik', 'Noto Sans Hebrew', 'Noto Sans Arabic', sans-serif;
 }
 
 * {

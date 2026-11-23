@@ -1,12 +1,13 @@
 // Чистый 2D-рендерер холста: корабль, капсулы слов, лазеры и всплывающий перевод (SRP)
 import { roundRect } from '../core/utils.js';
-import { CANVAS_HEADING_FONT, CANVAS_WORD_FONT, getArticleStyle } from '../config/constants.js';
+import { CANVAS_HEADING_FONT, CANVAS_WORD_FONT, REAL_ARTICLES, getArticleStyle } from '../config/constants.js';
 import {
   getCurrentWeapon,
   getWordTranslation,
   isEntryPinned,
-  isHebrewUI,
+  isRtlText,
   isRtlTranslation,
+  isRtlUI,
   state,
   t
 } from '../state/store.js';
@@ -411,12 +412,13 @@ export function drawWordNode(w, isLocked, bounds) {
   const remainText = w.text.slice(w.typedCount);
   const typedText = w.text.slice(0, w.typedCount);
   const pinned = isEntryPinned(w.entry);
+  const rtlWord = isRtlText(w.text);
 
   const fontPx = getWordFontPx(w.text.length);
   ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
-  const typedW = ctx.measureText(typedText).width;
-  const remainW = ctx.measureText(remainText).width;
-  const totalW = typedW + remainW;
+  const typedW = typedText ? ctx.measureText(typedText).width : 0;
+  const fullW = rtlWord ? ctx.measureText(w.text).width : (typedW + ctx.measureText(remainText).width);
+  const totalW = fullW;
 
   const padX = canvas.width < 520 ? 11 : 15;
   const starPrefixW = pinned ? 18 : 0;
@@ -503,25 +505,57 @@ export function drawWordNode(w, isLocked, bounds) {
   }
 
   ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
-  ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  const startTextX = contentLeftX + starPrefixW;
 
-  if (typedText.length > 0) {
-    ctx.fillStyle = '#34d399';
-    ctx.fillText(typedText, startTextX, 0.5);
-  }
-
-  if (remainText.length > 0) {
-    const firstRemain = remainText[0];
-    const restRemain = remainText.slice(1);
-    const firstRemainW = ctx.measureText(firstRemain).width;
-
-    ctx.fillStyle = isLocked ? '#fde047' : '#38bdf8';
-    ctx.fillText(firstRemain, startTextX + typedW, 0.5);
-
+  if (rtlWord) {
+    const wordRightX = innerContentW / 2;
+    const typedPlusOneW = w.typedCount < w.text.length
+      ? ctx.measureText(w.text.slice(0, w.typedCount + 1)).width
+      : fullW;
+    ctx.direction = 'rtl';
+    ctx.textAlign = 'right';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText(restRemain, startTextX + typedW + firstRemainW, 0.5);
+    ctx.fillText(w.text, wordRightX, 0.5);
+
+    if (w.typedCount < w.text.length) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(wordRightX - typedPlusOneW - 1, boxY - 4, Math.max(2, typedPlusOneW - typedW + 2), capsuleH + 8);
+      ctx.clip();
+      ctx.fillStyle = isLocked ? '#fde047' : '#38bdf8';
+      ctx.fillText(w.text, wordRightX, 0.5);
+      ctx.restore();
+    }
+
+    if (w.typedCount > 0 && typedW > 0) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(wordRightX - typedW, boxY - 4, typedW + 6, capsuleH + 8);
+      ctx.clip();
+      ctx.fillStyle = '#34d399';
+      ctx.fillText(w.text, wordRightX, 0.5);
+      ctx.restore();
+    }
+  } else {
+    ctx.textAlign = 'left';
+    const startTextX = contentLeftX + starPrefixW;
+
+    if (typedText.length > 0) {
+      ctx.fillStyle = '#34d399';
+      ctx.fillText(typedText, startTextX, 0.5);
+    }
+
+    if (remainText.length > 0) {
+      const firstRemain = remainText[0];
+      const restRemain = remainText.slice(1);
+      const firstRemainW = ctx.measureText(firstRemain).width;
+
+      ctx.fillStyle = isLocked ? '#fde047' : '#38bdf8';
+      ctx.fillText(firstRemain, startTextX + typedW, 0.5);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(restRemain, startTextX + typedW + firstRemainW, 0.5);
+    }
   }
 
   ctx.restore();
@@ -589,7 +623,7 @@ export function drawFloatingTranslation(ft, bounds) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  ctx.direction = 'ltr';
+  ctx.direction = isRtlText(cleanWord) ? 'rtl' : 'ltr';
   ctx.font = `700 ${deFontPx}px ${CANVAS_WORD_FONT}`;
   ctx.fillStyle = '#f8fafc';
   ctx.fillText(cleanWord, 0, yTopOffset);
@@ -605,12 +639,14 @@ export function drawFloatingTranslation(ft, bounds) {
 export function drawWeaponBanner(bounds) {
   const w = getCurrentWeapon();
   const borderCol = state.weaponBannerColor || w.color;
-  const bannerFont = isHebrewUI()
+  const rtlUi = isRtlUI();
+  const bannerFont = rtlUi
     ? CANVAS_WORD_FONT
     : (state.nativeLang === 'en' ? '"Orbitron", "Exo 2", "Rubik", sans-serif' : CANVAS_HEADING_FONT);
   ctx.save();
   ctx.globalAlpha = Math.min(1, state.weaponBannerTimer * 1.4);
-  ctx.font = `${isHebrewUI() ? 700 : 800} 14px ${bannerFont}`;
+  ctx.direction = rtlUi ? 'rtl' : 'ltr';
+  ctx.font = `${rtlUi ? 700 : 800} 14px ${bannerFont}`;
   const maxW = Math.max(200, (bounds.right - bounds.left) - 20);
   const textW = Math.min(maxW, ctx.measureText(state.weaponBannerText).width + 30);
   ctx.translate(bounds.centerX, state.ship.y - 56);
@@ -778,15 +814,16 @@ function drawDesktopPromoWordCard(w, isLocked, bounds) {
   const remainText = w.text.slice(w.typedCount);
   const typedText = w.text.slice(0, w.typedCount);
   const artRaw = (w.entry && w.entry.article) || '';
-  const hasRealArt = Boolean(artRaw) && !['Verb', 'Noun', 'Adj.', 'Adv.'].includes(artRaw) && !state.typeWithArticle;
+  const hasRealArt = Boolean(artRaw) && REAL_ARTICLES.has(artRaw) && !state.typeWithArticle;
   const artPrefix = hasRealArt ? `${artRaw} ` : '';
+  const rtlWord = isRtlText(w.text);
 
   const fontPx = getWordFontPx(w.text.length);
   ctx.font = `700 ${fontPx}px ${CANVAS_WORD_FONT}`;
   const artW = artPrefix ? ctx.measureText(artPrefix).width : 0;
-  const typedW = ctx.measureText(typedText).width;
-  const remainW = ctx.measureText(remainText).width;
-  const topLineW = artW + typedW + remainW;
+  const typedW = typedText ? ctx.measureText(typedText).width : 0;
+  const wordSpanW = rtlWord ? ctx.measureText(w.text).width : (typedW + ctx.measureText(remainText).width);
+  const topLineW = artW + wordSpanW;
 
   let transStr = !isLocked && w.entry ? getWordTranslation(w.entry) : '';
   if (transStr.length > 18) transStr = transStr.slice(0, 17) + '…';
@@ -842,13 +879,30 @@ function drawDesktopPromoWordCard(w, isLocked, bounds) {
     ctx.fillStyle = isLocked ? '#fbcfe8' : '#bae6fd';
     ctx.fillText(artPrefix, startX, topY);
   }
-  if (typedText.length > 0) {
-    ctx.fillStyle = '#34d399';
-    ctx.fillText(typedText, startX + artW, topY);
-  }
-  if (remainText.length > 0) {
+  if (rtlWord) {
+    const wordRightX = startX + artW + wordSpanW;
+    ctx.direction = 'rtl';
+    ctx.textAlign = 'right';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText(remainText, startX + artW + typedW, topY);
+    ctx.fillText(w.text, wordRightX, topY);
+    if (w.typedCount > 0 && typedW > 0) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(wordRightX - typedW, boxY - 4, typedW + 6, boxH + 8);
+      ctx.clip();
+      ctx.fillStyle = '#34d399';
+      ctx.fillText(w.text, wordRightX, topY);
+      ctx.restore();
+    }
+  } else {
+    if (typedText.length > 0) {
+      ctx.fillStyle = '#34d399';
+      ctx.fillText(typedText, startX + artW, topY);
+    }
+    if (remainText.length > 0) {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(remainText, startX + artW + typedW, topY);
+    }
   }
 
   if (transStr) {

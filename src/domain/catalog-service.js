@@ -1,4 +1,5 @@
 // Доменный сервис каталога курсов, прогресса колод, CEFR-фильтрации и рейтинга (SRP — 0 зависимостей от DOM)
+import { ALL_LANG_CODES } from '../config/constants.js';
 import { ADMIN_CATALOG_LS_KEY, saveJsonStorage } from '../core/storage.js';
 import { shuffleArray } from '../core/utils.js';
 import { GAME_CATALOG } from '../data/index.js';
@@ -15,15 +16,15 @@ import {
 
 export function normalizeAdminCatalogObject(rawObj) {
   const obj = (rawObj && typeof rawObj === 'object') ? rawObj : {};
+  const courses = {};
+  for (const lg of ALL_LANG_CODES) {
+    courses[lg] = (obj.courses && Array.isArray(obj.courses[lg])) ? obj.courses[lg] : [];
+  }
   return {
     version: 1,
     updatedAt: typeof obj.updatedAt === 'string' ? obj.updatedAt : '',
     categories: Array.isArray(obj.categories) ? obj.categories : [],
-    courses: {
-      de: (obj.courses && Array.isArray(obj.courses.de)) ? obj.courses.de : [],
-      en: (obj.courses && Array.isArray(obj.courses.en)) ? obj.courses.en : [],
-      es: (obj.courses && Array.isArray(obj.courses.es)) ? obj.courses.es : []
-    },
+    courses,
     courseOverrides: (obj.courseOverrides && typeof obj.courseOverrides === 'object')
       ? obj.courseOverrides
       : {},
@@ -63,11 +64,14 @@ export function inferCourseCategory(course) {
   if (course.category) return course.category;
   const cid = String(course.id || '').toLowerCase();
   if (cid.includes('auto')) return 'auto';
-  if (cid.includes('business') || cid.includes('existenz')) return 'business';
+  if (cid.includes('business') || cid.includes('existenz') || cid.includes('arbeit') || cid.includes('bewerbung') || cid.includes('start')) return 'business';
   if (cid.includes('finance') || cid.includes('bank') || cid.includes('money')) return 'finance';
   if (cid.includes('food') || cid.includes('kitchen')) return 'food';
-  if (cid.includes('it')) return 'it';
-  if (cid.includes('travel')) return 'travel';
+  if (cid.includes('it') || cid.includes('digital')) return 'it';
+  if (cid.includes('travel') || cid.includes('reisen')) return 'travel';
+  if (cid.includes('gesund') || cid.includes('med')) return 'medicine';
+  if (cid.includes('natur') || cid.includes('umwelt')) return 'nature';
+  if (cid.includes('politik') || cid.includes('zukunft') || cid.includes('wie-wird')) return 'society';
   return 'base';
 }
 
@@ -268,10 +272,12 @@ export function getCourseVisualTheme(course) {
   if (cat === 'business') return { cls: 'art-business', emoji: '💼', tag: 'BUSINESS' };
   if (cat === 'finance') return { cls: 'art-base', emoji: '🪙', tag: 'FINANCE' };
   if (cat === 'food') return { cls: 'art-food', emoji: '👨‍🍳', tag: 'FOOD' };
-  if (cat === 'it') return { cls: 'art-it', emoji: '💻', tag: 'IT & AI' };
+  if (cat === 'it') return { cls: 'art-it', emoji: '💻', tag: 'DIGITAL' };
   if (cat === 'travel') return { cls: 'art-travel', emoji: '✈️', tag: 'TRAVEL' };
   if (cat === 'medicine') return { cls: 'art-base', emoji: '🩺', tag: 'MED' };
-  return { cls: 'art-base', emoji: '🌍', tag: course.levelTag || 'A1–B2' };
+  if (cat === 'nature') return { cls: 'art-base', emoji: '🌿', tag: 'NATURE' };
+  if (cat === 'society') return { cls: 'art-it', emoji: '🏛️', tag: 'SOCIETY' };
+  return { cls: 'art-base', emoji: '🌍', tag: course.levelTag || 'B1' };
 }
 
 export function countLearnedWordsInCourse(course) {
@@ -345,8 +351,8 @@ export function getDeckArtClass(course) {
   if (cat === 'finance') return 'art-base';
   if (cat === 'food') return 'art-food';
   if (cat === 'travel') return 'art-travel';
-  if (cat === 'it') return 'art-it';
-  if (cat === 'base') return 'art-base';
+  if (cat === 'it' || cat === 'society') return 'art-it';
+  if (cat === 'base' || cat === 'medicine' || cat === 'nature') return 'art-base';
   return '';
 }
 

@@ -69,7 +69,12 @@ module.exports = async function handler(req, res) {
     courses: {
       de: Array.isArray(catalog.courses.de) ? catalog.courses.de : [],
       en: Array.isArray(catalog.courses.en) ? catalog.courses.en : [],
-      es: Array.isArray(catalog.courses.es) ? catalog.courses.es : []
+      es: Array.isArray(catalog.courses.es) ? catalog.courses.es : [],
+      ru: Array.isArray(catalog.courses.ru) ? catalog.courses.ru : [],
+      uk: Array.isArray(catalog.courses.uk) ? catalog.courses.uk : [],
+      tr: Array.isArray(catalog.courses.tr) ? catalog.courses.tr : [],
+      he: Array.isArray(catalog.courses.he) ? catalog.courses.he : [],
+      ar: Array.isArray(catalog.courses.ar) ? catalog.courses.ar : []
     },
     courseOverrides: (catalog.courseOverrides && typeof catalog.courseOverrides === 'object')
       ? catalog.courseOverrides
