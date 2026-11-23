@@ -54,7 +54,7 @@ def build_init_script() -> str:
         "nativeLang": "ru",
         "targetLang": "de",
         "ttsEnabled": True,
-        "ttsModel": "gemini-3.8-flash-tts",
+        "ttsModel": "gemini-3.8-flash-lite-tts",
         "ttsVoice": "Kore",
         "weaponId": "plasma",
         "speedPresetIndex": 2,
@@ -241,18 +241,31 @@ async def prewarm_tts(page) -> dict:
               : [];
 
             let cached = 0;
+            const missing = [];
+            const sleep = (ms) => new Promise(r => setTimeout(r, ms));
             const texts = pool.map(e => (e.withArticle || e.word || '').trim()).filter(Boolean);
-            for (let i = 0; i < texts.length; i += 3) {
-                const batch = texts.slice(i, i + 3);
+            for (let i = 0; i < texts.length; i += 2) {
+                const batch = texts.slice(i, i + 2);
                 const results = await Promise.all(
                     batch.map(txt => ttsMod.ttsManager.getOrFetchAudioBuffer(txt, 'de'))
                 );
-                for (const buf of results) {
+                results.forEach((buf, idx) => {
                     if (buf) cached++;
+                    else missing.push(batch[idx]);
+                });
+                if (i + 2 < texts.length) await sleep(350);
+            }
+            if (missing.length > 0) {
+                await sleep(1500);
+                for (const txt of missing) {
+                    const buf = await ttsMod.ttsManager.getOrFetchAudioBuffer(txt, 'de');
+                    if (buf) cached++;
+                    await sleep(350);
                 }
             }
             return {
                 courseId: storeMod.state.activeCourseId,
+                ttsModel: ttsMod.ttsManager.model,
                 totalWords: texts.length,
                 cachedCount: cached,
                 serverAvailable: ttsMod.ttsManager.serverAvailable,
@@ -260,7 +273,7 @@ async def prewarm_tts(page) -> dict:
         }"""
     )
     print(f"[TTS Prewarm] {stats}")
-    if stats["cachedCount"] < 10:
+    if stats["cachedCount"] < 12:
         raise RuntimeError(
             f"Gemini TTS prewarm failed: only {stats['cachedCount']}/{stats['totalWords']} decoded"
         )
@@ -810,10 +823,10 @@ def composite_edited_video(
         )
         last_label = out_l
 
-    # Add glowing cyan progress bar at bottom edge (6px tall)
+    # Add glowing cyan progress bar at bottom edge (8px tall)
     filter_parts.append(
-        f"color=c=0x22d3ee:s={OUT_W}x6:r={TARGET_FPS}:d={dur:.3f}[bar];"
-        f"[{last_label}][bar]overlay=x='-W+(W*t/{dur:.3f})':y=H-6:shortest=1,format=yuv420p[vout]"
+        f"color=c=0x22d3ee:s={OUT_W}x8:r={TARGET_FPS}:d={dur:.3f}[bar];"
+        f"[{last_label}][bar]overlay=x='-W+(W*t/{dur:.3f})':y=H-8:shortest=1,format=yuv420p[vout]"
     )
 
     run_ffmpeg(
@@ -837,7 +850,7 @@ def composite_edited_video(
 def extract_preview_frames(mp4_path: Path, prefix: str, dur: float) -> list[Path]:
     """Extract 4 representative keyframes for visual inspection."""
     PREVIEWS_DIR.mkdir(parents=True, exist_ok=True)
-    fracs = [0.10, 0.34, 0.62, 0.88]
+    fracs = [0.06, 0.31, 0.62, 0.93]
     out_paths = []
     for idx, fr in enumerate(fracs, start=1):
         t_pos = max(0.2, min(max(0.3, dur - 0.3), dur * fr))
@@ -895,13 +908,13 @@ async def run_scenario_1(page, base_url: str, tmp_dir: Path) -> dict:
     start_epoch = await page.evaluate("() => window.__recStart()")
     rec.begin_capture(start_epoch)
 
-    # Cycle 5 distinct weapons across 9 words, then EMP wave finale
-    weapon_schedule = ["1", "1", "3", "3", "4", "4", "5", "5", "6"]
+    # Cycle 5 distinct weapons across 7 words, then EMP wave finale
+    weapon_schedule = ["1", "3", "3", "4", "5", "5", "6"]
     battle_stats = await play_human_battle(
         page,
         weapon_schedule=weapon_schedule,
-        target_words_to_type=9,
-        max_elapsed_sec=20.2,
+        target_words_to_type=7,
+        max_elapsed_sec=21.5,
         rec_start_epoch=start_epoch,
         trigger_emp=True,
     )
@@ -927,31 +940,31 @@ async def run_scenario_1(page, base_url: str, tmp_dir: Path) -> dict:
         ov_dir / "ov1.png",
         "КАК Я ИГРАЯ УЧУ НЕМЕЦКИЙ",
         "Стреляю по словам в космосе · DE -> RU",
-        y_top=206,
+        y_top=940,
     )
     render_feature_pill(
         ov_dir / "ov2.png",
         "Взрыв слова = перевод + озвучка Gemini AI",
         accent_rgb=(34, 211, 238),
-        y_top=214,
+        y_top=1010,
     )
     render_feature_pill(
         ov_dir / "ov3.png",
         "6 видов оружия: Рельсотрон · Ракеты · Тесла",
         accent_rgb=(251, 146, 60),
-        y_top=214,
+        y_top=1010,
     )
     render_feature_pill(
         ov_dir / "ov4.png",
         "Готовые курсы B1 и свои колоды Anki (.apkg)",
         accent_rgb=(167, 139, 250),
-        y_top=214,
+        y_top=1010,
     )
     render_cta_card(
         ov_dir / "ov5.png",
         "VOCANOVA",
         "Учи языки, играя в космосе · Бесплатно в браузере",
-        y_top=1040,
+        y_top=960,
     )
 
     cta_start = max(14.5, dur - 2.6)
@@ -1040,11 +1053,11 @@ async def run_scenario_2(page, base_url: str, tmp_dir: Path) -> dict:
     )
 
     battle_start_elapsed = time.time() - start_epoch
-    weapon_schedule = ["1", "2", "3", "3", "4", "5", "5", "6", "6"]
+    weapon_schedule = ["1", "2", "3", "4", "5", "5", "6", "6"]
     battle_stats = await play_human_battle(
         page,
         weapon_schedule=weapon_schedule,
-        target_words_to_type=9,
+        target_words_to_type=8,
         max_elapsed_sec=min(41.5, battle_start_elapsed + 24.0),
         rec_start_epoch=start_epoch,
         trigger_emp=True,
@@ -1071,13 +1084,13 @@ async def run_scenario_2(page, base_url: str, tmp_dir: Path) -> dict:
         ov_dir / "ov1.png",
         "КАК Я ИГРАЯ УЧУ НЕМЕЦКИЙ",
         "Космический тренажёр вместо скучных карточек",
-        y_top=144,
+        y_top=1490,
     )
     render_feature_pill(
         ov_dir / "ov2.png",
         "8 языков в обе стороны · Профиль и арсенал",
         accent_rgb=(56, 189, 248),
-        y_top=160,
+        y_top=140,
     )
     render_feature_pill(
         ov_dir / "ov3.png",
@@ -1089,25 +1102,25 @@ async def run_scenario_2(page, base_url: str, tmp_dir: Path) -> dict:
         ov_dir / "ov4.png",
         "Печатай слово — слушай носителя (Gemini 3.8 TTS)",
         accent_rgb=(34, 211, 238),
-        y_top=214,
+        y_top=1010,
     )
     render_feature_pill(
         ov_dir / "ov5.png",
         "Прокачивай 6 видов космического оружия",
         accent_rgb=(251, 146, 60),
-        y_top=214,
+        y_top=1010,
     )
     render_feature_pill(
         ov_dir / "ov6.png",
         "Неон-Синт + сокрушительная EMP-волна!",
         accent_rgb=(232, 121, 249),
-        y_top=214,
+        y_top=1010,
     )
     render_cta_card(
         ov_dir / "ov7.png",
         "VOCANOVA",
         "DE · EN · ES · 8 языков · Играй в браузере",
-        y_top=1040,
+        y_top=960,
     )
 
     cta_start = max(30.0, dur - 2.8)

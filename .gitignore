@@ -16,3 +16,5 @@ node_modules/
 # Rendered promo videos & scratch capture frames
 videos/
 *.mp4
+__pycache__/
+*.pyc
