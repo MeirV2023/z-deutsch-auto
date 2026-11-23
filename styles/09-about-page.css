@@ -1,0 +1,858 @@
+/* ==========================================================================
+   VOCANOVA STYLES · 09-about-page.css
+   Полноэкранная страница «О проекте» (#aboutPageView) с доступными вкладками
+   ========================================================================== */
+
+.about-page-view {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-bottom: 34px;
+}
+
+.about-page-view.hidden {
+  display: none !important;
+}
+
+/* --- Верхний космический Hero-баннер --- */
+.about-hero-card {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 24px;
+  border-radius: 20px;
+  background: linear-gradient(140deg, rgba(14, 26, 54, 0.9) 0%, rgba(8, 16, 36, 0.94) 65%, rgba(19, 14, 44, 0.92) 100%);
+  border: 1px solid rgba(112, 168, 255, 0.3);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.about-planet-fx {
+  position: absolute;
+  inset-inline-end: -70px;
+  top: -120px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 42% 42%, rgba(56, 189, 248, 0.35) 0%, rgba(168, 85, 247, 0.22) 48%, transparent 74%);
+  filter: blur(8px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.about-hero-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.about-hero-kicker {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.42);
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #7dd3fc;
+}
+
+.about-hero-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+  font-weight: 900;
+  line-height: 1.12;
+  background: linear-gradient(95deg, #ffffff 0%, #bae6fd 58%, #5eead4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.about-hero-sub {
+  margin: 0;
+  font-size: 0.96rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  max-width: 66ch;
+}
+
+.about-hero-metrics {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(84px, 1fr));
+  gap: 10px;
+}
+
+.about-metric-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(9, 17, 36, 0.85);
+  border: 1px solid rgba(112, 168, 255, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  text-align: center;
+}
+
+.about-metric-val {
+  font-family: var(--font-heading);
+  font-size: 1.28rem;
+  font-weight: 900;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.about-metric-lbl {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+/* --- Панель вкладок --- */
+.about-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 16px;
+  background: rgba(9, 16, 34, 0.86);
+  border: 1px solid rgba(112, 168, 255, 0.24);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.about-tabs-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.about-tab-btn {
+  flex: 1 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.about-tab-btn:hover {
+  color: #f8fafc;
+  background: rgba(30, 41, 59, 0.55);
+}
+
+.about-tab-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.26) 0%, rgba(45, 212, 191, 0.2) 100%);
+  border-color: rgba(56, 189, 248, 0.62);
+  box-shadow: 0 0 18px rgba(45, 212, 191, 0.22), inset 0 1px 0 rgba(186, 230, 253, 0.25);
+}
+
+.about-tab-btn:focus-visible,
+.about-tab-panel:focus-visible,
+.about-btn-primary:focus-visible,
+.about-btn-secondary:focus-visible,
+.about-btn-ghost:focus-visible,
+.about-copy-btn:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+.about-tab-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.about-tab-panel {
+  animation: aboutPanelIn 0.2s ease both;
+}
+
+@keyframes aboutPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-tab-panel {
+    animation: none;
+  }
+}
+
+/* --- Общая типографика и кнопки страницы --- */
+.about-section-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.22rem, 1.8vw, 1.55rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.about-section-sub {
+  margin: 6px 0 0;
+  font-size: 0.94rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.about-tab-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.about-tab-intro {
+  padding: 2px 4px;
+}
+
+.about-btn-primary,
+.about-btn-secondary,
+.about-btn-ghost,
+.about-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 18px;
+  border-radius: 12px;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.about-btn-primary {
+  border: 1px solid rgba(110, 231, 183, 0.85);
+  background: linear-gradient(135deg, #0284c7 0%, #10b981 65%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.34);
+}
+
+.about-btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.07);
+}
+
+.about-btn-secondary {
+  border: 1px solid rgba(56, 189, 248, 0.55);
+  background: rgba(14, 30, 62, 0.88);
+  color: #e0f2fe;
+}
+
+.about-btn-secondary:hover {
+  transform: translateY(-1px);
+  border-color: #7dd3fc;
+  color: #ffffff;
+  background: rgba(20, 42, 84, 0.94);
+}
+
+.about-btn-ghost {
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  background: rgba(15, 23, 42, 0.72);
+  color: #e2e8f0;
+}
+
+.about-btn-ghost:hover {
+  transform: translateY(-1px);
+  border-color: rgba(192, 132, 252, 0.65);
+  color: #ffffff;
+}
+
+.about-copy-btn {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.82);
+  color: #e2e8f0;
+}
+
+.about-copy-btn:hover {
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.about-copy-btn.is-copied {
+  border-color: rgba(52, 211, 153, 0.85);
+  background: rgba(16, 185, 129, 0.22);
+  color: #a7f3d0;
+}
+
+/* --- Вкладка 1: История создателя + 4 вайб-принципа --- */
+.about-story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.9fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.about-story-card {
+  padding: 24px;
+  gap: 14px;
+}
+
+.about-story-badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(192, 132, 252, 0.16);
+  border: 1px solid rgba(192, 132, 252, 0.44);
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #e9d5ff;
+}
+
+.about-story-body {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.about-story-para {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.66;
+  color: #e2e8f0;
+}
+
+.about-vibe-quote {
+  margin: 4px 0 0;
+  padding: 13px 16px;
+  border-radius: 14px;
+  border-inline-start: 3.5px solid #2dd4bf;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.14), rgba(56, 189, 248, 0.08));
+  color: #f0fdfa;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.52;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.about-quote-spark {
+  color: #5eead4;
+  font-size: 1rem;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.about-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.about-pillars-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-pillars-heading {
+  margin: 0 0 2px 4px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #bae6fd;
+  letter-spacing: 0.02em;
+}
+
+.about-pillars-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.about-pillar-card {
+  padding: 15px 16px;
+  border-radius: 16px;
+  background: linear-gradient(155deg, rgba(14, 25, 50, 0.84), rgba(8, 14, 30, 0.92));
+  border: 1px solid rgba(112, 168, 255, 0.22);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.36);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.about-pillar-card.tone-cyan {
+  border-color: rgba(56, 189, 248, 0.36);
+}
+
+.about-pillar-card.tone-amber {
+  border-color: rgba(251, 191, 36, 0.38);
+}
+
+.about-pillar-card.tone-emerald {
+  border-color: rgba(52, 211, 153, 0.38);
+}
+
+.about-pillar-card.tone-violet {
+  border-color: rgba(192, 132, 252, 0.38);
+}
+
+.about-pillar-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.about-pillar-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.about-pillar-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.about-pillar-text {
+  margin: 0;
+  font-size: 0.87rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+/* --- Вкладка 2: Как это работает (6-карточная Bento-сетка) --- */
+.about-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.about-guide-card {
+  padding: 18px;
+  gap: 10px;
+}
+
+.about-guide-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.about-guide-card.tone-amber .about-guide-icon-box {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.38);
+}
+
+.about-guide-card.tone-emerald .about-guide-icon-box {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: rgba(52, 211, 153, 0.38);
+}
+
+.about-guide-card.tone-violet .about-guide-icon-box {
+  background: rgba(192, 132, 252, 0.16);
+  border-color: rgba(192, 132, 252, 0.4);
+}
+
+.about-guide-card.tone-rose .about-guide-icon-box {
+  background: rgba(251, 113, 133, 0.15);
+  border-color: rgba(251, 113, 133, 0.38);
+}
+
+.about-guide-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.about-guide-text {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.54;
+  color: #cbd5e1;
+}
+
+.about-bottom-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* --- Вкладка 3: Планы развития (Roadmap) --- */
+.about-roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.about-roadmap-card {
+  padding: 18px 20px;
+  gap: 12px;
+}
+
+.about-roadmap-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.about-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.about-status-badge.status-emerald {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(52, 211, 153, 0.55);
+  color: #a7f3d0;
+}
+
+.about-status-badge.status-cyan {
+  background: rgba(14, 165, 233, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.55);
+  color: #bae6fd;
+}
+
+.about-status-badge.status-violet {
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(192, 132, 252, 0.55);
+  color: #e9d5ff;
+}
+
+.about-roadmap-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.about-roadmap-list {
+  margin: 0;
+  padding-inline-start: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: #cbd5e1;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.about-roadmap-callout {
+  padding: 18px 22px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.about-callout-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.about-callout-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.about-callout-text {
+  margin: 0;
+  font-size: 0.89rem;
+  color: #cbd5e1;
+}
+
+/* --- Вкладка 4: Контакты и сотрудничество --- */
+.about-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.about-contact-card {
+  padding: 22px;
+  gap: 16px;
+}
+
+.about-contact-card.is-telegram {
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.about-contact-card.is-email {
+  border-color: rgba(52, 211, 153, 0.42);
+}
+
+.about-contact-top {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.about-contact-orb {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.about-contact-orb svg {
+  width: 22px;
+  height: 22px;
+}
+
+.about-contact-orb.orb-telegram {
+  background: rgba(14, 165, 233, 0.22);
+  border: 1px solid rgba(56, 189, 248, 0.52);
+  color: #7dd3fc;
+}
+
+.about-contact-orb.orb-email {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(52, 211, 153, 0.5);
+  color: #6ee7b7;
+}
+
+.about-contact-name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.about-contact-role {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.about-contact-handle {
+  padding: 12px 15px;
+  border-radius: 12px;
+  background: rgba(6, 12, 26, 0.85);
+  border: 1px solid rgba(112, 168, 255, 0.22);
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 0.02em;
+  user-select: text;
+  -webkit-user-select: text;
+  overflow-wrap: anywhere;
+}
+
+.about-contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.about-collab-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.about-collab-heading {
+  margin: 0 4px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #bae6fd;
+}
+
+.about-collab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.about-collab-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px 16px;
+  border-radius: 16px;
+  background: rgba(10, 19, 38, 0.82);
+  border: 1px solid rgba(112, 168, 255, 0.2);
+}
+
+.about-collab-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.26);
+  flex-shrink: 0;
+}
+
+.about-collab-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.about-collab-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.about-collab-text {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.48;
+  color: #cbd5e1;
+}
+
+/* --- Адаптация под планшеты и смартфоны --- */
+@media (max-width: 1040px) {
+  .about-story-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-guide-grid,
+  .about-roadmap-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .about-page-view {
+    gap: 13px;
+    padding-bottom: 18px;
+  }
+
+  .about-hero-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .about-hero-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .about-metric-pill {
+    padding: 9px 8px;
+  }
+
+  .about-metric-val {
+    font-size: 1.08rem;
+  }
+
+  .about-metric-lbl {
+    font-size: 0.7rem;
+  }
+
+  .about-tabs-bar {
+    padding: 5px;
+    gap: 6px;
+  }
+
+  .about-tab-btn {
+    flex: 0 0 auto;
+    padding: 9px 13px;
+    font-size: 0.85rem;
+  }
+
+  .about-story-card,
+  .about-contact-card {
+    padding: 17px 16px;
+  }
+
+  .about-story-para {
+    font-size: 0.94rem;
+  }
+
+  .about-guide-grid,
+  .about-roadmap-grid,
+  .about-contact-grid,
+  .about-collab-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-cta-row > button,
+  .about-bottom-bar > button,
+  .about-contact-actions > a,
+  .about-contact-actions > button {
+    flex: 1 1 auto;
+  }
+}

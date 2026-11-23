@@ -1586,6 +1586,12 @@
 
 /* Адаптация для компактных ноутбуков и планшетов (769px–1180px) */
 @media (max-width: 1180px) and (min-width: 769px) {
+  .home-nav-pill {
+    padding: 7px 10px;
+    font-size: 0.87rem;
+    gap: 6px;
+  }
+
   .home-bento-grid {
     grid-template-columns: 204px minmax(0, 1fr) 256px;
     gap: 12px;

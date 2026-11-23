@@ -211,7 +211,8 @@ export const state = {
   catalogSourceFilter: 'all', // 'all' | 'official' | 'user'
   decksOnlyFavorites: false,
   decksOnlyRecent: false,
-  homeSubView: 'home', // 'home' | 'decks' | 'admin'
+  homeSubView: 'home', // 'home' | 'decks' | 'admin' | 'about'
+  aboutActiveTab: 'story', // 'story' | 'guide' | 'roadmap' | 'contact'
   decksViewMode: 'grid', // 'grid' | 'list'
   decksCategoryFilter: 'all',
   decksLevelFilter: 'all',

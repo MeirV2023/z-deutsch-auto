@@ -17,6 +17,7 @@ import {
   resolveLessonBaseWords
 } from '../domain/catalog-service.js';
 import {
+  aboutPageView,
   adminStudioView,
   ankiDropSub,
   ankiDropTitle,
@@ -34,10 +35,12 @@ import {
   btnLangMode,
   btnMissionDailyGoal,
   btnMissionLaunch,
+  btnMobNavAbout,
   btnMobNavDecks,
   btnMobNavHome,
   btnMobNavPlay,
   btnMobNavStats,
+  btnNavAbout,
   btnNavAdmin,
   btnNavDecks,
   btnNavHome,
@@ -132,6 +135,7 @@ import {
   labelMobNavHome,
   labelMobNavPlay,
   labelMobNavStats,
+  labelMobNavAbout,
   labelMobStep1,
   labelMobStep2,
   labelMobStep3,
@@ -141,6 +145,7 @@ import {
   labelNativeFilter,
   labelOverlayBackMenu,
   labelOverlayCatalog,
+  labelNavAbout,
   labelNavAdmin,
   labelNavDecks,
   labelNavHome,
@@ -242,6 +247,7 @@ import {
   renderTtsSettingsUI
 } from './modals.js';
 import { renderAdminStudio } from './admin-studio.js';
+import { renderAboutPage } from './about-page.js';
 
 let _resizeBound = false;
 
@@ -478,6 +484,7 @@ export function applyStaticUILocalization() {
   if (arcadeTitleScreen) arcadeTitleScreen.dir = isRtl ? 'rtl' : 'ltr';
   if (decksPageView) decksPageView.dir = isRtl ? 'rtl' : 'ltr';
   if (adminStudioView) adminStudioView.dir = isRtl ? 'rtl' : 'ltr';
+  if (aboutPageView) aboutPageView.dir = isRtl ? 'rtl' : 'ltr';
   if (overlayCard) overlayCard.dir = isRtl ? 'rtl' : 'ltr';
   if (ttsDialogBody) ttsDialogBody.dir = isRtl ? 'rtl' : 'ltr';
   if (catalogDialogBody) catalogDialogBody.dir = isRtl ? 'rtl' : 'ltr';
@@ -505,6 +512,7 @@ export function applyStaticUILocalization() {
   if (labelNavDecks) labelNavDecks.textContent = tr.navDecks;
   if (labelNavStats) labelNavStats.textContent = tr.navStats;
   if (labelNavLeaderboard) labelNavLeaderboard.textContent = tr.navLeaderboard;
+  if (labelNavAbout && tr.navAbout) labelNavAbout.textContent = tr.navAbout;
   if (labelNavAdmin) labelNavAdmin.textContent = tr.navAdmin;
   if (btnAdminLockMode && tr.adminLockBtn) btnAdminLockMode.textContent = tr.adminLockBtn;
 
@@ -561,6 +569,7 @@ export function applyStaticUILocalization() {
   if (labelMobNavPlay && tr.mobNavPlay) labelMobNavPlay.textContent = tr.mobNavPlay;
   if (labelMobNavDecks && tr.mobNavDecks) labelMobNavDecks.textContent = tr.mobNavDecks;
   if (labelMobNavStats && tr.mobNavStats) labelMobNavStats.textContent = tr.mobNavStats;
+  if (labelMobNavAbout && tr.mobNavAbout) labelMobNavAbout.textContent = tr.mobNavAbout;
 
   if (labelQuickStartTitle) labelQuickStartTitle.textContent = tr.popularCoursesTitle || tr.quickStartTitle;
   if (labelQuickAnkiBtn) labelQuickAnkiBtn.textContent = tr.quickAnkiBtn;
@@ -731,6 +740,8 @@ export function applyStaticUILocalization() {
     renderDecksPage();
   } else if (state.homeSubView === 'admin') {
     renderAdminStudio();
+  } else if (state.homeSubView === 'about') {
+    renderAboutPage();
   }
   refreshHitSpotlightPinState();
   onTtsStatusChanged();
@@ -743,6 +754,8 @@ export function syncMobileBottomNavUI(overrideTab = '') {
       activeTab = 'stats';
     } else if (state.homeSubView === 'decks') {
       activeTab = 'decks';
+    } else if (state.homeSubView === 'about') {
+      activeTab = 'about';
     } else if (state.homeSubView === 'admin') {
       activeTab = 'profile';
     } else {
@@ -753,21 +766,25 @@ export function syncMobileBottomNavUI(overrideTab = '') {
   if (btnMobNavPlay) btnMobNavPlay.classList.toggle('active', activeTab === 'play');
   if (btnMobNavDecks) btnMobNavDecks.classList.toggle('active', activeTab === 'decks');
   if (btnMobNavStats) btnMobNavStats.classList.toggle('active', activeTab === 'stats');
+  if (btnMobNavAbout) btnMobNavAbout.classList.toggle('active', activeTab === 'about');
 }
 
 export function switchHomeSubView(subView) {
-  state.homeSubView = (subView === 'decks' || subView === 'admin') ? subView : 'home';
+  state.homeSubView = (subView === 'decks' || subView === 'admin' || subView === 'about') ? subView : 'home';
   const onHome = state.homeSubView === 'home';
   const onDecks = state.homeSubView === 'decks';
   const onAdmin = state.homeSubView === 'admin';
+  const onAbout = state.homeSubView === 'about';
 
   if (homeDashboardView) homeDashboardView.classList.toggle('hidden', !onHome);
   if (decksPageView) decksPageView.classList.toggle('hidden', !onDecks);
   if (adminStudioView) adminStudioView.classList.toggle('hidden', !onAdmin);
+  if (aboutPageView) aboutPageView.classList.toggle('hidden', !onAbout);
 
   if (btnNavHome) btnNavHome.classList.toggle('active', onHome);
   if (btnNavDecks) btnNavDecks.classList.toggle('active', onDecks);
   if (btnNavAdmin) btnNavAdmin.classList.toggle('active', onAdmin);
+  if (btnNavAbout) btnNavAbout.classList.toggle('active', onAbout);
   syncMobileBottomNavUI();
 
   if (btnDecksReturnBattle) {
@@ -786,6 +803,10 @@ export function switchHomeSubView(subView) {
     state.demoWords = [];
     state.demoTargetId = null;
     renderAdminStudio();
+  } else if (onAbout) {
+    state.demoWords = [];
+    state.demoTargetId = null;
+    renderAboutPage();
   } else if (state.screenMode === 'title') {
     resizeCanvas();
     requestAnimationFrame(() => {
@@ -963,6 +984,15 @@ export function bindNavigationEvents() {
     });
   }
 
+  if (btnNavAbout) {
+    btnNavAbout.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      switchHomeSubView('about');
+      btnNavAbout.blur();
+    });
+  }
+
   if (btnHudLangPair) {
     btnHudLangPair.addEventListener('click', (e) => {
       sound.init();
@@ -1021,6 +1051,16 @@ export function bindNavigationEvents() {
       if (gameSettingsDialog && gameSettingsDialog.open) gameSettingsDialog.close();
       openStatsModal();
       btnMobNavStats.blur();
+    });
+  }
+
+  if (btnMobNavAbout) {
+    btnMobNavAbout.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      switchHomeSubView('about');
+      syncMobileBottomNavUI('about');
+      btnMobNavAbout.blur();
     });
   }
 

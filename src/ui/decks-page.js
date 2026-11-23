@@ -38,6 +38,7 @@ import {
   isDeckFavorite
 } from '../domain/catalog-service.js';
 import {
+  aboutPageView,
   adminStudioView,
   arcadeLogoSub,
   arcadeTitleScreen,
@@ -53,6 +54,7 @@ import {
   btnMobFilterCourses,
   btnMobFilterFav,
   btnMobFilterUser,
+  btnNavAbout,
   btnNavAdmin,
   btnNavDecks,
   btnNavHome,
@@ -240,9 +242,11 @@ export function resumeBattleFromDecksPage() {
   if (homeDashboardView) homeDashboardView.classList.remove('hidden');
   if (decksPageView) decksPageView.classList.add('hidden');
   if (adminStudioView) adminStudioView.classList.add('hidden');
+  if (aboutPageView) aboutPageView.classList.add('hidden');
   if (btnNavHome) btnNavHome.classList.add('active');
   if (btnNavDecks) btnNavDecks.classList.remove('active');
   if (btnNavAdmin) btnNavAdmin.classList.remove('active');
+  if (btnNavAbout) btnNavAbout.classList.remove('active');
 
   state.screenMode = 'play';
   if (arcadeTitleScreen) arcadeTitleScreen.hidden = true;

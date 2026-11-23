@@ -56,7 +56,7 @@ print(f"[OK] index.html: {len(html_id_set)} unique IDs, {len(hi.local_refs)} ver
 # 2. CSS syntax & brace balance across styles/*.css
 # ============================================================================
 css_files = sorted((ROOT / "styles").glob("*.css"))
-assert len(css_files) == 8, f"Expected 8 modular CSS files, found {len(css_files)}"
+assert len(css_files) == 9, f"Expected 9 modular CSS files, found {len(css_files)}"
 total_css_lines = 0
 for cf in css_files:
     raw = cf.read_text(encoding="utf-8")

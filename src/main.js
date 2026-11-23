@@ -69,6 +69,11 @@ import {
   bindAdminStudioEvents
 } from './ui/admin-studio.js';
 import {
+  openAboutPage,
+  renderAboutPage,
+  bindAboutPageEvents
+} from './ui/about-page.js';
+import {
   setNativeLanguage,
   setTargetLanguage,
   applyStaticUILocalization,
@@ -104,6 +109,8 @@ registerActions({
   openLeaderboardModal,
   openAdminStudio,
   renderAdminStudio,
+  openAboutPage,
+  renderAboutPage,
   setNativeLanguage,
   setTargetLanguage,
   applyStaticUILocalization,
@@ -160,6 +167,7 @@ bindGameplayEvents();
 bindDecksPageEvents();
 bindModalEvents();
 bindAdminStudioEvents();
+bindAboutPageEvents();
 bindNavigationEvents();
 
 // 5. Асинхронная инициализация пользовательских колод, облачного каталога и 60 FPS цикла

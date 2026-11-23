@@ -1495,7 +1495,7 @@ export function bindGameplayEvents() {
       )
     );
 
-    if (state.screenMode === 'title' && (state.homeSubView === 'decks' || state.homeSubView === 'admin')) {
+    if (state.screenMode === 'title' && (state.homeSubView === 'decks' || state.homeSubView === 'admin' || state.homeSubView === 'about')) {
       if (e.key === 'Escape' && !isTypingInInput) {
         e.preventDefault();
         if (state.homeSubView === 'decks' && state.openedDeckId) {

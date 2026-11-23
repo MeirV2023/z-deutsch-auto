@@ -330,13 +330,16 @@ export const btnNavPlay = document.getElementById('btnNavPlay');
 export const btnNavDecks = document.getElementById('btnNavDecks');
 export const btnNavStats = document.getElementById('btnNavStats');
 export const btnNavLeaderboard = document.getElementById('btnNavLeaderboard');
+export const btnNavAbout = document.getElementById('btnNavAbout');
 export const btnNavAdmin = document.getElementById('btnNavAdmin');
 export const labelNavHome = document.getElementById('labelNavHome');
 export const labelNavPlay = document.getElementById('labelNavPlay');
 export const labelNavDecks = document.getElementById('labelNavDecks');
 export const labelNavStats = document.getElementById('labelNavStats');
 export const labelNavLeaderboard = document.getElementById('labelNavLeaderboard');
+export const labelNavAbout = document.getElementById('labelNavAbout');
 export const labelNavAdmin = document.getElementById('labelNavAdmin');
+export const aboutPageView = document.getElementById('aboutPageView');
 export const btnHomeStreakChip = document.getElementById('btnHomeStreakChip');
 export const homeStreakBadge = document.getElementById('homeStreakBadge');
 export const pilotRankPill = document.getElementById('pilotRankPill');
@@ -413,10 +416,12 @@ export const btnMobNavHome = document.getElementById('btnMobNavHome');
 export const btnMobNavPlay = document.getElementById('btnMobNavPlay');
 export const btnMobNavDecks = document.getElementById('btnMobNavDecks');
 export const btnMobNavStats = document.getElementById('btnMobNavStats');
+export const btnMobNavAbout = document.getElementById('btnMobNavAbout');
 export const labelMobNavHome = document.getElementById('labelMobNavHome');
 export const labelMobNavPlay = document.getElementById('labelMobNavPlay');
 export const labelMobNavDecks = document.getElementById('labelMobNavDecks');
 export const labelMobNavStats = document.getElementById('labelMobNavStats');
+export const labelMobNavAbout = document.getElementById('labelMobNavAbout');
 
 export const labelQuickStartTitle = document.getElementById('labelQuickStartTitle');
 export const btnQuickStartAnki = document.getElementById('btnQuickStartAnki');
@@ -857,13 +862,16 @@ export const dom = {
   btnNavDecks,
   btnNavStats,
   btnNavLeaderboard,
+  btnNavAbout,
   btnNavAdmin,
   labelNavHome,
   labelNavPlay,
   labelNavDecks,
   labelNavStats,
   labelNavLeaderboard,
+  labelNavAbout,
   labelNavAdmin,
+  aboutPageView,
   btnHomeStreakChip,
   homeStreakBadge,
   pilotRankPill,
@@ -934,10 +942,12 @@ export const dom = {
   btnMobNavPlay,
   btnMobNavDecks,
   btnMobNavStats,
+  btnMobNavAbout,
   labelMobNavHome,
   labelMobNavPlay,
   labelMobNavDecks,
   labelMobNavStats,
+  labelMobNavAbout,
   labelQuickStartTitle,
   btnQuickStartAnki,
   labelQuickAnkiBtn,
