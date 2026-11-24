@@ -28,6 +28,7 @@ import {
   arcadeLogoSub,
   arcadeTitleScreen,
   arenaWavePill,
+  authPageView,
   btnAdminLockMode,
   btnArticleMode,
   btnDecksLevelAll,
@@ -47,6 +48,7 @@ import {
   btnMobNavStats,
   btnNavAbout,
   btnNavAdmin,
+  btnNavAuth,
   btnNavDecks,
   btnNavHome,
   btnNavLangToggle,
@@ -263,6 +265,7 @@ import {
 } from './modals.js';
 import { renderAdminStudio } from './admin-studio.js';
 import { openAboutPage, renderAboutPage } from './about-page.js';
+import { openAuthPage, renderAuthPage, updateAuthNavButton } from './auth-page.js';
 import { applyCookieConsentLocalization, openCookiePrefsModal } from './cookie-consent.js';
 
 let _resizeBound = false;
@@ -765,7 +768,10 @@ export function applyStaticUILocalization() {
     renderAdminStudio();
   } else if (state.homeSubView === 'about') {
     renderAboutPage();
+  } else if (state.homeSubView === 'auth') {
+    renderAuthPage();
   }
+  updateAuthNavButton();
   refreshHitSpotlightPinState();
   onTtsStatusChanged();
 
@@ -800,21 +806,24 @@ export function syncMobileBottomNavUI(overrideTab = '') {
 }
 
 export function switchHomeSubView(subView) {
-  state.homeSubView = (subView === 'decks' || subView === 'admin' || subView === 'about') ? subView : 'home';
+  state.homeSubView = (subView === 'decks' || subView === 'admin' || subView === 'about' || subView === 'auth') ? subView : 'home';
   const onHome = state.homeSubView === 'home';
   const onDecks = state.homeSubView === 'decks';
   const onAdmin = state.homeSubView === 'admin';
   const onAbout = state.homeSubView === 'about';
+  const onAuth = state.homeSubView === 'auth';
 
   if (homeDashboardView) homeDashboardView.classList.toggle('hidden', !onHome);
   if (decksPageView) decksPageView.classList.toggle('hidden', !onDecks);
   if (adminStudioView) adminStudioView.classList.toggle('hidden', !onAdmin);
   if (aboutPageView) aboutPageView.classList.toggle('hidden', !onAbout);
+  if (authPageView) authPageView.classList.toggle('hidden', !onAuth);
 
   if (btnNavHome) btnNavHome.classList.toggle('active', onHome);
   if (btnNavDecks) btnNavDecks.classList.toggle('active', onDecks);
   if (btnNavAdmin) btnNavAdmin.classList.toggle('active', onAdmin);
   if (btnNavAbout) btnNavAbout.classList.toggle('active', onAbout);
+  if (btnNavAuth) btnNavAuth.classList.toggle('active', onAuth);
   syncMobileBottomNavUI();
 
   if (btnDecksReturnBattle) {
@@ -837,6 +846,10 @@ export function switchHomeSubView(subView) {
     state.demoWords = [];
     state.demoTargetId = null;
     renderAboutPage();
+  } else if (onAuth) {
+    state.demoWords = [];
+    state.demoTargetId = null;
+    renderAuthPage();
   } else if (state.screenMode === 'title') {
     resizeCanvas();
     requestAnimationFrame(() => {
@@ -1045,6 +1058,15 @@ export function bindNavigationEvents() {
       closeAllTopDialogs();
       switchHomeSubView('about');
       btnNavAbout.blur();
+    });
+  }
+
+  if (btnNavAuth) {
+    btnNavAuth.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      openAuthPage();
+      btnNavAuth.blur();
     });
   }
 

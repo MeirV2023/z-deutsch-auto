@@ -152,6 +152,10 @@
               <button type="button" class="hud-btn native-lang-btn" data-native-lang="ar">🇸🇦 AR · العربية</button>
             </div>
           </div>
+          <button type="button" class="home-auth-pill" id="btnNavAuth" title="Google / Gmail аккаунт и синхронизация">
+            <span class="home-auth-icon" id="navAuthAvatar" aria-hidden="true">G</span>
+            <span class="home-auth-label" id="labelNavAuth">Войти</span>
+          </button>
           <button type="button" class="home-avatar-btn" id="btnHomeSettings" title="Профиль и настройки игры">
             <span class="avatar-gear-desktop" aria-hidden="true">
               <svg class="avatar-user-desktop-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -1242,6 +1246,9 @@
 
       <!-- ПОДЭКРАН Г: СТРАНИЦА «О ПРОЕКТЕ» (С ВКЛАДКАМИ: О ПРОЕКТЕ · КАК ИГРАТЬ · ПЛАНЫ · КОНТАКТЫ) -->
       <div class="about-page-view hidden" id="aboutPageView" aria-label="О проекте VOCANOVA"></div>
+
+      <!-- ПОДЭКРАН Д: ДОБРОВОЛЬНАЯ РЕГИСТРАЦИЯ GOOGLE (GMAIL) И ОБЛАЧНЫЙ АККАУНТ -->
+      <div class="auth-page-view hidden" id="authPageView" aria-label="Аккаунт VOCANOVA"></div>
     </div>
 
     <!-- Всплывающее меню быстрых действий колоды по кнопке ⋮ -->
@@ -1994,6 +2001,10 @@
           <button type="button" class="primary-btn" id="btnSaveCustomWords">Создать личный курс и играть 🚀</button>
         </div>
       </div>
+
+      <button type="button" class="anki-auth-sync-hint" id="btnAnkiSyncAuthHint">
+        ☁️ <span id="labelAnkiSyncAuthHint">Войдите через Google (Gmail), чтобы колоды Anki и FSRS-5 синхронизировались между устройствами →</span>
+      </button>
     </div>
   </dialog>
 
@@ -2021,6 +2032,9 @@
           </button>
           <button type="button" class="hud-btn" id="btnOpenStatsFromSettings">
             📊 <span id="labelSettingsStatsBtn">Статистика</span>
+          </button>
+          <button type="button" class="hud-btn auth-accent-btn" id="btnOpenAuthFromSettings">
+            ☁️ <span id="labelSettingsAuthBtn">Войти через Google</span>
           </button>
         </div>
       </div>

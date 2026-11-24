@@ -61,7 +61,8 @@ export const ABOUT_FSRS_LEGAL = {
         { key: 'zlingo_learned_words_v1 / pinned / daily', purpose: 'Изученные слова, ⭐ закладки, дневная цель и серия дней', category: 'Необходимое' },
         { key: 'zlingo_cookie_consent_v1', purpose: 'Ваш выбор настроек приватности и согласия с баннером cookies', category: 'Необходимое' },
         { key: 'IndexedDB (Anki Decks)', purpose: 'Ваши загруженные колоды .apkg / .colpkg — только на вашем устройстве', category: 'Необходимое' },
-        { key: 'zdeutsch_gemini_api_key', purpose: 'Необязательный личный ключ Gemini API для TTS (если введён пользователем)', category: 'Функциональное' }
+        { key: 'zdeutsch_gemini_api_key', purpose: 'Необязательный личный ключ Gemini API для TTS (если введён пользователем)', category: 'Функциональное' },
+        { key: 'zlingo_auth_profile_v1 + vocanova_session', purpose: 'Только при добровольном входе Google: сессия облачной синхронизации и кэш имени/аватара', category: 'При входе' }
       ],
       ctaCookiePrefs: '⚙️ Настроить cookies',
       ctaPrivacyDoc: 'Политика конфиденциальности (GDPR) ↗',
@@ -119,7 +120,8 @@ export const ABOUT_FSRS_LEGAL = {
         { key: 'zlingo_learned_words_v1 / pinned / daily', purpose: 'Learned vocabulary, ⭐ bookmarks, daily goal & streak counter', category: 'Essential' },
         { key: 'zlingo_cookie_consent_v1', purpose: 'Stores your GDPR privacy banner / preference modal decision', category: 'Essential' },
         { key: 'IndexedDB (Anki Decks)', purpose: 'Your imported .apkg / .colpkg / custom decks kept offline on device', category: 'Essential' },
-        { key: 'zdeutsch_gemini_api_key', purpose: 'Optional user-supplied Gemini API key for studio TTS playback', category: 'Functional' }
+        { key: 'zdeutsch_gemini_api_key', purpose: 'Optional user-supplied Gemini API key for studio TTS playback', category: 'Functional' },
+        { key: 'zlingo_auth_profile_v1 + vocanova_session', purpose: 'Only when voluntarily signed in via Google: cloud-sync session & profile display cache', category: 'If signed in' }
       ],
       ctaCookiePrefs: '⚙️ Cookie Settings',
       ctaPrivacyDoc: 'Privacy Policy (GDPR) ↗',
@@ -177,7 +179,8 @@ export const ABOUT_FSRS_LEGAL = {
         { key: 'zlingo_learned_words_v1 / pinned / daily', purpose: 'Gelernte Wörter, ⭐ Lesezeichen, Tagesziel & Streak', category: 'Notwendig' },
         { key: 'zlingo_cookie_consent_v1', purpose: 'Speichert deine Auswahl im Cookie- & Datenschutz-Banner', category: 'Notwendig' },
         { key: 'IndexedDB (Anki Decks)', purpose: 'Importierte .apkg / .colpkg-Decks offline auf deinem Gerät', category: 'Notwendig' },
-        { key: 'zdeutsch_gemini_api_key', purpose: 'Optionaler eigener Gemini-API-Key für TTS (falls eingetragen)', category: 'Funktional' }
+        { key: 'zdeutsch_gemini_api_key', purpose: 'Optionaler eigener Gemini-API-Key für TTS (falls eingetragen)', category: 'Funktional' },
+        { key: 'zlingo_auth_profile_v1 + vocanova_session', purpose: 'Nur bei freiwilligem Google-Login: HttpOnly-Sync-Sitzung und Profilanzeige-Cache', category: 'Bei Login' }
       ],
       ctaCookiePrefs: '⚙️ Cookie-Einstellungen',
       ctaPrivacyDoc: 'Datenschutzerklärung ↗',
@@ -235,7 +238,8 @@ export const ABOUT_FSRS_LEGAL = {
         { key: 'zlingo_learned_words_v1 / pinned / daily', purpose: 'Palabras aprendidas, ⭐ favoritas, meta diaria y racha', category: 'Esencial' },
         { key: 'zlingo_cookie_consent_v1', purpose: 'Guarda tu decisión en el banner y panel de privacidad', category: 'Esencial' },
         { key: 'IndexedDB (Mazos Anki)', purpose: 'Tus archivos .apkg / .colpkg guardados sin conexión en el navegador', category: 'Esencial' },
-        { key: 'zdeutsch_gemini_api_key', purpose: 'Clave API opcional de Gemini introducida por el usuario para TTS', category: 'Funcional' }
+        { key: 'zdeutsch_gemini_api_key', purpose: 'Clave API opcional de Gemini introducida por el usuario para TTS', category: 'Funcional' },
+        { key: 'zlingo_auth_profile_v1 + vocanova_session', purpose: 'Solo si inicias sesión voluntaria con Google: sesión de sincronización y caché de perfil', category: 'Al iniciar sesión' }
       ],
       ctaCookiePrefs: '⚙️ Ajustar cookies',
       ctaPrivacyDoc: 'Política de privacidad ↗',
@@ -293,7 +297,8 @@ export const ABOUT_FSRS_LEGAL = {
         { key: 'zlingo_learned_words_v1 / pinned / daily', purpose: 'Вивчені слова, ⭐ закладки, денна ціль і серія днів', category: 'Необхідне' },
         { key: 'zlingo_cookie_consent_v1', purpose: 'Зберігає ваш вибір у банері приватності й налаштувань cookies', category: 'Необхідне' },
         { key: 'IndexedDB (Колоди Anki)', purpose: 'Завантажені вами колоди .apkg / .colpkg лише на вашому пристрої', category: 'Необхідне' },
-        { key: 'zdeutsch_gemini_api_key', purpose: 'Необов’язковий особистий ключ Gemini API для озвучення', category: 'Функціональне' }
+        { key: 'zdeutsch_gemini_api_key', purpose: 'Необов’язковий особистий ключ Gemini API для озвучення', category: 'Функціональне' },
+        { key: 'zlingo_auth_profile_v1 + vocanova_session', purpose: 'Лише при добровільному вході Google: сесія хмарної синхронізації та кеш профілю', category: 'При вході' }
       ],
       ctaCookiePrefs: '⚙️ Налаштувати cookies',
       ctaPrivacyDoc: 'Політика конфіденційності ↗',
@@ -351,7 +356,8 @@ export const ABOUT_FSRS_LEGAL = {
         { key: 'zlingo_learned_words_v1 / pinned / daily', purpose: 'Öğrenilen kelimeler, ⭐ yer imleri, günlük hedef ve seri', category: 'Zorunlu' },
         { key: 'zlingo_cookie_consent_v1', purpose: 'Çerez ve gizlilik tercihini saklar', category: 'Zorunlu' },
         { key: 'IndexedDB (Anki Desteleri)', purpose: 'Yüklenen .apkg / .colpkg desteleri cihazında çevrimdışı saklanır', category: 'Zorunlu' },
-        { key: 'zdeutsch_gemini_api_key', purpose: 'İsteğe bağlı kullanıcı Gemini TTS API anahtarı', category: 'İşlevsel' }
+        { key: 'zdeutsch_gemini_api_key', purpose: 'İsteğe bağlı kullanıcı Gemini TTS API anahtarı', category: 'İşlevsel' },
+        { key: 'zlingo_auth_profile_v1 + vocanova_session', purpose: 'Yalnızca isteğe bağlı Google girişinde: bulut eşitleme oturumu ve profil önbelleği', category: 'Girişte' }
       ],
       ctaCookiePrefs: '⚙️ Çerez Ayarları',
       ctaPrivacyDoc: 'Gizlilik Politikası ↗',
@@ -409,7 +415,8 @@ export const ABOUT_FSRS_LEGAL = {
         { key: 'zlingo_learned_words_v1 / pinned / daily', purpose: 'מילים שנלמדו, סימניות ⭐, יעד יומי ורצף ימים', category: 'הכרחי' },
         { key: 'zlingo_cookie_consent_v1', purpose: 'שומר את בחירתכם בהגדרות הפרטיות והעוגיות', category: 'הכרחי' },
         { key: 'IndexedDB (חפיסות Anki)', purpose: 'חפיסות .apkg / .colpkg שיובאו אופליין במכשירכם', category: 'הכרחי' },
-        { key: 'zdeutsch_gemini_api_key', purpose: 'מפתח Gemini API אישי אופציונלי לקריינות TTS', category: 'פונקציונלי' }
+        { key: 'zdeutsch_gemini_api_key', purpose: 'מפתח Gemini API אישי אופציונלי לקריינות TTS', category: 'פונקציונלי' },
+        { key: 'zlingo_auth_profile_v1 + vocanova_session', purpose: 'רק בהתחברות וולונטרית עם Google: סשן סנכרון בענן ומטמון פרופיל', category: 'בהתחברות' }
       ],
       ctaCookiePrefs: '⚙️ הגדרות עוגיות',
       ctaPrivacyDoc: 'מדיניות פרטיות ↗',
@@ -467,7 +474,8 @@ export const ABOUT_FSRS_LEGAL = {
         { key: 'zlingo_learned_words_v1 / pinned / daily', purpose: 'الكلمات المتعلمة والمفضلة ⭐ والهدف اليومي والسلسلة', category: 'ضروري' },
         { key: 'zlingo_cookie_consent_v1', purpose: 'يحفظ اختيارك في شريط موافقة الخصوصية وملفات الارتباط', category: 'ضروري' },
         { key: 'IndexedDB (مجموعات Anki)', purpose: 'ملفات .apkg / .colpkg المستوردة بدون اتصال على جهازك', category: 'ضروري' },
-        { key: 'zdeutsch_gemini_api_key', purpose: 'مفتاح Gemini API اختياري يضيفه المستخدم للنطق الصوتي', category: 'وظيفي' }
+        { key: 'zdeutsch_gemini_api_key', purpose: 'مفتاح Gemini API اختياري يضيفه المستخدم للنطق الصوتي', category: 'وظيفي' },
+        { key: 'zlingo_auth_profile_v1 + vocanova_session', purpose: 'فقط عند تسجيل الدخول الطوعي عبر Google: جلسة المزامنة السحابية والملف الشخصي', category: 'عند الدخول' }
       ],
       ctaCookiePrefs: '⚙️ إعدادات ملفات الارتباط',
       ctaPrivacyDoc: 'سياسة الخصوصية ↗',

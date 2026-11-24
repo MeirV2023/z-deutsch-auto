@@ -600,6 +600,16 @@ export const linkPrefsCookies = document.getElementById('linkPrefsCookies');
 export const linkPrefsTerms = document.getElementById('linkPrefsTerms');
 export const btnSaveCookiePrefs = document.getElementById('btnSaveCookiePrefs');
 
+// Добровольная регистрация Google (Gmail) и синхронизация
+export const btnNavAuth = document.getElementById('btnNavAuth');
+export const navAuthAvatar = document.getElementById('navAuthAvatar');
+export const labelNavAuth = document.getElementById('labelNavAuth');
+export const authPageView = document.getElementById('authPageView');
+export const btnOpenAuthFromSettings = document.getElementById('btnOpenAuthFromSettings');
+export const labelSettingsAuthBtn = document.getElementById('labelSettingsAuthBtn');
+export const btnAnkiSyncAuthHint = document.getElementById('btnAnkiSyncAuthHint');
+export const labelAnkiSyncAuthHint = document.getElementById('labelAnkiSyncAuthHint');
+
 export const dom = {
   canvas,
   ctx,
@@ -1149,5 +1159,13 @@ export const dom = {
   linkPrefsPrivacy,
   linkPrefsCookies,
   linkPrefsTerms,
-  btnSaveCookiePrefs
+  btnSaveCookiePrefs,
+  btnNavAuth,
+  navAuthAvatar,
+  labelNavAuth,
+  authPageView,
+  btnOpenAuthFromSettings,
+  labelSettingsAuthBtn,
+  btnAnkiSyncAuthHint,
+  labelAnkiSyncAuthHint
 };

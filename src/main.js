@@ -77,6 +77,16 @@ import {
   bindAboutPageEvents
 } from './ui/about-page.js';
 import {
+  openAuthPage,
+  renderAuthPage,
+  bindAuthPageEvents,
+  updateAuthNavButton
+} from './ui/auth-page.js';
+import {
+  fetchAuthRuntimeConfig,
+  scheduleAuthCloudSync
+} from './services/auth-service.js';
+import {
   initCookieConsent,
   openCookiePrefsModal
 } from './ui/cookie-consent.js';
@@ -119,6 +129,8 @@ registerActions({
   renderAdminStudio,
   openAboutPage,
   renderAboutPage,
+  openAuthPage,
+  renderAuthPage,
   openCookiePrefsModal,
   setNativeLanguage,
   setTargetLanguage,
@@ -145,6 +157,7 @@ bus.on('pins:changed', () => {
 });
 
 bus.on('learned:updated', ({ alreadyKnown } = {}) => {
+  scheduleAuthCloudSync();
   if (alreadyKnown) {
     updateTodayLearnedUI();
     renderHomeDashboardWidgets();
@@ -172,6 +185,7 @@ bus.on('tts:status', () => {
 });
 
 bus.on('fsrs:changed', () => {
+  scheduleAuthCloudSync();
   renderHomeDashboardWidgets();
   if (statsDialog && statsDialog.open) {
     renderStatsModal();
@@ -184,14 +198,28 @@ bus.on('fsrs:changed', () => {
   }
 });
 
+bus.on('auth:changed', () => {
+  updateAuthNavButton();
+  renderHomeDashboardWidgets();
+  if (state.homeSubView === 'auth') {
+    renderAuthPage();
+  }
+});
+
 // 4. Подключаем обработчики событий всех независимых контроллеров
 bindGameplayEvents();
 bindDecksPageEvents();
 bindModalEvents();
 bindAdminStudioEvents();
 bindAboutPageEvents();
+bindAuthPageEvents();
 bindNavigationEvents();
 initCookieConsent();
+updateAuthNavButton();
+fetchAuthRuntimeConfig().then(() => {
+  updateAuthNavButton();
+  if (state.homeSubView === 'auth') renderAuthPage();
+});
 
 // 5. Асинхронная инициализация пользовательских колод, облачного каталога и 60 FPS цикла
 async function initGame() {

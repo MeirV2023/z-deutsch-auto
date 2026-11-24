@@ -419,5 +419,11 @@ export const TR_TEXT = {
   cookieCatFuncDesc: 'Seçilen Gemini TTS sesini, ekran klavyesini, dil çiftini ve arayüz filtrelerini hatırlar.',
   cookieCatAnalyticsTitle: 'İsteğe Bağlı Kalite Telemetrisi',
   cookieCatAnalyticsDesc: 'VOCANOVA şu anda üçüncü taraf reklam veya analiz çerezi kullanmaz. Gelecekteki isteğe bağlı tanılama için ayrılmıştır.',
-  cookieBtnSavePrefs: '💾 Tercihleri Kaydet'
+  cookieBtnSavePrefs: '💾 Tercihleri Kaydet',
+
+  // İsteğe bağlı Google (Gmail) Kaydı
+  navAuthSignIn: 'Giriş',
+  navAuthAccount: 'Hesap',
+  settingsAuthBtn: 'Google ile Giriş Yap',
+  ankiAuthSyncHint: 'Anki destelerinizi ve FSRS-5 belleğinizi cihazlar arasında eşitlemek için Google (Gmail) ile giriş yapın →'
 };

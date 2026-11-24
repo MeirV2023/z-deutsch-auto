@@ -1434,4 +1434,36 @@ button.arcade-logo-sub:hover {
   text-decoration: underline;
 }
 
+.auth-accent-btn {
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  background: rgba(14, 165, 233, 0.16) !important;
+  color: #e0f2fe !important;
+}
+
+.anki-auth-sync-hint {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px 13px;
+  border-radius: 12px;
+  border: 1px dashed rgba(56, 189, 248, 0.45);
+  background: rgba(14, 165, 233, 0.09);
+  color: #bae6fd;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.anki-auth-sync-hint:hover {
+  border-color: #38bdf8;
+  background: rgba(14, 165, 233, 0.18);
+  color: #ffffff;
+}
+
+.anki-auth-sync-hint.hidden {
+  display: none !important;
+}
+
 

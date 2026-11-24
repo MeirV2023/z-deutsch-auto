@@ -152,6 +152,36 @@ export function getFsrsSummaryForTargetLang(targetLang = state.targetLang, nowMs
 }
 
 /**
+ * Return plain JSON-serializable copy of all tracked FSRS cards.
+ */
+export function getAllFsrsCardsObject() {
+  return Object.fromEntries(fsrsCardsMap.entries());
+}
+
+/**
+ * Merge FSRS cards from cloud backup, preserving whichever record has newer lastReview.
+ */
+export function mergeFsrsCardsFromCloud(remoteMapObj) {
+  if (!remoteMapObj || typeof remoteMapObj !== 'object' || Array.isArray(remoteMapObj)) return 0;
+  let mergedCount = 0;
+  for (const [key, remoteCard] of Object.entries(remoteMapObj)) {
+    if (!key || !remoteCard || typeof remoteCard !== 'object') continue;
+    const localCard = fsrsCardsMap.get(key);
+    const remoteTs = Number(remoteCard.lastReview) || 0;
+    const localTs = localCard ? (Number(localCard.lastReview) || 0) : 0;
+    if (!localCard || remoteTs > localTs) {
+      fsrsCardsMap.set(key, remoteCard);
+      mergedCount++;
+    }
+  }
+  if (mergedCount > 0) {
+    persistFsrsCards();
+    bus.emit('fsrs:changed', { mergedFromCloud: mergedCount });
+  }
+  return mergedCount;
+}
+
+/**
  * Clear all persisted FSRS cards (e.g., user privacy reset).
  */
 export function clearAllFsrsCards() {

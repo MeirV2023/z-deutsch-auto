@@ -303,8 +303,11 @@ export function getMergedLeaderboardEntries() {
     { name: 'MayaTLV', score: 15800, avatar: '⚡', isYou: false },
     { name: 'CarlosMadrid', score: 9450, avatar: '🌟', isYou: false }
   ];
+  const displayName = (state.authUser && state.authUser.name)
+    ? state.authUser.name
+    : tr.youPilotLabel;
   const youEntry = {
-    name: tr.youPilotLabel,
+    name: displayName,
     score: myBest,
     avatar: '🏆',
     isYou: true

@@ -62,6 +62,7 @@ import {
   btnOpenAdminFromSettings,
   btnOpenAnkiFromCatalog,
   btnOpenAnkiFromSettings,
+  btnOpenAuthFromSettings,
   btnOpenCustom,
   btnOpenDictFromSettings,
   btnOpenLeaderboardCard,
@@ -85,6 +86,7 @@ import {
   btnTitleDict,
   btnTitleVoice,
   btnToggleTtsMaster,
+  btnAnkiSyncAuthHint,
   centerOverlay,
   courseBrowserDialog,
   customWordsDialog,
@@ -905,6 +907,20 @@ export function bindModalEvents() {
     btnOpenAdminFromSettings.addEventListener('click', () => {
       gameSettingsDialog.close();
       actions.openAdminStudio(state.targetLang);
+    });
+  }
+  if (btnOpenAuthFromSettings) {
+    btnOpenAuthFromSettings.addEventListener('click', () => {
+      gameSettingsDialog.close();
+      actions.openAuthPage();
+    });
+  }
+  if (btnAnkiSyncAuthHint) {
+    btnAnkiSyncAuthHint.addEventListener('click', () => {
+      if (customWordsDialog && customWordsDialog.open) {
+        customWordsDialog.close();
+      }
+      actions.openAuthPage();
     });
   }
 

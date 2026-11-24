@@ -472,5 +472,11 @@ export const UK_TEXT = {
   cookieCatFuncDesc: 'Збереження вибраного голосу Gemini TTS, екранної клавіатури, мовної пари й фільтрів.',
   cookieCatAnalyticsTitle: 'Опціональна телеметрія якості',
   cookieCatAnalyticsDesc: 'Наразі VOCANOVA не використовує сторонню рекламу чи аналітику. Перемикач зарезервовано лише для опційної діагностики за вашою згодою.',
-  cookieBtnSavePrefs: '💾 Зберегти налаштування'
+  cookieBtnSavePrefs: '💾 Зберегти налаштування',
+
+  // Добровільна реєстрація Google (Gmail)
+  navAuthSignIn: 'Увійти',
+  navAuthAccount: 'Акаунт',
+  settingsAuthBtn: 'Увійти через Google',
+  ankiAuthSyncHint: 'Увійдіть через Google (Gmail), щоб ваші колоди Anki та FSRS-5 синхронізувалися між пристроями →'
 };

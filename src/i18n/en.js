@@ -419,5 +419,11 @@ export const EN_TEXT = {
   cookieCatFuncDesc: 'Remembers your selected Gemini TTS voice, ZType keyboard visibility, language pair, and UI filters.',
   cookieCatAnalyticsTitle: 'Optional Product Telemetry',
   cookieCatAnalyticsDesc: 'VOCANOVA currently sets zero third-party advertising or analytics cookies. Reserved exclusively for opt-in quality diagnostics.',
-  cookieBtnSavePrefs: '💾 Save Preferences'
+  cookieBtnSavePrefs: '💾 Save Preferences',
+
+  // Voluntary Google (Gmail) Registration
+  navAuthSignIn: 'Sign in',
+  navAuthAccount: 'Account',
+  settingsAuthBtn: 'Sign in with Google',
+  ankiAuthSyncHint: 'Sign in with Google (Gmail) to sync your Anki decks & FSRS-5 across devices →'
 };

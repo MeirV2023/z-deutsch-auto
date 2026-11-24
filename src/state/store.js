@@ -3,6 +3,7 @@
 
 import { bus } from '../core/events.js';
 import {
+  AUTH_PROFILE_KEY,
   PINNED_STORAGE_KEY,
   FAV_DECKS_KEY,
   LEARNED_STORAGE_KEY,
@@ -12,6 +13,7 @@ import {
   loadJsonStorage,
   saveJsonStorage,
   loadSavedSettings,
+  saveSettingsPatch,
   detectBrowserNativeLanguage,
   detectDefaultTargetLanguage
 } from '../core/storage.js';
@@ -211,8 +213,9 @@ export const state = {
   catalogSourceFilter: 'all', // 'all' | 'official' | 'user'
   decksOnlyFavorites: false,
   decksOnlyRecent: false,
-  homeSubView: 'home', // 'home' | 'decks' | 'admin' | 'about'
-  aboutActiveTab: 'story', // 'story' | 'guide' | 'roadmap' | 'contact'
+  homeSubView: 'home', // 'home' | 'decks' | 'admin' | 'about' | 'auth'
+  aboutActiveTab: 'story', // 'story' | 'guide' | 'fsrs' | 'roadmap' | 'legal' | 'contact'
+  authUser: loadJsonStorage(AUTH_PROFILE_KEY, null),
   decksViewMode: 'grid', // 'grid' | 'list'
   decksCategoryFilter: 'all',
   decksLevelFilter: 'all',
@@ -399,6 +402,72 @@ export function recordWordLearned(entry, targetLang = state.targetLang) {
   }
 
   bus.emit('learned:updated', { entry, targetLang, newlyUnlocked, alreadyKnown: false });
+}
+
+export function mergeLocalProgressFromCloud(cloudProgress) {
+  if (!cloudProgress || typeof cloudProgress !== 'object') return false;
+  let changed = false;
+
+  if (Array.isArray(cloudProgress.learnedWords)) {
+    const prevSize = learnedWordsSet.size;
+    for (const key of cloudProgress.learnedWords) {
+      if (typeof key === 'string' && key) learnedWordsSet.add(key);
+    }
+    if (learnedWordsSet.size !== prevSize) {
+      saveJsonStorage(LEARNED_STORAGE_KEY, Array.from(learnedWordsSet));
+      changed = true;
+    }
+  }
+
+  if (cloudProgress.pinnedWords && typeof cloudProgress.pinnedWords === 'object') {
+    let pinnedChanged = false;
+    for (const [k, val] of Object.entries(cloudProgress.pinnedWords)) {
+      if (k && val && !pinnedWordsMap.has(k)) {
+        pinnedWordsMap.set(k, val);
+        pinnedChanged = true;
+      }
+    }
+    if (pinnedChanged) {
+      saveJsonStorage(PINNED_STORAGE_KEY, Object.fromEntries(pinnedWordsMap.entries()));
+      changed = true;
+      bus.emit('pins:changed', { syncedFromCloud: true });
+    }
+  }
+
+  if (cloudProgress.settings && typeof cloudProgress.settings === 'object') {
+    const remoteHigh = Number(cloudProgress.settings.highScore) || 0;
+    if (remoteHigh > state.highScore) {
+      state.highScore = remoteHigh;
+      changed = true;
+    }
+    if (Array.isArray(cloudProgress.settings.completedLessonIds)) {
+      const prevLen = state.completedLessonIds.size;
+      for (const lid of cloudProgress.settings.completedLessonIds) {
+        if (typeof lid === 'string' && lid) state.completedLessonIds.add(lid);
+      }
+      if (state.completedLessonIds.size !== prevLen) changed = true;
+    }
+    if (changed) {
+      saveSettingsPatch({
+        highScore: state.highScore,
+        completedLessonIds: Array.from(state.completedLessonIds)
+      });
+    }
+  }
+
+  if (cloudProgress.dailyProgress && typeof cloudProgress.dailyProgress === 'object') {
+    const rBest = Number(cloudProgress.dailyProgress.bestStreakDays) || 0;
+    if (rBest > dailyProgress.bestStreakDays) {
+      dailyProgress.bestStreakDays = rBest;
+      saveJsonStorage(DAILY_PROGRESS_KEY, dailyProgress);
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    bus.emit('learned:updated', { syncedFromCloud: true, alreadyKnown: false });
+  }
+  return changed;
 }
 
 export function toggleDeckFavorite(courseId) {

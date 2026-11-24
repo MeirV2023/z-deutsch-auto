@@ -421,5 +421,11 @@ export const AR_TEXT = {
   cookieCatFuncDesc: 'يحفظ صوت Gemini TTS المختار وإظهار لوحة المفاتيح ولغة التعلم وعوامل التصفية.',
   cookieCatAnalyticsTitle: 'قياس الجودة الاختياري',
   cookieCatAnalyticsDesc: 'لا تستخدم VOCANOVA حالياً ملفات تعريف ارتباط إعلانية أو تحليلية خارجية. محجوز لتشخيصات الجودة الاختيارية بموافقتك فقط.',
-  cookieBtnSavePrefs: '💾 حفظ الإعدادات'
+  cookieBtnSavePrefs: '💾 حفظ الإعدادات',
+
+  // تسجيل اختياري عبر Google (Gmail)
+  navAuthSignIn: 'دخول',
+  navAuthAccount: 'الحساب',
+  settingsAuthBtn: 'تسجيل عبر Google',
+  ankiAuthSyncHint: 'سجّل الدخول عبر Google (Gmail) لمزامنة مجموعات Anki وذاكرة FSRS-5 بين أجهزتك ←'
 };

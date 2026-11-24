@@ -1970,5 +1970,84 @@
   .home-legal-footer {
     padding-bottom: 14px;
   }
+
+  .home-auth-pill {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 460px) {
+  .home-auth-label {
+    display: none;
+  }
+
+  .home-auth-pill {
+    padding: 6px;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   КНОПКА АККАУНТА GOOGLE (GMAIL) В ВЕРХНЕЙ ПАНЕЛИ
+   ========================================================================== */
+.home-auth-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1.4px solid rgba(56, 189, 248, 0.42);
+  background: rgba(13, 23, 46, 0.9);
+  color: #f1f5f9;
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+
+.home-auth-pill:hover,
+.home-auth-pill.active {
+  border-color: #34d399;
+  background: rgba(16, 185, 129, 0.2);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.home-auth-pill.is-signed-in {
+  border-color: rgba(52, 211, 153, 0.58);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(14, 165, 233, 0.2));
+}
+
+.home-auth-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 0.74rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.home-auth-g-svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.home-auth-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 

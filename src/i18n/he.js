@@ -419,5 +419,11 @@ export const HE_TEXT = {
   cookieCatFuncDesc: 'זוכר את קול Gemini TTS שנבחר, תצוגת המקלדת, שפת הלימוד והמסננים.',
   cookieCatAnalyticsTitle: 'טלמטריית איכות אופציונלית',
   cookieCatAnalyticsDesc: 'כרגע VOCANOVA אינה משתמשת בעוגיות פרסום או אנליטיקה צד שלישי. שמור לאבחון אופציונלי עתידי בהסכמה בלבד.',
-  cookieBtnSavePrefs: '💾 שמור העדפות'
+  cookieBtnSavePrefs: '💾 שמור העדפות',
+
+  // הרשמה וולונטרית עם Google (Gmail)
+  navAuthSignIn: 'כניסה',
+  navAuthAccount: 'חשבון',
+  settingsAuthBtn: 'התחברות עם Google',
+  ankiAuthSyncHint: 'התחברו עם Google (Gmail) כדי לסנכרן חפיסות Anki ו-FSRS-5 בין מכשירים ←'
 };
