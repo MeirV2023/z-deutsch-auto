@@ -25,6 +25,7 @@ import {
   getAllWordsInTargetLang,
   getMergedLeaderboardEntries
 } from '../domain/catalog-service.js';
+import { getFsrsSummaryForTargetLang } from '../domain/fsrs-service.js';
 import {
   achievementsGrid,
   ankiAutoMapBanner,
@@ -54,6 +55,7 @@ import {
   btnHomeSettings,
   btnHomeStreakChip,
   btnHudGameSettings,
+  btnLaunchFsrsFromStats,
   btnMobHudSettings,
   btnNavLeaderboard,
   btnNavStats,
@@ -94,6 +96,7 @@ import {
   gameSettingsDialogTitle,
   geminiApiKeyInput,
   labelAchievementsHeading,
+  labelLaunchFsrsFromStats,
   labelOpenLeaderFromStats,
   labelSettingArticle,
   labelSettingDesktopKbd,
@@ -524,6 +527,7 @@ export function renderStatsModal() {
   const unlockedCount = WEAPONS.filter(isWeaponUnlocked).length;
   const pinnedCount = getPinnedEntriesForTargetLang(state.targetLang).length;
   const bestPts = Math.max(state.highScore, state.score);
+  const fsrs = getFsrsSummaryForTargetLang(state.targetLang);
 
   const tiles = [
     { icon: '📖', val: learnedWordsSet.size.toLocaleString(), label: tr.statTotalLearned },
@@ -533,8 +537,18 @@ export function renderStatsModal() {
     { icon: '✅', val: String(state.completedLessonIds.size), label: tr.statLessonsDone },
     { icon: '🎯', val: accPct, label: tr.statAccuracy },
     { icon: '🚀', val: `${unlockedCount} / ${WEAPONS.length}`, label: tr.statUnlockedWeapons },
-    { icon: '⭐', val: String(pinnedCount), label: tr.statPinnedCount }
+    { icon: '⭐', val: String(pinnedCount), label: tr.statPinnedCount },
+    { icon: '🧠', val: String(fsrs.dueNow), label: tr.statFsrsDue || 'FSRS Due' },
+    { icon: '🛡️', val: String(fsrs.mastered), label: tr.statFsrsMastered || 'Long-Term (S≥21d)' },
+    { icon: '📈', val: `${fsrs.avgRetentionPct}%`, label: tr.statFsrsRetention || 'FSRS Retention' }
   ];
+
+  if (btnLaunchFsrsFromStats) {
+    btnLaunchFsrsFromStats.classList.toggle('hidden', fsrs.dueNow <= 0);
+    if (labelLaunchFsrsFromStats && tr.fsrsReviewBtn) {
+      labelLaunchFsrsFromStats.textContent = tr.fsrsReviewBtn(fsrs.dueNow);
+    }
+  }
 
   statsModalGrid.innerHTML = '';
   tiles.forEach(tItem => {
@@ -932,6 +946,13 @@ export function bindModalEvents() {
       el.blur();
     });
   });
+
+  if (btnLaunchFsrsFromStats) {
+    btnLaunchFsrsFromStats.addEventListener('click', () => {
+      statsDialog.close();
+      actions.launchFsrsReviewDrill();
+    });
+  }
 
   if (btnOpenLeaderboardFromStats) {
     btnOpenLeaderboardFromStats.addEventListener('click', () => {

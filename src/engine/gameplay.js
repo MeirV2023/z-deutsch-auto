@@ -28,6 +28,12 @@ import {
   getNextLessonPointer,
   resolveLessonBaseWords
 } from '../domain/catalog-service.js';
+import { FSRS_RATING } from '../domain/fsrs-engine.js';
+import {
+  getFsrsCardMetrics,
+  getFsrsDueEntriesForTargetLang,
+  recordFsrsReview
+} from '../domain/fsrs-service.js';
 import {
   arcadeTitleScreen,
   btnArcadeLaunch,
@@ -58,6 +64,7 @@ import {
   btnWeaponMode,
   canvas,
   centerOverlay,
+  cookiePrefsDialog,
   courseBrowserDialog,
   customWordsDialog,
   dictDialog,
@@ -483,10 +490,15 @@ export function renderWordsPreviewList(wordsArray, container) {
     const dirAttr = isRtlTranslation(item) ? ' dir="rtl"' : ' dir="ltr"';
     const wordDirAttr = isRtlTargetLang(state.targetLang) ? ' dir="rtl"' : ' dir="ltr"';
     const pinned = isEntryPinned(item);
+    const fsrsMeta = getFsrsCardMetrics(item, state.targetLang);
+    const fsrsBadgeHtml = fsrsMeta
+      ? `<span class="dict-fsrs-badge ${fsrsMeta.isDue ? 'is-due' : 'is-ok'}">FSRS · ${escapeHtml(fsrsMeta.isDue ? (tr.fsrsDueBadge || 'Due') : `${fsrsMeta.retrievabilityPct}% · ${tr.fsrsDaysShort ? tr.fsrsDaysShort(Math.max(1, Math.round(fsrsMeta.stabilityDays))) : `${Math.max(1, Math.round(fsrsMeta.stabilityDays))}d`}`)}</span>`
+      : '';
 
     div.innerHTML = `
       <div class="preview-word-top">
         <span class="preview-word-de"${wordDirAttr}>${escapeHtml(item.raw)}</span>
+        ${fsrsBadgeHtml}
         <button type="button" class="pin-star-btn${pinned ? ' pinned' : ''}" title="${escapeHtml(tr.pinTooltip)}">${pinned ? '⭐' : '☆'}</button>
       </div>
       <span class="preview-word-ru"${dirAttr}>${escapeHtml(transText)}</span>
@@ -517,23 +529,39 @@ export function showLevelIntroOverlay() {
   centerOverlay.classList.remove('hidden');
 }
 
-// Подмешивание отмеченных ⭐ слов в следующие раунды, чтобы незнакомые слова чаще закреплялись!
+// Подмешивание отмеченных ⭐ слов и слов, подошедших по алгоритму FSRS-5, в раунд
 export function buildRoundWordPool(basePool, isCustomPool = false) {
   const cleanBase = basePool.slice();
   if (isCustomPool) return shuffleArray(cleanBase);
 
-  const pinnedForLang = shuffleArray(getPinnedEntriesForTargetLang(state.targetLang));
-  if (pinnedForLang.length === 0) return shuffleArray(cleanBase);
+  const existingKeys = new Set(cleanBase.map(w => (w.word || w.raw || '').toLowerCase()));
+  const extras = [];
 
-  const existingKeys = new Set(cleanBase.map(w => (w.word || '').toLowerCase()));
-  const extraPinned = [];
+  const pinnedForLang = shuffleArray(getPinnedEntriesForTargetLang(state.targetLang));
+  let pinnedAdded = 0;
   for (const pw of pinnedForLang) {
-    if (extraPinned.length >= 3) break;
-    if (!existingKeys.has((pw.word || '').toLowerCase())) {
-      extraPinned.push(pw);
+    if (pinnedAdded >= 3) break;
+    const wk = (pw.word || pw.raw || '').toLowerCase();
+    if (!existingKeys.has(wk)) {
+      extras.push(pw);
+      existingKeys.add(wk);
+      pinnedAdded++;
     }
   }
-  return shuffleArray([...cleanBase, ...extraPinned]);
+
+  const fsrsDueForLang = getFsrsDueEntriesForTargetLang(state.targetLang, 6);
+  let fsrsAdded = 0;
+  for (const fw of fsrsDueForLang) {
+    if (fsrsAdded >= 3) break;
+    const wk = (fw.word || fw.raw || '').toLowerCase();
+    if (!existingKeys.has(wk)) {
+      extras.push(fw);
+      existingKeys.add(wk);
+      fsrsAdded++;
+    }
+  }
+
+  return shuffleArray([...cleanBase, ...extras]);
 }
 
 export function startLevelNow(customWordPool = null, customTitle = '') {
@@ -658,6 +686,7 @@ export function spawnNextWord(forceSpawn = false) {
     frameVy: baseSpeedUnscaled * speedPreset,
     recoilY: 0,
     hitFlash: 0,
+    missCount: 0,
     spawnTime: performance.now()
   });
 
@@ -713,7 +742,7 @@ export function hitWordLetter(wordObj) {
   updateHudStats();
 }
 
-export function explodeWord(wordObj, byPlayer = true) {
+export function explodeWord(wordObj, byPlayer = true, viaEmp = false) {
   const idx = state.activeWords.findIndex(w => w.id === wordObj.id);
   if (idx !== -1) {
     state.activeWords.splice(idx, 1);
@@ -771,8 +800,17 @@ export function explodeWord(wordObj, byPlayer = true) {
       saveSettingsPatch({ highScore: state.highScore });
     }
 
-    // Засчитываем выученное слово для прокачки оружия и обновляем карточку «ПОПАДАНИЕ!»
+    // Засчитываем выученное слово и автоматически оцениваем интервал FSRS-5
     recordWordLearned(wordObj.entry, state.targetLang);
+    if (!viaEmp) {
+      const misses = wordObj.missCount || 0;
+      const autoRating = misses >= 3
+        ? FSRS_RATING.Again
+        : (misses >= 1
+            ? FSRS_RATING.Hard
+            : (state.combo >= 5 ? FSRS_RATING.Easy : FSRS_RATING.Good));
+      recordFsrsReview(wordObj.entry, state.targetLang, autoRating);
+    }
     updateHitSpotlightCard(wordObj.entry, true);
     updatePilotRankUI();
 
@@ -784,6 +822,9 @@ export function explodeWord(wordObj, byPlayer = true) {
       scatterWordsToTop(state.activeWords, bounds, 1.0, 34);
       sound.playGravityWave(0.85);
     }
+  } else {
+    // Слово прорвалось к щиту -> FSRS-5 фиксирует провал (Again)
+    recordFsrsReview(wordObj.entry, state.targetLang, FSRS_RATING.Again);
   }
 
   updateHudStats();
@@ -922,6 +963,7 @@ export function processTypedChar(char) {
     } else {
       state.shotsFired++;
       state.combo = 1;
+      lockedWord.missCount = (lockedWord.missCount || 0) + 1;
       state.mistakeWordsMap.set(lockedWord.entry.raw, lockedWord.entry);
       sound.playMiss();
       updateHudStats();
@@ -974,7 +1016,7 @@ export function triggerEmpWave() {
 
   const sorted = state.activeWords.slice().sort((a, b) => b.y - a.y);
   const toDestroy = sorted.slice(0, 3);
-  toDestroy.forEach(w => explodeWord(w, true));
+  toDestroy.forEach(w => explodeWord(w, true, true));
 }
 
 export function completeLevel() {
@@ -1093,9 +1135,11 @@ export function renderCurrentQuizQuestion(speakNow = false) {
           state.highScore = state.score;
           saveSettingsPatch({ highScore: state.highScore });
         }
+        recordFsrsReview(currentQ, state.targetLang, FSRS_RATING.Good);
         updateHudStats();
         sound.playExplosion(3, 0);
       } else {
+        recordFsrsReview(currentQ, state.targetLang, FSRS_RATING.Again);
         sound.playMiss();
       }
 
@@ -1375,6 +1419,16 @@ export function launchPinnedWordsDrill() {
   startLevelNow(pinned, t().pinnedRoundTitle);
 }
 
+export function launchFsrsReviewDrill() {
+  const dueWords = getFsrsDueEntriesForTargetLang(state.targetLang, 15);
+  if (dueWords.length === 0) return false;
+  sound.init();
+  const tr = t();
+  const title = tr.fsrsRoundTitle ? tr.fsrsRoundTitle(dueWords.length) : `FSRS (${dueWords.length})`;
+  startLevelNow(dueWords, title);
+  return true;
+}
+
 export function toggleArticleTypingMode() {
   state.typeWithArticle = !state.typeWithArticle;
   saveSettingsPatch({ typeWithArticle: state.typeWithArticle });
@@ -1480,7 +1534,8 @@ export function bindGameplayEvents() {
       (courseBrowserDialog && courseBrowserDialog.open) ||
       (gameSettingsDialog && gameSettingsDialog.open) ||
       (statsDialog && statsDialog.open) ||
-      (leaderboardDialog && leaderboardDialog.open)
+      (leaderboardDialog && leaderboardDialog.open) ||
+      (cookiePrefsDialog && cookiePrefsDialog.open)
     ) {
       return;
     }
@@ -1780,6 +1835,7 @@ export function bindGameplayEvents() {
       const entry = state.lastSpotlightEntry;
       if (!entry) return;
       recordWordLearned(entry, state.targetLang);
+      recordFsrsReview(entry, state.targetLang, FSRS_RATING.Easy);
       if (isEntryPinned(entry, state.targetLang)) {
         togglePinWord(entry, state.targetLang);
       } else {
@@ -1799,7 +1855,10 @@ export function bindGameplayEvents() {
       sound.init();
       const entry = state.lastSpotlightEntry;
       if (!entry) return;
-      togglePinWord(entry, state.targetLang);
+      const nowPinned = togglePinWord(entry, state.targetLang);
+      if (nowPinned) {
+        recordFsrsReview(entry, state.targetLang, FSRS_RATING.Again);
+      }
       refreshHitSpotlightPinState();
       btnHitRepeat.blur();
     });

@@ -387,5 +387,37 @@ export const TR_TEXT = {
   ttsStatusReadyServer: (model, voice) => `✨ Etkin: ${model} · ses ${voice} (Vercel sunucusu)`,
   ttsStatusReadyLocal: (model, voice) => `✨ Etkin: ${model} · ses ${voice} (Yerel API anahtarı)`,
   ttsStatusFallback: '🔊 Yerleşik tarayıcı sesi kullanılıyor. Stüdyo kalitesinde Gemini 3.8 TTS için GEMINI_API_KEY ekle!',
-  ttsStatusMuted: '🔇 Kelime seslendirmesi kapatıldı'
+  ttsStatusMuted: '🔇 Kelime seslendirmesi kapatıldı',
+
+  // FSRS-5 Aralıklı Tekrarlama
+  statFsrsDue: 'Tekrar Zamanı (FSRS)',
+  statFsrsMastered: 'Uzun Süreli (S≥21g)',
+  statFsrsRetention: 'FSRS Hatırlama',
+  fsrsRoundTitle: (n) => `🧠 FSRS Tekrarı (${n} kel.)`,
+  fsrsReviewBtn: (n) => `Zamanı Gelenleri Çalış (${n})`,
+  fsrsHomePill: (n) => `🧠 FSRS-5: ${n} kelime hazır`,
+  fsrsDueBadge: 'Tekrar',
+  fsrsDaysShort: (d) => `${d}g`,
+
+  // Yasal Sayfalar ve Çerez Onayı (AB / GDPR)
+  footerPrivacy: 'Gizlilik Politikası',
+  footerCookies: 'Çerezler',
+  footerTerms: 'Koşullar ve Impressum',
+  footerCookieSettings: 'Çerez Ayarları',
+  footerFsrsAbout: 'FSRS-5 Algoritması',
+  cookieBannerTitle: '🍪 Veri Depolama ve Çerezler (AB / GDPR)',
+  cookieBannerText: 'VOCANOVA ilerlemenizi, FSRS-5 bellek eğrinizi ve Anki destelerinizi tarayıcınızda yerel olarak saklar; reklam izleyicisi yoktur.',
+  cookieBtnEssential: 'Sadece Gerekli',
+  cookieBtnAcceptAll: 'Tümünü Kabul Et',
+  cookieBtnCustomize: 'Özelleştir',
+  cookiePrefsTitle: '🛡️ Gizlilik ve Çerez Tercihleri',
+  cookiePrefsIntro: 'Yerel tarayıcı depolama kategorilerini (localStorage / IndexedDB) yönetin. Zorunlu depolama oyun, FSRS-5 ve Anki desteleri içindir.',
+  cookieCatEssentialTitle: 'Kesinlikle Gerekli (Her Zaman Açık)',
+  cookieCatEssentialDesc: 'Ders ilerlemesi, rekor, FSRS-5 hafıza durumu (zlingo_fsrs_cards_v1), IndexedDB Anki desteleri ve onay kaydınız.',
+  cookieCatAlwaysOn: 'Her Zaman Açık',
+  cookieCatFuncTitle: 'İşlevsel Tercihler',
+  cookieCatFuncDesc: 'Seçilen Gemini TTS sesini, ekran klavyesini, dil çiftini ve arayüz filtrelerini hatırlar.',
+  cookieCatAnalyticsTitle: 'İsteğe Bağlı Kalite Telemetrisi',
+  cookieCatAnalyticsDesc: 'VOCANOVA şu anda üçüncü taraf reklam veya analiz çerezi kullanmaz. Gelecekteki isteğe bağlı tanılama için ayrılmıştır.',
+  cookieBtnSavePrefs: '💾 Tercihleri Kaydet'
 };

@@ -33,7 +33,9 @@ import {
   btnDecksLevelAll,
   btnDecksReturnBattle,
   btnDownloadSampleApkg,
+  btnFooterAboutFsrs,
   btnHudLangPair,
+  btnHomeFsrsReview,
   btnHomeThemeDropdown,
   btnLangMode,
   btnMissionDailyGoal,
@@ -49,6 +51,7 @@ import {
   btnNavHome,
   btnNavLangToggle,
   btnNavPlay,
+  btnOpenCookiePrefs,
   btnSaveAnkiToDecks,
   btnSaveCustomWords,
   btnSidebarCatalog,
@@ -58,6 +61,7 @@ import {
   catalogDialogBody,
   catalogDialogTitle,
   centerOverlay,
+  cookiePrefsDialog,
   courseBrowserDialog,
   customDialogBody,
   customDialogHint,
@@ -186,6 +190,9 @@ import {
   legendDie,
   legendVerb,
   levelQuizBox,
+  linkFooterCookies,
+  linkFooterPrivacy,
+  linkFooterTerms,
   mobileHeroArtArticle,
   mobileHeroArtWord,
   mobHudWaveText,
@@ -236,6 +243,7 @@ import {
 } from './hud-widgets.js';
 import { launchFromTitleScreen, returnToTitleScreen, seedTitleDemoWords } from '../engine/promo-autopilot.js';
 import {
+  launchFsrsReviewDrill,
   refreshOverlayContent,
   renderCurrentQuizQuestion,
   renderZtypeKeyboard,
@@ -254,7 +262,8 @@ import {
   renderTtsSettingsUI
 } from './modals.js';
 import { renderAdminStudio } from './admin-studio.js';
-import { renderAboutPage } from './about-page.js';
+import { openAboutPage, renderAboutPage } from './about-page.js';
+import { applyCookieConsentLocalization, openCookiePrefsModal } from './cookie-consent.js';
 
 let _resizeBound = false;
 
@@ -759,6 +768,13 @@ export function applyStaticUILocalization() {
   }
   refreshHitSpotlightPinState();
   onTtsStatusChanged();
+
+  if (linkFooterPrivacy && tr.footerPrivacy) linkFooterPrivacy.textContent = tr.footerPrivacy;
+  if (linkFooterCookies && tr.footerCookies) linkFooterCookies.textContent = tr.footerCookies;
+  if (linkFooterTerms && tr.footerTerms) linkFooterTerms.textContent = tr.footerTerms;
+  if (btnOpenCookiePrefs && tr.footerCookieSettings) btnOpenCookiePrefs.textContent = tr.footerCookieSettings;
+  if (btnFooterAboutFsrs && tr.footerFsrsAbout) btnFooterAboutFsrs.textContent = `🧠 ${tr.footerFsrsAbout}`;
+  applyCookieConsentLocalization();
 }
 
 export function syncMobileBottomNavUI(overrideTab = '') {
@@ -838,7 +854,8 @@ export function resumePlayIfAllDialogsClosed() {
     (dictDialog && dictDialog.open) ||
     (gameSettingsDialog && gameSettingsDialog.open) ||
     (statsDialog && statsDialog.open) ||
-    (leaderboardDialog && leaderboardDialog.open)
+    (leaderboardDialog && leaderboardDialog.open) ||
+    (cookiePrefsDialog && cookiePrefsDialog.open)
   );
   syncMobileBottomNavUI();
   if (!anyOpen && state.screenMode === 'play' && state.running && centerOverlay.classList.contains('hidden')) {
@@ -854,7 +871,8 @@ export function closeAllTopDialogs() {
     dictDialog,
     gameSettingsDialog,
     statsDialog,
-    leaderboardDialog
+    leaderboardDialog,
+    cookiePrefsDialog
   ].forEach(dlg => {
     if (dlg && dlg.open) dlg.close();
   });
@@ -1027,6 +1045,29 @@ export function bindNavigationEvents() {
       closeAllTopDialogs();
       switchHomeSubView('about');
       btnNavAbout.blur();
+    });
+  }
+
+  if (btnHomeFsrsReview) {
+    btnHomeFsrsReview.addEventListener('click', () => {
+      launchFsrsReviewDrill();
+      btnHomeFsrsReview.blur();
+    });
+  }
+
+  if (btnFooterAboutFsrs) {
+    btnFooterAboutFsrs.addEventListener('click', () => {
+      sound.init();
+      closeAllTopDialogs();
+      openAboutPage('fsrs');
+      btnFooterAboutFsrs.blur();
+    });
+  }
+
+  if (btnOpenCookiePrefs) {
+    btnOpenCookiePrefs.addEventListener('click', () => {
+      openCookiePrefsModal();
+      btnOpenCookiePrefs.blur();
     });
   }
 

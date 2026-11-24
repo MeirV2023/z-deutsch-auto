@@ -856,3 +856,262 @@
     flex: 1 1 auto;
   }
 }
+
+/* ==========================================================================
+   ВКЛАДКИ «FSRS-5» И «ПРИВАТНОСТЬ & COOKIES» НА СТРАНИЦЕ «О ПРОЕКТЕ»
+   ========================================================================== */
+.about-fsrs-hero,
+.about-fsrs-ratings-card,
+.about-fsrs-live-card,
+.about-legal-table-card {
+  padding: 20px 22px;
+  gap: 14px;
+}
+
+.about-fsrs-formula-box {
+  padding: 13px 16px;
+  border-radius: 14px;
+  background: rgba(6, 12, 26, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.about-fsrs-formula-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #7dd3fc;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.about-fsrs-formula-code {
+  font-family: var(--font-mono);
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #6ee7b7;
+  overflow-wrap: anywhere;
+}
+
+.about-fsrs-formula-cap {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.about-fsrs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-fsrs-dsr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.about-fsrs-dsr-card {
+  padding: 16px 18px;
+  gap: 10px;
+}
+
+.about-fsrs-code-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  font-weight: 900;
+  background: rgba(56, 189, 248, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  color: #7dd3fc;
+}
+
+.about-fsrs-code-badge.tone-rose {
+  background: rgba(251, 113, 133, 0.16);
+  border-color: rgba(251, 113, 133, 0.45);
+  color: #fda4af;
+}
+
+.about-fsrs-code-badge.tone-emerald {
+  background: rgba(52, 211, 153, 0.16);
+  border-color: rgba(52, 211, 153, 0.45);
+  color: #6ee7b7;
+}
+
+.about-fsrs-ratings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.about-fsrs-rating-row {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 12px;
+  align-items: center;
+  padding: 11px 14px;
+  border-radius: 12px;
+  background: rgba(8, 16, 34, 0.8);
+  border: 1px solid rgba(112, 168, 255, 0.18);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.about-fsrs-rating-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.about-fsrs-rating-pill.tone-emerald {
+  background: rgba(16, 185, 129, 0.22);
+  color: #6ee7b7;
+  border: 1px solid rgba(52, 211, 153, 0.45);
+}
+
+.about-fsrs-rating-pill.tone-cyan {
+  background: rgba(14, 165, 233, 0.22);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+}
+
+.about-fsrs-rating-pill.tone-amber {
+  background: rgba(245, 158, 11, 0.22);
+  color: #fcd34d;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+}
+
+.about-fsrs-rating-pill.tone-rose {
+  background: rgba(244, 63, 94, 0.22);
+  color: #fda4af;
+  border: 1px solid rgba(251, 113, 133, 0.45);
+}
+
+.about-fsrs-rating-trigger {
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.about-fsrs-rating-effect {
+  color: #cbd5e1;
+}
+
+.about-fsrs-live-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.about-fsrs-metric {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(8, 16, 34, 0.85);
+  border: 1px solid rgba(112, 168, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.about-fsrs-metric strong {
+  font-family: var(--font-heading);
+  font-size: 1.28rem;
+  font-weight: 900;
+  color: #f8fafc;
+}
+
+.about-fsrs-metric.is-due strong {
+  color: #34d399;
+}
+
+.about-fsrs-metric span {
+  font-size: 0.78rem;
+  color: #94a3b8;
+}
+
+.about-legal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.about-legal-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(112, 168, 255, 0.2);
+  background: rgba(6, 12, 26, 0.76);
+}
+
+.about-legal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  text-align: start;
+}
+
+.about-legal-table th,
+.about-legal-table td {
+  padding: 10px 13px;
+  border-bottom: 1px solid rgba(112, 168, 255, 0.14);
+  vertical-align: top;
+}
+
+.about-legal-table th {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #7dd3fc;
+  background: rgba(14, 165, 233, 0.09);
+}
+
+.about-legal-table td code {
+  font-family: var(--font-mono);
+  font-size: 0.79rem;
+  color: #6ee7b7;
+  word-break: break-word;
+}
+
+.about-legal-table tr:last-child td {
+  border-bottom: none;
+}
+
+.about-legal-cat {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .about-fsrs-dsr-grid,
+  .about-legal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-fsrs-rating-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .about-fsrs-live-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

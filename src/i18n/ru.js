@@ -425,5 +425,37 @@ export const RU_TEXT = {
   ttsStatusReadyServer: (model, voice) => `✨ Активен: ${model} · голос ${voice} (сервер Vercel)`,
   ttsStatusReadyLocal: (model, voice) => `✨ Активен: ${model} · голос ${voice} (локальный ключ API)`,
   ttsStatusFallback: '🔊 Активен встроенный системный голос браузера. Добавьте GEMINI_API_KEY для Gemini 3.8 TTS!',
-  ttsStatusMuted: '🔇 Озвучка слов выключена'
+  ttsStatusMuted: '🔇 Озвучка слов выключена',
+
+  // FSRS-5 Интервальное повторение
+  statFsrsDue: 'К повтору (FSRS)',
+  statFsrsMastered: 'В долгой памяти',
+  statFsrsRetention: 'Память FSRS',
+  fsrsRoundTitle: (n) => `🧠 FSRS Повтор (${n} сл.)`,
+  fsrsReviewBtn: (n) => `Повторить к сроку (${n})`,
+  fsrsHomePill: (n) => `🧠 FSRS-5: к повтору ${n}`,
+  fsrsDueBadge: 'К повтору',
+  fsrsDaysShort: (d) => `${d}д`,
+
+  // Правовые страницы и согласие Cookies (ЕС / GDPR)
+  footerPrivacy: 'Конфиденциальность',
+  footerCookies: 'Cookies',
+  footerTerms: 'Условия и Impressum',
+  footerCookieSettings: 'Настроить cookies',
+  footerFsrsAbout: 'Алгоритм FSRS-5',
+  cookieBannerTitle: '🍪 Хранение данных и Cookies (ЕС / GDPR)',
+  cookieBannerText: 'VOCANOVA хранит ваш прогресс, кривую памяти FSRS-5 и колоды Anki локально в браузере без рекламных трекеров. Нажатие или звук/перевод отправляют только текст слова в TTS/Переводчик.',
+  cookieBtnEssential: 'Только необходимые',
+  cookieBtnAcceptAll: 'Принять все',
+  cookieBtnCustomize: 'Настроить',
+  cookiePrefsTitle: '🛡️ Настройки приватности и Cookies',
+  cookiePrefsIntro: 'Управляйте категориями локального хранилища (localStorage / IndexedDB). Необходимое хранилище обеспечивает работу игры и FSRS-памяти.',
+  cookieCatEssentialTitle: 'Необходимые (Всегда активны)',
+  cookieCatEssentialDesc: 'Прогресс уроков, рейтинг, статус FSRS-5 (zlingo_fsrs_cards_v1), колоды Anki в IndexedDB и ваш выбор настроек.',
+  cookieCatAlwaysOn: 'Всегда вкл.',
+  cookieCatFuncTitle: 'Функциональные (Озвучка и интерфейс)',
+  cookieCatFuncDesc: 'Сохранение выбранного голоса Gemini TTS, настроек клавиатуры, фильтров и локальных предпочтений.',
+  cookieCatAnalyticsTitle: 'Опциональная телеметрия качества',
+  cookieCatAnalyticsDesc: 'На данный момент VOCANOVA не использует стороннюю рекламу или аналитику. Переключатель зарезервирован для будущих улучшений с вашего согласия.',
+  cookieBtnSavePrefs: '💾 Сохранить настройки'
 };

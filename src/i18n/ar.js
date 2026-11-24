@@ -389,5 +389,37 @@ export const AR_TEXT = {
   ttsStatusReadyServer: (model, voice) => `✨ نشط: ${model} · الصوت ${voice} (خادم Vercel)`,
   ttsStatusReadyLocal: (model, voice) => `✨ نشط: ${model} · الصوت ${voice} (مفتاح API محلي)`,
   ttsStatusFallback: '🔊 يستخدم صوت المتصفح المدمج. أضف GEMINI_API_KEY للحصول على استوديو Gemini 3.8 TTS!',
-  ttsStatusMuted: '🔇 نطق الكلمات مكتوم'
+  ttsStatusMuted: '🔇 نطق الكلمات مكتوم',
+
+  // FSRS-5 التكرار المتباعد
+  statFsrsDue: 'مستحق الآن (FSRS)',
+  statFsrsMastered: 'الذاكرة طويلة المدى',
+  statFsrsRetention: 'نسبة التذكر FSRS',
+  fsrsRoundTitle: (n) => `🧠 مراجعة FSRS (${n})`,
+  fsrsReviewBtn: (n) => `مراجعة الكلمات المستحقة (${n})`,
+  fsrsHomePill: (n) => `🧠 FSRS-5: ${n} للمراجعة`,
+  fsrsDueBadge: 'مستحق',
+  fsrsDaysShort: (d) => `${d}ي`,
+
+  // الصفحات القانونية وموافقة ملفات الارتباط (GDPR)
+  footerPrivacy: 'سياسة الخصوصية',
+  footerCookies: 'ملفات الارتباط',
+  footerTerms: 'الشروط و Impressum',
+  footerCookieSettings: 'إعدادات Cookies',
+  footerFsrsAbout: 'خوارزمية FSRS-5',
+  cookieBannerTitle: '🍪 تخزين البيانات وملفات الارتباط (GDPR)',
+  cookieBannerText: 'تحفظ VOCANOVA تقدمك ومنحنى الذاكرة FSRS-5 ومجموعات Anki محلياً في متصفحك بدون متتبعات إعلانية.',
+  cookieBtnEssential: 'الضرورية فقط',
+  cookieBtnAcceptAll: 'قبول الكل',
+  cookieBtnCustomize: 'تخصيص',
+  cookiePrefsTitle: '🛡️ تفضيلات الخصوصية وملفات الارتباط',
+  cookiePrefsIntro: 'تحكم في فئات التخزين المحلي (localStorage / IndexedDB). التخزين الضروري يشغّل اللعبة وذاكرة FSRS-5 ومجموعات Anki.',
+  cookieCatEssentialTitle: 'الضرورية للغاية (نشطة دائماً)',
+  cookieCatEssentialDesc: 'تقدم الدروس، النقاط، حالة ذاكرة FSRS-5 (zlingo_fsrs_cards_v1)، مجموعات Anki في IndexedDB وسجل موافقتك.',
+  cookieCatAlwaysOn: 'نشط دائماً',
+  cookieCatFuncTitle: 'التفضيلات الوظيفية',
+  cookieCatFuncDesc: 'يحفظ صوت Gemini TTS المختار وإظهار لوحة المفاتيح ولغة التعلم وعوامل التصفية.',
+  cookieCatAnalyticsTitle: 'قياس الجودة الاختياري',
+  cookieCatAnalyticsDesc: 'لا تستخدم VOCANOVA حالياً ملفات تعريف ارتباط إعلانية أو تحليلية خارجية. محجوز لتشخيصات الجودة الاختيارية بموافقتك فقط.',
+  cookieBtnSavePrefs: '💾 حفظ الإعدادات'
 };

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VOCANOVA — Terms of Use &amp; Impressum (§ 5 DDG)</title>
+  <link rel="icon" type="image/svg+xml" href="image/favicon.svg" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050a18;
+      --card: rgba(12, 22, 46, 0.88);
+      --border: rgba(112, 168, 255, 0.25);
+      --text: #e2e8f0;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(circle at 80% 12%, rgba(168, 85, 247, 0.13), transparent 45%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 24px 16px 56px;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      padding: 14px 18px; border-radius: 16px; background: var(--card); border: 1px solid var(--border);
+    }
+    .back-link { color: var(--cyan); font-weight: 700; text-decoration: none; font-size: 0.92rem; }
+    .back-link:hover { text-decoration: underline; }
+    .nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.86rem; }
+    .nav-links a { color: #cbd5e1; text-decoration: none; }
+    .nav-links a.active { color: var(--emerald); font-weight: 700; }
+    .nav-links a:hover { color: var(--cyan); }
+    .lang-switch { display: inline-flex; gap: 6px; }
+    .lang-btn {
+      border: 1px solid var(--border); background: rgba(15, 29, 60, 0.8); color: #cbd5e1;
+      border-radius: 8px; padding: 5px 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer;
+    }
+    .lang-btn.active { border-color: var(--emerald); background: rgba(16, 185, 129, 0.2); color: #ecfdf5; }
+    .hero, .card {
+      padding: 24px 26px; border-radius: 18px; background: var(--card); border: 1px solid var(--border);
+    }
+    .badge {
+      display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.74rem;
+      font-weight: 800; letter-spacing: 0.04em; color: #c4b5fd;
+      background: rgba(139, 92, 246, 0.16); border: 1px solid rgba(167, 139, 250, 0.35);
+      margin-bottom: 10px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.5rem, 3vw, 2rem); color: #fff; }
+    h2 { margin: 0 0 10px; font-size: 1.15rem; color: #7dd3fc; }
+    p { margin: 0 0 10px; color: #cbd5e1; }
+    ul { margin: 6px 0 0; padding-left: 20px; color: #cbd5e1; }
+    li { margin-bottom: 6px; }
+    a.inline { color: var(--cyan); }
+    .note {
+      margin-top: 10px; padding: 12px 14px; border-radius: 12px;
+      background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #bae6fd; font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="topbar">
+      <a class="back-link" href="index.html" id="backLink">← Вернуться в VOCANOVA</a>
+      <div class="nav-links">
+        <a href="privacy.html" id="navPrivacy">Конфиденциальность</a>
+        <a href="cookies.html" id="navCookies">Cookies</a>
+        <a href="terms.html" class="active" id="navTerms">Условия и Impressum</a>
+      </div>
+      <div class="lang-switch">
+        <button type="button" class="lang-btn" data-lang="ru">RU</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+        <button type="button" class="lang-btn" data-lang="de">DE</button>
+      </div>
+    </nav>
+
+    <main id="contentRoot"></main>
+  </div>
+
+  <script>
+    const DOCS = {
+      ru: {
+        title: 'VOCANOVA — Условия использования и Impressum',
+        back: '← Вернуться в VOCANOVA',
+        nav: ['Конфиденциальность', 'Cookies', 'Условия и Impressum'],
+        badge: 'TERMS · OPEN-SOURCE · IMPRESSUM (§ 5 DDG)',
+        h1: 'Условия использования и правовая информация',
+        sections: [
+          {
+            h: '1. Назначение сервиса',
+            p: [
+              'VOCANOVA — бесплатное образовательное веб-приложение для тренировки словарного запаса в игровом формате. Сервис предоставляется по принципу «как есть» (as is) без коммерческих гарантий бесперебойности.'
+            ]
+          },
+          {
+            h: '2. Пользовательские колоды Anki и авторские права',
+            li: [
+              'При импорте файлов Anki (<code>.apkg</code>, <code>.colpkg</code>, <code>.tsv</code>, <code>.csv</code>) вся обработка выполняется локально в вашем браузере.',
+              'Вы несёте ответственность за наличие прав на использование загружаемых учебных материалов. В случае появления облачной публикации колод запрещено выгружать материалы, нарушающие авторские права третьих лиц.'
+            ]
+          },
+          {
+            h: '3. Открытый код и атрибуция',
+            li: [
+              'Интервальное повторение основано на открытом алгоритме <a class="inline" href="https://github.com/open-spaced-repetition/fsrs4anki" target="_blank" rel="noopener noreferrer">FSRS-5 (open-spaced-repetition/fsrs4anki)</a> (MIT License).',
+              'Локальный импорт колод Anki использует открытые библиотеки <code>JSZip</code> и <code>sql.js</code> (MIT).'
+            ]
+          },
+          {
+            h: '4. Контактная информация / Impressum',
+            p: [
+              'Ответственный автор проекта VOCANOVA:',
+              'Email: <a class="inline" href="mailto:alefweb7@gmail.com">alefweb7@gmail.com</a><br/>Telegram: <a class="inline" href="https://t.me/Stanislavm770" target="_blank" rel="noopener noreferrer">@Stanislavm770</a>'
+            ],
+            note: 'Примечание для работы в Германии/ЕС: до старта любой платной монетизации или рекламы сайт работает как некоммерческий инди-пет-проект. Перед подключением платежей в этот раздел Impressum (по § 5 DDG) необходимо вписать полные ФИО владельца и физический почтовый адрес.'
+          }
+        ]
+      },
+      en: {
+        title: 'VOCANOVA — Terms of Use & Legal Notice (Impressum)',
+        back: '← Back to VOCANOVA',
+        nav: ['Privacy Policy', 'Cookie Policy', 'Terms & Impressum'],
+        badge: 'TERMS · OPEN-SOURCE · LEGAL NOTICE',
+        h1: 'Terms of Use & Impressum',
+        sections: [
+          {
+            h: '1. Educational Service Scope',
+            p: [
+              'VOCANOVA is a free educational web application for vocabulary training. The service is provided on an "as is" basis without uptime or learning-outcome warranties.'
+            ]
+          },
+          {
+            h: '2. Imported Anki Decks & Intellectual Property',
+            li: [
+              'Uploaded Anki packages (<code>.apkg</code>, <code>.colpkg</code>, <code>.tsv</code>) are parsed locally inside your browser.',
+              'Users are responsible for ensuring they hold the rights to use any personal decks they import or share.'
+            ]
+          },
+          {
+            h: '3. Open-Source Attributions',
+            li: [
+              'Spaced repetition scheduling implements <a class="inline" href="https://github.com/open-spaced-repetition/fsrs4anki" target="_blank" rel="noopener noreferrer">FSRS-5 (open-spaced-repetition/fsrs4anki)</a> (MIT License).',
+              'Client-side Anki parsing uses open-source <code>JSZip</code> and <code>sql.js</code>.'
+            ]
+          },
+          {
+            h: '4. Operator Contact / Impressum',
+            p: [
+              'VOCANOVA Indie Project Operator:<br/>Email: <a class="inline" href="mailto:alefweb7@gmail.com">alefweb7@gmail.com</a><br/>Telegram: <a class="inline" href="https://t.me/Stanislavm770" target="_blank" rel="noopener noreferrer">@Stanislavm770</a>'
+            ],
+            note: 'EU/German Compliance Note (§ 5 DDG): Before launching paid subscriptions or advertising, add the operator’s full legal name and physical postal address to this Impressum block.'
+          }
+        ]
+      },
+      de: {
+        title: 'VOCANOVA — Nutzungsbedingungen & Impressum (§ 5 DDG)',
+        back: '← Zurück zu VOCANOVA',
+        nav: ['Datenschutz', 'Cookies', 'Nutzung & Impressum'],
+        badge: 'NUTZUNG · OPEN-SOURCE · IMPRESSUM (§ 5 DDG)',
+        h1: 'Nutzungsbedingungen & Impressum',
+        sections: [
+          {
+            h: '1. Leistungsgegenstand',
+            p: [
+              'VOCANOVA ist ein kostenloses Bildungs-Webprojekt zum Vokabeltraining im Arcade-Format und wird ohne Gewährleistung (as is) bereitgestellt.'
+            ]
+          },
+          {
+            h: '2. Eigene Anki-Decks & Urheberrecht',
+            li: [
+              'Hochgeladene <code>.apkg</code>- / <code>.colpkg</code>- / <code>.tsv</code>-Dateien werden ausschließlich lokal in deinem Browser verarbeitet.',
+              'Für eigene importierte Materialien trägt allein der jeweilige Nutzer die urheberrechtliche Verantwortung.'
+            ]
+          },
+          {
+            h: '3. Open-Source-Hinweise',
+            li: [
+              'Das Wiederholungs-Timing basiert auf <a class="inline" href="https://github.com/open-spaced-repetition/fsrs4anki" target="_blank" rel="noopener noreferrer">FSRS-5 (open-spaced-repetition/fsrs4anki)</a> (MIT-Lizenz).',
+              'Der lokale Anki-Import nutzt die Open-Source-Bibliotheken <code>JSZip</code> und <code>sql.js</code>.'
+            ]
+          },
+          {
+            h: '4. Kontakt / Angaben gemäß § 5 DDG',
+            p: [
+              'Verantwortlicher Betreiber (VOCANOVA):<br/>E-Mail: <a class="inline" href="mailto:alefweb7@gmail.com">alefweb7@gmail.com</a><br/>Telegram: <a class="inline" href="https://t.me/Stanislavm770" target="_blank" rel="noopener noreferrer">@Stanislavm770</a>'
+            ],
+            note: 'Hinweis (§ 5 DDG): Vor Aufnahme kommerzieller Angebote oder Werbung sind hier vollständiger bürgerlicher Name und ladungsfähige Postanschrift des Betreibers zu ergänzen.'
+          }
+        ]
+      }
+    };
+
+    function detectLang() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('zdeutsch_save_v2') || '{}');
+        if (saved.nativeLang && DOCS[saved.nativeLang]) return saved.nativeLang;
+      } catch (_) {}
+      const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
+      return DOCS[nav] ? nav : 'en';
+    }
+
+    function renderDoc(lang) {
+      const d = DOCS[lang] || DOCS.en;
+      document.documentElement.lang = lang;
+      document.title = d.title;
+      document.getElementById('backLink').textContent = d.back;
+      document.getElementById('navPrivacy').textContent = d.nav[0];
+      document.getElementById('navCookies').textContent = d.nav[1];
+      document.getElementById('navTerms').textContent = d.nav[2];
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+      const sectionsHtml = d.sections.map(sec => `
+        <section class="card">
+          <h2>${sec.h}</h2>
+          ${(sec.p || []).map(x => `<p>${x}</p>`).join('')}
+          ${sec.li ? `<ul>${sec.li.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}
+          ${sec.note ? `<div class="note">${sec.note}</div>` : ''}
+        </section>
+      `).join('');
+
+      document.getElementById('contentRoot').innerHTML = `
+        <header class="hero">
+          <div class="badge">${d.badge}</div>
+          <h1>${d.h1}</h1>
+        </header>
+        ${sectionsHtml}
+      `;
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => renderDoc(btn.dataset.lang));
+    });
+    renderDoc(detectLang());
+  </script>
+</body>
+</html>

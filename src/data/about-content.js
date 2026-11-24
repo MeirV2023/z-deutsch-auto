@@ -1,4 +1,5 @@
 // Контент страницы «О проекте» (#aboutPageView) на 8 языках интерфейса (SRP)
+import { ABOUT_FSRS_LEGAL } from './about-fsrs-legal.js';
 
 export const ABOUT_CONTACTS = {
   email: 'alefweb7@gmail.com',
@@ -6,7 +7,7 @@ export const ABOUT_CONTACTS = {
   telegramUrl: 'https://t.me/Stanislavm770'
 };
 
-export const ABOUT_TABS = ['story', 'guide', 'roadmap', 'contact'];
+export const ABOUT_TABS = ['story', 'guide', 'fsrs', 'roadmap', 'legal', 'contact'];
 
 export const ABOUT_CONTENT = {
   ru: {
@@ -119,7 +120,7 @@ export const ABOUT_CONTENT = {
           tone: 'emerald',
           title: 'Этап 1 · Базовая арена и Anki',
           items: [
-            '12 готовых тем B1 (~15 слов в каждом уроке) и босс-раунды',
+            '40 готовых курсов от A1 до B2 (~15 слов в уроке) + интервальное повторение FSRS-5',
             '8 языков интерфейса и переводов в обе стороны + RTL (иврит, арабский)',
             'Прямой импорт колод Anki (.apkg / .colpkg / .tsv) прямо в браузер',
             'Озвучка Gemini 3.8 TTS, 6 видов оружия и мобильная клавиатура ZType'
@@ -296,7 +297,7 @@ export const ABOUT_CONTENT = {
           tone: 'emerald',
           title: 'Phase 1 · Core Arena & Anki Bridge',
           items: [
-            '12 curated B1 themed courses (~15-word lessons) and boss waves',
+            '40 curated A1–B2 themed courses (~15-word lessons) + built-in FSRS-5',
             '8 bidirectional languages including RTL support (Hebrew & Arabic)',
             'Zero-backend Anki .apkg / .colpkg / .tsv parsing right in the browser',
             'Gemini 3.8 TTS audio, 6 unlockable weapons, and mobile ZType keyboard'
@@ -473,7 +474,7 @@ export const ABOUT_CONTENT = {
           tone: 'emerald',
           title: 'Phase 1 · Arena & Anki-Brücke',
           items: [
-            '12 B1-Themenkurse (~15 Wörter pro Lektion) inklusive Boss-Wellen',
+            '40 A1–B2-Themenkurse (~15 Wörter pro Lektion) inklusive FSRS-5',
             '8 Sprachen in beide Richtungen inklusive RTL (Hebräisch & Arabisch)',
             'Direkter Browser-Import für .apkg / .colpkg / .tsv ohne Server-Upload',
             'Gemini 3.8 TTS, 6 freischaltbare Waffen und mobile ZType-Tastatur'
@@ -650,7 +651,7 @@ export const ABOUT_CONTENT = {
           tone: 'emerald',
           title: 'Etapa 1 · Base jugable y Anki',
           items: [
-            '12 temas B1 (~15 palabras por lección) con rondas jefe',
+            '40 cursos temáticos A1–B2 (~15 palabras por lección) con FSRS-5',
             '8 idiomas en ambas direcciones incluyendo RTL (hebreo y árabe)',
             'Soporte local para mazos .apkg / .colpkg / .tsv en el navegador',
             'Voz Gemini 3.8 TTS, 6 armas desbloqueables y teclado táctil ZType'
@@ -827,7 +828,7 @@ export const ABOUT_CONTENT = {
           tone: 'emerald',
           title: 'Етап 1 · Базова арена та Anki',
           items: [
-            '12 готових тем B1 (~15 слів у кожному уроці) і бос-раунди',
+            '40 готових курсів від A1 до B2 (~15 слів у уроці) + інтервальне повторення FSRS-5',
             '8 мов в обидва боки включно з RTL (іврит та арабська)',
             'Прямий розбір Anki .apkg / .colpkg / .tsv безпосередньо у браузері',
             'Озвучка Gemini 3.8 TTS, 6 гармат і мобільна клавіатура ZType'
@@ -1004,7 +1005,7 @@ export const ABOUT_CONTENT = {
           tone: 'emerald',
           title: 'Aşama 1 · Çekirdek Arena ve Anki',
           items: [
-            '12 B1 temalı kurs (~15 kelimelik dersler) ve boss turları',
+            '40 A1–B2 temalı kurs (~15 kelimelik dersler) ve FSRS-5 tekrar algoritması',
             'RTL desteğiyle (İbranice ve Arapça) çift yönlü 8 dil',
             'Tarayıcı içinde sunucusuz .apkg / .colpkg / .tsv ayrıştırma',
             'Gemini 3.8 TTS seslendirme, 6 silah ve mobil ZType klavyesi'
@@ -1181,7 +1182,7 @@ export const ABOUT_CONTENT = {
           tone: 'emerald',
           title: 'שלב 1 · ליבת המשחק ו-Anki',
           items: [
-            '12 קורסים נושאיים ברמת B1 (~15 מילים לשיעור) ושלבי בוס',
+            '40 קורסים נושאיים ברמות A1–B2 (~15 מילים לשיעור) ואלגוריתם FSRS-5',
             '8 שפות דו-כיווניות כולל תמיכה מלאה בימין-לשמאל (עברית וערבית)',
             'פענוח קובצי .apkg / .colpkg / .tsv ישירות בדפדפן',
             'קריינות Gemini 3.8 TTS, 6 כלי נשק ומקלדת מגע ZType'
@@ -1358,7 +1359,7 @@ export const ABOUT_CONTENT = {
           tone: 'emerald',
           title: 'المرحلة 1 · الساحة الأساسية وAnki',
           items: [
-            '12 دورة B1 موضوعية (~15 كلمة لكل درس) مع جولات الزعماء',
+            '40 دورة موضوعية A1–B2 (~15 كلمة لكل درس) مع خوارزمية FSRS-5',
             '8 لغات بالاتجاهين مع دعم كامل للكتابة من اليمين لليسار',
             'استيراد ملفات .apkg / .colpkg / .tsv داخل المتصفح مباشرة',
             'نطق Gemini 3.8 TTS و6 أسلحة ولوحة لمس ZType'
@@ -1426,3 +1427,20 @@ export const ABOUT_CONTENT = {
     }
   }
 };
+
+for (const [langCode, entry] of Object.entries(ABOUT_CONTENT)) {
+  const extra = ABOUT_FSRS_LEGAL[langCode] || ABOUT_FSRS_LEGAL.en;
+  if (!extra) continue;
+  const baseTabs = Array.isArray(entry.tabs) ? entry.tabs : [];
+  const byId = new Map(baseTabs.map(t => [t.id, t]));
+  entry.tabs = [
+    byId.get('story'),
+    byId.get('guide'),
+    { id: 'fsrs', icon: '🧠', label: extra.fsrsTabLabel },
+    byId.get('roadmap'),
+    { id: 'legal', icon: '🛡️', label: extra.legalTabLabel },
+    byId.get('contact')
+  ].filter(Boolean);
+  entry.fsrs = extra.fsrs;
+  entry.legal = extra.legal;
+}

@@ -577,6 +577,10 @@
                 </div>
               </div>
             </div>
+            <button type="button" class="home-fsrs-pill hidden" id="btnHomeFsrsReview">
+              <span class="home-fsrs-pill-text" id="labelHomeFsrsReview">🧠 FSRS-5: к повтору 0</span>
+              <span class="dir-arrow" aria-hidden="true">→</span>
+            </button>
           </div>
 
           <!-- Карточка 3Б: Топ игроков (неделя) -->
@@ -609,6 +613,19 @@
         </div>
         <div class="desktop-topics-chips" id="desktopTopicsChips"></div>
       </section>
+
+      <!-- 4В. Правовой футер (GDPR / ePrivacy / FSRS-5) -->
+      <footer class="home-legal-footer" id="homeLegalFooter">
+        <button type="button" class="home-legal-link-btn" id="btnFooterAboutFsrs">🧠 FSRS-5</button>
+        <span class="home-legal-sep" aria-hidden="true">·</span>
+        <a href="privacy.html" class="home-legal-link" id="linkFooterPrivacy" target="_blank" rel="noopener">Конфиденциальность</a>
+        <span class="home-legal-sep" aria-hidden="true">·</span>
+        <a href="cookies.html" class="home-legal-link" id="linkFooterCookies" target="_blank" rel="noopener">Cookies</a>
+        <span class="home-legal-sep" aria-hidden="true">·</span>
+        <a href="terms.html" class="home-legal-link" id="linkFooterTerms" target="_blank" rel="noopener">Условия и Impressum</a>
+        <span class="home-legal-sep" aria-hidden="true">·</span>
+        <button type="button" class="home-legal-link-btn" id="btnOpenCookiePrefs">Настроить cookies</button>
+      </footer>
 
       <!-- Скрытый контейнер обратной совместимости ID для статического линкера и общих виджетов -->
       <div hidden aria-hidden="true">
@@ -2100,6 +2117,9 @@
     <div class="dialog-body scrollable" id="statsDialogBody">
       <div class="stats-modal-grid" id="statsModalGrid"></div>
       <div class="stats-modal-footer-row">
+        <button type="button" class="hud-btn fsrs-launch-btn hidden" id="btnLaunchFsrsFromStats">
+          🧠 <span id="labelLaunchFsrsFromStats">Повторить к сроку (0)</span>
+        </button>
         <button type="button" class="hud-btn active" id="btnOpenLeaderboardFromStats">
           🏆 <span id="labelOpenLeaderFromStats">Рейтинг недели и достижения</span> →
         </button>
@@ -2207,6 +2227,65 @@
         </button>
       </div>
       <div id="dictFullList" class="overlay-Words-preview scrollable" style="max-height: 58vh;"></div>
+    </div>
+  </dialog>
+
+  <!-- GDPR / ePrivacy Баннер согласия с Cookies и локальным хранилищем -->
+  <aside class="cookie-consent-banner hidden" id="cookieConsentBanner" role="region" aria-labelledby="cookieBannerTitle">
+    <div class="cookie-banner-copy">
+      <div class="cookie-banner-title" id="cookieBannerTitle">🍪 Хранение данных и Cookies (ЕС / GDPR)</div>
+      <p class="cookie-banner-text" id="cookieBannerText">
+        VOCANOVA хранит ваш прогресс, кривую памяти FSRS-5 и колоды Anki локально в браузере без рекламных трекеров.
+      </p>
+    </div>
+    <div class="cookie-banner-actions">
+      <button type="button" class="cookie-btn cookie-btn-neutral" id="btnCookieEssential">Только необходимые</button>
+      <button type="button" class="cookie-btn cookie-btn-neutral" id="btnCookieAcceptAll">Принять все</button>
+      <button type="button" class="cookie-btn cookie-btn-link" id="btnCookieCustomize">Настроить</button>
+    </div>
+  </aside>
+
+  <!-- Модальное окно детальной настройки Cookies / Хранилища -->
+  <dialog class="modern-dialog" id="cookiePrefsDialog" closedby="any">
+    <div class="dialog-header">
+      <h2 class="dialog-title" id="cookiePrefsTitle">🛡️ Настройки приватности и Cookies</h2>
+      <button type="button" class="dialog-close" id="btnCloseCookiePrefs" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="dialog-body scrollable" id="cookiePrefsBody">
+      <p class="cookie-prefs-intro" id="cookiePrefsIntro"></p>
+
+      <div class="cookie-cat-card">
+        <div class="cookie-cat-head">
+          <strong class="cookie-cat-title" id="cookieCatEssentialTitle"></strong>
+          <span class="cookie-cat-badge" id="cookieCatAlwaysOn"></span>
+        </div>
+        <p class="cookie-cat-desc" id="cookieCatEssentialDesc"></p>
+      </div>
+
+      <label class="cookie-cat-card cookie-cat-toggle-row" for="chkCookieFunctional">
+        <div class="cookie-cat-copy">
+          <strong class="cookie-cat-title" id="cookieCatFuncTitle"></strong>
+          <p class="cookie-cat-desc" id="cookieCatFuncDesc"></p>
+        </div>
+        <input type="checkbox" class="cookie-toggle-input" id="chkCookieFunctional" checked />
+      </label>
+
+      <label class="cookie-cat-card cookie-cat-toggle-row" for="chkCookieAnalytics">
+        <div class="cookie-cat-copy">
+          <strong class="cookie-cat-title" id="cookieCatAnalyticsTitle"></strong>
+          <p class="cookie-cat-desc" id="cookieCatAnalyticsDesc"></p>
+        </div>
+        <input type="checkbox" class="cookie-toggle-input" id="chkCookieAnalytics" />
+      </label>
+
+      <div class="cookie-prefs-footer">
+        <div class="cookie-prefs-doc-links">
+          <a href="privacy.html" target="_blank" rel="noopener" id="linkPrefsPrivacy">Privacy Policy</a>
+          <a href="cookies.html" target="_blank" rel="noopener" id="linkPrefsCookies">Cookies</a>
+          <a href="terms.html" target="_blank" rel="noopener" id="linkPrefsTerms">Terms &amp; Impressum</a>
+        </div>
+        <button type="button" class="primary-btn" id="btnSaveCookiePrefs">💾 Сохранить настройки</button>
+      </div>
     </div>
   </dialog>
 

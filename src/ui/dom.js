@@ -564,6 +564,42 @@ export const leaderboardFullList = document.getElementById('leaderboardFullList'
 export const labelAchievementsHeading = document.getElementById('labelAchievementsHeading');
 export const achievementsGrid = document.getElementById('achievementsGrid');
 
+// FSRS-5 UI и GDPR Cookies / Правовой футер
+export const btnHomeFsrsReview = document.getElementById('btnHomeFsrsReview');
+export const labelHomeFsrsReview = document.getElementById('labelHomeFsrsReview');
+export const btnLaunchFsrsFromStats = document.getElementById('btnLaunchFsrsFromStats');
+export const labelLaunchFsrsFromStats = document.getElementById('labelLaunchFsrsFromStats');
+export const homeLegalFooter = document.getElementById('homeLegalFooter');
+export const btnFooterAboutFsrs = document.getElementById('btnFooterAboutFsrs');
+export const linkFooterPrivacy = document.getElementById('linkFooterPrivacy');
+export const linkFooterCookies = document.getElementById('linkFooterCookies');
+export const linkFooterTerms = document.getElementById('linkFooterTerms');
+export const btnOpenCookiePrefs = document.getElementById('btnOpenCookiePrefs');
+export const cookieConsentBanner = document.getElementById('cookieConsentBanner');
+export const cookieBannerTitle = document.getElementById('cookieBannerTitle');
+export const cookieBannerText = document.getElementById('cookieBannerText');
+export const btnCookieEssential = document.getElementById('btnCookieEssential');
+export const btnCookieAcceptAll = document.getElementById('btnCookieAcceptAll');
+export const btnCookieCustomize = document.getElementById('btnCookieCustomize');
+export const cookiePrefsDialog = document.getElementById('cookiePrefsDialog');
+export const btnCloseCookiePrefs = document.getElementById('btnCloseCookiePrefs');
+export const cookiePrefsBody = document.getElementById('cookiePrefsBody');
+export const cookiePrefsTitle = document.getElementById('cookiePrefsTitle');
+export const cookiePrefsIntro = document.getElementById('cookiePrefsIntro');
+export const cookieCatEssentialTitle = document.getElementById('cookieCatEssentialTitle');
+export const cookieCatAlwaysOn = document.getElementById('cookieCatAlwaysOn');
+export const cookieCatEssentialDesc = document.getElementById('cookieCatEssentialDesc');
+export const cookieCatFuncTitle = document.getElementById('cookieCatFuncTitle');
+export const cookieCatFuncDesc = document.getElementById('cookieCatFuncDesc');
+export const chkCookieFunctional = document.getElementById('chkCookieFunctional');
+export const cookieCatAnalyticsTitle = document.getElementById('cookieCatAnalyticsTitle');
+export const cookieCatAnalyticsDesc = document.getElementById('cookieCatAnalyticsDesc');
+export const chkCookieAnalytics = document.getElementById('chkCookieAnalytics');
+export const linkPrefsPrivacy = document.getElementById('linkPrefsPrivacy');
+export const linkPrefsCookies = document.getElementById('linkPrefsCookies');
+export const linkPrefsTerms = document.getElementById('linkPrefsTerms');
+export const btnSaveCookiePrefs = document.getElementById('btnSaveCookiePrefs');
+
 export const dom = {
   canvas,
   ctx,
@@ -1079,5 +1115,39 @@ export const dom = {
   btnCloseLeaderboardDialog,
   leaderboardFullList,
   labelAchievementsHeading,
-  achievementsGrid
+  achievementsGrid,
+  btnHomeFsrsReview,
+  labelHomeFsrsReview,
+  btnLaunchFsrsFromStats,
+  labelLaunchFsrsFromStats,
+  homeLegalFooter,
+  btnFooterAboutFsrs,
+  linkFooterPrivacy,
+  linkFooterCookies,
+  linkFooterTerms,
+  btnOpenCookiePrefs,
+  cookieConsentBanner,
+  cookieBannerTitle,
+  cookieBannerText,
+  btnCookieEssential,
+  btnCookieAcceptAll,
+  btnCookieCustomize,
+  cookiePrefsDialog,
+  btnCloseCookiePrefs,
+  cookiePrefsBody,
+  cookiePrefsTitle,
+  cookiePrefsIntro,
+  cookieCatEssentialTitle,
+  cookieCatAlwaysOn,
+  cookieCatEssentialDesc,
+  cookieCatFuncTitle,
+  cookieCatFuncDesc,
+  chkCookieFunctional,
+  cookieCatAnalyticsTitle,
+  cookieCatAnalyticsDesc,
+  chkCookieAnalytics,
+  linkPrefsPrivacy,
+  linkPrefsCookies,
+  linkPrefsTerms,
+  btnSaveCookiePrefs
 };

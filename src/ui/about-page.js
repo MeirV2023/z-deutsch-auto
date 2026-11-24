@@ -3,10 +3,12 @@ import { actions } from '../core/events.js';
 import { escapeHtml } from '../core/utils.js';
 import { ALL_LANG_CODES } from '../config/constants.js';
 import { ABOUT_CONTACTS, ABOUT_CONTENT, ABOUT_TABS } from '../data/about-content.js';
+import { ABOUT_LINKS } from '../data/about-fsrs-legal.js';
 import {
   getAllWordsInTargetLang,
   getOfficialCoursesForTargetLang
 } from '../domain/catalog-service.js';
+import { getFsrsSummaryForTargetLang } from '../domain/fsrs-service.js';
 import { sound } from '../services/sound-engine.js';
 import { isRtlUI, state } from '../state/store.js';
 import { aboutPageView, arcadeTitleScreen, centerOverlay } from './dom.js';
@@ -262,9 +264,180 @@ function renderContactTab(content) {
   `;
 }
 
+function renderFsrsTab(content) {
+  const f = content.fsrs;
+  if (!f) return '';
+  const summary = getFsrsSummaryForTargetLang(state.targetLang);
+
+  const dsrHtml = f.dsrCards
+    .map(
+      card => `
+        <article class="bento-card about-fsrs-dsr-card tone-${escapeHtml(card.tone)}">
+          <div class="about-fsrs-code-badge tone-${escapeHtml(card.tone)}" dir="ltr">${escapeHtml(card.code)}</div>
+          <h4 class="about-pillar-title">${escapeHtml(card.title)}</h4>
+          <p class="about-pillar-text">${escapeHtml(card.text)}</p>
+        </article>
+      `
+    )
+    .join('');
+
+  const ratingsHtml = f.ratings
+    .map(
+      r => `
+        <div class="about-fsrs-rating-row tone-${escapeHtml(r.tone)}">
+          <span class="about-fsrs-rating-pill tone-${escapeHtml(r.tone)}" dir="ltr">${escapeHtml(r.badge)}</span>
+          <span class="about-fsrs-rating-trigger">${escapeHtml(r.trigger)}</span>
+          <span class="about-fsrs-rating-effect">${escapeHtml(r.effect)}</span>
+        </div>
+      `
+    )
+    .join('');
+
+  return `
+    <div class="about-tab-stack">
+      <article class="bento-card about-fsrs-hero">
+        <div class="about-story-badge">${escapeHtml(f.badge)}</div>
+        <h2 class="about-section-title">${escapeHtml(f.title)}</h2>
+        <p class="about-story-para">${escapeHtml(f.intro)}</p>
+
+        <div class="about-fsrs-formula-box">
+          <div class="about-fsrs-formula-label">${escapeHtml(f.formulaLabel)}</div>
+          <code class="about-fsrs-formula-code" dir="ltr">R(t, S) = (1 + (19 / 81) · t / S)^(-0.5)</code>
+          <div class="about-fsrs-formula-cap">${escapeHtml(f.formulaCaption)}</div>
+        </div>
+      </article>
+
+      <section class="about-fsrs-section">
+        <h3 class="about-pillars-heading">${escapeHtml(f.dsrTitle)}</h3>
+        <div class="about-fsrs-dsr-grid">
+          ${dsrHtml}
+        </div>
+      </section>
+
+      <article class="bento-card about-fsrs-ratings-card">
+        <h3 class="about-section-title">${escapeHtml(f.howTitle)}</h3>
+        <p class="about-section-sub">${escapeHtml(f.howSubtitle)}</p>
+        <div class="about-fsrs-ratings-list">
+          ${ratingsHtml}
+        </div>
+      </article>
+
+      <article class="bento-card about-fsrs-live-card">
+        <h3 class="about-roadmap-title">${escapeHtml(f.liveTitle)}</h3>
+        <div class="about-fsrs-live-metrics">
+          <div class="about-fsrs-metric">
+            <strong>${summary.tracked}</strong>
+            <span>${escapeHtml(f.liveTracked)}</span>
+          </div>
+          <div class="about-fsrs-metric is-due">
+            <strong>${summary.dueNow}</strong>
+            <span>${escapeHtml(f.liveDue)}</span>
+          </div>
+          <div class="about-fsrs-metric">
+            <strong>${summary.mastered}</strong>
+            <span>${escapeHtml(f.liveMastered)}</span>
+          </div>
+          <div class="about-fsrs-metric">
+            <strong>${summary.avgRetentionPct}%</strong>
+            <span>${escapeHtml(f.liveRetention)}</span>
+          </div>
+        </div>
+        <div class="about-cta-row">
+          <button type="button" class="about-btn-primary" data-about-action="fsrs-drill">
+            <span>${escapeHtml(summary.dueNow > 0 ? f.ctaReviewDue : f.ctaStartPlaying)}</span>
+          </button>
+          <a
+            class="about-btn-ghost"
+            href="${escapeHtml(ABOUT_LINKS.fsrsRepo)}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>${escapeHtml(f.ctaRepo)}</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  `;
+}
+
+function renderLegalTab(content) {
+  const l = content.legal;
+  if (!l) return '';
+
+  const cardsHtml = l.cards
+    .map(
+      c => `
+        <article class="bento-card about-guide-card tone-${escapeHtml(c.tone)}">
+          <div class="about-guide-icon-box" aria-hidden="true">${escapeHtml(c.icon)}</div>
+          <h3 class="about-guide-title">${escapeHtml(c.title)}</h3>
+          <p class="about-guide-text">${escapeHtml(c.text)}</p>
+        </article>
+      `
+    )
+    .join('');
+
+  const rowsHtml = l.storageRows
+    .map(
+      row => `
+        <tr>
+          <td><code dir="ltr">${escapeHtml(row.key)}</code></td>
+          <td>${escapeHtml(row.purpose)}</td>
+          <td><span class="about-legal-cat">${escapeHtml(row.category)}</span></td>
+        </tr>
+      `
+    )
+    .join('');
+
+  return `
+    <div class="about-tab-stack">
+      <header class="about-tab-intro">
+        <div class="about-story-badge">${escapeHtml(l.badge)}</div>
+        <h2 class="about-section-title">${escapeHtml(l.title)}</h2>
+        <p class="about-section-sub">${escapeHtml(l.subtitle)}</p>
+      </header>
+
+      <div class="about-legal-grid">
+        ${cardsHtml}
+      </div>
+
+      <article class="bento-card about-legal-table-card">
+        <h3 class="about-roadmap-title">${escapeHtml(l.storageTitle)}</h3>
+        <div class="about-legal-table-wrap">
+          <table class="about-legal-table">
+            <thead>
+              <tr>
+                ${l.storageColumns.map(col => `<th>${escapeHtml(col)}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        </div>
+        <div class="about-cta-row">
+          <button type="button" class="about-btn-primary" data-about-action="open-cookie-prefs">
+            <span>${escapeHtml(l.ctaCookiePrefs)}</span>
+          </button>
+          <a class="about-btn-secondary" href="${escapeHtml(ABOUT_LINKS.privacy)}" target="_blank" rel="noopener">
+            <span>${escapeHtml(l.ctaPrivacyDoc)}</span>
+          </a>
+          <a class="about-btn-ghost" href="${escapeHtml(ABOUT_LINKS.cookies)}" target="_blank" rel="noopener">
+            <span>${escapeHtml(l.ctaCookiesDoc)}</span>
+          </a>
+          <a class="about-btn-ghost" href="${escapeHtml(ABOUT_LINKS.terms)}" target="_blank" rel="noopener">
+            <span>${escapeHtml(l.ctaTermsDoc)}</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  `;
+}
+
 function renderAboutTabPanel(activeTab, content) {
   if (activeTab === 'guide') return renderGuideTab(content);
+  if (activeTab === 'fsrs') return renderFsrsTab(content);
   if (activeTab === 'roadmap') return renderRoadmapTab(content);
+  if (activeTab === 'legal') return renderLegalTab(content);
   if (activeTab === 'contact') return renderContactTab(content);
   return renderStoryTab(content);
 }
@@ -461,6 +634,11 @@ export function bindAboutPageEvents() {
         actions.openDecksPage({ sourceFilter: 'all', onlyFavorites: false });
       } else if (act === 'tts') {
         actions.openTtsStudioDialog();
+      } else if (act === 'fsrs-drill') {
+        const started = actions.launchFsrsReviewDrill();
+        if (!started) actions.launchFromTitleScreen();
+      } else if (act === 'open-cookie-prefs') {
+        actions.openCookiePrefsModal();
       } else if (act === 'goto-contact') {
         activateTab('contact', false);
         if (arcadeTitleScreen) {

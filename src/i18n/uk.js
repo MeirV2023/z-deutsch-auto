@@ -440,5 +440,37 @@ export const UK_TEXT = {
   ttsStatusReadyServer: (model, voice) => `✨ Активно: ${model} · голос ${voice} (сервер Vercel)`,
   ttsStatusReadyLocal: (model, voice) => `✨ Активно: ${model} · голос ${voice} (локальний ключ API)`,
   ttsStatusFallback: '🔊 Активний вбудований системний голос браузера. Додайте GEMINI_API_KEY для Gemini 3.8 TTS!',
-  ttsStatusMuted: '🔇 Озвучення слів вимкнено'
+  ttsStatusMuted: '🔇 Озвучення слів вимкнено',
+
+  // FSRS-5 Інтервальне повторення
+  statFsrsDue: 'До повтору (FSRS)',
+  statFsrsMastered: 'У довгій пам’яті',
+  statFsrsRetention: 'Пам’ять FSRS',
+  fsrsRoundTitle: (n) => `🧠 FSRS Повтор (${n} сл.)`,
+  fsrsReviewBtn: (n) => `Повторити вчасно (${n})`,
+  fsrsHomePill: (n) => `🧠 FSRS-5: до повтору ${n}`,
+  fsrsDueBadge: 'Повторити',
+  fsrsDaysShort: (d) => `${d}д`,
+
+  // Правові сторінки та Cookies (ЄС / GDPR)
+  footerPrivacy: 'Конфіденційність',
+  footerCookies: 'Cookies',
+  footerTerms: 'Умови та Impressum',
+  footerCookieSettings: 'Налаштувати cookies',
+  footerFsrsAbout: 'Алгоритм FSRS-5',
+  cookieBannerTitle: '🍪 Зберігання даних і Cookies (ЄС / GDPR)',
+  cookieBannerText: 'VOCANOVA зберігає ваш прогрес, криву пам’яті FSRS-5 і колоди Anki локально в браузері без рекламних трекерів.',
+  cookieBtnEssential: 'Лише необхідні',
+  cookieBtnAcceptAll: 'Прийняти всі',
+  cookieBtnCustomize: 'Налаштувати',
+  cookiePrefsTitle: '🛡️ Налаштування приватності й Cookies',
+  cookiePrefsIntro: 'Керуйте категоріями локального сховища (localStorage / IndexedDB). Необхідне сховище забезпечує гру, FSRS-5 і колоди Anki.',
+  cookieCatEssentialTitle: 'Необхідні (Завжди активні)',
+  cookieCatEssentialDesc: 'Прогрес уроків, рекорди, стан FSRS-5 (zlingo_fsrs_cards_v1), колоди Anki в IndexedDB і ваш вибір згоди.',
+  cookieCatAlwaysOn: 'Завжди увімк.',
+  cookieCatFuncTitle: 'Функціональні (Озвучення й інтерфейс)',
+  cookieCatFuncDesc: 'Збереження вибраного голосу Gemini TTS, екранної клавіатури, мовної пари й фільтрів.',
+  cookieCatAnalyticsTitle: 'Опціональна телеметрія якості',
+  cookieCatAnalyticsDesc: 'Наразі VOCANOVA не використовує сторонню рекламу чи аналітику. Перемикач зарезервовано лише для опційної діагностики за вашою згодою.',
+  cookieBtnSavePrefs: '💾 Зберегти налаштування'
 };

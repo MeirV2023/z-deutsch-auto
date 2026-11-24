@@ -387,5 +387,37 @@ export const EN_TEXT = {
   ttsStatusReadyServer: (model, voice) => `✨ Active: ${model} · voice ${voice} (Vercel server)`,
   ttsStatusReadyLocal: (model, voice) => `✨ Active: ${model} · voice ${voice} (Local API key)`,
   ttsStatusFallback: '🔊 Using built-in browser voice. Add GEMINI_API_KEY for studio Gemini 3.8 TTS!',
-  ttsStatusMuted: '🔇 Word pronunciation is muted'
+  ttsStatusMuted: '🔇 Word pronunciation is muted',
+
+  // FSRS-5 Spaced Repetition
+  statFsrsDue: 'Due Now (FSRS)',
+  statFsrsMastered: 'Long-Term (S≥21d)',
+  statFsrsRetention: 'FSRS Retention',
+  fsrsRoundTitle: (n) => `🧠 FSRS Review (${n} wds)`,
+  fsrsReviewBtn: (n) => `Review Due Words (${n})`,
+  fsrsHomePill: (n) => `🧠 FSRS-5: ${n} due now`,
+  fsrsDueBadge: 'Due',
+  fsrsDaysShort: (d) => `${d}d`,
+
+  // Legal Pages & Cookie Consent (EU / GDPR)
+  footerPrivacy: 'Privacy Policy',
+  footerCookies: 'Cookies',
+  footerTerms: 'Terms & Impressum',
+  footerCookieSettings: 'Cookie Settings',
+  footerFsrsAbout: 'FSRS-5 Algorithm',
+  cookieBannerTitle: '🍪 Data Storage & Cookies (EU / GDPR)',
+  cookieBannerText: 'VOCANOVA stores your progress, FSRS-5 memory curve, and Anki decks locally in your browser with zero ad trackers. Audio/translation calls send only the target word text on demand.',
+  cookieBtnEssential: 'Essential Only',
+  cookieBtnAcceptAll: 'Accept All',
+  cookieBtnCustomize: 'Customize',
+  cookiePrefsTitle: '🛡️ Privacy & Cookie Preferences',
+  cookiePrefsIntro: 'Control browser storage categories (localStorage / IndexedDB). Essential storage keeps gameplay, FSRS-5 scheduling, and Anki decks working.',
+  cookieCatEssentialTitle: 'Strictly Necessary (Always On)',
+  cookieCatEssentialDesc: 'Lesson progress, high score, FSRS-5 memory state (zlingo_fsrs_cards_v1), IndexedDB Anki decks, and your consent record.',
+  cookieCatAlwaysOn: 'Always Active',
+  cookieCatFuncTitle: 'Functional Preferences',
+  cookieCatFuncDesc: 'Remembers your selected Gemini TTS voice, ZType keyboard visibility, language pair, and UI filters.',
+  cookieCatAnalyticsTitle: 'Optional Product Telemetry',
+  cookieCatAnalyticsDesc: 'VOCANOVA currently sets zero third-party advertising or analytics cookies. Reserved exclusively for opt-in quality diagnostics.',
+  cookieBtnSavePrefs: '💾 Save Preferences'
 };

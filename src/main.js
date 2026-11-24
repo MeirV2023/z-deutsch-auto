@@ -14,7 +14,8 @@ import {
 import {
   centerOverlay,
   dictDialog,
-  dictSearchInput
+  dictSearchInput,
+  statsDialog
 } from './ui/dom.js';
 import { resizeCanvas, measureWordCapsule } from './engine/arena-physics.js';
 import { renderWeaponSelectors } from './engine/weapon-vfx.js';
@@ -29,6 +30,7 @@ import {
   refreshOverlayContent,
   showLevelIntroOverlay,
   startLevelNow,
+  launchFsrsReviewDrill,
   spawnNextWord,
   gameLoop,
   bindGameplayEvents
@@ -58,6 +60,7 @@ import {
   openDictionaryModal,
   renderGameSettingsModal,
   openGameSettingsModal,
+  renderStatsModal,
   openStatsModal,
   openLeaderboardModal,
   bindModalEvents
@@ -73,6 +76,10 @@ import {
   renderAboutPage,
   bindAboutPageEvents
 } from './ui/about-page.js';
+import {
+  initCookieConsent,
+  openCookiePrefsModal
+} from './ui/cookie-consent.js';
 import {
   setNativeLanguage,
   setTargetLanguage,
@@ -92,6 +99,7 @@ if (state.desktopKbdOpen) {
 registerActions({
   spawnNextWord,
   startLevelNow,
+  launchFsrsReviewDrill,
   selectCourseLesson,
   launchFromTitleScreen,
   returnToTitleScreen,
@@ -111,6 +119,7 @@ registerActions({
   renderAdminStudio,
   openAboutPage,
   renderAboutPage,
+  openCookiePrefsModal,
   setNativeLanguage,
   setTargetLanguage,
   applyStaticUILocalization,
@@ -162,6 +171,19 @@ bus.on('tts:status', () => {
   onTtsStatusChanged();
 });
 
+bus.on('fsrs:changed', () => {
+  renderHomeDashboardWidgets();
+  if (statsDialog && statsDialog.open) {
+    renderStatsModal();
+  }
+  if (dictDialog && dictDialog.open) {
+    renderFullDictionary(dictSearchInput ? dictSearchInput.value : '');
+  }
+  if (state.homeSubView === 'about') {
+    renderAboutPage();
+  }
+});
+
 // 4. Подключаем обработчики событий всех независимых контроллеров
 bindGameplayEvents();
 bindDecksPageEvents();
@@ -169,6 +191,7 @@ bindModalEvents();
 bindAdminStudioEvents();
 bindAboutPageEvents();
 bindNavigationEvents();
+initCookieConsent();
 
 // 5. Асинхронная инициализация пользовательских колод, облачного каталога и 60 FPS цикла
 async function initGame() {

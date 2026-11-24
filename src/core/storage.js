@@ -6,6 +6,8 @@ export const PINNED_STORAGE_KEY = 'zlingo_pinned_words_v1';
 export const FAV_DECKS_KEY = 'zlingo_fav_decks_v1';
 export const LEARNED_STORAGE_KEY = 'zlingo_learned_words_v1';
 export const DAILY_PROGRESS_KEY = 'zlingo_daily_progress_v1';
+export const FSRS_STORAGE_KEY = 'zlingo_fsrs_cards_v1';
+export const COOKIE_CONSENT_KEY = 'zlingo_cookie_consent_v1';
 export const KEY_STORAGE_NAME = 'zdeutsch_gemini_api_key';
 
 export function getLocalIsoDateString(dateObj = new Date()) {

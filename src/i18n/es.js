@@ -387,5 +387,37 @@ export const ES_TEXT = {
   ttsStatusReadyServer: (model, voice) => `✨ Activo: ${model} · voz ${voice} (servidor Vercel)`,
   ttsStatusReadyLocal: (model, voice) => `✨ Activo: ${model} · voz ${voice} (clave API local)`,
   ttsStatusFallback: '🔊 Usando voz integrada del navegador. ¡Añade GEMINI_API_KEY para Gemini 3.8 TTS de estudio!',
-  ttsStatusMuted: '🔇 La pronunciación de palabras está silenciada'
+  ttsStatusMuted: '🔇 La pronunciación de palabras está silenciada',
+
+  // FSRS-5 Repetición espaciada
+  statFsrsDue: 'Pendientes (FSRS)',
+  statFsrsMastered: 'Largo plazo (S≥21d)',
+  statFsrsRetention: 'Retención FSRS',
+  fsrsRoundTitle: (n) => `🧠 Repaso FSRS (${n} pal.)`,
+  fsrsReviewBtn: (n) => `Repasar pendientes (${n})`,
+  fsrsHomePill: (n) => `🧠 FSRS-5: ${n} pendientes`,
+  fsrsDueBadge: 'Repasar',
+  fsrsDaysShort: (d) => `${d}d`,
+
+  // Páginas legales y Cookies (UE / RGPD)
+  footerPrivacy: 'Privacidad',
+  footerCookies: 'Cookies',
+  footerTerms: 'Términos e Impressum',
+  footerCookieSettings: 'Ajustes de cookies',
+  footerFsrsAbout: 'Algoritmo FSRS-5',
+  cookieBannerTitle: '🍪 Almacenamiento y Cookies (UE / RGPD)',
+  cookieBannerText: 'VOCANOVA guarda tu progreso, tu curva de memoria FSRS-5 y tus mazos de Anki localmente sin rastreadores publicitarios.',
+  cookieBtnEssential: 'Solo necesarias',
+  cookieBtnAcceptAll: 'Aceptar todo',
+  cookieBtnCustomize: 'Configurar',
+  cookiePrefsTitle: '🛡️ Preferencias de privacidad y cookies',
+  cookiePrefsIntro: 'Gestiona las categorías de almacenamiento local (localStorage / IndexedDB). Las necesarias mantienen el juego, FSRS-5 y tus mazos Anki.',
+  cookieCatEssentialTitle: 'Estrictamente necesarias (Siempre activas)',
+  cookieCatEssentialDesc: 'Progreso, puntuación, memoria FSRS-5 (zlingo_fsrs_cards_v1), mazos Anki en IndexedDB y tu registro de consentimiento.',
+  cookieCatAlwaysOn: 'Siempre activo',
+  cookieCatFuncTitle: 'Preferencias funcionales',
+  cookieCatFuncDesc: 'Guarda la voz de Gemini TTS elegida, visibilidad del teclado ZType y filtros de estudio.',
+  cookieCatAnalyticsTitle: 'Telemetría opcional de calidad',
+  cookieCatAnalyticsDesc: 'VOCANOVA no usa cookies publicitarias ni analíticas de terceros. Reservado solo para diagnósticos opcionales con tu permiso.',
+  cookieBtnSavePrefs: '💾 Guardar preferencias'
 };

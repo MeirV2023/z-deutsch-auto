@@ -31,6 +31,7 @@ import {
   inferCourseCategory,
   resolveLessonBaseWords
 } from '../domain/catalog-service.js';
+import { getFsrsSummaryForTargetLang } from '../domain/fsrs-service.js';
 import { getCourseArtKey, renderCourseArtworkSvg } from './deck-artwork.js';
 import {
   arenaWavePill,
@@ -38,6 +39,7 @@ import {
   btnDrillPinned,
   btnEmp,
   btnHitRepeat,
+  btnHomeFsrsReview,
   btnHomeThemeDropdown,
   btnMobHudEmp,
   btnOpenCatalogTitle,
@@ -99,6 +101,7 @@ import {
   killFeedContainer,
   labelHitBanner,
   labelHitRepeat,
+  labelHomeFsrsReview,
   labelPracticePinned,
   learnedProgressPill,
   levelListContainer,
@@ -693,6 +696,15 @@ export function renderHomeDashboardWidgets() {
   if (homeStatDecks) homeStatDecks.textContent = courseStats.total.toLocaleString();
   if (homeStatStreak) {
     homeStatStreak.textContent = `${todayLearnedSet.size} / ${DAILY_GOAL_WORDS}`;
+  }
+
+  if (btnHomeFsrsReview && labelHomeFsrsReview) {
+    const tr = t();
+    const fsrs = getFsrsSummaryForTargetLang(state.targetLang);
+    btnHomeFsrsReview.classList.toggle('hidden', fsrs.dueNow <= 0);
+    labelHomeFsrsReview.textContent = tr.fsrsHomePill
+      ? tr.fsrsHomePill(fsrs.dueNow)
+      : `🧠 FSRS-5: ${fsrs.dueNow} due`;
   }
 
   // Мини-список Топ-3 недели на Главной

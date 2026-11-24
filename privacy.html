@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VOCANOVA — Privacy Policy (GDPR / DSGVO)</title>
+  <link rel="icon" type="image/svg+xml" href="image/favicon.svg" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050a18;
+      --card: rgba(12, 22, 46, 0.88);
+      --border: rgba(112, 168, 255, 0.25);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(56, 189, 248, 0.14), transparent 45%),
+        radial-gradient(circle at 82% 8%, rgba(52, 211, 153, 0.11), transparent 42%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 24px 16px 56px;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      padding: 14px 18px; border-radius: 16px; background: var(--card); border: 1px solid var(--border);
+    }
+    .back-link { color: var(--cyan); font-weight: 700; text-decoration: none; font-size: 0.92rem; }
+    .back-link:hover { text-decoration: underline; }
+    .nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.86rem; }
+    .nav-links a { color: #cbd5e1; text-decoration: none; }
+    .nav-links a.active { color: var(--emerald); font-weight: 700; }
+    .nav-links a:hover { color: var(--cyan); }
+    .lang-switch { display: inline-flex; gap: 6px; }
+    .lang-btn {
+      border: 1px solid var(--border); background: rgba(15, 29, 60, 0.8); color: #cbd5e1;
+      border-radius: 8px; padding: 5px 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer;
+    }
+    .lang-btn.active { border-color: var(--emerald); background: rgba(16, 185, 129, 0.2); color: #ecfdf5; }
+    .hero, .card {
+      padding: 24px 26px; border-radius: 18px; background: var(--card); border: 1px solid var(--border);
+    }
+    .badge {
+      display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.74rem;
+      font-weight: 800; letter-spacing: 0.04em; color: var(--emerald);
+      background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(52, 211, 153, 0.35);
+      margin-bottom: 10px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.5rem, 3vw, 2rem); color: #fff; }
+    h2 { margin: 0 0 10px; font-size: 1.15rem; color: #7dd3fc; }
+    p { margin: 0 0 10px; color: #cbd5e1; }
+    ul { margin: 6px 0 0; padding-left: 20px; color: #cbd5e1; }
+    li { margin-bottom: 6px; }
+    code {
+      background: rgba(6, 12, 26, 0.85); color: #6ee7b7; padding: 2px 6px; border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em;
+    }
+    a.inline { color: var(--cyan); }
+    .meta { font-size: 0.84rem; color: var(--muted); }
+    .callout {
+      margin-top: 10px; padding: 12px 14px; border-radius: 12px;
+      background: rgba(245, 158, 11, 0.11); border: 1px solid rgba(251, 191, 36, 0.35);
+      color: #fde68a; font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="topbar">
+      <a class="back-link" href="index.html" id="backLink">← Вернуться в VOCANOVA</a>
+      <div class="nav-links">
+        <a href="privacy.html" class="active" id="navPrivacy">Конфиденциальность</a>
+        <a href="cookies.html" id="navCookies">Cookies</a>
+        <a href="terms.html" id="navTerms">Условия и Impressum</a>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" class="lang-btn" data-lang="ru">RU</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+        <button type="button" class="lang-btn" data-lang="de">DE</button>
+      </div>
+    </nav>
+
+    <main id="contentRoot"></main>
+  </div>
+
+  <script>
+    const DOCS = {
+      ru: {
+        title: 'VOCANOVA — Политика конфиденциальности (GDPR / DSGVO)',
+        back: '← Вернуться в VOCANOVA',
+        nav: ['Конфиденциальность', 'Cookies', 'Условия и Impressum'],
+        badge: 'EU GDPR · ART. 13 & 14 · DSGVO',
+        h1: 'Политика конфиденциальности VOCANOVA',
+        updated: 'Последнее обновление: 24 ноября 2026 г.',
+        sections: [
+          {
+            h: '1. Кто отвечает за обработку данных (Контролёр, ст. 4(7) GDPR)',
+            p: [
+              'VOCANOVA — образовательный инди-проект для изучения иностранных языков.',
+              'Контактное лицо по вопросам персональных данных: <a class="inline" href="mailto:alefweb7@gmail.com">alefweb7@gmail.com</a> · Telegram: <a class="inline" href="https://t.me/Stanislavm770" target="_blank" rel="noopener noreferrer">@Stanislavm770</a>.'
+            ]
+          },
+          {
+            h: '2. Какие данные хранятся только у вас на устройстве (Local-First)',
+            p: [
+              'По умолчанию VOCANOVA работает без обязательной регистрации. Учебные данные хранятся исключительно в вашем браузере (<code>localStorage</code> и <code>IndexedDB</code>) и не передаются разработчику:'
+            ],
+            li: [
+              'Настройки языка, текущий курс, скорость, оружие и рекорд (<code>zdeutsch_save_v2</code>).',
+              'Кривая памяти алгоритма интервального повторения FSRS-5 (<code>zlingo_fsrs_cards_v1</code>).',
+              'Выученные слова, отмеченные звёздочкой ⭐ слова, дневная цель и серия дней.',
+              'Импортированные колоды Anki <code>.apkg</code> / <code>.colpkg</code> / <code>.tsv</code> и личные списки слов в <code>IndexedDB</code>.',
+              'Ваш выбор настроек приватности в баннере cookies (<code>zlingo_cookie_consent_v1</code>).'
+            ]
+          },
+          {
+            h: '3. Серверные запросы: хостинг Vercel и озвучка / перевод (Google Gemini API)',
+            p: [
+              'Для работы веб-приложения и генерации озвучки/перевода используются следующие обработчики:'
+            ],
+            li: [
+              '<strong>Vercel Inc. (хостинг)</strong>: при открытии страниц сервер автоматически фиксирует технические HTTP-заголовки (IP-адрес, время запроса, User-Agent) в кратковременных журналах безопасности (правовое основание: законный интерес ст. 6(1)(f) GDPR).',
+              '<strong>Серверные маршруты <code>/api/tts</code> и <code>/api/translate</code> (Google Gemini API)</strong>: когда вы воспроизводите слово или запрашиваете перевод при импорте Anki, на сервер отправляется <em>только текст соответствующего слова</em> и выбранный язык. Ваш email или личный профиль в эти запросы не передаются. Если вы ввели собственный ключ Gemini в Настройках озвучки, он хранится только в вашем <code>localStorage</code> (<code>zdeutsch_gemini_api_key</code>).'
+            ]
+          },
+          {
+            h: '4. Электронная почта и опциональный вход через Google (Google OAuth / База пользователей)',
+            p: [
+              'VOCANOVA может предоставлять опциональный вход через Google для облачной синхронизации ваших колод Anki и прогресса FSRS-5 между устройствами (компьютер и телефон). Если вы войдёте через Google:'
+            ],
+            li: [
+              '<strong>Какие данные запрашиваются</strong>: только базовый профиль Google (email, отображаемое имя, идентификатор Google UID и при необходимости аватар).',
+              '<strong>Цель и правовое основание (ст. 6(1)(b) GDPR)</strong>: создание аккаунта, сохранение личных колод/прогресса FSRS в базе данных и восстановление доступа при смене устройства. Доступ к чтению вашей почты Gmail или контактов НЕ запрашивается.',
+              '<strong>Рассылки и клиентская база (ст. 6(1)(a) GDPR)</strong>: отправлять вам письма об обновлениях проекта мы имеем право <em>только при наличии отдельного добровольного согласия (отдельная галочка)</em>. Отозвать согласие и отписаться можно в один клик.',
+              '<strong>Запрет скрытой передачи</strong>: база адресов электронной почты никогда не продаётся и не передаётся рекламным брокерам.'
+            ],
+            callout: 'Важно для ЕС: вы всегда можете импортировать колоды Anki локально и играть бесплатно без входа через Google. Вход даёт именно облачную синхронизацию и удобство.'
+          },
+          {
+            h: '5. Сроки хранения и удаление данных (ст. 17 GDPR)',
+            li: [
+              'Локальные данные браузера хранятся до момента, пока вы сами не очистите хранилище сайта.',
+              'Данные аккаунта (если подключён вход через Google) хранятся, пока учётная запись активна. По запросу на <a class="inline" href="mailto:alefweb7@gmail.com">alefweb7@gmail.com</a> или кнопке удаления в профиле email и облачные копии колод удаляются в течение максимум 30 дней.'
+            ]
+          },
+          {
+            h: '6. Ваши права по Регламенту ЕС (ст. 15–22 GDPR) и защита детей (ст. 8)',
+            li: [
+              '<strong>Право на доступ и копию данных (ст. 15, ст. 20 GDPR)</strong> — получить экспорт ваших данных в машиночитаемом формате.',
+              '<strong>Право на исправление и удаление (ст. 16, ст. 17 GDPR)</strong> — изменить или полностью стереть email и связанные данные.',
+              '<strong>Право на ограничение и возражение (ст. 18, ст. 21 GDPR)</strong> и <strong>право отозвать согласие (ст. 7(3))</strong> в любой момент без ущерба законности прошлой обработки.',
+              '<strong>Право на жалобу (ст. 77 GDPR)</strong> — обратиться в надзорный орган по защите данных вашей страны ЕС.',
+              'Сервис не предназначен для детей младше 16 лет без согласия родителей (ст. 8 GDPR).'
+            ]
+          }
+        ]
+      },
+      en: {
+        title: 'VOCANOVA — Privacy Policy (EU GDPR / DSGVO)',
+        back: '← Back to VOCANOVA',
+        nav: ['Privacy Policy', 'Cookie Policy', 'Terms & Impressum'],
+        badge: 'EU GDPR · ART. 13 & 14',
+        h1: 'VOCANOVA Privacy Policy',
+        updated: 'Last updated: November 24, 2026',
+        sections: [
+          {
+            h: '1. Data Controller (Art. 4(7) GDPR)',
+            p: [
+              'VOCANOVA is an educational indie language-learning web application.',
+              'Privacy contact: <a class="inline" href="mailto:alefweb7@gmail.com">alefweb7@gmail.com</a> · Telegram: <a class="inline" href="https://t.me/Stanislavm770" target="_blank" rel="noopener noreferrer">@Stanislavm770</a>.'
+            ]
+          },
+          {
+            h: '2. Local-First Browser Storage (No Mandatory Registration)',
+            p: [
+              'By default VOCANOVA runs client-side without requiring an account. Learning data stays strictly on your device in <code>localStorage</code> and <code>IndexedDB</code>:'
+            ],
+            li: [
+              'Language preferences, active course/lesson, speed preset, arsenal & high score (<code>zdeutsch_save_v2</code>).',
+              'FSRS-5 spaced repetition memory parameters (<code>zlingo_fsrs_cards_v1</code>).',
+              'Learned word IDs, ⭐ bookmarks, daily goal & streak state.',
+              'Imported Anki <code>.apkg</code> / <code>.colpkg</code> / <code>.tsv</code> decks in <code>IndexedDB</code>.',
+              'Your privacy/cookie banner consent decision (<code>zlingo_cookie_consent_v1</code>).'
+            ]
+          },
+          {
+            h: '3. Hosting (Vercel) & On-Demand Audio / Translation (Google Gemini)',
+            li: [
+              '<strong>Vercel Inc. Hosting</strong>: Standard short-lived HTTP security logs (IP address, request timestamp, user agent) processed under legitimate interest (Art. 6(1)(f) GDPR).',
+              '<strong><code>/api/tts</code> & <code>/api/translate</code> (Google Gemini API)</strong>: When speech or translation is requested, only the target word text and language code are transmitted. Optional user-entered API keys stay locally in <code>zdeutsch_gemini_api_key</code>.'
+            ]
+          },
+          {
+            h: '4. Email Addresses & Optional Future Google Sign-In (OAuth)',
+            p: [
+              'VOCANOVA may offer optional Google Sign-In so players can sync FSRS-5 memory states and Anki decks across devices. Where enabled:'
+            ],
+            li: [
+              '<strong>Scope</strong>: Strictly minimal OpenID profile (email address, display name, Google UID). Never requests Gmail or Contacts access.',
+              '<strong>Account & Cloud Sync (Art. 6(1)(b) GDPR)</strong>: Email is used to authenticate your account, sync decks, and allow account recovery.',
+              '<strong>Updates & Mailing List (Art. 6(1)(a) GDPR)</strong>: Marketing or product news emails are sent ONLY if you tick an explicit, separate unchecked opt-in box, with one-click unsubscribe anytime.',
+              'No selling or sharing of email addresses with ad brokers.'
+            ],
+            callout: 'No login wall: local browser play and local Anki .apkg import remain available without creating an account.'
+          },
+          {
+            h: '5. Data Retention & Erasure (Art. 17 GDPR)',
+            li: [
+              'Local browser storage persists until you clear your browser data.',
+              'Cloud account data (if opted into Google Sign-In) is retained while your account is active and deleted within 30 days upon erasure request to <a class="inline" href="mailto:alefweb7@gmail.com">alefweb7@gmail.com</a>.'
+            ]
+          },
+          {
+            h: '6. Your Rights Under EU GDPR (Art. 15–22) & Minors (Art. 8)',
+            li: [
+              'Right of access & portability (Art. 15, 20), rectification (Art. 16), erasure (Art. 17), restriction & objection (Art. 18, 21), and consent withdrawal (Art. 7(3)).',
+              'Right to lodge a complaint with your national EU Data Protection Authority (Art. 77 GDPR).',
+              'Users under 16 in the EU require parental/guardian authorization where consent-based processing applies (Art. 8 GDPR).'
+            ]
+          }
+        ]
+      },
+      de: {
+        title: 'VOCANOVA — Datenschutzerklärung (DSGVO / GDPR)',
+        back: '← Zurück zu VOCANOVA',
+        nav: ['Datenschutz', 'Cookies', 'Nutzung & Impressum'],
+        badge: 'EU DSGVO · ART. 13 & 14',
+        h1: 'Datenschutzerklärung von VOCANOVA',
+        updated: 'Stand: 24. November 2026',
+        sections: [
+          {
+            h: '1. Verantwortlicher (Art. 4 Nr. 7 DSGVO)',
+            p: [
+              'VOCANOVA ist ein unabhängiges Bildungsprojekt zum Sprachenlernen.',
+              'Kontakt für Datenschutzanfragen: <a class="inline" href="mailto:alefweb7@gmail.com">alefweb7@gmail.com</a> · Telegram: <a class="inline" href="https://t.me/Stanislavm770" target="_blank" rel="noopener noreferrer">@Stanislavm770</a>.'
+            ]
+          },
+          {
+            h: '2. Lokale Speicherung im Browser (Local-First)',
+            p: [
+              'VOCANOVA funktioniert ohne Registrierungspflicht. Sämtliche Lernstände bleiben lokal in deinem Browser (<code>localStorage</code> und <code>IndexedDB</code>):'
+            ],
+            li: [
+              'Sprachwahl, aktiver Kurs, Spielgeschwindigkeit, Waffen-Fortschritt und Highscore (<code>zdeutsch_save_v2</code>).',
+              'FSRS-5 Gedächtniswerte je Wort (<code>zlingo_fsrs_cards_v1</code>).',
+              'Gelernte Wörter, ⭐ Lesezeichen, Tagesziel und Streak.',
+              'Importierte Anki-Decks (<code>.apkg</code> / <code>.colpkg</code> / <code>.tsv</code>) in <code>IndexedDB</code>.',
+              'Deine Entscheidung im Cookie-/Datenschutzbanner (<code>zlingo_cookie_consent_v1</code>).'
+            ]
+          },
+          {
+            h: '3. Hosting (Vercel) & Audio-/Übersetzungs-API (Google Gemini)',
+            li: [
+              '<strong>Vercel Inc.</strong>: Technische Zugriffs- und Sicherheitslogs (IP-Adresse, Zeitstempel) auf Grundlage berechtigten Interesses (Art. 6 Abs. 1 lit. f DSGVO).',
+              '<strong><code>/api/tts</code> & <code>/api/translate</code></strong>: Beim Vorlesen oder Übersetzen wird ausschließlich das jeweilige Zielwort übertragen. Ein optional selbst eingetragener Gemini-API-Key verbleibt lokal in <code>zdeutsch_gemini_api_key</code>.'
+            ]
+          },
+          {
+            h: '4. E-Mail & optionaler Google-Login (OAuth / Cloud-Sync)',
+            p: [
+              'Sofern ein freiwilliger Google Sign-In zur geräteübergreifenden Synchronisierung von Anki-Decks und FSRS-5 bereitgestellt wird:'
+            ],
+            li: [
+              '<strong>Umfang</strong>: Nur E-Mail-Adresse, Name und Google-UID (kein Zugriff auf Gmail oder Kontakte).',
+              '<strong>Rechtsgrundlage Synchronisierung (Art. 6 Abs. 1 lit. b DSGVO)</strong>: Bereitstellung von Konto und Cloud-Speicherung.',
+              '<strong>Produkt-Updates / Newsletter (Art. 6 Abs. 1 lit. a DSGVO)</strong>: E-Mail-Updates erfolgen ausschließlich nach separater, aktiver Opt-in-Einwilligung und sind jederzeit widerrufbar.',
+              'Kein Verkauf oder Weitergabe von E-Mail-Adressen an Werbenetzwerke.'
+            ]
+          },
+          {
+            h: '5. Speicherdauer & Deine Rechte (Art. 15–22, Art. 77 DSGVO)',
+            li: [
+              'Auskunft, Berichtigung, Löschung (Art. 17 DSGVO), Einschränkung, Datenübertragbarkeit und Widerspruch jederzeit per Mail an <a class="inline" href="mailto:alefweb7@gmail.com">alefweb7@gmail.com</a>.',
+              'Beschwerderecht bei einer zuständigen Datenschutz-Aufsichtsbehörde in der EU.'
+            ]
+          }
+        ]
+      }
+    };
+
+    function detectLang() {
+      try {
+        const q = new URLSearchParams(location.search).get('lang');
+        if (q && DOCS[q]) return q;
+        const saved = JSON.parse(localStorage.getItem('zdeutsch_save_v2') || '{}');
+        if (saved.nativeLang && DOCS[saved.nativeLang]) return saved.nativeLang;
+      } catch (_) {}
+      const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
+      return DOCS[nav] ? nav : 'en';
+    }
+
+    function renderDoc(lang) {
+      const d = DOCS[lang] || DOCS.en;
+      document.documentElement.lang = lang;
+      document.title = d.title;
+      document.getElementById('backLink').textContent = d.back;
+      document.getElementById('navPrivacy').textContent = d.nav[0];
+      document.getElementById('navCookies').textContent = d.nav[1];
+      document.getElementById('navTerms').textContent = d.nav[2];
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+      const sectionsHtml = d.sections.map(sec => `
+        <section class="card">
+          <h2>${sec.h}</h2>
+          ${(sec.p || []).map(x => `<p>${x}</p>`).join('')}
+          ${sec.li ? `<ul>${sec.li.map(x => `<li>${x}</li>`).join('')}</ul>` : ''}
+          ${sec.callout ? `<div class="callout">${sec.callout}</div>` : ''}
+        </section>
+      `).join('');
+
+      document.getElementById('contentRoot').innerHTML = `
+        <header class="hero">
+          <div class="badge">${d.badge}</div>
+          <h1>${d.h1}</h1>
+          <p class="meta">${d.updated}</p>
+        </header>
+        ${sectionsHtml}
+      `;
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => renderDoc(btn.dataset.lang));
+    });
+    renderDoc(detectLang());
+  </script>
+</body>
+</html>

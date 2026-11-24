@@ -387,5 +387,37 @@ export const DE_TEXT = {
   ttsStatusReadyServer: (model, voice) => `✨ Aktiv: ${model} · Stimme ${voice} (Vercel-Server)`,
   ttsStatusReadyLocal: (model, voice) => `✨ Aktiv: ${model} · Stimme ${voice} (Lokaler API-Key)`,
   ttsStatusFallback: '🔊 Integrierte Browser-Stimme aktiv. Füge GEMINI_API_KEY für Studio-Qualität mit Gemini 3.8 TTS hinzu!',
-  ttsStatusMuted: '🔇 Wort-Aussprache ist stummgeschaltet'
+  ttsStatusMuted: '🔇 Wort-Aussprache ist stummgeschaltet',
+
+  // FSRS-5 Spaced Repetition
+  statFsrsDue: 'Fällig (FSRS)',
+  statFsrsMastered: 'Langzeit (S≥21T)',
+  statFsrsRetention: 'FSRS-Abrufrate',
+  fsrsRoundTitle: (n) => `🧠 FSRS-Wiederholung (${n} W.)`,
+  fsrsReviewBtn: (n) => `Fällige Wörter üben (${n})`,
+  fsrsHomePill: (n) => `🧠 FSRS-5: ${n} fällig`,
+  fsrsDueBadge: 'Fällig',
+  fsrsDaysShort: (d) => `${d}T`,
+
+  // Rechtliches & Cookie-Einwilligung (EU / DSGVO)
+  footerPrivacy: 'Datenschutz',
+  footerCookies: 'Cookies',
+  footerTerms: 'Nutzung & Impressum',
+  footerCookieSettings: 'Cookie-Einstellungen',
+  footerFsrsAbout: 'FSRS-5 Algorithmus',
+  cookieBannerTitle: '🍪 Datenspeicherung & Cookies (EU / DSGVO)',
+  cookieBannerText: 'VOCANOVA speichert Lernfortschritt, FSRS-5-Gedächtniskurve und Anki-Decks lokal im Browser – ohne Werbe-Tracker. Audio/Übersetzung sendet bei Bedarf nur den jeweiligen Worttext.',
+  cookieBtnEssential: 'Nur Notwendige',
+  cookieBtnAcceptAll: 'Alle akzeptieren',
+  cookieBtnCustomize: 'Anpassen',
+  cookiePrefsTitle: '🛡️ Datenschutz- & Cookie-Einstellungen',
+  cookiePrefsIntro: 'Verwalte die Speicher-Kategorien (localStorage / IndexedDB). Notwendige Daten sichern Spielfortschritt, FSRS-5 und Anki-Decks.',
+  cookieCatEssentialTitle: 'Unbedingt erforderlich (Immer aktiv)',
+  cookieCatEssentialDesc: 'Lektionsfortschritt, Highscore, FSRS-5-Speicher (zlingo_fsrs_cards_v1), IndexedDB Anki-Decks und diese Einwilligung.',
+  cookieCatAlwaysOn: 'Immer aktiv',
+  cookieCatFuncTitle: 'Funktionale Präferenzen',
+  cookieCatFuncDesc: 'Speichert gewählte Gemini-TTS-Stimme, ZType-Tastatur, Sprachpaar und UI-Filter.',
+  cookieCatAnalyticsTitle: 'Optionale Produkt-Telemetrie',
+  cookieCatAnalyticsDesc: 'VOCANOVA verwendet aktuell keine Werbe- oder Analyse-Cookies. Dieser Schalter ist für spätere freiwillige Qualitätsdiagnosen reserviert.',
+  cookieBtnSavePrefs: '💾 Einstellungen speichern'
 };

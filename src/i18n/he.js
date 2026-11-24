@@ -387,5 +387,37 @@ export const HE_TEXT = {
   ttsStatusReadyServer: (model, voice) => `✨ פעיל: ${model} · קול ${voice} (שרת Vercel)`,
   ttsStatusReadyLocal: (model, voice) => `✨ פעיל: ${model} · קול ${voice} (מפתח מקומי)`,
   ttsStatusFallback: '🔊 פעיל קול מובנה של הדפדפן. הוסיפו GEMINI_API_KEY להפעלת Gemini 3.8 TTS!',
-  ttsStatusMuted: '🔇 הקראת המילים כבויה'
+  ttsStatusMuted: '🔇 הקראת המילים כבויה',
+
+  // FSRS-5 חזרה מרווחת
+  statFsrsDue: 'לחזרה עכשיו (FSRS)',
+  statFsrsMastered: 'בזיכרון ארוך טווח',
+  statFsrsRetention: 'שימור FSRS',
+  fsrsRoundTitle: (n) => `🧠 חזרת FSRS (${n} מ׳)`,
+  fsrsReviewBtn: (n) => `חזור על מילים שהגיע זמנן (${n})`,
+  fsrsHomePill: (n) => `🧠 FSRS-5: ${n} לחזרה`,
+  fsrsDueBadge: 'לחזרה',
+  fsrsDaysShort: (d) => `${d}י׳`,
+
+  // דפים משפטיים והסכמת עוגיות (EU / GDPR)
+  footerPrivacy: 'מדיניות פרטיות',
+  footerCookies: 'עוגיות (Cookies)',
+  footerTerms: 'תנאים ו-Impressum',
+  footerCookieSettings: 'הגדרות עוגיות',
+  footerFsrsAbout: 'אלגוריתם FSRS-5',
+  cookieBannerTitle: '🍪 אחסון נתונים ועוגיות (EU / GDPR)',
+  cookieBannerText: 'VOCANOVA שומרת את ההתקדמות, עקומת הזיכרון FSRS-5 וחפיסות Anki מקומית בדפדפן ללא מעקב פרסומי.',
+  cookieBtnEssential: 'הכרחיות בלבד',
+  cookieBtnAcceptAll: 'אשר הכול',
+  cookieBtnCustomize: 'התאמה אישית',
+  cookiePrefsTitle: '🛡️ העדפות פרטיות ועוגיות',
+  cookiePrefsIntro: 'נהלו את קטגוריות האחסון המקומי (localStorage / IndexedDB). אחסון הכרחי מאפשר שמירת משחק, FSRS-5 ו-Anki.',
+  cookieCatEssentialTitle: 'הכרחיות (פעילות תמיד)',
+  cookieCatEssentialDesc: 'התקדמות שלבים, שיאים, זיכרון FSRS-5 (zlingo_fsrs_cards_v1), חפיסות Anki ב-IndexedDB והעדפה זו.',
+  cookieCatAlwaysOn: 'פעיל תמיד',
+  cookieCatFuncTitle: 'העדפות פונקציונליות',
+  cookieCatFuncDesc: 'זוכר את קול Gemini TTS שנבחר, תצוגת המקלדת, שפת הלימוד והמסננים.',
+  cookieCatAnalyticsTitle: 'טלמטריית איכות אופציונלית',
+  cookieCatAnalyticsDesc: 'כרגע VOCANOVA אינה משתמשת בעוגיות פרסום או אנליטיקה צד שלישי. שמור לאבחון אופציונלי עתידי בהסכמה בלבד.',
+  cookieBtnSavePrefs: '💾 שמור העדפות'
 };
