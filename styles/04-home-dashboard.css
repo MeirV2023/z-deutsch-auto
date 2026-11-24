@@ -49,14 +49,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   padding: 2px 4px 6px;
   border-radius: 0;
   background: transparent;
   border: none;
   box-shadow: none;
   backdrop-filter: none;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .home-brand {
@@ -64,6 +64,7 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .brand-logo-picture {
@@ -116,23 +117,25 @@
 .home-nav-links {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 3px;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .home-nav-pill {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
+  gap: 6px;
+  padding: 7px 10px;
   border-radius: 12px;
   border: 1px solid transparent;
   background: transparent;
   color: #94a3b8;
   font-family: var(--font-ui);
-  font-size: 0.94rem;
+  font-size: 0.89rem;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
   transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease;
 }
@@ -194,19 +197,21 @@
 .home-nav-right {
   display: flex;
   align-items: center;
-  gap: 9px;
-  flex-wrap: wrap;
+  gap: 6px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .home-stat-chip {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 13px;
+  gap: 5px;
+  padding: 5px 10px;
   border-radius: 999px;
   font-family: var(--font-ui);
-  font-size: 0.88rem;
+  font-size: 0.83rem;
   font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
   transition: transform 0.14s ease, filter 0.14s ease;
   font-variant-numeric: tabular-nums;
@@ -253,15 +258,16 @@
 .nav-lang-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 12px;
+  gap: 5px;
+  padding: 5px 10px;
   border-radius: 999px;
   border: 1.3px solid rgba(112, 168, 255, 0.34);
   background: rgba(13, 23, 46, 0.86);
   color: #f8fafc;
   font-family: var(--font-ui);
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
 }
@@ -1671,10 +1677,29 @@
 
 /* Адаптация для компактных ноутбуков и планшетов (769px–1180px) */
 @media (max-width: 1180px) and (min-width: 769px) {
+  .brand-logo-img {
+    height: 40px;
+  }
+
   .home-nav-pill {
-    padding: 7px 10px;
-    font-size: 0.87rem;
-    gap: 6px;
+    padding: 6px 8px;
+    font-size: 0.82rem;
+    gap: 4px;
+  }
+
+  .nav-pill-svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .home-stat-chip {
+    padding: 5px 8px;
+    font-size: 0.78rem;
+  }
+
+  .nav-lang-trigger {
+    padding: 5px 8px;
+    font-size: 0.78rem;
   }
 
   .home-bento-grid {
@@ -1694,6 +1719,17 @@
   .desktop-topic-chip {
     padding: 7px 12px;
     font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 960px) and (min-width: 769px) {
+  .home-nav-pill {
+    padding: 6px 6px;
+    font-size: 0.78rem;
+  }
+
+  .nav-pill-svg {
+    display: none;
   }
 }
 
@@ -1970,24 +2006,6 @@
   .home-legal-footer {
     padding-bottom: 14px;
   }
-
-  .home-auth-pill {
-    padding: 5px 10px;
-    font-size: 0.78rem;
-  }
-}
-
-@media (max-width: 460px) {
-  .home-auth-label {
-    display: none;
-  }
-
-  .home-auth-pill {
-    padding: 6px;
-    width: 36px;
-    height: 36px;
-    justify-content: center;
-  }
 }
 
 /* ==========================================================================
@@ -1996,14 +2014,14 @@
 .home-auth-pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 13px;
+  gap: 6px;
+  padding: 5px 10px;
   border-radius: 999px;
   border: 1.4px solid rgba(56, 189, 248, 0.42);
   background: rgba(13, 23, 46, 0.9);
   color: #f1f5f9;
   font-family: var(--font-ui);
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.14s ease, border-color 0.15s ease, background 0.15s ease;
@@ -2049,5 +2067,38 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+@media (max-width: 1140px) and (min-width: 769px) {
+  .home-auth-label {
+    display: none;
+  }
+
+  .home-auth-pill {
+    padding: 0;
+    width: 34px;
+    height: 34px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-auth-pill {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 460px) {
+  .home-auth-label {
+    display: none;
+  }
+
+  .home-auth-pill {
+    padding: 6px;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+  }
 }
 
