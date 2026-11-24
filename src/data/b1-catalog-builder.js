@@ -1,5 +1,17 @@
-// Единый построитель B1-каталога VOCANOVA для всех 8 изучаемых языков (0 дублирования слов, уроки по ~15 слов)
+// Единый построитель каталога VOCANOVA (A2 + B1) для всех 8 изучаемых языков (0 дублирования слов, уроки по ~15 слов)
 import { ALL_LANG_CODES, REAL_ARTICLES } from '../config/constants.js';
+import { THEME_A2_ALLTAG_FAMILIE } from './a2-themes/alltag-familie.js';
+import { THEME_A2_SCHULE_BERUF } from './a2-themes/schule-beruf.js';
+import { THEME_A2_MEDIEN_KINO } from './a2-themes/medien-kino.js';
+import { THEME_A2_EREIGNISSE_GEFUEHLE } from './a2-themes/ereignisse-gefuehle.js';
+import { THEME_A2_STADT_BEHOERDEN } from './a2-themes/stadt-behoerden.js';
+import { THEME_A2_BERUF_BAHNHOF } from './a2-themes/beruf-bahnhof.js';
+import { THEME_A2_VERKEHR_ROUTEN } from './a2-themes/verkehr-routen.js';
+import { THEME_A2_LERNEN_PRUEFUNGEN } from './a2-themes/lernen-pruefungen.js';
+import { THEME_A2_SPORT_REISEN } from './a2-themes/sport-reisen.js';
+import { THEME_A2_WOHNEN_NACHBARN } from './a2-themes/wohnen-nachbarn.js';
+import { THEME_A2_LEBENSPHASEN_AUSFLUG } from './a2-themes/lebensphasen-ausflug.js';
+import { THEME_A2_KULTUR_FESTIVALS } from './a2-themes/kultur-festivals.js';
 import { THEME_EIN_NEUER_START } from './b1-themes/ein-neuer-start.js';
 import { THEME_BEWERBUNG_FIRMA } from './b1-themes/bewerbung-firma.js';
 import { THEME_ARBEITSWELT } from './b1-themes/arbeitswelt.js';
@@ -12,6 +24,21 @@ import { THEME_POLITIK_GESELLSCHAFT } from './b1-themes/politik-gesellschaft.js'
 import { THEME_DAMALS_HEUTE } from './b1-themes/damals-heute.js';
 import { THEME_WUENSCHE } from './b1-themes/wuensche.js';
 import { THEME_WIE_WIRD_ES_SEIN } from './b1-themes/wie-wird-es-sein.js';
+
+export const A2_THEMES = [
+  THEME_A2_ALLTAG_FAMILIE,
+  THEME_A2_SCHULE_BERUF,
+  THEME_A2_MEDIEN_KINO,
+  THEME_A2_EREIGNISSE_GEFUEHLE,
+  THEME_A2_STADT_BEHOERDEN,
+  THEME_A2_BERUF_BAHNHOF,
+  THEME_A2_VERKEHR_ROUTEN,
+  THEME_A2_LERNEN_PRUEFUNGEN,
+  THEME_A2_SPORT_REISEN,
+  THEME_A2_WOHNEN_NACHBARN,
+  THEME_A2_LEBENSPHASEN_AUSFLUG,
+  THEME_A2_KULTUR_FESTIVALS
+];
 
 export const B1_THEMES = [
   THEME_EIN_NEUER_START,
@@ -27,6 +54,8 @@ export const B1_THEMES = [
   THEME_WUENSCHE,
   THEME_WIE_WIRD_ES_SEIN
 ];
+
+export const ALL_THEMES = [...A2_THEMES, ...B1_THEMES];
 
 export function splitIntoLessonsOf15(items) {
   if (!Array.isArray(items) || items.length === 0) return [];
@@ -110,16 +139,16 @@ function buildLessonTitles(lessonNum, count) {
   };
 }
 
-function buildLessonDescriptions(themeTitles, lessonNum, count) {
+function buildLessonDescriptions(themeTitles, lessonNum, count, levelTag = 'B1') {
   return {
-    ru: `${themeTitles.ru} — урок ${lessonNum} (${count} слов B1).`,
-    en: `${themeTitles.en} — lesson ${lessonNum} (${count} B1 words).`,
-    de: `${themeTitles.de} — Lektion ${lessonNum} (${count} B1-Wörter).`,
-    es: `${themeTitles.es} — lección ${lessonNum} (${count} palabras B1).`,
-    uk: `${themeTitles.uk} — урок ${lessonNum} (${count} слів B1).`,
-    tr: `${themeTitles.tr} — ders ${lessonNum} (${count} B1 kelime).`,
-    he: `${themeTitles.he} — שלב ${lessonNum} (${count} מילים B1).`,
-    ar: `${themeTitles.ar} — الدرس ${lessonNum} (${count} كلمة B1).`
+    ru: `${themeTitles.ru} — урок ${lessonNum} (${count} слов ${levelTag}).`,
+    en: `${themeTitles.en} — lesson ${lessonNum} (${count} ${levelTag} words).`,
+    de: `${themeTitles.de} — Lektion ${lessonNum} (${count} ${levelTag}-Wörter).`,
+    es: `${themeTitles.es} — lección ${lessonNum} (${count} palabras ${levelTag}).`,
+    uk: `${themeTitles.uk} — урок ${lessonNum} (${count} слів ${levelTag}).`,
+    tr: `${themeTitles.tr} — ders ${lessonNum} (${count} ${levelTag} kelime).`,
+    he: `${themeTitles.he} — שלב ${lessonNum} (${count} מילים ${levelTag}).`,
+    ar: `${themeTitles.ar} — الدرس ${lessonNum} (${count} كلمة ${levelTag}).`
   };
 }
 
@@ -137,8 +166,9 @@ function buildModuleTitles(themeTitles) {
 }
 
 export function buildCoursesForTargetLang(targetLang) {
-  return B1_THEMES.map(theme => {
-    const courseId = `${targetLang}-b1-${theme.slug}`;
+  return ALL_THEMES.map(theme => {
+    const levelTag = String(theme.levelTag || 'B1').toUpperCase();
+    const courseId = `${targetLang}-${levelTag.toLowerCase()}-${theme.slug}`;
     const chunks = splitIntoLessonsOf15(theme.items);
     const lessons = chunks.map((chunk, idx) => {
       const lessonNum = idx + 1;
@@ -148,7 +178,7 @@ export function buildCoursesForTargetLang(targetLang) {
         speedMultiplier: 0.9,
         spawnIntervalMs: 2750,
         titles: buildLessonTitles(lessonNum, words.length),
-        descriptions: buildLessonDescriptions(theme.titles, lessonNum, words.length),
+        descriptions: buildLessonDescriptions(theme.titles, lessonNum, words.length, levelTag),
         words
       };
     });
@@ -159,7 +189,7 @@ export function buildCoursesForTargetLang(targetLang) {
       category: theme.category,
       source: 'official',
       icon: theme.icon,
-      levelTag: 'B1',
+      levelTag,
       titles: { ...theme.titles },
       descriptions: { ...theme.descriptions },
       modules: [

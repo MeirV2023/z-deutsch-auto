@@ -386,7 +386,7 @@ export function normalizeCefrBucket(levelTag) {
   if (raw.includes('A2') && raw.includes('B1')) return 'A2–B1';
   if (raw.includes('B1') && raw.includes('B2')) return 'B1–B2';
   if (raw === 'A1') return 'A1–A2';
-  if (raw === 'A2') return 'A2–B1';
+  if (raw === 'A2') return 'A2';
   if (raw === 'B1') return 'B1';
   if (raw === 'B2' || raw.includes('C1')) return 'B1–B2';
   return raw;

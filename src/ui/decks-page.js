@@ -437,7 +437,7 @@ export function renderDeckDetailPane(course, stats) {
         <div class="anki-field-col">
           <label>${escapeHtml(tr.decksEditorLevelLabel)}</label>
           <select class="dict-search-input" id="inlineEditDeckLevel">
-            ${['A1–A2', 'A2–B1', 'B1', 'B1–B2', 'C1'].map(lv =>
+            ${['A1–A2', 'A2', 'A2–B1', 'B1', 'B1–B2', 'C1'].map(lv =>
               `<option value="${lv}"${(course.levelTag || 'A2–B1') === lv ? ' selected' : ''}>${lv}</option>`
             ).join('')}
           </select>
