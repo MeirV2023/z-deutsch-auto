@@ -1,5 +1,13 @@
-// Единый построитель каталога VOCANOVA (A2 + B1) для всех 8 изучаемых языков (0 дублирования слов, уроки по ~15 слов)
+// Единый построитель каталога VOCANOVA (A1 + A2 + B1 + B2) для всех 8 изучаемых языков (0 дублирования слов, уроки по ~15 слов)
 import { ALL_LANG_CODES, REAL_ARTICLES } from '../config/constants.js';
+import { THEME_A1_BEGRUESSUNG_KENNENLERNEN } from './a1-themes/begruessung-kennenlernen.js';
+import { THEME_A1_ZAHLEN_ZEIT_KALENDER } from './a1-themes/zahlen-zeit-kalender.js';
+import { THEME_A1_FAMILIE_FREUNDE_MENSCHEN } from './a1-themes/familie-freunde-menschen.js';
+import { THEME_A1_ESSEN_TRINKEN_EINKAUFEN } from './a1-themes/essen-trinken-einkaufen.js';
+import { THEME_A1_WOHNEN_ZIMMER_MOEBEL } from './a1-themes/wohnen-zimmer-moebel.js';
+import { THEME_A1_ALLTAG_FREIZEIT_HOBBYS } from './a1-themes/alltag-freizeit-hobbys.js';
+import { THEME_A1_STADT_WEGE_REISEN } from './a1-themes/stadt-wege-reisen-a1.js';
+import { THEME_A1_KOERPER_GESUNDHEIT_WETTER } from './a1-themes/koerper-gesundheit-wetter.js';
 import { THEME_A2_ALLTAG_FAMILIE } from './a2-themes/alltag-familie.js';
 import { THEME_A2_SCHULE_BERUF } from './a2-themes/schule-beruf.js';
 import { THEME_A2_MEDIEN_KINO } from './a2-themes/medien-kino.js';
@@ -24,6 +32,25 @@ import { THEME_POLITIK_GESELLSCHAFT } from './b1-themes/politik-gesellschaft.js'
 import { THEME_DAMALS_HEUTE } from './b1-themes/damals-heute.js';
 import { THEME_WUENSCHE } from './b1-themes/wuensche.js';
 import { THEME_WIE_WIRD_ES_SEIN } from './b1-themes/wie-wird-es-sein.js';
+import { THEME_B2_KOMMUNIKATION_ARGUMENTATION } from './b2-themes/kommunikation-argumentation.js';
+import { THEME_B2_WIRTSCHAFT_FINANZEN_MARKT } from './b2-themes/wirtschaft-finanzen-markt.js';
+import { THEME_B2_WISSENSCHAFT_FORSCHUNG_KI } from './b2-themes/wissenschaft-forschung-ki.js';
+import { THEME_B2_KULTUR_KUNST_MEDIENKRITIK } from './b2-themes/kultur-kunst-medienkritik.js';
+import { THEME_B2_RECHT_STAAT_DEMOKRATIE } from './b2-themes/recht-staat-demokratie.js';
+import { THEME_B2_PSYCHOLOGIE_ETHIK } from './b2-themes/psychologie-beziehungen-ethik.js';
+import { THEME_B2_KARRIERE_MANAGEMENT } from './b2-themes/karriere-fuehrung-management.js';
+import { THEME_B2_KLIMA_NACHHALTIGKEIT } from './b2-themes/klima-nachhaltigkeit-global.js';
+
+export const A1_THEMES = [
+  THEME_A1_BEGRUESSUNG_KENNENLERNEN,
+  THEME_A1_ZAHLEN_ZEIT_KALENDER,
+  THEME_A1_FAMILIE_FREUNDE_MENSCHEN,
+  THEME_A1_ESSEN_TRINKEN_EINKAUFEN,
+  THEME_A1_WOHNEN_ZIMMER_MOEBEL,
+  THEME_A1_ALLTAG_FREIZEIT_HOBBYS,
+  THEME_A1_STADT_WEGE_REISEN,
+  THEME_A1_KOERPER_GESUNDHEIT_WETTER
+];
 
 export const A2_THEMES = [
   THEME_A2_ALLTAG_FAMILIE,
@@ -55,7 +82,18 @@ export const B1_THEMES = [
   THEME_WIE_WIRD_ES_SEIN
 ];
 
-export const ALL_THEMES = [...A2_THEMES, ...B1_THEMES];
+export const B2_THEMES = [
+  THEME_B2_KOMMUNIKATION_ARGUMENTATION,
+  THEME_B2_WIRTSCHAFT_FINANZEN_MARKT,
+  THEME_B2_WISSENSCHAFT_FORSCHUNG_KI,
+  THEME_B2_KULTUR_KUNST_MEDIENKRITIK,
+  THEME_B2_RECHT_STAAT_DEMOKRATIE,
+  THEME_B2_PSYCHOLOGIE_ETHIK,
+  THEME_B2_KARRIERE_MANAGEMENT,
+  THEME_B2_KLIMA_NACHHALTIGKEIT
+];
+
+export const ALL_THEMES = [...A1_THEMES, ...A2_THEMES, ...B1_THEMES, ...B2_THEMES];
 
 export function splitIntoLessonsOf15(items) {
   if (!Array.isArray(items) || items.length === 0) return [];

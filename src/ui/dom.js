@@ -388,6 +388,13 @@ export const targetLangDropdownName = document.getElementById('targetLangDropdow
 export const targetLangDropdownMenu = document.getElementById('targetLangDropdownMenu');
 export const labelHomeLevelFilter = document.getElementById('labelHomeLevelFilter');
 export const homeLevelPills = document.getElementById('homeLevelPills');
+export const homeThemeSection = document.getElementById('homeThemeSection');
+export const labelHomeThemeFilter = document.getElementById('labelHomeThemeFilter');
+export const homeThemeDropdownWrap = document.getElementById('homeThemeDropdownWrap');
+export const btnHomeThemeDropdown = document.getElementById('btnHomeThemeDropdown');
+export const homeThemeDropdownIcon = document.getElementById('homeThemeDropdownIcon');
+export const homeThemeDropdownName = document.getElementById('homeThemeDropdownName');
+export const homeThemeDropdownMenu = document.getElementById('homeThemeDropdownMenu');
 export const desktopTopicsBar = document.getElementById('desktopTopicsBar');
 export const labelDesktopTopics = document.getElementById('labelDesktopTopics');
 export const desktopTopicsChips = document.getElementById('desktopTopicsChips');
@@ -917,6 +924,13 @@ export const dom = {
   targetLangDropdownMenu,
   labelHomeLevelFilter,
   homeLevelPills,
+  homeThemeSection,
+  labelHomeThemeFilter,
+  homeThemeDropdownWrap,
+  btnHomeThemeDropdown,
+  homeThemeDropdownIcon,
+  homeThemeDropdownName,
+  homeThemeDropdownMenu,
   desktopTopicsBar,
   labelDesktopTopics,
   desktopTopicsChips,

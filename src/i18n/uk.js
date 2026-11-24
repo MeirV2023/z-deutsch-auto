@@ -139,6 +139,7 @@ export const UK_TEXT = {
   },
   promoTargetPrefix: 'Ціль:',
   homeLevelLabel: 'Рівень',
+  homeThemeLabel: 'Теми',
   popularCoursesTitle: 'Популярні курси',
   myProgressTitle: 'Мій прогрес',
   metricCourseLearned: 'Вивчено слів',

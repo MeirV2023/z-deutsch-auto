@@ -573,6 +573,7 @@
   width: 54px;
   height: 54px;
   border-radius: 14px;
+  overflow: hidden;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -587,6 +588,13 @@
   width: 34px;
   height: 34px;
   filter: drop-shadow(0 3px 6px rgba(2, 6, 23, 0.5));
+}
+
+.deck-tile-svg.deck-unique-art-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: none;
 }
 
 .deck-icon-tile.art-auto {
@@ -1309,6 +1317,7 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
+  overflow: hidden;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -1320,6 +1329,12 @@
 .decks-recent-icon .deck-tile-svg {
   width: 24px;
   height: 24px;
+}
+
+.decks-recent-icon .deck-tile-svg.deck-unique-art-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .decks-recent-info {

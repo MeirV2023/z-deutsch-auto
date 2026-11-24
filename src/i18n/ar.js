@@ -120,6 +120,7 @@ export const AR_TEXT = {
   missionProgressSummary: (learned, total, pct) => `${learned} من ${total} ${total % 100 >= 3 && total % 100 <= 10 ? 'كلمات' : 'كلمة'} · ${pct}%`,
   promoTargetPrefix: 'الهدف:',
   homeLevelLabel: 'المستوى',
+  homeThemeLabel: 'المواضيع',
   popularCoursesTitle: 'الدورات الشائعة',
   myProgressTitle: 'تقدمي',
   metricCourseLearned: 'كلمات تم تعلمها',

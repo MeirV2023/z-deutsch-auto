@@ -119,6 +119,7 @@ export const EN_TEXT = {
   missionProgressSummary: (learned, total, pct) => `${learned} of ${total} ${total === 1 ? 'word' : 'words'} · ${pct}%`,
   promoTargetPrefix: 'Target:',
   homeLevelLabel: 'Level',
+  homeThemeLabel: 'Topics',
   popularCoursesTitle: 'Popular Courses',
   myProgressTitle: 'My Progress',
   metricCourseLearned: 'Words Learned',

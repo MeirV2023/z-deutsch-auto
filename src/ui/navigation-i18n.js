@@ -11,9 +11,11 @@ import {
   t
 } from '../state/store.js';
 import {
+  courseMatchesLevelFilter,
   ensureValidCourseSelection,
   getActiveSelection,
   getAllWordsInCourse,
+  getCoursesForTargetLang,
   resolveLessonBaseWords
 } from '../domain/catalog-service.js';
 import {
@@ -32,6 +34,7 @@ import {
   btnDecksReturnBattle,
   btnDownloadSampleApkg,
   btnHudLangPair,
+  btnHomeThemeDropdown,
   btnLangMode,
   btnMissionDailyGoal,
   btnMissionLaunch,
@@ -78,6 +81,8 @@ import {
   homeHeroTitleAccent,
   homeHeroTitleTop,
   homeLevelPills,
+  homeThemeDropdownMenu,
+  homeThemeDropdownWrap,
   homeStepItem1,
   homeStepItem2,
   homeStepItem3,
@@ -217,6 +222,7 @@ import {
   getLangFlagSvg,
   refreshHitSpotlightPinState,
   renderDesktopLevelPills,
+  renderDesktopThemeDropdown,
   renderHomeDashboardWidgets,
   renderHomeQuickStartGrid,
   renderLevelSidebar,
@@ -233,6 +239,7 @@ import {
   refreshOverlayContent,
   renderCurrentQuizQuestion,
   renderZtypeKeyboard,
+  selectCourseLesson,
   showLevelIntroOverlay
 } from '../engine/gameplay.js';
 import { openDecksPage, renderCourseBrowserModal, renderDecksPage } from './decks-page.js';
@@ -264,7 +271,14 @@ function closeAllHomeDropdowns() {
   if (btnTargetLangDropdown) {
     btnTargetLangDropdown.setAttribute('aria-expanded', 'false');
   }
-  const langCard = targetLangDropdownWrap && targetLangDropdownWrap.closest('.home-lang-card');
+  if (homeThemeDropdownMenu) {
+    homeThemeDropdownMenu.classList.add('hidden');
+  }
+  if (btnHomeThemeDropdown) {
+    btnHomeThemeDropdown.setAttribute('aria-expanded', 'false');
+  }
+  const langCard = (targetLangDropdownWrap && targetLangDropdownWrap.closest('.home-lang-card'))
+    || (homeThemeDropdownWrap && homeThemeDropdownWrap.closest('.home-lang-card'));
   if (langCard) {
     langCard.classList.remove('dropdown-open');
   }
@@ -867,7 +881,7 @@ export function bindNavigationEvents() {
     document.addEventListener('click', (e) => {
       const target = e.target;
       if (!target || !target.closest) return;
-      if (!target.closest('#navLangDropdownWrap') && !target.closest('#targetLangDropdownWrap')) {
+      if (!target.closest('#navLangDropdownWrap') && !target.closest('#targetLangDropdownWrap') && !target.closest('#homeThemeDropdownWrap')) {
         closeAllHomeDropdowns();
       }
     });
@@ -903,13 +917,36 @@ export function bindNavigationEvents() {
     });
   }
 
+  if (btnHomeThemeDropdown && homeThemeDropdownMenu) {
+    btnHomeThemeDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const willOpen = homeThemeDropdownMenu.classList.contains('hidden');
+      closeAllHomeDropdowns();
+      if (willOpen) {
+        homeThemeDropdownMenu.classList.remove('hidden');
+        btnHomeThemeDropdown.setAttribute('aria-expanded', 'true');
+        const langCard = homeThemeDropdownWrap && homeThemeDropdownWrap.closest('.home-lang-card');
+        if (langCard) langCard.classList.add('dropdown-open');
+      }
+    });
+  }
+
   if (homeLevelPills) {
     homeLevelPills.addEventListener('click', (e) => {
       const btn = e.target && e.target.closest && e.target.closest('[data-home-level]');
       if (!btn) return;
       const lvl = btn.dataset.homeLevel;
       state.homeLevelFilter = state.homeLevelFilter === lvl ? 'all' : lvl;
+      if (state.homeLevelFilter !== 'all') {
+        const allCourses = getCoursesForTargetLang(state.targetLang);
+        const matched = allCourses.filter(c => courseMatchesLevelFilter(c, state.homeLevelFilter));
+        const { course: activeCourse } = getActiveSelection();
+        if (matched.length > 0 && (!activeCourse || !courseMatchesLevelFilter(activeCourse, state.homeLevelFilter))) {
+          selectCourseLesson(matched[0].id, 0, 0, false);
+        }
+      }
       renderDesktopLevelPills();
+      renderDesktopThemeDropdown();
       renderHomeQuickStartGrid();
       btn.blur();
     });

@@ -119,6 +119,7 @@ export const TR_TEXT = {
   missionProgressSummary: (learned, total, pct) => `${learned} / ${total} kelime · %${pct}`,
   promoTargetPrefix: 'Hedef:',
   homeLevelLabel: 'Seviye',
+  homeThemeLabel: 'Konular',
   popularCoursesTitle: 'Popüler Kurslar',
   myProgressTitle: 'İlerlemem',
   metricCourseLearned: 'Öğrenilen Kelime',

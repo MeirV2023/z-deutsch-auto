@@ -119,6 +119,7 @@ export const HE_TEXT = {
   missionProgressSummary: (learned, total, pct) => `${learned} מתוך ${total} מילים · ${pct}%`,
   promoTargetPrefix: 'מטרה:',
   homeLevelLabel: 'רמה',
+  homeThemeLabel: 'נושאים',
   popularCoursesTitle: 'קורסים פופולריים',
   myProgressTitle: 'ההתקדמות שלי',
   metricCourseLearned: 'מילים שנלמדו',

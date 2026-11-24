@@ -31,12 +31,14 @@ import {
   inferCourseCategory,
   resolveLessonBaseWords
 } from '../domain/catalog-service.js';
+import { getCourseArtKey, renderCourseArtworkSvg } from './deck-artwork.js';
 import {
   arenaWavePill,
   bottomTargetPreview,
   btnDrillPinned,
   btnEmp,
   btnHitRepeat,
+  btnHomeThemeDropdown,
   btnMobHudEmp,
   btnOpenCatalogTitle,
   btnPracticePinned,
@@ -67,6 +69,10 @@ import {
   homeStatLearned,
   homeStatStreak,
   homeStreakBadge,
+  homeThemeDropdownIcon,
+  homeThemeDropdownMenu,
+  homeThemeDropdownName,
+  homeThemeDropdownWrap,
   hudCombo,
   hudLearnedCount,
   hudProgressBar,
@@ -79,6 +85,7 @@ import {
   labelDailyGoalTitle,
   labelDesktopTopics,
   labelHomeLevelFilter,
+  labelHomeThemeFilter,
   labelMissionLaunch,
   labelMobChooseLevel,
   labelMobChooseTopic,
@@ -187,245 +194,6 @@ export function getLangFlagSvg(code) {
   }
 }
 
-function getMissionArtworkSvg(course) {
-  const isUser = course && course.source === 'user';
-  const cat = isUser ? 'anki' : inferCourseCategory(course);
-  if (cat === 'auto') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="mSkyAuto" x1="67" y1="0" x2="67" y2="85" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#1d4ed8"/>
-          <stop offset="65%" stop-color="#38bdf8"/>
-          <stop offset="100%" stop-color="#93c5fd"/>
-        </linearGradient>
-        <linearGradient id="mCarAuto" x1="36" y1="62" x2="98" y2="112" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#93c5fd"/>
-          <stop offset="45%" stop-color="#2563eb"/>
-          <stop offset="100%" stop-color="#1e3a8a"/>
-        </linearGradient>
-      </defs>
-      <rect width="134" height="134" fill="url(#mSkyAuto)"/>
-      <circle cx="96" cy="24" r="14" fill="#fef08a" fill-opacity="0.45"/>
-      <ellipse cx="32" cy="28" rx="22" ry="9" fill="#ffffff" fill-opacity="0.72"/>
-      <ellipse cx="96" cy="34" rx="26" ry="8" fill="#ffffff" fill-opacity="0.62"/>
-      <path d="M0 78L28 46l24 22 26-26 30 22 26-16v42H0V78Z" fill="#1e40af" fill-opacity="0.48"/>
-      <path d="M0 84L38 68l36 8 60-14v72H0V84Z" fill="#15803d"/>
-      <path d="M46 74L12 134h110L88 74H46Z" fill="#1e293b"/>
-      <path d="M65 77h4l3 57h-10l3-57Z" fill="#e2e8f0" fill-opacity="0.82"/>
-      <ellipse cx="67" cy="112" rx="34" ry="8" fill="#020617" fill-opacity="0.58"/>
-      <path d="M35 90l9-18c2-4 7-6 13-6h20c6 0 11 2 13 6l9 18c3 2 5 5 5 9v8c0 3-2 5-5 5H35c-3 0-5-2-5-5v-8c0-4 2-7 5-9Z" fill="url(#mCarAuto)" stroke="#bfdbfe" stroke-width="1.4"/>
-      <path d="M46 75h42l6 13H40l6-13Z" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
-      <rect x="35" y="95" width="12" height="5" rx="2.5" fill="#fef08a"/>
-      <rect x="87" y="95" width="12" height="5" rx="2.5" fill="#fef08a"/>
-      <rect x="55" y="97" width="24" height="6" rx="2" fill="#0f172a"/>
-    </svg>`;
-  }
-  if (cat === 'business') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="mSkyBiz" x1="0" y1="0" x2="134" y2="134" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#1e1b4b"/><stop offset="60%" stop-color="#312e81"/><stop offset="100%" stop-color="#0f172a"/>
-        </linearGradient>
-        <linearGradient id="mCaseBiz" x1="30" y1="54" x2="104" y2="112" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#b45309"/>
-        </linearGradient>
-      </defs>
-      <rect width="134" height="134" fill="url(#mSkyBiz)"/>
-      <rect x="14" y="34" width="22" height="100" rx="2" fill="#1e293b" fill-opacity="0.72"/>
-      <rect x="44" y="20" width="28" height="114" rx="2" fill="#1e293b" fill-opacity="0.86"/>
-      <rect x="82" y="42" width="26" height="92" rx="2" fill="#1e293b" fill-opacity="0.74"/>
-      <path d="M54 54v-7a5 5 0 0 1 5-5h16a5 5 0 0 1 5 5v7" stroke="#fde68a" stroke-width="4" stroke-linecap="round"/>
-      <rect x="28" y="54" width="78" height="54" rx="10" fill="url(#mCaseBiz)" stroke="#fde68a" stroke-width="1.6"/>
-      <path d="M28 74h78" stroke="#78350f" stroke-width="2.5"/>
-      <rect x="61" y="69" width="12" height="10" rx="3" fill="#fef08a"/>
-    </svg>`;
-  }
-  if (cat === 'it') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="mSkyIt" x1="0" y1="0" x2="134" y2="134" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#1e1b4b"/><stop offset="55%" stop-color="#0e7490"/><stop offset="100%" stop-color="#090d1f"/>
-        </linearGradient>
-      </defs>
-      <rect width="134" height="134" fill="url(#mSkyIt)"/>
-      <rect x="24" y="32" width="86" height="58" rx="8" fill="#0f172a" stroke="#67e8f9" stroke-width="2"/>
-      <rect x="30" y="38" width="74" height="46" rx="4" fill="#1e293b"/>
-      <path d="M52 55l-9 7 9 7M82 55l9 7-9 7M70 52l-6 20" stroke="#38bdf8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M14 96h106l-7 12H21l-7-12Z" fill="#64748b" stroke="#cbd5e1" stroke-width="1.2"/>
-    </svg>`;
-  }
-  if (cat === 'travel') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="mSkyTrv" x1="67" y1="0" x2="67" y2="134" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#1d4ed8"/><stop offset="65%" stop-color="#0284c7"/><stop offset="100%" stop-color="#0c4a6e"/>
-        </linearGradient>
-      </defs>
-      <rect width="134" height="134" fill="url(#mSkyTrv)"/>
-      <ellipse cx="32" cy="92" rx="28" ry="12" fill="#e0f2fe" fill-opacity="0.35"/>
-      <ellipse cx="98" cy="100" rx="30" ry="13" fill="#e0f2fe" fill-opacity="0.4"/>
-      <path d="M26 78l78-36-22 44-16-8-14 14-2-20-24 6Z" fill="#f8fafc" stroke="#7dd3fc" stroke-width="1.6" stroke-linejoin="round"/>
-    </svg>`;
-  }
-  if (cat === 'food') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <rect width="134" height="134" fill="#1e1b4b"/>
-      <circle cx="67" cy="67" r="44" fill="#f43f5e" fill-opacity="0.18"/>
-      <path d="M40 58c-6 0-11-5-11-12s6-12 13-11c4-8 14-12 25-12s21 4 25 12c7-1 13 4 13 11s-5 12-11 12v14H40V58Z" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
-      <rect x="38" y="72" width="58" height="14" rx="4" fill="#cbd5e1"/>
-      <path d="M32 98h70" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
-    </svg>`;
-  }
-  if (cat === 'finance') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <rect width="134" height="134" fill="#064e3b"/>
-      <ellipse cx="56" cy="96" rx="22" ry="7" fill="#d97706"/>
-      <ellipse cx="56" cy="86" rx="22" ry="7" fill="#f59e0b"/>
-      <ellipse cx="56" cy="76" rx="22" ry="7" fill="#fbbf24"/>
-      <ellipse cx="82" cy="88" rx="20" ry="6.5" fill="#d97706"/>
-      <ellipse cx="82" cy="78" rx="20" ry="6.5" fill="#fbbf24"/>
-      <ellipse cx="82" cy="68" rx="20" ry="6.5" fill="#fde047"/>
-      <path d="M26 52l26-18 18 10 34-22" stroke="#34d399" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>`;
-  }
-  if (cat === 'medicine') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <rect width="134" height="134" fill="#0f172a"/>
-      <circle cx="67" cy="67" r="44" fill="#fb7185" fill-opacity="0.16"/>
-      <rect x="57" y="34" width="20" height="66" rx="6" fill="#fb7185"/>
-      <rect x="34" y="57" width="66" height="20" rx="6" fill="#fb7185"/>
-      <path d="M24 94h22l9-16 11 26 11-22 9 12h24" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>`;
-  }
-  if (cat === 'nature') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <rect width="134" height="134" fill="#064e3b"/>
-      <circle cx="96" cy="30" r="15" fill="#fde047" fill-opacity="0.45"/>
-      <path d="M0 98l42-34 28 22 30-26 34 26v48H0V98Z" fill="#059669" fill-opacity="0.65"/>
-      <path d="M67 104V52" stroke="#4ade80" stroke-width="5" stroke-linecap="round"/>
-      <path d="M67 64c0-22-18-30-32-27 2 18 15 30 32 27Z" fill="#4ade80"/>
-      <path d="M67 56c0-22 18-30 32-27-2 18-15 30-32 27Z" fill="#22c55e"/>
-    </svg>`;
-  }
-  if (cat === 'society') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <rect width="134" height="134" fill="#1e1b4b"/>
-      <path d="M67 24L22 50h90L67 24Z" fill="#a78bfa" stroke="#ddd6fe" stroke-width="1.8"/>
-      <rect x="32" y="54" width="12" height="44" rx="2" fill="#38bdf8"/>
-      <rect x="61" y="54" width="12" height="44" rx="2" fill="#38bdf8"/>
-      <rect x="90" y="54" width="12" height="44" rx="2" fill="#38bdf8"/>
-      <rect x="20" y="100" width="94" height="12" rx="4" fill="#6366f1"/>
-    </svg>`;
-  }
-  if (cat === 'anki') {
-    return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-      <rect width="134" height="134" fill="#31105f"/>
-      <rect x="34" y="34" width="66" height="72" rx="12" transform="rotate(-7 67 70)" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
-      <rect x="36" y="32" width="66" height="72" rx="12" fill="#0f172a" stroke="#c084fc" stroke-width="2.2"/>
-      <path d="M69 48l5.5 11.2 12.3 1.8-8.9 8.7 2.1 12.3L69 76.2 58 82l2.1-12.3-8.9-8.7 12.3-1.8L69 48Z" fill="#fde047"/>
-    </svg>`;
-  }
-  return `<svg class="mission-art-svg" viewBox="0 0 134 134" fill="none" aria-hidden="true">
-    <defs>
-      <linearGradient id="mSkyBase" x1="67" y1="0" x2="67" y2="134" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#0c4a6e"/><stop offset="65%" stop-color="#0f766e"/><stop offset="100%" stop-color="#064e3b"/>
-      </linearGradient>
-    </defs>
-    <rect width="134" height="134" fill="url(#mSkyBase)"/>
-    <circle cx="96" cy="30" r="16" fill="#fde047" fill-opacity="0.35"/>
-    <path d="M67 104V58" stroke="#4ade80" stroke-width="5" stroke-linecap="round"/>
-    <path d="M67 66c0-20-16-28-30-26 2 16 14 28 30 26Z" fill="#4ade80"/>
-    <path d="M67 60c0-22 18-30 32-27-2 17-15 29-32 27Z" fill="#22c55e"/>
-    <ellipse cx="67" cy="108" rx="34" ry="8" fill="#022c22" fill-opacity="0.65"/>
-  </svg>`;
-}
-
-function getCourseCardIconSvg(course) {
-  const isUser = course && course.source === 'user';
-  const cat = isUser ? 'anki' : inferCourseCategory(course);
-  switch (cat) {
-    case 'auto':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <ellipse cx="32" cy="44" rx="22" ry="4" fill="#020617" fill-opacity="0.55"/>
-        <path d="M12 27l6-11c1.5-2.5 4.5-4 8-4h12c3.5 0 6.5 1.5 8 4l6 11c2.5 1.2 4 3.5 4 6v6a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3v-6c0-2.5 1.5-4.8 4-6Z" fill="#2563eb" stroke="#93c5fd" stroke-width="1.6"/>
-        <path d="M18 16h28l4 9H14l4-9Z" fill="#0f172a" stroke="#60a5fa" stroke-width="1.2"/>
-        <rect x="12" y="30" width="8" height="4" rx="2" fill="#fef08a"/>
-        <rect x="44" y="30" width="8" height="4" rx="2" fill="#fef08a"/>
-        <circle cx="17" cy="41" r="4" fill="#0f172a" stroke="#94a3b8" stroke-width="1.5"/>
-        <circle cx="47" cy="41" r="4" fill="#0f172a" stroke="#94a3b8" stroke-width="1.5"/>
-      </svg>`;
-    case 'business':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <path d="M23 15v-3.5A3.5 3.5 0 0 1 26.5 8h11A3.5 3.5 0 0 1 41 11.5V15" stroke="#fcd34d" stroke-width="3" stroke-linecap="round"/>
-        <rect x="11" y="15" width="42" height="30" rx="6" fill="#d97706" stroke="#fde68a" stroke-width="1.6"/>
-        <path d="M11 26h42" stroke="#78350f" stroke-width="2"/>
-        <rect x="28" y="23" width="8" height="6" rx="2" fill="#fef08a"/>
-      </svg>`;
-    case 'base':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <path d="M32 44V22" stroke="#4ade80" stroke-width="4" stroke-linecap="round"/>
-        <path d="M32 28c0-13-11-19-20-17 1 11 9 18 20 17Z" fill="#4ade80" stroke="#bbf7d0" stroke-width="1.2"/>
-        <path d="M32 24c0-14 12-20 21-18-1 12-10 19-21 18Z" fill="#22c55e" stroke="#86efac" stroke-width="1.2"/>
-      </svg>`;
-    case 'it':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <rect x="12" y="10" width="40" height="27" rx="4" fill="#1e293b" stroke="#93c5fd" stroke-width="1.8"/>
-        <rect x="16" y="14" width="32" height="19" rx="2" fill="#0f172a"/>
-        <path d="M26 20l-5 3.5 5 3.5M38 20l5 3.5-5 3.5M33.5 18l-3 11" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M7 40h50l-3 5H10l-3-5Z" fill="#64748b"/>
-      </svg>`;
-    case 'finance':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <ellipse cx="26" cy="39" rx="12" ry="4" fill="#d97706"/>
-        <ellipse cx="26" cy="33" rx="12" ry="4" fill="#f59e0b"/>
-        <ellipse cx="26" cy="27" rx="12" ry="4" fill="#fbbf24" stroke="#fef08a" stroke-width="1"/>
-        <ellipse cx="39" cy="35" rx="11" ry="3.8" fill="#d97706"/>
-        <ellipse cx="39" cy="29" rx="11" ry="3.8" fill="#f59e0b"/>
-        <ellipse cx="39" cy="23" rx="11" ry="3.8" fill="#fde047" stroke="#fef9c3" stroke-width="1"/>
-      </svg>`;
-    case 'food':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <path d="M18 28c-4 0-7-3-7-7s4-7 8-6.5C21 10 26 8 32 8s11 2 13 6.5c4-.5 8 2.5 8 6.5s-3 7-7 7v9H18v-9Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-        <rect x="17" y="36" width="30" height="7" rx="2.5" fill="#cbd5e1"/>
-      </svg>`;
-    case 'travel':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <path d="M10 30l42-18-13 26-9-4.5-8 8-1-11-11 2.5Z" fill="#e0f2fe" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round"/>
-      </svg>`;
-    case 'medicine':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <rect x="26" y="8" width="12" height="36" rx="3" fill="#fb7185"/>
-        <rect x="14" y="20" width="36" height="12" rx="3" fill="#fb7185"/>
-      </svg>`;
-    case 'nature':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <path d="M32 45V20" stroke="#4ade80" stroke-width="3.6" stroke-linecap="round"/>
-        <path d="M32 28c0-13-12-19-21-17 1 12 9 19 21 17Z" fill="#4ade80"/>
-        <path d="M32 23c0-14 12-20 22-17-1 12-10 19-22 17Z" fill="#22c55e"/>
-      </svg>`;
-    case 'society':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <path d="M32 8L12 20h40L32 8Z" fill="#a78bfa"/>
-        <rect x="17" y="22" width="6" height="17" rx="1.5" fill="#38bdf8"/>
-        <rect x="29" y="22" width="6" height="17" rx="1.5" fill="#38bdf8"/>
-        <rect x="41" y="22" width="6" height="17" rx="1.5" fill="#38bdf8"/>
-        <rect x="12" y="40" width="40" height="5" rx="2" fill="#6366f1"/>
-      </svg>`;
-    case 'anki':
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <rect x="18" y="8" width="28" height="34" rx="5" transform="rotate(-7 32 25)" fill="#1e293b" stroke="#38bdf8" stroke-width="1.6"/>
-        <rect x="18" y="10" width="28" height="34" rx="5" fill="#0f172a" stroke="#c084fc" stroke-width="1.8"/>
-        <path d="M32 18l2.6 5.4 6 .8-4.4 4.2 1 6L32 31.6 26.8 34.4l1-6-4.4-4.2 6-.8L32 18Z" fill="#fde047"/>
-      </svg>`;
-    default:
-      return `<svg class="qs-svg-icon" viewBox="0 0 64 52" fill="none" aria-hidden="true">
-        <circle cx="32" cy="26" r="16" fill="#0ea5e9" fill-opacity="0.22" stroke="#38bdf8" stroke-width="2"/>
-        <ellipse cx="32" cy="26" rx="7" ry="16" stroke="#7dd3fc" stroke-width="1.4"/>
-        <path d="M17 21h30M17 31h30" stroke="#7dd3fc" stroke-width="1.4"/>
-      </svg>`;
-  }
-}
-
 export function getTopicChipIconSvg(cat) {
   switch (cat) {
     case 'auto':
@@ -501,10 +269,10 @@ export function renderDesktopMissionCard() {
   const { course, mod } = getActiveSelection();
   let hasCourseProgress = false;
   if (course) {
-    const artKey = course.source === 'user' ? 'anki' : inferCourseCategory(course);
+    const artKey = getCourseArtKey(course);
     if (homeMissionArtwork && homeMissionArtwork.dataset.artKey !== artKey) {
       homeMissionArtwork.dataset.artKey = artKey;
-      homeMissionArtwork.innerHTML = getMissionArtworkSvg(course);
+      homeMissionArtwork.innerHTML = renderCourseArtworkSvg(course, 'mission');
     }
     if (homeMissionTitle) {
       homeMissionTitle.textContent = getLocalizedField(course, 'titles');
@@ -574,6 +342,64 @@ export function renderDesktopLevelPills() {
   });
 }
 
+export function renderDesktopThemeDropdown() {
+  if (!homeThemeDropdownMenu) return;
+  const tr = t();
+  if (labelHomeThemeFilter && tr.homeThemeLabel) {
+    labelHomeThemeFilter.textContent = tr.homeThemeLabel;
+  }
+
+  const allCourses = getCoursesForTargetLang(state.targetLang);
+  const filtered = state.homeLevelFilter !== 'all'
+    ? allCourses.filter(c => courseMatchesLevelFilter(c, state.homeLevelFilter))
+    : allCourses;
+  const list = filtered.length > 0 ? filtered : allCourses;
+  const { course: activeCourse } = getActiveSelection();
+  const currentCourse = (activeCourse && list.find(c => c.id === activeCourse.id)) || list[0] || activeCourse;
+
+  if (homeThemeDropdownIcon && currentCourse) {
+    homeThemeDropdownIcon.innerHTML = renderCourseArtworkSvg(currentCourse, 'mini');
+  }
+  if (homeThemeDropdownName && currentCourse) {
+    homeThemeDropdownName.textContent = getLocalizedField(currentCourse, 'titles');
+  }
+
+  homeThemeDropdownMenu.innerHTML = '';
+  list.forEach(course => {
+    const isSel = activeCourse && course.id === activeCourse.id;
+    const totalWords = getAllWordsInCourse(course).length;
+    const metaBit = state.homeLevelFilter === 'all' && course.levelTag
+      ? `${course.levelTag} · ${totalWords}`
+      : String(totalWords);
+
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'home-lang-row home-theme-row' + (isSel ? ' active' : '');
+    row.setAttribute('role', 'option');
+    row.setAttribute('aria-selected', isSel ? 'true' : 'false');
+    row.dataset.courseId = course.id;
+    row.innerHTML = `
+      <span class="home-lang-left home-theme-row-main">
+        <span class="home-theme-row-icon" aria-hidden="true">${renderCourseArtworkSvg(course, 'mini')}</span>
+        <span class="home-theme-row-title">${escapeHtml(getLocalizedField(course, 'titles'))}</span>
+      </span>
+      <span class="home-theme-row-right">
+        <span class="home-theme-row-meta">${escapeHtml(metaBit)}</span>
+        <span class="home-lang-check">✓</span>
+      </span>
+    `;
+    row.addEventListener('click', (e) => {
+      e.stopPropagation();
+      homeThemeDropdownMenu.classList.add('hidden');
+      if (btnHomeThemeDropdown) btnHomeThemeDropdown.setAttribute('aria-expanded', 'false');
+      const card = homeThemeDropdownWrap && homeThemeDropdownWrap.closest('.home-lang-card');
+      if (card) card.classList.remove('dropdown-open');
+      actions.selectCourseLesson(course.id, 0, 0, false);
+    });
+    homeThemeDropdownMenu.appendChild(row);
+  });
+}
+
 export function renderDesktopTopicsBar() {
   if (!desktopTopicsChips) return;
   const tr = t();
@@ -627,14 +453,13 @@ export function renderHomeQuickStartGrid() {
 
   let displayCourses = filteredCourses.slice(0, 4);
   if (
-    state.homeLevelFilter === 'all' &&
-    allCourses.length > 4 &&
+    filteredCourses.length > 4 &&
     state.activeCourseId &&
     !displayCourses.some(c => c.id === state.activeCourseId)
   ) {
-    const activeCourseObj = allCourses.find(c => c.id === state.activeCourseId);
+    const activeCourseObj = filteredCourses.find(c => c.id === state.activeCourseId);
     if (activeCourseObj) {
-      displayCourses = [...allCourses.slice(0, 3), activeCourseObj];
+      displayCourses = [...filteredCourses.slice(0, 3), activeCourseObj];
     }
   }
 
@@ -658,7 +483,7 @@ export function renderHomeQuickStartGrid() {
     btn.className = 'qs-course-card' + (isActive ? ' active' : '');
     btn.innerHTML = `
       <div class="qs-card-icon-wrap">
-        ${getCourseCardIconSvg(course)}
+        ${renderCourseArtworkSvg(course, 'card')}
       </div>
       <div class="qs-card-body">
         <div class="qs-card-title">${escapeHtml(getLocalizedField(course, 'titles'))}</div>
@@ -696,7 +521,7 @@ export function renderHomeQuickStartGrid() {
     ankiCard.className = 'qs-course-card qs-anki-card';
     ankiCard.innerHTML = `
       <div class="qs-card-icon-wrap">
-        ${getCourseCardIconSvg({ source: 'user' })}
+        ${renderCourseArtworkSvg({ source: 'user', originType: 'anki' }, 'card')}
       </div>
       <div class="qs-card-body">
         <div class="qs-card-title">${escapeHtml(tr.quickAnkiCardTitle)}</div>
@@ -846,6 +671,7 @@ export function renderMobileDiscoveryBlocks() {
 export function renderHomeDashboardWidgets() {
   renderDesktopMissionCard();
   renderDesktopLevelPills();
+  renderDesktopThemeDropdown();
   renderHomeQuickStartGrid();
   renderDesktopTopicsBar();
   renderMobileDiscoveryBlocks();
@@ -1016,7 +842,7 @@ export function renderLevelSidebar() {
     }
   }
   if (sidebarDeckThumb) {
-    sidebarDeckThumb.textContent = course.icon || '🚀';
+    sidebarDeckThumb.innerHTML = renderCourseArtworkSvg(course, 'mini');
   }
   if (sidebarLevelsTitle) {
     sidebarLevelsTitle.textContent = courseTitle;

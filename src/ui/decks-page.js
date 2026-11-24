@@ -102,6 +102,7 @@ import {
   sidebarActiveDeckCard
 } from './dom.js';
 import { resizeCanvas } from '../engine/arena-physics.js';
+import { renderCourseArtworkSvg } from './deck-artwork.js';
 import { getTopicChipIconSvg, renderLevelSidebar } from './hud-widgets.js';
 import { launchFromTitleScreen } from '../engine/promo-autopilot.js';
 import { selectCourseLesson, showLevelIntroOverlay, startLevelNow } from '../engine/gameplay.js';
@@ -302,7 +303,6 @@ export function renderDeckDetailPane(course, stats) {
   const originText = !isUser
     ? tr.decksCreatorBadge
     : (course.originType === 'anki' ? tr.decksAnkiBadge : tr.decksCustomBadge);
-  const iconChar = course.icon || (isUser ? '📦' : '📚');
   const cTitle = getLocalizedField(course, 'titles');
   const cDesc = getLocalizedField(course, 'descriptions');
   const health = isUser && AnkiImporter && AnkiImporter.inspectDeckTranslationHealth
@@ -385,7 +385,7 @@ export function renderDeckDetailPane(course, stats) {
   heroRow.className = 'deck-detail-hero';
   heroRow.innerHTML = `
     <div class="deck-detail-title-wrap">
-      <div class="deck-icon-tile ${artCls}">${escapeHtml(iconChar)}</div>
+      <div class="deck-icon-tile ${artCls}">${renderCourseArtworkSvg(course, 'tile')}</div>
       <div>
         <div class="deck-badges-inline">
           <span class="deck-tag-badge ${originBadgeCls}">${escapeHtml(originText)}</span>
@@ -437,7 +437,7 @@ export function renderDeckDetailPane(course, stats) {
         <div class="anki-field-col">
           <label>${escapeHtml(tr.decksEditorLevelLabel)}</label>
           <select class="dict-search-input" id="inlineEditDeckLevel">
-            ${['A1–A2', 'A2', 'A2–B1', 'B1', 'B1–B2', 'C1'].map(lv =>
+            ${['A1', 'A1–A2', 'A2', 'A2–B1', 'B1', 'B1–B2', 'B2', 'C1'].map(lv =>
               `<option value="${lv}"${(course.levelTag || 'A2–B1') === lv ? ' selected' : ''}>${lv}</option>`
             ).join('')}
           </select>
@@ -734,75 +734,6 @@ export function renderDeckDetailPane(course, stats) {
   deckDetailPane.appendChild(wordsBox);
 }
 
-/** Returns crisp vector artwork for square deck icon tiles on desktop. */
-function getDeckTileSvg(course) {
-  if (course && course.source === 'user') {
-    return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-      <path d="M24 7 40 15.2v17.6L24 41 8 32.8V15.2L24 7z" fill="#b45309" stroke="#fcd34d" stroke-width="1.3" stroke-linejoin="round"/>
-      <path d="M24 7 40 15.2 24 23.4 8 15.2 24 7z" fill="#f59e0b"/>
-      <path d="M24 23.4v17.6L8 32.8V15.2L24 23.4z" fill="#d97706"/>
-      <path d="M17.2 10.6 33.2 18.8l-5.6 2.9-16-8.2 5.6-2.9z" fill="#fde68a" fill-opacity="0.72"/>
-      <path d="M24 23.4l16-8.2v17.6L24 41V23.4z" fill="#92400e"/>
-    </svg>`;
-  }
-  const cat = inferCourseCategory(course);
-  switch (cat) {
-    case 'auto':
-      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <ellipse cx="24" cy="36.5" rx="16" ry="3.2" fill="#020617" fill-opacity="0.55"/>
-        <path d="M8.5 25.5 13 16c1.2-2.2 3.4-3.4 6.2-3.4h9.6c2.8 0 5 1.2 6.2 3.4l4.5 9.5c2 1 3 2.7 3 4.8v3.6c0 1.4-1.1 2.4-2.5 2.4h-2v2a1.8 1.8 0 0 1-1.8 1.8h-2.4a1.8 1.8 0 0 1-1.8-1.8v-2H16v2a1.8 1.8 0 0 1-1.8 1.8h-2.4A1.8 1.8 0 0 1 10 38.3v-2H8c-1.4 0-2.5-1-2.5-2.4v-3.6c0-2.1 1-3.8 3-4.8Z" fill="#dc2626" stroke="#fda4af" stroke-width="1.3"/>
-        <path d="M13.8 16.5h20.4l3.5 7.5H10.3l3.5-7.5Z" fill="#0f172a" stroke="#93c5fd" stroke-width="1.1"/>
-        <rect x="8.5" y="28.2" width="6.5" height="3.2" rx="1.6" fill="#fef08a"/>
-        <rect x="33" y="28.2" width="6.5" height="3.2" rx="1.6" fill="#fef08a"/>
-        <rect x="18.5" y="29" width="11" height="3.5" rx="1.4" fill="#0f172a"/>
-      </svg>`;
-    case 'business':
-      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <path d="M17.5 15v-3a3 3 0 0 1 3-3h7a3 3 0 0 1 3 3v3" stroke="#fde68a" stroke-width="2.6" stroke-linecap="round"/>
-        <rect x="8.5" y="15" width="31" height="23" rx="4.5" fill="#d97706" stroke="#fde68a" stroke-width="1.4"/>
-        <path d="M8.5 23.5h31" stroke="#78350f" stroke-width="2"/>
-        <rect x="21" y="21" width="6" height="4.8" rx="1.5" fill="#fef08a"/>
-      </svg>`;
-    case 'base':
-      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <path d="M24 39V20" stroke="#4ade80" stroke-width="3.6" stroke-linecap="round"/>
-        <path d="M24 25c0-10-8.5-15-15.5-13.2.8 8.8 7 14 15.5 13.2Z" fill="#4ade80" stroke="#bbf7d0" stroke-width="1.2"/>
-        <path d="M24 21.5c0-11 9.2-16 16.5-14-1 9.5-7.6 14.8-16.5 14Z" fill="#22c55e" stroke="#86efac" stroke-width="1.2"/>
-      </svg>`;
-    case 'it':
-      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <rect x="9" y="11" width="30" height="21" rx="3.5" fill="#1e293b" stroke="#67e8f9" stroke-width="1.5"/>
-        <rect x="12" y="14" width="24" height="15" rx="2" fill="#0f172a"/>
-        <path d="M19.5 19l-4 2.8 4 2.8M28.5 19l4 2.8-4 2.8M25 17.5l-2.2 8.2" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M5.5 34.5h37l-2.2 4H7.7l-2.2-4Z" fill="#64748b"/>
-      </svg>`;
-    case 'travel':
-      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <path d="M8 26.5l30-13.5-9.2 19.5-6.6-3.4-5.8 5.8-.9-8.2L8 26.5Z" fill="#e0f2fe" stroke="#38bdf8" stroke-width="1.6" stroke-linejoin="round"/>
-      </svg>`;
-    case 'finance':
-      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <ellipse cx="19" cy="34.5" rx="9" ry="3.2" fill="#d97706"/>
-        <ellipse cx="19" cy="29.5" rx="9" ry="3.2" fill="#f59e0b"/>
-        <ellipse cx="19" cy="24.5" rx="9" ry="3.2" fill="#fbbf24" stroke="#fef08a" stroke-width="0.9"/>
-        <ellipse cx="29.5" cy="31.5" rx="8.5" ry="3" fill="#d97706"/>
-        <ellipse cx="29.5" cy="26.5" rx="8.5" ry="3" fill="#f59e0b"/>
-        <ellipse cx="29.5" cy="21.5" rx="8.5" ry="3" fill="#fde047" stroke="#fef9c3" stroke-width="0.9"/>
-      </svg>`;
-    case 'food':
-      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <path d="M14.5 26a5.2 5.2 0 0 1-.8-10.2 6.8 6.8 0 0 1 20.6 0A5.2 5.2 0 0 1 33.5 26v7h-19v-7Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
-        <rect x="13.8" y="32" width="20.4" height="5" rx="1.8" fill="#cbd5e1"/>
-      </svg>`;
-    default:
-      return `<svg class="deck-tile-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <circle cx="24" cy="24" r="13" fill="#0ea5e9" fill-opacity="0.22" stroke="#38bdf8" stroke-width="1.8"/>
-        <ellipse cx="24" cy="24" rx="5.5" ry="13" stroke="#7dd3fc" stroke-width="1.3"/>
-        <path d="M12 20h24M12 28h24" stroke="#7dd3fc" stroke-width="1.3"/>
-      </svg>`;
-  }
-}
-
 /** Builds clean inline origin + CEFR badges for desktop deck cards/rows. */
 function getDeckSourceBadgeMarkup(course, tr) {
   const isUser = course.source === 'user';
@@ -1063,7 +994,7 @@ export function renderDecksPage() {
       const row = document.createElement('div');
       row.className = 'decks-recent-item';
       row.innerHTML = `
-        <div class="decks-recent-icon ${artCls}">${getDeckTileSvg(course)}</div>
+        <div class="decks-recent-icon ${artCls}">${renderCourseArtworkSvg(course, 'tile')}</div>
         <div class="decks-recent-info">
           <div class="decks-recent-name" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</div>
           <div class="decks-recent-sub">${escapeHtml(sub)}</div>
@@ -1137,7 +1068,7 @@ export function renderDecksPage() {
       contCard.className = 'deck-continue-card' + ((course.id === state.activeCourseId || idx === 0) ? ' is-active' : '');
       contCard.innerHTML = `
         <div class="deck-cont-top">
-          <div class="deck-icon-tile ${artCls}">${getDeckTileSvg(course)}</div>
+          <div class="deck-icon-tile ${artCls}">${renderCourseArtworkSvg(course, 'tile')}</div>
           <div class="deck-cont-body">
             <div class="deck-badges-inline">${getDeckSourceBadgeMarkup(course, tr)}</div>
             <div class="deck-cont-title" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</div>
@@ -1243,7 +1174,6 @@ export function renderDecksPage() {
     const st = statsById.get(course.id) || computeDeckStats(course);
     const isUser = course.source === 'user';
     const artCls = getDeckArtClass(course);
-    const iconChar = course.icon || (isUser ? '📦' : '📚');
     const titleStr = getLocalizedField(course, 'titles');
     const descStr = getLocalizedField(course, 'descriptions');
     const hasDeckProgress = st.learnedInCourse > 0 || st.doneLessons > 0;
@@ -1266,7 +1196,7 @@ export function renderDecksPage() {
     const infoZone = document.createElement('div');
     infoZone.className = 'deck-row-info';
     infoZone.innerHTML = `
-      <div class="deck-icon-tile ${artCls}">${getDeckTileSvg(course)}</div>
+      <div class="deck-icon-tile ${artCls}">${renderCourseArtworkSvg(course, 'tile')}</div>
       <div class="deck-row-texts">
         <div class="deck-row-title-line">
           <h3 class="deck-card-title" title="${escapeHtml(titleStr)}">${escapeHtml(titleStr)}</h3>
@@ -1354,17 +1284,7 @@ export function renderDecksPage() {
     mobInner.className = 'deck-mobile-card-inner';
 
     const isAnkiDeck = isUser && course.originType === 'anki';
-    const mobIconMarkup = isAnkiDeck
-      ? `<svg class="deck-anki-cards-svg" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-           <g transform="rotate(-10 15 18)">
-             <rect x="6.5" y="7" width="17" height="22" rx="3.5" fill="#93c5fd" fill-opacity="0.55" stroke="#dbeafe" stroke-width="1.15"/>
-           </g>
-           <g transform="rotate(6 21 18)">
-             <rect x="12.5" y="6.5" width="17.5" height="22.5" rx="3.6" fill="#f8fafc" stroke="#dbeafe" stroke-width="1.15"/>
-             <path d="M18 22.5L21.25 13L24.5 22.5M19.1 20H23.4" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-           </g>
-         </svg>`
-      : escapeHtml(iconChar);
+    const mobIconMarkup = renderCourseArtworkSvg(course, 'tile');
 
     const wordsFullText = formatDeckWordsCountFull(st.totalWords);
     const mobMetaSvg = !isUser

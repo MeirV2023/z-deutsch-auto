@@ -385,25 +385,25 @@ export function normalizeCefrBucket(levelTag) {
   if (raw.includes('A1') && raw.includes('A2')) return 'A1–A2';
   if (raw.includes('A2') && raw.includes('B1')) return 'A2–B1';
   if (raw.includes('B1') && raw.includes('B2')) return 'B1–B2';
-  if (raw === 'A1') return 'A1–A2';
+  if (raw === 'A1') return 'A1';
   if (raw === 'A2') return 'A2';
   if (raw === 'B1') return 'B1';
-  if (raw === 'B2' || raw.includes('C1')) return 'B1–B2';
+  if (raw === 'B2' || raw.includes('C1')) return 'B2';
   return raw;
 }
 
 export function courseMatchesLevelFilter(course, filterVal) {
   if (!filterVal || filterVal === 'all') return true;
-  const raw = String(course.levelTag || '').toUpperCase().replace(/-/g, '–');
+  const raw = String(course.levelTag || '').toUpperCase().replace(/-/g, '–').trim();
   const bucket = normalizeCefrBucket(course.levelTag);
-  if (bucket === filterVal) return true;
-  if (filterVal === 'A1' && raw.includes('A1')) return true;
-  if (filterVal === 'A2' && raw.includes('A2')) return true;
-  if (filterVal === 'B1' && (raw === 'B1' || raw === 'A2–B1' || raw.includes('B1'))) return true;
-  if (filterVal === 'B2' && (raw.includes('B2') || raw.includes('C1'))) return true;
-  if (filterVal === 'A1–A2' && (raw.includes('A1') || raw === 'A2')) return true;
-  if (filterVal === 'A2–B1' && (raw.includes('A2') || raw === 'A1–B1')) return true;
-  if (filterVal === 'B1–B2' && (raw.includes('B2') || raw.includes('C1'))) return true;
+  if (bucket === filterVal || raw === filterVal) return true;
+  if (filterVal === 'A1') return raw.includes('A1');
+  if (filterVal === 'A2') return raw.includes('A2');
+  if (filterVal === 'B1') return raw.includes('B1');
+  if (filterVal === 'B2') return raw.includes('B2') || raw.includes('C1');
+  if (filterVal === 'A1–A2') return raw.includes('A1') || raw === 'A2';
+  if (filterVal === 'A2–B1') return raw.includes('A2') || raw === 'A1–B1';
+  if (filterVal === 'B1–B2') return raw.includes('B2') || raw.includes('C1');
   return false;
 }
 

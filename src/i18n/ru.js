@@ -139,6 +139,7 @@ export const RU_TEXT = {
   },
   promoTargetPrefix: 'Цель:',
   homeLevelLabel: 'Уровень',
+  homeThemeLabel: 'Темы',
   popularCoursesTitle: 'Популярные курсы',
   myProgressTitle: 'Мой прогресс',
   metricCourseLearned: 'Изучено слов',
